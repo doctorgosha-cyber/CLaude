@@ -1,0 +1,37 @@
+{
+ "task_id": "AL-10",
+ "agent": "agent-lab (cloud Claude, advisory)",
+ "generated": "2026-10-06",
+ "source_signals": "agent-lab-package.zip: learning/ (routing, ledger, eval, runs/*/telemetry, regress), reports/ (20), agents, skills, scripts. learning/signals.json is stale (RUN-001..007 only), so most proposals cite file:line evidence instead of SIG ids.",
+ "ranking_method": "rank = expected gain / effort (S=1, M=2, L=3). Gains are computed from package numbers where marked 'computed', otherwise labelled 'estimate'. Not the CAWL EV formula.",
+ "held_out_note": "cm-01..03 have already been held-out cases for 3 roles / 4 bundles; prefer a fresh capability case (AL-10) where the eval_plan says so. Advice only: NEXUS tests locally and applies only on ACCEPT.",
+ "proposals": [
+  {
+   "id": "AL-10",
+   "rank": 10,
+   "effort": "M",
+   "class": "eval-set growth / overfitting",
+   "target_file": "learning/eval-set.json (schema) + scripts/regress.mjs list + skills/shared/capability-learning/SKILL.md step 7",
+   "target_role": "NEXUS, CAWL",
+   "change": {
+    "type": "schema+skill-line",
+    "anchor": "cases[]",
+    "text": "Add per case: tier ('capability' | 'regression'), uses (int, incremented by each gate), last_baseline (recall fraction), origin ('fixture' | 'incident' | 'field' | 'build'). Rules: a gate may only use capability cases with uses < 3; a case whose baseline >= 0.95 in a precheck (AL-02) moves to regression. Grow capability cases from prod-log incidents, blind-graded field snapshots and builds with hidden tests (RUN-029 hidden.test.mjs). Target mix: >= 1/3 non-audit. Owner labels ~10 extras per quarter to calibrate the blind grader (calibration only; not used to gate)."
+   },
+   "signals": [],
+   "evidence": [
+    "learning/eval-set.json:3-138 (11 cases: 10 audits/workspaces, 1 build, 0 production-write / trading / 3D)",
+    "learning/ledger.jsonl:9-15 (cm-01..03 used as held-out for solo, corax, dorn)",
+    "learning/runs/RUN-023-SEO-CLAUDESEO/RESULT.md:27 (fixture author is the same model family)",
+    "learning/runs/RUN-015-SEO-FIELD/before.json (field case graded by hand, so it could not gate)",
+    "Anthropic, 'Demystifying evals for AI agents' (capability vs regression; graduate saturated evals; tasks from real failures)"
+   ],
+   "root_cause": "Held-out cases are reused until they become a dev set, saturated cases keep being gated, and the set does not resemble where tokens are spent.",
+   "target_metric": "generalisation (validity)",
+   "expected_effect": "Lower overfitting risk; gates measure the work NEXUS actually does. No token number claimed.",
+   "risk": "Medium: authoring cost (Codex fixtures on the subscription).",
+   "eval_plan": "regress list shows tier/uses; learn gate refuses a case with uses >= 3 (scripted check). After 4 weeks: share of gates on capability cases = 100%."
+  }
+ ],
+ "not_proposed": []
+}

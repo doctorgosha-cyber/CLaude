@@ -1,0 +1,37 @@
+{
+ "task_id": "AL-07",
+ "agent": "agent-lab (cloud Claude, advisory)",
+ "generated": "2026-10-06",
+ "source_signals": "agent-lab-package.zip: learning/ (routing, ledger, eval, runs/*/telemetry, regress), reports/ (20), agents, skills, scripts. learning/signals.json is stale (RUN-001..007 only), so most proposals cite file:line evidence instead of SIG ids.",
+ "ranking_method": "rank = expected gain / effort (S=1, M=2, L=3). Gains are computed from package numbers where marked 'computed', otherwise labelled 'estimate'. Not the CAWL EV formula.",
+ "held_out_note": "cm-01..03 have already been held-out cases for 3 roles / 4 bundles; prefer a fresh capability case (AL-10) where the eval_plan says so. Advice only: NEXUS tests locally and applies only on ACCEPT.",
+ "proposals": [
+  {
+   "id": "AL-07",
+   "rank": 7,
+   "effort": "S",
+   "class": "routing evidence",
+   "target_file": "learning/routing.json (via scripts/routing.mjs add) + experiment",
+   "target_role": "NEXUS router",
+   "change": {
+    "type": "data+experiment",
+    "anchor": "routing.json classes",
+    "text": "(1) Record existing scripted observations (0 tokens): class 'audit-crossfile' (cm-01: solo/corax/dorn), 'audit-falseclaim' (cm-02: solo/corax), 'audit-design-mobile' (cm-03: solo/dorn), from learning/eval/REG-*-base-*.json, score = recall_points/max, tokens = mean. (2) engineering-build experiment: regress prepare eb-v --cases=billing-module --role=vulcan --reps=3 and eb-s --role=solo, grade-build; repeat on one new below-ceiling build case with hidden tests. Rule: vulcan becomes the build default only if it wins on both cases (AL-03 test). (3) design-build: the experiment already named at RUN-028 RESULT.md:18, 3 reps."
+   },
+   "signals": [],
+   "evidence": [
+    "learning/routing.json:1-79 (3 classes, n=1 each)",
+    "learning/eval/REG-cm-base-cm-01.json, REG-corax-base-cm-01.json, REG-dorn-base-cm-01.json (8/8 all; severity 54.2 / 45.8 / 37.5 %)",
+    "learning/eval/REG-cm-base-cm-02.json vs REG-corax-base-cm-02.json (9 vs 9.67 /10)",
+    "learning/runs/RUN-029-BINANCE-BOT/RESULT.md:7-17 (vulcan 40 vs solo 38, n=1)",
+    "learning/runs/RUN-028-CAT-TRADING/RESULT.md:14-18 (team +5.7% for 3.1-4.3x tokens, confounded by QA)"
+   ],
+   "root_cause": "The router has no audit data although audits are the best-measured class, and builds rest on n=1.",
+   "target_metric": "routing decision quality / cost",
+   "expected_effect": "Audits: confirms solo (no change). Builds: a decision after ~6 runs. estimate: ~0.5M tokens incl. grading.",
+   "risk": "Low.",
+   "eval_plan": "routing.mjs show must list the audit classes with n>=3 reps; build decision via AL-03 gate on the two cases."
+  }
+ ],
+ "not_proposed": []
+}

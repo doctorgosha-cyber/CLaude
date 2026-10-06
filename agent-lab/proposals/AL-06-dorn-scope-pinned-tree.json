@@ -1,0 +1,38 @@
+{
+ "task_id": "AL-06",
+ "agent": "agent-lab (cloud Claude, advisory)",
+ "generated": "2026-10-06",
+ "source_signals": "agent-lab-package.zip: learning/ (routing, ledger, eval, runs/*/telemetry, regress), reports/ (20), agents, skills, scripts. learning/signals.json is stale (RUN-001..007 only), so most proposals cite file:line evidence instead of SIG ids.",
+ "ranking_method": "rank = expected gain / effort (S=1, M=2, L=3). Gains are computed from package numbers where marked 'computed', otherwise labelled 'estimate'. Not the CAWL EV formula.",
+ "held_out_note": "cm-01..03 have already been held-out cases for 3 roles / 4 bundles; prefer a fresh capability case (AL-10) where the eval_plan says so. Advice only: NEXUS tests locally and applies only on ACCEPT.",
+ "proposals": [
+  {
+   "id": "AL-06",
+   "rank": 6,
+   "effort": "S",
+   "class": "cost (QA) + consistency",
+   "target_file": "agents/dorn/AGENT.md (-> .claude/agents/dorn.md)",
+   "target_role": "dorn",
+   "change": {
+    "type": "edit",
+    "anchor": "dorn.md:9 (remove history line) + dorn.md:14 + append to ## Rules",
+    "text": "DELETE line 9 (history belongs in learning/runs/CM-DORN-V1/RESULT.md).\nAPPEND to line 14: ' Use exactly these words (not PASS-WITH-NOTES).'\nAPPEND:\n- Scope: the acceptance items, each claim in the builder's report, and production or irreversible risk. If the builder gives a suite command and tree hash, re-run only what you doubt. No new design review unless asked.\n- Pin the tree: hash the files under test at start. If they change during QA, stop and report BLOCKED (tree changed).\n- Stop when every claim is CONFIRMED / REFUTED / UNVERIFIED; report in the lean format."
+   },
+   "signals": [
+    "SIG-126"
+   ],
+   "evidence": [
+    "reports/OFFICE-2-QA.md:76 (~280K, 35 min), reports/OFFICE-2-QA2.md:36 (~230K, 40 min)",
+    "reports/OFFICE-2-QA2.md:22 (author suites re-run), :7-11 and :33 (moving tree; pinned hashes improvised)",
+    "learning/runs/RUN-029-BINANCE-BOT/RESULT.md:12 (QA changed no score) vs RUN-028-CAT-TRADING/RESULT.md:15 (2 majors found)",
+    "dorn.md:14 vs reports/OFFICE-2-QA.md:4 and learning/runs/OFFICE-1/telemetry.json:6 ('PASS-WITH-NOTES')"
+   ],
+   "root_cause": "QA has no scope limit or stop rule, so it re-does the author's verification. Verdict spelling is not enforced.",
+   "target_metric": "tokens (QA) with recall not dropping",
+   "expected_effect": "estimate: 30-50% fewer QA tokens on builds; same majors found.",
+   "risk": "Medium: narrower scope could miss an out-of-scope major (RUN-028 majors were in scope: silhouettes, 390 labels).",
+   "eval_plan": "(a) No-regression on audits: regress --role=dorn --variant=learning/variants/al-06.md --cases=cm-01,cm-03 --reps=3; learn gate --target=tokens (recall may not drop). (b) The real effect is on build QA: next 2 build QAs, AL-01 tokens and majors found vs OFFICE-2-QA/QA2."
+  }
+ ],
+ "not_proposed": []
+}

@@ -1,0 +1,38 @@
+{
+ "task_id": "AL-05",
+ "agent": "agent-lab (cloud Claude, advisory)",
+ "generated": "2026-10-06",
+ "source_signals": "agent-lab-package.zip: learning/ (routing, ledger, eval, runs/*/telemetry, regress), reports/ (20), agents, skills, scripts. learning/signals.json is stale (RUN-001..007 only), so most proposals cite file:line evidence instead of SIG ids.",
+ "ranking_method": "rank = expected gain / effort (S=1, M=2, L=3). Gains are computed from package numbers where marked 'computed', otherwise labelled 'estimate'. Not the CAWL EV formula.",
+ "held_out_note": "cm-01..03 have already been held-out cases for 3 roles / 4 bundles; prefer a fresh capability case (AL-10) where the eval_plan says so. Advice only: NEXUS tests locally and applies only on ACCEPT.",
+ "proposals": [
+  {
+   "id": "AL-05",
+   "rank": 5,
+   "effort": "S",
+   "class": "cost + integration safety",
+   "target_file": "agents/vulcan/AGENT.md (-> .claude/agents/vulcan.md via sync-agents)",
+   "target_role": "vulcan",
+   "change": {
+    "type": "edit",
+    "anchor": "vulcan.md:14 (labels) + append to ## Rules",
+    "text": "REPLACE line 14 with: '- Label every deliverable WORKING / PARTIAL / MOCK / PLANNED / BLOCKED (CLAUDE.md). Never present MOCK as working.'\nAPPEND:\n- Work in checkpoints: keep `work/<TASK>/PROGRESS.md` (done / failing / next). Finish one acceptance group, run its checks, update PROGRESS.md. Stop and hand back PARTIAL after ~40 tool calls or when the group is done, whichever comes first; NEXUS starts a fresh agent from PROGRESS.md.\n- Edit only paths in the task's `writes`. If another file must change, stop and ask NEXUS.\n- While a server serves the tree: create new files before the files that import them, and never leave a removed symbol referenced between edits. Report the time the tree was consistent again."
+   },
+   "signals": [],
+   "evidence": [
+    "learning/runs/RUN-030-OFFICE-2-CLAUDE/telemetry.json:5-17 (9 vulcan tasks 200-490K; cost model <=60K at CLAUDEMAXING-LOOP.md:60)",
+    "reports/OFFICE-2-QA2.md:7-11 (4th round edited the served tree during QA; stylesheet missing ~46 s)",
+    "reports/OFFICE-2-QA2-FIX.md:4 (non-atomic decor.js edit and a typo threw on load) -> 2 occurrences of the same class",
+    "reports/OFFICE-2-A-WALK.md:35 (shared files edited by several agents)",
+    "vulcan.md:14 vs CLAUDE.md:19; QA-FIX.md:10 WORKING vs QA2-FIX.md:12 DEMO",
+    "Anthropic, 'Effective harnesses for long-running agents' (progress file, one feature at a time)"
+   ],
+   "root_cause": "No budget or checkpoint, so one agent accumulates hours of context. Missing landing discipline caused 2 broken-tree windows. Two label vocabularies.",
+   "target_metric": "tokens (build) with tests not dropping",
+   "expected_effect": "estimate: 20-40% fewer builder tokens per large build; 0 broken-tree windows. The ~40 tool-call threshold is an estimate to tune (RUN-028 vulcan: 50 tool uses for 206K).",
+   "risk": "Medium: more hand-backs means more coordinator turns; check with AL-01 orchestrator tokens.",
+   "eval_plan": "Variant file learning/variants/al-05.md with the appended lines. regress prepare vb-base --cases=billing-module --role=vulcan --reps=3 and vb-cand ... --variant=learning/variants/al-05.md; grade-build (pass count may not drop); learn gate --target=tokens --reps=3. billing-module is small, so also log the next real build with AL-01. A check for check-artifacts-in-deliverables belongs in checks/ (single incident), not here."
+  }
+ ],
+ "not_proposed": []
+}

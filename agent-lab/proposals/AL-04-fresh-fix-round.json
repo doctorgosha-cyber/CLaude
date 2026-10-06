@@ -1,0 +1,35 @@
+{
+ "task_id": "AL-04",
+ "agent": "agent-lab (cloud Claude, advisory)",
+ "generated": "2026-10-06",
+ "source_signals": "agent-lab-package.zip: learning/ (routing, ledger, eval, runs/*/telemetry, regress), reports/ (20), agents, skills, scripts. learning/signals.json is stale (RUN-001..007 only), so most proposals cite file:line evidence instead of SIG ids.",
+ "ranking_method": "rank = expected gain / effort (S=1, M=2, L=3). Gains are computed from package numbers where marked 'computed', otherwise labelled 'estimate'. Not the CAWL EV formula.",
+ "held_out_note": "cm-01..03 have already been held-out cases for 3 roles / 4 bundles; prefer a fresh capability case (AL-10) where the eval_plan says so. Advice only: NEXUS tests locally and applies only on ACCEPT.",
+ "proposals": [
+  {
+   "id": "AL-04",
+   "rank": 3,
+   "effort": "S",
+   "class": "cost (context)",
+   "target_file": "CLAUDE.md (Loop step 3) + SYSTEM.md §8",
+   "target_role": "NEXUS",
+   "change": {
+    "type": "replace",
+    "anchor": "CLAUDE.md:13 'One bounded fix round, then `task fail <CLASS>`.'",
+    "text": "One bounded fix round by a fresh agent of the same role (never a resumed one): its packet = the QA report + the files it names + the worker's PROGRESS.md; then `task fail <CLASS>`."
+   },
+   "signals": [],
+   "evidence": [
+    "learning/runs/RUN-028-CAT-TRADING/telemetry.json:7 (resumed R2: 245,049 reported, increment >= 38,570)",
+    "Claude Code docs, sub-agents: resumed subagents 'retain their full conversation history'",
+    "reports/OFFICE-2-QA-FIX.md:3 (fix round already worked from a packet - pattern exists)"
+   ],
+   "root_cause": "A resumed agent re-reads its whole build history (screenshots, logs) for a small fix.",
+   "target_metric": "tokens per fix round",
+   "expected_effect": "estimate: 30-80% fewer tokens per fix round (bounded by RUN-028's 245K reported vs >=38.6K increment).",
+   "risk": "Low-medium: a fresh agent may miss context; PROGRESS.md (AL-05) carries it.",
+   "eval_plan": "Next 3 build fix rounds: AL-01 tokens vs RUN-028 R2; quality held by the same hidden tests / dorn re-check (REVISE->PASS rate unchanged)."
+  }
+ ],
+ "not_proposed": []
+}

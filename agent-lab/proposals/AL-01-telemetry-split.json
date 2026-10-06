@@ -1,0 +1,40 @@
+{
+ "task_id": "AL-01",
+ "agent": "agent-lab (cloud Claude, advisory)",
+ "generated": "2026-10-06",
+ "source_signals": "agent-lab-package.zip: learning/ (routing, ledger, eval, runs/*/telemetry, regress), reports/ (20), agents, skills, scripts. learning/signals.json is stale (RUN-001..007 only), so most proposals cite file:line evidence instead of SIG ids.",
+ "ranking_method": "rank = expected gain / effort (S=1, M=2, L=3). Gains are computed from package numbers where marked 'computed', otherwise labelled 'estimate'. Not the CAWL EV formula.",
+ "held_out_note": "cm-01..03 have already been held-out cases for 3 roles / 4 bundles; prefer a fresh capability case (AL-10) where the eval_plan says so. Advice only: NEXUS tests locally and applies only on ACCEPT.",
+ "proposals": [
+  {
+   "id": "AL-01",
+   "rank": 2,
+   "effort": "S",
+   "class": "measurement -> cost",
+   "target_file": "scripts/lib/core.mjs (telemetry row schema) + A3 auto-telemetry hook in .claude/settings.json (Owner edits)",
+   "target_role": "NEXUS (plumbing)",
+   "change": {
+    "type": "code",
+    "anchor": "telemetry row written per task (SYSTEM.md §10)",
+    "text": "Add fields: input_tokens, cache_read_tokens, cache_write_tokens, output_tokens, tool_uses, resumed (bool), segment (n of m when rate-limited), orchestrator_tokens (main session, per task). Keep 'tokens' for backward compatibility. Validator warns when any field is null."
+   },
+   "signals": [
+    "SIG-125",
+    "SIG-126",
+    "SIG-127"
+   ],
+   "evidence": [
+    "learning/runs/RUN-028-CAT-TRADING/telemetry.json:7 ('cumulative-context figure, increment over R1 unknown')",
+    "learning/runs/OFFICE-1/telemetry.json:4 ('tokens not metered for the main session')",
+    "proposals/CLAUDEMAXING-LOOP.md:14 ('Orchestrator cost unmeasured')",
+    "reports/OFFICE-2-A-WALK.md:42, OFFICE-2-A-PRODUCT.md:53 (sessions split by rate limit, no segment field)"
+   ],
+   "root_cause": "A single 'tokens' number mixes cached re-reads with new work and omits the orchestrator, so neither builder waste nor fix-round cost can be attributed.",
+   "target_metric": "tokens (attribution)",
+   "expected_effect": "No direct saving; prerequisite for measuring AL-04/05/06/08.",
+   "risk": "Low. Owner-side settings edit (CLAUDE.md:6 forbids agents editing settings).",
+   "eval_plan": "No gate. Done when 10 consecutive tasks in logs/telemetry.jsonl carry all fields (scripted count)."
+  }
+ ],
+ "not_proposed": []
+}

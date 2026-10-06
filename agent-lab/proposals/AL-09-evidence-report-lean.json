@@ -1,0 +1,39 @@
+{
+ "task_id": "AL-09",
+ "agent": "agent-lab (cloud Claude, advisory)",
+ "generated": "2026-10-06",
+ "source_signals": "agent-lab-package.zip: learning/ (routing, ledger, eval, runs/*/telemetry, regress), reports/ (20), agents, skills, scripts. learning/signals.json is stale (RUN-001..007 only), so most proposals cite file:line evidence instead of SIG ids.",
+ "ranking_method": "rank = expected gain / effort (S=1, M=2, L=3). Gains are computed from package numbers where marked 'computed', otherwise labelled 'estimate'. Not the CAWL EV formula.",
+ "held_out_note": "cm-01..03 have already been held-out cases for 3 roles / 4 bundles; prefer a fresh capability case (AL-10) where the eval_plan says so. Advice only: NEXUS tests locally and applies only on ACCEPT.",
+ "proposals": [
+  {
+   "id": "AL-09",
+   "rank": 9,
+   "effort": "S",
+   "class": "consistency -> noise/tokens",
+   "target_file": "skills/shared/evidence-report/SKILL.md",
+   "target_role": "all roles (gate on solo first)",
+   "change": {
+    "type": "replace",
+    "anchor": "SKILL.md:7-24 (Process / output block); keep the Severity rubric unchanged",
+    "text": "Lean report (default): `# <TASK_ID> - <agent>` / `## STATUS` COMPLETE | PARTIAL | BLOCKED + one line / `## FINDINGS` numbered, one line per defect: [critical|major|minor] [category] title - evidence (values, file:line, command) - fix; name the criterion for each critical / `## NOT CHECKED` what you could not verify (UNVERIFIED). The full V0.2 format (CLAIM/EVIDENCE/LIMITATION/VERDICT, FILES, RISKS, REQUESTED_REVIEW) only when the packet says council or profile v0.2."
+   },
+   "signals": [
+    "SIG-077",
+    "SIG-078",
+    "SIG-079"
+   ],
+   "evidence": [
+    "skills/shared/evidence-report/SKILL.md:9-24 (full V0.2 format for every specialist task)",
+    "SYSTEM.md:32 ('Lean is the only default ... full V0.2 format only when council or profile v0.2')",
+    "solo.md:15,18 refer to LIMITATION / RISKS sections that the lean format does not have"
+   ],
+   "root_cause": "Every packet loads two conflicting output contracts; agents mix them, which adds sections where findings get parked (CM-CAWL-001-P01 root cause).",
+   "target_metric": "noise (and tokens)",
+   "expected_effect": "estimate: small token saving; fewer findings parked outside FINDINGS.",
+   "risk": "Low-medium: touches every role. That is why it is gated on solo first, per CM-SOLO-V1/RESULT.md:17.",
+   "eval_plan": "regress prepare ev --role=solo --variant=learning/variants/al-09.md --cases=cm-01,cm-02,cm-03 --reps=3; grade; learn gate --target=noise (recall may not drop). Then nexus handoff must still validate (npm test)."
+  }
+ ],
+ "not_proposed": []
+}

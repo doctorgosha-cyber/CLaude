@@ -1,0 +1,37 @@
+{
+ "task_id": "AL-03",
+ "agent": "agent-lab (cloud Claude, advisory)",
+ "generated": "2026-10-06",
+ "source_signals": "agent-lab-package.zip: learning/ (routing, ledger, eval, runs/*/telemetry, regress), reports/ (20), agents, skills, scripts. learning/signals.json is stale (RUN-001..007 only), so most proposals cite file:line evidence instead of SIG ids.",
+ "ranking_method": "rank = expected gain / effort (S=1, M=2, L=3). Gains are computed from package numbers where marked 'computed', otherwise labelled 'estimate'. Not the CAWL EV formula.",
+ "held_out_note": "cm-01..03 have already been held-out cases for 3 roles / 4 bundles; prefer a fresh capability case (AL-10) where the eval_plan says so. Advice only: NEXUS tests locally and applies only on ACCEPT.",
+ "proposals": [
+  {
+   "id": "AL-03",
+   "rank": 4,
+   "effort": "M",
+   "class": "learning validity",
+   "target_file": "scripts/lib/learn.mjs (gate) + scripts/lib/grade.mjs (per-defect output) + skills/shared/capability-learning/SKILL.md step 5",
+   "target_role": "NEXUS (plumbing), CAWL",
+   "change": {
+    "type": "code+skill-line",
+    "anchor": "gate(before, after, opts)",
+    "text": "(1) grade.mjs emits a per-defect x rep detection and severity matrix. (2) gate computes discordant pairs (detected in one arm's rep i, not the other's) and an exact two-sided sign test; ACCEPT on recall/severity needs p <= 0.05 (>= 6/6, 8/9 or 9/10 discordant pairs in one direction) pooled over cases AND the same sign on >= 2 cases; otherwise PROVISIONAL at best. (3) ledger row stores sha256 of KEY.json/DECOYS.json, written before the first rep; gate refuses if the hash changed. Skill line: 'Prefer more cases over more reps: 3 cases x 1-2 reps beats 1 case x 3 reps.'"
+   },
+   "signals": [],
+   "evidence": [
+    "learning/ledger.jsonl:10 (cm-03 ACCEPT on +0.067 = 2 detections in 9 defect-rep slots, paired_agree:false)",
+    "learning/ledger.jsonl:15 (dorn cm-01 severity +0.125 = one defect re-rated per rep)",
+    "learning/eval/REG-*-base-*.json per_rep 8/8/8, 9/9/9 (reps nearly deterministic)",
+    "learning/runs/CM-SOLO-V1/RESULT.md:19-21 (detector edits after baseline; tolerance fix after candidate reports were seen)",
+    "skills/shared/capability-learning/SKILL.md:9 (thresholds as absolute deltas)"
+   ],
+   "root_cause": "Absolute thresholds (recall 0.02, severity 0.05) are smaller than the score step of one defect, and reps of one case are not independent evidence of a general gain.",
+   "target_metric": "false ACCEPT rate (validity)",
+   "expected_effect": "Fewer accepted changes that do not generalise; number unknown. Estimate: some of the 5 ACCEPT rows would become PROVISIONAL.",
+   "risk": "Medium: stricter gate = slower learning; mitigated by AL-10 (more cases) and by keeping PROVISIONAL as an Owner-decidable state.",
+   "eval_plan": "Retro-replay the new gate on all 15 ledger rows using stored per-rep data (where per-defect detail exists in state/grading). Report which verdicts change. 0 model tokens."
+  }
+ ],
+ "not_proposed": []
+}

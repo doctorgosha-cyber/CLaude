@@ -1,0 +1,35 @@
+{
+ "task_id": "AL-11",
+ "agent": "agent-lab (cloud Claude, advisory)",
+ "generated": "2026-10-06",
+ "source_signals": "agent-lab-package.zip: learning/ (routing, ledger, eval, runs/*/telemetry, regress), reports/ (20), agents, skills, scripts. learning/signals.json is stale (RUN-001..007 only), so most proposals cite file:line evidence instead of SIG ids.",
+ "ranking_method": "rank = expected gain / effort (S=1, M=2, L=3). Gains are computed from package numbers where marked 'computed', otherwise labelled 'estimate'. Not the CAWL EV formula.",
+ "held_out_note": "cm-01..03 have already been held-out cases for 3 roles / 4 bundles; prefer a fresh capability case (AL-10) where the eval_plan says so. Advice only: NEXUS tests locally and applies only on ACCEPT.",
+ "proposals": [
+  {
+   "id": "AL-11",
+   "rank": 11,
+   "effort": "S",
+   "class": "consistency + build rules",
+   "target_file": "agents/solo/AGENT.md (-> .claude/agents/solo.md)",
+   "target_role": "solo",
+   "change": {
+    "type": "edit",
+    "anchor": "solo.md:8-10, :18, append",
+    "text": "Line 8: 'The default worker in NEXUS V0.5 lean mode. You do the whole task yourself, across domains, with no council and no synthesis step.' DELETE lines 9-10 (history; it lives in learning/runs/CM-SOLO-V1/RESULT.md). Line 18: replace 'NOT CHECKED / LIMITATION' with 'NOT CHECKED'. APPEND (build tasks only): '- When you build: copy each file to evidence/<TASK>/before/ before editing; test before claiming PASS and paste the command and output; label deliverables WORKING / PARTIAL / MOCK / PLANNED / BLOCKED; keep PROGRESS.md as in AL-05.'"
+   },
+   "signals": [],
+   "evidence": [
+    "solo.md:8 'V0.4' vs SYSTEM.md:1 'V0.5'",
+    "solo.md:18 vs SYSTEM.md:32 (lean = STATUS / FINDINGS / NOT CHECKED)",
+    "learning/runs/RUN-028, RUN-029 (solo used for builds; its rules are audit-only)"
+   ],
+   "root_cause": "Stale version and history text; audit-only rules for a role that is also the default builder.",
+   "target_metric": "tests (build) / tokens",
+   "expected_effect": "Housekeeping: ~0.1K tokens per spawn (tiny). Build lines: tests whether solo with build rules matches vulcan (AL-07), which could keep one default for everything.",
+   "risk": "Low.",
+   "eval_plan": "Gate the build lines only: regress prepare sb --cases=billing-module --role=solo --variant=learning/variants/al-11.md --reps=3; grade-build vs the AL-07 eb-s/eb-v arms. Text fixes ride along (no behaviour claim)."
+  }
+ ],
+ "not_proposed": []
+}

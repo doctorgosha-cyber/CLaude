@@ -1,0 +1,38 @@
+{
+ "task_id": "AL-13",
+ "agent": "agent-lab (cloud Claude, advisory)",
+ "generated": "2026-10-06",
+ "source_signals": "agent-lab-package.zip: learning/ (routing, ledger, eval, runs/*/telemetry, regress), reports/ (20), agents, skills, scripts. learning/signals.json is stale (RUN-001..007 only), so most proposals cite file:line evidence instead of SIG ids.",
+ "ranking_method": "rank = expected gain / effort (S=1, M=2, L=3). Gains are computed from package numbers where marked 'computed', otherwise labelled 'estimate'. Not the CAWL EV formula.",
+ "held_out_note": "cm-01..03 have already been held-out cases for 3 roles / 4 bundles; prefer a fresh capability case (AL-10) where the eval_plan says so. Advice only: NEXUS tests locally and applies only on ACCEPT.",
+ "proposals": [
+  {
+   "id": "AL-13",
+   "rank": 13,
+   "effort": "S",
+   "class": "output contract",
+   "target_file": "agents/sanguinius/AGENT.md (-> .claude/agents/sanguinius.md)",
+   "target_role": "sanguinius",
+   "change": {
+    "type": "append",
+    "anchor": "end of ## Rules",
+    "text": "- Output: a prioritised fix list (P1 = breaks the brief or reads wrong, P2 = clearly weaker, P3 = polish), at most 25 items. Each item: where (selector/view + viewport), before-shot path, fix direction, and the check that proves it fixed.\n- Use the captures NEXUS provides. Capture again only the views you need, and say why."
+   },
+   "signals": [
+    "SIG-127"
+   ],
+   "evidence": [
+    "learning/runs/RUN-030-OFFICE-2-CLAUDE/telemetry.json:13,20 (ART-REVIEW 225K; 'highest-value fix list')",
+    "reports/OFFICE-2-A-FINAL.md:24-50 (P1/P2/P3 list consumed directly by the builder)",
+    "reports/OFFICE-2-A-ARTREVIEW.md:13,44 (54 fresh captures, 3 capture runs)",
+    "SYSTEM.md:38 (shared evidence captured once)"
+   ],
+   "root_cause": "The format that worked best is not in the role card, and re-capturing duplicates NEXUS evidence.",
+   "target_metric": "tokens with fix-list usefulness unchanged",
+   "expected_effect": "estimate: 10-25% fewer tokens per design review; the fix list stays directly buildable.",
+   "risk": "Low.",
+   "eval_plan": "No fixture for design reviews of built scenes exists. Measure on the next 2 design reviews (AL-01 tokens; share of items the builder closes). Add such a case to the capability tier (AL-10) before gating."
+  }
+ ],
+ "not_proposed": []
+}

@@ -1,0 +1,37 @@
+{
+ "task_id": "AL-02",
+ "agent": "agent-lab (cloud Claude, advisory)",
+ "generated": "2026-10-06",
+ "source_signals": "agent-lab-package.zip: learning/ (routing, ledger, eval, runs/*/telemetry, regress), reports/ (20), agents, skills, scripts. learning/signals.json is stale (RUN-001..007 only), so most proposals cite file:line evidence instead of SIG ids.",
+ "ranking_method": "rank = expected gain / effort (S=1, M=2, L=3). Gains are computed from package numbers where marked 'computed', otherwise labelled 'estimate'. Not the CAWL EV formula.",
+ "held_out_note": "cm-01..03 have already been held-out cases for 3 roles / 4 bundles; prefer a fresh capability case (AL-10) where the eval_plan says so. Advice only: NEXUS tests locally and applies only on ACCEPT.",
+ "proposals": [
+  {
+   "id": "AL-02",
+   "rank": 1,
+   "effort": "S",
+   "class": "learning cost",
+   "target_file": "scripts/regress.mjs (new subcommand) + scripts/lib/learn.mjs",
+   "target_role": "NEXUS (plumbing)",
+   "change": {
+    "type": "code",
+    "anchor": "before 'regress prepare <candidate>'",
+    "text": "New 'regress precheck <label> --target=recall|severity': prepare+run baseline with --reps=1, grade, and refuse to prepare the candidate when target=recall and baseline recall >= 0.95*max (or target=severity and baseline agreement >= 0.9). Append {verdict:'SKIPPED_CEILING', case, baseline} to learning/ledger.jsonl so the case is flagged for AL-10 demotion."
+   },
+   "signals": [],
+   "evidence": [
+    "learning/runs/RUN-014-SEO-SENIOR-V2/RESULT.md:8-15 (42/42 both arms, 'fixture hit a ceiling')",
+    "learning/runs/RUN-023-SEO-CLAUDESEO/RESULT.md:11-21 ('second ceiling result')",
+    "learning/ledger.jsonl:6,8 (REJECT gain 0)",
+    "learning/runs/CM-CORAX-V1/RESULT.md:15 (both arms at ceiling on cm-01)",
+    "CLAUDEMAXING-LOOP.md:12 ('eval cases must be below ceiling') - rule exists, no code enforces it"
+   ],
+   "root_cause": "Ceiling status is only discovered after both arms x 3 reps have run.",
+   "target_metric": "tokens per gate decision",
+   "expected_effect": "computed: RUN-014 (~275K) + RUN-023 (~389K) = ~664K = ~15% of ~4.42M measured gate spend; a 1-rep precheck costs ~1/6 of a 2x3 gate, saving ~83% of each doomed gate.",
+   "risk": "Low. A case just under the threshold still runs; threshold is a parameter.",
+   "eval_plan": "Replay: run precheck logic on the stored baseline eval files of RUN-013/014/015/023 and CM-*; it must flag RUN-014 and RUN-023 and no gate that produced ACCEPT. 0 tokens."
+  }
+ ],
+ "not_proposed": []
+}

@@ -1,0 +1,35 @@
+{
+ "task_id": "AL-08",
+ "agent": "agent-lab (cloud Claude, advisory)",
+ "generated": "2026-10-06",
+ "source_signals": "agent-lab-package.zip: learning/ (routing, ledger, eval, runs/*/telemetry, regress), reports/ (20), agents, skills, scripts. learning/signals.json is stale (RUN-001..007 only), so most proposals cite file:line evidence instead of SIG ids.",
+ "ranking_method": "rank = expected gain / effort (S=1, M=2, L=3). Gains are computed from package numbers where marked 'computed', otherwise labelled 'estimate'. Not the CAWL EV formula.",
+ "held_out_note": "cm-01..03 have already been held-out cases for 3 roles / 4 bundles; prefer a fresh capability case (AL-10) where the eval_plan says so. Advice only: NEXUS tests locally and applies only on ACCEPT.",
+ "proposals": [
+  {
+   "id": "AL-08",
+   "rank": 8,
+   "effort": "S",
+   "class": "cost (model tier)",
+   "target_file": ".claude/agents/dorn.md and corax.md frontmatter (via agents/<role>/AGENT.md + sync-agents)",
+   "target_role": "dorn, corax",
+   "change": {
+    "type": "frontmatter",
+    "anchor": "--- block",
+    "text": "Candidate arm only: add 'model: sonnet' to dorn (then corax). Do not change solo or vulcan until the AL-07 build question is settled."
+   },
+   "signals": [],
+   "evidence": [
+    ".claude/agents/*.md frontmatter has no model field, so every subagent runs on the session model",
+    "Claude Code docs, sub-agents: 'model' field per subagent; subagent requests 'count toward the same usage limits as your main conversation'",
+    "learning/eval/REG-dorn-base-*.json (a stable audit baseline to compare against)"
+   ],
+   "root_cause": "Verification and SEO audits may not need the top model; untested.",
+   "target_metric": "cost per verified finding",
+   "expected_effect": "unknown; this is an experiment. The upside is the largest lever on plan limits if quality holds.",
+   "risk": "Medium: lower recall or more false claims. The gate catches both.",
+   "eval_plan": "NEXUS spawns the candidate reps with model=sonnet (per-invocation model parameter); regress prepare dorn-sonnet --role=dorn --cases=cm-01,cm-03 --reps=3; grade; learn gate vs REG-dorn-base-* with target=tokens. Recall may not drop and false claims may not rise (existing gate rules). Record the model in the ledger row."
+  }
+ ],
+ "not_proposed": []
+}

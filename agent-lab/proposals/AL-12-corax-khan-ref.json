@@ -1,0 +1,34 @@
+{
+ "task_id": "AL-12",
+ "agent": "agent-lab (cloud Claude, advisory)",
+ "generated": "2026-10-06",
+ "source_signals": "agent-lab-package.zip: learning/ (routing, ledger, eval, runs/*/telemetry, regress), reports/ (20), agents, skills, scripts. learning/signals.json is stale (RUN-001..007 only), so most proposals cite file:line evidence instead of SIG ids.",
+ "ranking_method": "rank = expected gain / effort (S=1, M=2, L=3). Gains are computed from package numbers where marked 'computed', otherwise labelled 'estimate'. Not the CAWL EV formula.",
+ "held_out_note": "cm-01..03 have already been held-out cases for 3 roles / 4 bundles; prefer a fresh capability case (AL-10) where the eval_plan says so. Advice only: NEXUS tests locally and applies only on ACCEPT.",
+ "proposals": [
+  {
+   "id": "AL-12",
+   "rank": 12,
+   "effort": "S",
+   "class": "consistency",
+   "target_file": "agents/corax/AGENT.md (-> .claude/agents/corax.md)",
+   "target_role": "corax",
+   "change": {
+    "type": "replace",
+    "anchor": "corax.md:14",
+    "text": "- Affiliate/sponsored links: check rel=\"sponsored\"/nofollow and disclosure placement; flag them, and leave commercial policy to NEXUS and the Owner. APPEND: '- Report in the lean format (evidence-report); stop when the inventory is complete and every finding has a quoted DOM value.'"
+   },
+   "signals": [],
+   "evidence": [
+    "corax.md:14 '(that is KHAN)' vs SYSTEM.md:44 (khan is a council-only role, not spawnable)",
+    "learning/ledger.jsonl:5-8,12-13 (6 corax rule bundles REJECTED) -> no new rules proposed"
+   ],
+   "root_cause": "Dangling reference to a role that does not exist in lean mode.",
+   "target_metric": "none (consistency)",
+   "expected_effect": "No measurable quality change expected; removes an instruction that cannot be followed.",
+   "risk": "Low.",
+   "eval_plan": "No-regression only: regress --role=corax --variant=learning/variants/al-12.md --cases=cm-01,cm-02 --reps=1 vs REG-corax-base-*; recall may not drop."
+  }
+ ],
+ "not_proposed": []
+}
