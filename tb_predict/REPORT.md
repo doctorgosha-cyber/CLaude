@@ -14,7 +14,6 @@ rolling 3-year training, quarterly refits, 1-horizon purge + 7-day embargo, 0.15
 shuffled-label control. Development OOS 2020-01 .. 2025-09. Holdout, read once: 2025-10-01 ..
 2026-10-03 for the 10 symbols with data to 2026 (BTC fell 25 % that year) plus 2023-03-15 ..
 2024-03-14 for the 12 alts whose mirror ends there. 23 trading variants counted for the DSR.
-
 ## Q1 Direction — does not work after costs
 | horizon | model | dev AUC | holdout AUC | holdout hit | shuffle AUC | strat Sharpe (holdout) | B&H Sharpe |
 |---|---|---|---|---|---|---|---|
@@ -28,14 +27,12 @@ trip: every long/cash variant (thresholds 0.50, 0.55) trails equal-weight buy-an
 Sharpe in the holdout, 4h variants lose 8–31 %/yr, all DSR ≤ 0.01 (SR0 ≈ 2.1 for 23 trials).
 The best development result (1d LightGBM, Sharpe 1.32 vs B&H 1.28, DSR 0.45) did not survive
 (holdout Sharpe 0.10). Weekly direction is indistinguishable from chance.
-
 ## Q2 Calm regime — does not help
 Calm (RV72h below 90-day median, no 3σ 1h shock in 72h, 72h volume z < 2) covers 35–48 % of
 bars. Holdout AUC inside vs outside calm: 4h 0.534 vs 0.536, 1d 0.499 vs 0.513 (LightGBM) and
 0.536 vs 0.531 (logit), 1w 0.500 vs 0.534; the development hint at 1w (0.54 vs 0.50) reversed.
 Calm-only training is worse everywhere; trading only in calm windows loses at every horizon
 (holdout Sharpe −3.0 .. +0.35). Calm bars have half the variance and no extra predictability.
-
 ## Q3 Volatility and drawdown — predictable, but the model adds little
 | next-week RV (log) | dev R² vs persistence | holdout R² vs persistence | holdout Spearman |
 |---|---|---|---|
@@ -60,7 +57,6 @@ MaxDD improves in both periods; Sharpe is flat in development (−0.04) and bett
 holdout (49 weeks, mostly risk-off, DSR 0.16). This fails the strict "both Sharpe and MaxDD
 in both periods" rule by a hair and is not an edge; it is a drawdown control that costs
 return in bull years (dev annual return 142 % → 77 %). Model vol adds nothing over realised.
-
 ## Q4 Cross-sectional ranking — does not beat plain momentum
 Weekly rank-IC vs next-week return over 20 alts: 4-week momentum −0.02 dev / −0.05 holdout,
 LightGBM expected return +0.03 / +0.02 (t < 1.1), logit 0.02 / 0.00, blend 0.01 / −0.02.
