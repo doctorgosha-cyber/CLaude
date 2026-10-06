@@ -1,0 +1,22 @@
+BTCUSDT   2019-01-01 .. 2026-10-03 rows= 67941 gaps_filled= 183 overlap=57511 bars, median|dClose|=0.00e+00, max=0.00e+00
+ETHUSDT   2019-01-01 .. 2026-10-03 rows= 67941 gaps_filled= 183 overlap=57511 bars, median|dClose|=0.00e+00, max=0.00e+00
+BNBUSDT   2019-01-01 .. 2026-10-03 rows= 67941 gaps_filled= 185 overlap=55574 bars, median|dClose|=0.00e+00, max=0.00e+00
+XRPUSDT   2019-01-01 .. 2026-10-03 rows= 67941 gaps_filled= 185 overlap=51307 bars, median|dClose|=0.00e+00, max=0.00e+00
+ADAUSDT   2019-01-01 .. 2026-10-03 rows= 67940 gaps_filled= 184 overlap=51719 bars, median|dClose|=0.00e+00, max=0.00e+00
+LTCUSDT   2019-01-01 .. 2024-03-14 rows= 45589 gaps_filled=  60 
+BCHUSDT   2019-11-28 .. 2026-10-03 rows= 59993 gaps_filled= 160 overlap=37609 bars, median|dClose|=0.00e+00, max=0.00e+00
+EOSUSDT   2019-01-01 .. 2024-03-14 rows= 45589 gaps_filled=  60 
+XLMUSDT   2019-01-01 .. 2024-03-14 rows= 45589 gaps_filled=  60 
+TRXUSDT   2019-01-01 .. 2026-10-03 rows= 67941 gaps_filled= 185 overlap=50392 bars, median|dClose|=0.00e+00, max=0.00e+00
+LINKUSDT  2019-01-16 .. 2024-03-14 rows= 45219 gaps_filled=  60 
+ETCUSDT   2019-01-01 .. 2024-03-14 rows= 45589 gaps_filled=  60 
+XMRUSDT   2019-03-15 .. 2024-02-20 rows= 43264 gaps_filled=  54 
+NEOUSDT   2019-01-01 .. 2024-03-14 rows= 45589 gaps_filled=  60 
+ATOMUSDT  2019-04-29 .. 2024-03-14 rows= 42753 gaps_filled=  54 
+VETUSDT   2019-01-01 .. 2024-03-14 rows= 45589 gaps_filled=  60 
+DOGEUSDT  2019-07-05 .. 2026-10-03 rows= 63493 gaps_filled= 169 overlap=41099 bars, median|dClose|=0.00e+00, max=0.00e+00
+MATICUSDT 2019-04-26 .. 2024-03-14 rows= 42814 gaps_filled=  54 
+ALGOUSDT  2019-06-22 .. 2024-03-14 rows= 41465 gaps_filled=  44 
+XTZUSDT   2019-09-24 .. 2024-03-14 rows= 39200 gaps_filled=  36 
+ZECUSDT   2019-03-21 .. 2026-10-03 rows= 66041 gaps_filled= 182 overlap=43641 bars, median|dClose|=0.00e+00, max=0.00e+00
+SOLUSDT   2020-08-11 .. 2026-10-03 rows= 53829 gaps_filled= 143 overlap=31457 bars, median|dClose|=0.00e+00, max=0.00e+00

@@ -1,0 +1,5 @@
+data_raw/
+__pycache__/
+*.pyc
+tb_predict/tables/*.parquet
+tb_predict/tables/*.log
