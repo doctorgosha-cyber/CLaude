@@ -1,0 +1,649 @@
+diff --git a/scripts/learn.mjs b/scripts/learn.mjs
+index 8b07c12..557f6b6 100644
+--- a/scripts/learn.mjs
++++ b/scripts/learn.mjs
+@@ -2,11 +2,13 @@
+ // CAWL learning loop CLI.
+ //   node scripts/learn.mjs signals                    -> learning/signals.json (+ summary)
+ //   node scripts/learn.mjs gate --before=a.json --after=b.json --target=severity|recall|noise|tokens [--reps=N] [--proposal=ID]
++//   node scripts/learn.mjs gate --gate=v3 --before=a1.json,a2.json --after=b1.json,b2.json --target=… [--alpha=0.05] [--min-cases=2]
++//        [--allow-unlocked]   -> paired per-defect sign test pooled over cases (AL-03); files pair by position
+ //   node scripts/learn.mjs ledger                     -> list decisions (learning/ledger.jsonl)
+ import { readFileSync, writeFileSync, appendFileSync, mkdirSync, existsSync } from 'node:fs';
+ import { join } from 'node:path';
+ import { fileURLToPath } from 'node:url';
+-import { loadRuns, buildSignals, summarizeSignals, gate, gradingProvenance } from './lib/learn.mjs';
++import { loadRuns, buildSignals, summarizeSignals, gate, gateV3, checkKeyLock, gradingProvenance } from './lib/learn.mjs';
+ 
+ const ROOT = fileURLToPath(new URL('..', import.meta.url));
+ const OUT = join(ROOT, 'learning'); mkdirSync(OUT, { recursive: true });
+@@ -22,6 +24,8 @@ if (cmd === 'signals') {
+   console.log(JSON.stringify({ file: 'learning/signals.json', runs: doc.runs.map((r) => r.run), ...doc.summary }, null, 2));
+ } else if (cmd === 'gate') {
+   if (!flags.before || !flags.after || !flags.target) { console.error('usage: gate --before=a.json --after=b.json --target=severity|recall|noise|tokens [--reps=N] [--proposal=ID]'); process.exit(2); }
++  if (flags.gate === 'v3') gateV3Cli();
++  if (flags.gate && flags.gate !== 'v2') { console.error(`unknown --gate=${flags.gate}; use v2 (default) or v3`); process.exit(2); }
+   const before = JSON.parse(readFileSync(flags.before, 'utf8')), after = JSON.parse(readFileSync(flags.after, 'utf8'));
+   // A8: the gate accepts only scripted or blind-model grading; hand grading by the orchestrator is refused.
+   for (const [name, m] of [['before', before], ['after', after]]) {
+@@ -35,7 +39,32 @@ if (cmd === 'signals') {
+   console.log(JSON.stringify(row, null, 2));
+   process.exit(res.verdict === 'ACCEPT' ? 0 : 1);
+ } else if (cmd === 'ledger') {
+-  for (const r of readJsonl(join(OUT, 'ledger.jsonl'))) console.log(`${r.at}  ${r.proposal ?? '-'}  ${r.verdict}${r.provisional ? ' (provisional)' : ''}  target=${r.target}  Δ=${JSON.stringify(r.delta)}  ${r.reasons.join('; ')}`);
++  for (const r of readJsonl(join(OUT, 'ledger.jsonl'))) console.log(`${r.at}  ${r.proposal ?? r.label ?? '-'}${r.case ? `/${r.case}` : ''}  ${r.gate ?? 'v2'}  ${r.verdict}${r.provisional ? ' (provisional)' : ''}  target=${r.target ?? '-'}  ${r.sign_test ? `p=${r.sign_test.p} (${r.sign_test.plus}+/${r.sign_test.minus}-)` : `Δ=${JSON.stringify(r.delta ?? null)}`}  ${(r.reasons ?? []).join('; ')}`);
+ } else {
+   console.error('usage: learn.mjs signals | gate --before --after --target | ledger'); process.exit(2);
+ }
++
++// Gate v3 (AL-03). Never the default: NEXUS switches only after the Owner decides.
++function gateV3Cli() {
++  const list = (v) => String(v).split(',').map((x) => x.trim()).filter(Boolean);
++  const bs = list(flags.before), as = list(flags.after);
++  if (bs.length !== as.length) { console.error(`v3: ${bs.length} --before file(s) but ${as.length} --after file(s); they pair by position`); process.exit(2); }
++  const ledger = readJsonl(join(OUT, 'ledger.jsonl'));
++  const refuse = [];
++  const cases = bs.map((b, i) => {
++    const before = JSON.parse(readFileSync(b, 'utf8')), after = JSON.parse(readFileSync(as[i], 'utf8'));
++    for (const [name, m] of [[b, before], [as[i], after]]) {
++      const prov = gradingProvenance(m);
++      if (prov === 'hand') refuse.push(`${name} was graded by hand ("${m.grading}")`);
++      if (!flags['allow-unlocked']) refuse.push(...checkKeyLock(m, ledger));
++    }
++    if (before.key_sha256 && after.key_sha256 && before.key_sha256 !== after.key_sha256) refuse.push(`${b} and ${as[i]} were graded with different keys`);
++    return { case: after.case ?? before.case ?? as[i], before, after };
++  });
++  if (refuse.length) { console.error(`refused (gate v3):\n  ${refuse.join('\n  ')}`); process.exit(2); }
++  const res = gateV3(cases, { target: flags.target, reps: Number(flags.reps ?? 1), alpha: Number(flags.alpha ?? 0.05), minCases: Number(flags['min-cases'] ?? 2) });
++  const row = { at: new Date().toISOString(), proposal: flags.proposal ?? null, before: bs, after: as, key_lock: flags['allow-unlocked'] ? 'unchecked' : 'ok', ...res };
++  appendFileSync(join(OUT, 'ledger.jsonl'), JSON.stringify(row) + '\n');
++  console.log(JSON.stringify(row, null, 2));
++  process.exit(res.verdict === 'ACCEPT' ? 0 : 1);
++}
+diff --git a/scripts/lib/grade.mjs b/scripts/lib/grade.mjs
+index b9b9cdc..5e8af2b 100644
+--- a/scripts/lib/grade.mjs
++++ b/scripts/lib/grade.mjs
+@@ -73,6 +73,23 @@ export function scoreReport(md, key, { decoys = null, labels = null, tokens = nu
+   };
+ }
+ 
++/**
++ * Per-defect x rep matrix (gate v3, AL-03): { <defect id>: { gtSev, found: [bool per rep], agree: [true|false|null per rep] } }.
++ * found = the rep's report detected the defect; agree = its severity matched the key (null when not found or unrated).
++ * Reps keep their input order, so before/after matrices pair by rep index.
++ */
++export function perDefectMatrix(reps) {
++  const m = {};
++  reps.forEach((r, i) => {
++    for (const h of r.detail?.hits ?? []) {
++      const row = (m[h.id] ??= { gtSev: h.gtSev ?? null, found: [], agree: [] });
++      row.found[i] = !!h.found; row.agree[i] = h.agree ?? null;
++    }
++  });
++  for (const row of Object.values(m)) for (let i = 0; i < reps.length; i++) { row.found[i] ??= false; row.agree[i] ??= null; }
++  return m;
++}
++
+ /** Mean of several reps (same key) in the eval-json shape, with per_rep recall for the paired gate check. */
+ export function aggregate(reps) {
+   const n = reps.length; if (!n) throw new Error('no reps');
+@@ -86,6 +103,7 @@ export function aggregate(reps) {
+     criticals_given: mean('criticals_given'), criticals_correct: mean('criticals_correct'),
+     per_rep: reps.map((r) => r.recall_points),
+   };
++  if (reps.every((r) => Array.isArray(r.detail?.hits))) out.per_defect = perDefectMatrix(reps);
+   if (reps.every((r) => Number.isFinite(r.tokens))) out.tokens = mean('tokens');
+   return out;
+ }
+diff --git a/scripts/lib/learn.mjs b/scripts/lib/learn.mjs
+index 87bc429..5fb8149 100644
+--- a/scripts/lib/learn.mjs
++++ b/scripts/lib/learn.mjs
+@@ -5,6 +5,7 @@
+ // The model half (CAWL agent) reads signals.json and writes proposals; it never grades its own proposals.
+ import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+ import { join } from 'node:path';
++import { createHash } from 'node:crypto';
+ 
+ const SEV = { crit: 'critical', critical: 'critical', maj: 'major', major: 'major', min: 'minor', minor: 'minor' };
+ const RANK = { minor: 1, major: 2, critical: 3 };
+@@ -177,3 +178,134 @@ export function gate(before, after, { target, minGain = {}, reps = 1, falseToler
+   const verdict = reasons.length ? 'REJECT' : 'ACCEPT';
+   return { verdict, provisional: reps < 3 || pairedAgree === false, reps, target, delta: d, false_ratio: { before: +fb.toFixed(4), after: +fa.toFixed(4) }, paired_agree: pairedAgree, reasons };
+ }
++
++// ---------------------------------------------------------------------------------------------------------------
++// Gate v3 (AL-03, agent-lab): paired per-defect statistics instead of absolute mean deltas.
++// The v2 thresholds (recall +0.02, severity +0.05) are smaller than the score step of a single defect, so a v2
++// ACCEPT can rest on one defect flipping in one rep. v3 pairs rep i of the baseline with rep i of the candidate,
++// per defect, counts the discordant pairs and runs an exact two-sided sign test pooled over cases.
++// ACCEPT (recall|severity) needs p <= alpha AND a positive net on >= minCases cases with no negative case.
++// Anything weaker but positive is PROVISIONAL; no gain or a v2 veto is REJECT. Other targets keep v2 logic per case.
++// ---------------------------------------------------------------------------------------------------------------
++/** Binomial coefficient as a float (exact for the n used here, n <= ~1000). */
++function choose(n, k) { if (k < 0 || k > n) return 0; k = Math.min(k, n - k); let c = 1; for (let i = 1; i <= k; i++) c = (c * (n - k + i)) / i; return c; }
++
++/** Exact two-sided sign test: k successes out of n discordant pairs under p = 0.5. */
++export function signTest(k, n) {
++  if (!Number.isInteger(k) || !Number.isInteger(n) || k < 0 || n < 0 || k > n) throw new Error(`signTest: bad k=${k} n=${n}`);
++  if (n === 0) return 1;
++  const lo = Math.min(k, n - k);
++  let tail = 0; for (let i = 0; i <= lo; i++) tail += choose(n, i);
++  return Math.min(1, (2 * tail) / 2 ** n);
++}
++
++/**
++ * Discordant pairs between two per-defect matrices (see grade.mjs perDefectMatrix / matrixFromScores).
++ * recall:   a pair (defect, rep i) is discordant when exactly one arm found the defect; credit is the score
++ *           difference sign (scores may be 0 / 0.5 / 1 from a blind grader table).
++ * severity: only pairs where both arms found and rated the defect count; discordant when exactly one agrees with the key.
++ * Reps pair by index; extra reps on one side are ignored and reported as `unpaired`.
++ */
++export function discordantPairs(beforeM, afterM, target) {
++  const out = { plus: 0, minus: 0, ties: 0, pairs: 0, unpaired: 0, defects_missing: [] };
++  for (const [id, b] of Object.entries(beforeM ?? {})) {
++    const a = afterM?.[id]; if (!a) { out.defects_missing.push(id); continue; }
++    const nb = (b.found ?? b.score ?? []).length, na = (a.found ?? a.score ?? []).length, n = Math.min(nb, na);
++    out.unpaired += Math.abs(nb - na);
++    for (let i = 0; i < n; i++) {
++      let s = 0;
++      if (target === 'recall') {
++        const vb = b.score ? b.score[i] : (b.found[i] ? 1 : 0), va = a.score ? a.score[i] : (a.found[i] ? 1 : 0);
++        s = Math.sign(va - vb);
++      } else if (target === 'severity') {
++        const gb = b.agree?.[i], ga = a.agree?.[i];
++        if (gb == null || ga == null) continue; // not rated in both arms: no severity pair
++        s = Math.sign((ga ? 1 : 0) - (gb ? 1 : 0));
++      } else throw new Error(`discordantPairs: target ${target} has no per-defect pairs`);
++      out.pairs++;
++      if (s > 0) out.plus++; else if (s < 0) out.minus++; else out.ties++;
++    }
++  }
++  return out;
++}
++
++/** sha256 of a file's bytes (KEY.json / DECOYS.json), or null when the file is absent. */
++export function fileSha256(path) { return existsSync(path) ? createHash('sha256').update(readFileSync(path)).digest('hex') : null; }
++
++/**
++ * Key lock check: the eval file's key hashes must equal the first `KEY_LOCK` ledger row for its label + case
++ * (written by `regress prepare` before the first rep). Returns [] when fine, else reasons.
++ */
++export function checkKeyLock(evalDoc, ledgerRows) {
++  const label = evalDoc?.label, cid = evalDoc?.case;
++  if (!label || !cid) return ['eval file has no label/case, so its key lock cannot be checked'];
++  const lock = ledgerRows.find((r) => r.verdict === 'KEY_LOCK' && r.label === label && r.case === cid);
++  if (!lock) return [`no KEY_LOCK ledger row for ${label}/${cid} (key was not locked before the first rep)`];
++  const reasons = [];
++  if (!evalDoc.key_sha256) reasons.push(`${label}/${cid}: eval file carries no key_sha256`);
++  else if (evalDoc.key_sha256 !== lock.key_sha256) reasons.push(`${label}/${cid}: KEY.json changed after lock (${lock.key_sha256.slice(0, 12)} → ${evalDoc.key_sha256.slice(0, 12)})`);
++  if ((evalDoc.decoys_sha256 ?? null) !== (lock.decoys_sha256 ?? null)) reasons.push(`${label}/${cid}: DECOYS.json changed after lock`);
++  return reasons;
++}
++
++/**
++ * Gate v3. cases: [{ case, before, after }] with eval docs that carry `per_defect` (grade.mjs aggregate).
++ * Returns the v2-compatible shape plus { gate: 'v3', verdict: ACCEPT|PROVISIONAL|REJECT, sign_test, per_case }.
++ */
++export function gateV3(cases, { target, reps = 1, alpha = 0.05, minCases = 2, ...v2opts } = {}) {
++  if (!Array.isArray(cases) || !cases.length) throw new Error('gateV3: no cases');
++  const perCase = cases.map((c) => ({ case: c.case ?? c.after?.case ?? null, v2: gate(c.before, c.after, { target, reps, ...v2opts }) }));
++  const paired = target === 'recall' || target === 'severity';
++  if (!paired) {
++    // token / noise / false_claims / cost: v2 logic per case, all cases must pass
++    const rej = perCase.filter((p) => p.v2.verdict === 'REJECT');
++    const verdict = rej.length ? 'REJECT' : perCase.some((p) => p.v2.provisional) ? 'PROVISIONAL' : 'ACCEPT';
++    return { gate: 'v3', verdict, provisional: verdict === 'PROVISIONAL', reps, target, per_case: perCase.map((p) => ({ case: p.case, verdict: p.v2.verdict, provisional: p.v2.provisional, delta: p.v2.delta, reasons: p.v2.reasons })), reasons: rej.flatMap((p) => p.v2.reasons.map((r) => `${p.case}: ${r}`)) };
++  }
++  // v2 vetoes still apply per case (recall drop, false claims, noise, cost); the v2 threshold on the target does not
++  const targetRe = new RegExp(`^target "${target}" gain`);
++  const vetoes = perCase.flatMap((p) => p.v2.reasons.filter((r) => !targetRe.test(r)).map((r) => `${p.case}: ${r}`));
++  let plus = 0, minus = 0, pairs = 0; const missing = [];
++  const caseRows = cases.map((c, i) => {
++    const bm = c.before?.per_defect, am = c.after?.per_defect;
++    if (!bm || !am) { missing.push(perCase[i].case); return { case: perCase[i].case, data: 'missing' }; }
++    const dp = discordantPairs(bm, am, target);
++    plus += dp.plus; minus += dp.minus; pairs += dp.pairs;
++    return { case: perCase[i].case, ...dp, net: Math.sign(dp.plus - dp.minus) };
++  });
++  const n = plus + minus, p = signTest(Math.max(plus, minus), n);
++  const up = caseRows.filter((r) => r.net > 0).length, down = caseRows.filter((r) => r.net < 0).length;
++  const reasons = [...vetoes];
++  if (missing.length) reasons.push(`no per-defect data for ${missing.join(', ')}`);
++  let verdict;
++  if (vetoes.length) verdict = 'REJECT';
++  else if (missing.length === cases.length) {
++    // nothing to pair: v3 cannot confirm a gain, so a v2 pass is PROVISIONAL at best
++    const v2ok = perCase.every((x) => x.v2.verdict === 'ACCEPT');
++    verdict = v2ok ? 'PROVISIONAL' : 'REJECT';
++    if (!v2ok) reasons.push(...perCase.flatMap((x) => x.v2.reasons.map((r) => `${x.case}: ${r}`)));
++  } else if (plus <= minus) { verdict = 'REJECT'; reasons.push(`no paired gain on "${target}" (${plus} better vs ${minus} worse discordant pairs)`); }
++  else if (p <= alpha && up >= minCases && down === 0 && !missing.length) verdict = 'ACCEPT';
++  else {
++    verdict = 'PROVISIONAL';
++    if (p > alpha) reasons.push(`sign test p=${p.toFixed(3)} > ${alpha} (${plus} of ${n} discordant pairs better)`);
++    if (up < minCases) reasons.push(`positive on ${up} case(s), ${minCases} required`);
++    if (down) reasons.push(`negative on ${down} case(s)`);
++  }
++  return { gate: 'v3', verdict, provisional: verdict === 'PROVISIONAL', reps, target, sign_test: { plus, minus, discordant: n, pairs, p: +p.toFixed(4), alpha }, per_case: caseRows, cases_up: up, cases_down: down, reasons };
++}
++
++/**
++ * AL-02 ceiling precheck on a graded baseline eval doc. recall: recall_points/max_points >= threshold (default 0.95);
++ * severity: severity_agreement_pct/100 >= threshold (default 0.9). rep = 1-based rep to judge (default: the mean).
++ */
++export function ceilingCheck(m, { target, threshold, rep = null } = {}) {
++  if (target !== 'recall' && target !== 'severity') throw new Error(`precheck target must be recall|severity, got ${target}`);
++  const thr = Number(threshold ?? (target === 'recall' ? 0.95 : 0.9));
++  let value;
++  if (target === 'recall') {
++    const pts = rep && Array.isArray(m.per_rep) ? m.per_rep[rep - 1] : m.recall_points;
++    value = m.max_points ? pts / m.max_points : 0;
++  } else value = (m.severity_agreement_pct ?? 0) / 100;
++  return { target, threshold: thr, value: +value.toFixed(4), ceiling: value >= thr };
++}
+diff --git a/scripts/regress.mjs b/scripts/regress.mjs
+index c77176e..aa4dab2 100644
+--- a/scripts/regress.mjs
++++ b/scripts/regress.mjs
+@@ -11,8 +11,13 @@
+ // Case type "workspace": { dir, key, decoys? } — the agent gets a copy of dir; key/decoys stay sealed in the grading folder.
+ //   node scripts/regress.mjs report <label> [--baseline=<label>]  -> table + per-case gate vs baseline
+ //   node scripts/regress.mjs baseline <label>      -> saves this label's metrics as the named baseline
++//   node scripts/regress.mjs precheck <label> --target=recall|severity [--threshold=0.95|0.9] [--cases=…] [--role=…]
++//        AL-02 ceiling precheck. 1st call: prepares a 1-rep baseline (spawn it, collect, grade). 2nd call: judges each
++//        graded case; a case at the ceiling gets a SKIPPED_CEILING ledger row and `prepare --variant` then refuses it
++//        (override: --force-ceiling). Key lock (AL-03): prepare hashes KEY/DECOYS (or GROUND-TRUTH) into a KEY_LOCK
++//        ledger row before the first rep; grade stamps the hashes into the eval file; gate v3 compares them.
+ // Audit cases need one blind grader agent per case: its brief is state/grading/REG-<label>/<case>/GRADER-BRIEF.md.
+-import { readFileSync, writeFileSync, mkdirSync, copyFileSync, existsSync, cpSync } from 'node:fs';
++import { readFileSync, writeFileSync, mkdirSync, copyFileSync, existsSync, cpSync, appendFileSync } from 'node:fs';
+ import { scoreReport, aggregate } from './lib/grade.mjs';
+ import { join } from 'node:path';
+ import { spawnSync } from 'node:child_process';
+@@ -20,7 +25,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
+ import { tmpdir } from 'node:os';
+ import { fileURLToPath } from 'node:url';
+ import { decideRoute } from './lib/router.mjs';
+-import { gate } from './lib/learn.mjs';
++import { gate, fileSha256, ceilingCheck } from './lib/learn.mjs';
+ 
+ const ROOT = fileURLToPath(new URL('..', import.meta.url));
+ const P = (...a) => join(ROOT, ...a);
+@@ -31,6 +36,19 @@ const pick = () => (flags.cases ? set.filter((c) => String(flags.cases).split(',
+ const runFile = (l) => P('learning', 'regress', `${l}.json`);
+ const readJson = (f, d = null) => (existsSync(f) ? JSON.parse(readFileSync(f, 'utf8')) : d);
+ const need = (v, m) => { if (!v) { console.error(m); process.exit(2); } return v; };
++const LEDGER = P('learning', 'ledger.jsonl');
++const ledgerRows = () => (existsSync(LEDGER) ? readFileSync(LEDGER, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)) : []);
++const ledgerAppend = (row) => appendFileSync(LEDGER, JSON.stringify({ at: new Date().toISOString(), ...row }) + '\n');
++/** AL-03 key lock: first KEY_LOCK row per label/case wins; a later prepare with a different key is refused. */
++function lockKey(label, cid, keyFile, decoysFile) {
++  const key_sha256 = fileSha256(keyFile), decoys_sha256 = decoysFile ? fileSha256(decoysFile) : null;
++  const prior = ledgerRows().find((r) => r.verdict === 'KEY_LOCK' && r.label === label && r.case === cid);
++  if (prior && (prior.key_sha256 !== key_sha256 || (prior.decoys_sha256 ?? null) !== decoys_sha256)) {
++    console.error(`refused: ${label}/${cid} key differs from its KEY_LOCK (${prior.at}); use a new label for a new key`); process.exit(2);
++  }
++  if (!prior) ledgerAppend({ verdict: 'KEY_LOCK', label, case: cid, key_sha256, decoys_sha256, reasons: [] });
++  return { key_sha256, decoys_sha256 };
++}
+ 
+ function brief(n) {
+   return `# Regression grading brief
+@@ -50,7 +68,10 @@ if (cmd === 'prepare') {
+   const profile = flags.profile ?? 'lean'; const run = { label, profile, variant: flags.variant ?? null, created: new Date().toISOString(), cases: {} };
+   const extra = flags.variant ? readFileSync(P(flags.variant), 'utf8') : null;
+   const reps = Math.max(1, Number(flags.reps ?? 1)); run.reps = reps;
++  const ceilinged = ledgerRows().filter((r) => r.verdict === 'SKIPPED_CEILING');
+   for (const c of pick()) {
++    const roleFor = flags.role ?? c.role ?? (c.type === 'build' ? 'vulcan' : decideRoute({ domains: c.domains, size: c.domains.length > 1 ? 'large' : 'small', risk: 'medium' }).roles[0]);
++    if (flags.variant && !flags['force-ceiling'] && ceilinged.some((r) => r.case === c.id && (r.role ?? roleFor) === roleFor)) { console.error(`skipped ${c.id}: a precheck found the ${roleFor} baseline at the ceiling (SKIPPED_CEILING in learning/ledger.jsonl); --force-ceiling to run anyway`); continue; }
+     const proj = `regress-${label}-${c.id}`.toLowerCase(); const pd = P('projects', proj); mkdirSync(join(pd, 'site'), { recursive: true });
+     const route = decideRoute({ domains: c.domains, size: c.domains.length > 1 ? 'large' : 'small', risk: 'medium' });
+     const role = flags.role ?? c.role ?? (c.type === 'build' ? 'vulcan' : route.roles[0]); // --role=<id> runs another role on the same cases
+@@ -79,22 +100,51 @@ if (cmd === 'prepare') {
+       spawnSync(process.execPath, [P('scripts', 'nexus.mjs'), 'packet', id], { cwd: ROOT });
+       ids.push(id);
+     }
+-    const gd = P('state', 'grading', `REG-${label}`, c.id);
++    const gd = P('state', 'grading', `REG-${label}`, c.id); const lockSlot = {};
+     if (c.type === 'audit') {
+       mkdirSync(gd, { recursive: true });
+       copyFileSync(P(c.gt), join(gd, 'GROUND-TRUTH.json')); copyFileSync(P(c.page), join(gd, 'page.html'));
++      Object.assign(lockSlot, lockKey(label, c.id, join(gd, 'GROUND-TRUTH.json'), null));
+       writeFileSync(join(gd, 'GRADER-BRIEF.md'), brief(JSON.parse(readFileSync(P(c.gt), 'utf8')).defects.length));
+     } else if (c.type === 'workspace') {
+       mkdirSync(gd, { recursive: true });
+       copyFileSync(P(c.key), join(gd, 'KEY.json')); if (c.decoys) copyFileSync(P(c.decoys), join(gd, 'DECOYS.json'));
++      Object.assign(lockSlot, lockKey(label, c.id, join(gd, 'KEY.json'), c.decoys ? join(gd, 'DECOYS.json') : null));
+     }
+-    run.cases[c.id] = { type: c.type, task_id: ids[0], task_ids: ids, role, packet: `state/packets/${ids[0]}.md`, packets: ids.map((i) => `state/packets/${i}.md`), project: proj };
++    run.cases[c.id] = { type: c.type, task_id: ids[0], task_ids: ids, role, packet: `state/packets/${ids[0]}.md`, packets: ids.map((i) => `state/packets/${i}.md`), project: proj, ...lockSlot };
+   }
+   mkdirSync(P('learning', 'regress'), { recursive: true }); writeFileSync(runFile(label), JSON.stringify(run, null, 2));
+   console.log(JSON.stringify({ label, profile, reps, spawn: Object.values(run.cases).flatMap((x) => x.packets.map((p) => `${x.role}: ${p}`)) }, null, 1));
+   process.exit(0);
+ }
+ 
++if (cmd === 'precheck') {
++  need(label, 'usage: precheck <label> --target=recall|severity [--threshold=x] [--cases=a,b] [--role=r]');
++  const target = need(flags.target, 'precheck needs --target=recall|severity');
++  if (!existsSync(runFile(label))) {
++    // phase 1: a plain 1-rep baseline (no variant), prepared by the normal prepare path
++    const pass = rest.filter((a) => /^--(cases|role|profile)=/.test(a));
++    const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), 'prepare', label, '--reps=1', ...pass], { cwd: ROOT, encoding: 'utf8' });
++    process.stdout.write(r.stdout ?? ''); process.stderr.write(r.stderr ?? '');
++    if (r.status !== 0) process.exit(r.status ?? 1);
++    console.log(`precheck ${label}: 1-rep baseline prepared. Spawn it, then: regress collect ${label} && regress grade ${label} (or a blind grader for audit cases), then re-run this precheck.`);
++    process.exit(0);
++  }
++  const pr = readJson(runFile(label)); let pending = 0; const rows = [];
++  for (const [cid, x] of Object.entries(pr.cases)) {
++    if (flags.cases && !String(flags.cases).split(',').includes(cid)) continue;
++    let m = x.metrics;
++    if (!m && x.type === 'audit') m = readJson(P('state', 'grading', `REG-${label}`, cid, 'GRADING.json'))?.Z ?? null;
++    if (!m || m.error || m.recall_points == null) { pending++; console.log(cid.padEnd(16), 'not graded yet'); continue; }
++    const c = ceilingCheck(m, { target, threshold: flags.threshold, rep: Array.isArray(m.per_rep) ? 1 : null });
++    x.precheck = { ...c, at: new Date().toISOString() };
++    if (c.ceiling) ledgerAppend({ verdict: 'SKIPPED_CEILING', proposal: flags.proposal ?? null, label, case: cid, role: x.role ?? null, target, threshold: c.threshold, baseline: { recall_points: m.recall_points, max_points: m.max_points, severity_agreement_pct: m.severity_agreement_pct, per_rep: m.per_rep ?? null }, reasons: [`baseline ${target} ${c.value} >= ${c.threshold}: no room to show a gain; candidate not run`] });
++    rows.push(c); console.log(cid.padEnd(16), `${target} ${c.value} vs threshold ${c.threshold}:`, c.ceiling ? 'CEILING -> SKIPPED_CEILING (candidate refused)' : 'below ceiling -> run the candidate');
++  }
++  writeFileSync(runFile(label), JSON.stringify(pr, null, 2));
++  process.exit(pending ? 2 : 0);
++}
++
+ const run = need(readJson(runFile(label)), `unknown label ${label}; run prepare first`);
+ const reportNames = (x) => (x.task_ids ?? [x.task_id]).map((id, i) => ({ id, name: (x.task_ids?.length ?? 1) > 1 ? `REPORT-R${i + 1}.md` : 'REPORT-Z.md' }));
+ 
+@@ -120,7 +170,8 @@ if (cmd === 'grade') {
+     reportNames(x).forEach(({ name }, i) => { const f = join(gd, name); if (existsSync(f)) reps.push(scoreReport(readFileSync(f, 'utf8'), key, { decoys, labels: labels?.per_report?.[name] ?? labels, tokens: tokenMap[cid]?.[i] ?? null })); });
+     if (!reps.length) { console.log(cid.padEnd(16), 'no reports collected'); continue; }
+     x.metrics = aggregate(reps);
+-    const evalFile = P('learning', 'eval', `REG-${label}-${cid}.json`); writeFileSync(evalFile, JSON.stringify({ ...x.metrics, label, case: cid, role: x.role }, null, 2));
++    const hashes = { key_sha256: fileSha256(existsSync(join(gd, 'KEY.json')) ? join(gd, 'KEY.json') : join(gd, 'GROUND-TRUTH.json')), decoys_sha256: fileSha256(join(gd, 'DECOYS.json')) };
++    const evalFile = P('learning', 'eval', `REG-${label}-${cid}.json`); writeFileSync(evalFile, JSON.stringify({ ...x.metrics, label, case: cid, role: x.role, ...hashes }, null, 2));
+     console.log(cid.padEnd(16), `reps ${reps.length}: recall ${x.metrics.recall_points}/${x.metrics.max_points} (${x.metrics.per_rep.join('/')})  severity ${x.metrics.severity_agreement_pct}%  false ${x.metrics.extras_false}  unlabelled extras ${x.metrics.extras_unlabelled}  -> ${evalFile.replace(ROOT, '')}`);
+   }
+   writeFileSync(runFile(label), JSON.stringify(run, null, 2)); process.exit(0);
+@@ -156,4 +207,4 @@ if (cmd === 'report' || cmd === 'baseline') {
+   console.log(regressions ? `${regressions} regression(s)` : 'no regressions');
+   process.exit(regressions ? 1 : 0);
+ }
+-console.error('usage: regress.mjs list | prepare <label> [--reps=N] | collect <label> | grade <label> | grade-build <label> | report <label> [--baseline=x] | baseline <label>'); process.exit(2);
++console.error('usage: regress.mjs list | prepare <label> [--reps=N] | precheck <label> --target=recall|severity | collect <label> | grade <label> | grade-build <label> | report <label> [--baseline=x] | baseline <label>'); process.exit(2);
+diff --git a/scripts/replay-gates.mjs b/scripts/replay-gates.mjs
+new file mode 100644
+index 0000000..35bf67a
+--- /dev/null
++++ b/scripts/replay-gates.mjs
+@@ -0,0 +1,118 @@
++#!/usr/bin/env node
++// Retro-replay of AL-02 (ceiling precheck) and AL-03 (gate v3) on stored data. No model calls, no writes
++// except the optional --out JSON. Reads learning/ledger.jsonl, learning/eval/*, learning/runs/*/before.json
++// and per-defect data from state/grading (blind GRADING.md tables or re-scored REG reports + KEY).
++//   node scripts/replay-gates.mjs [--out=learning/replay-al.json]
++import { readFileSync, existsSync, writeFileSync } from 'node:fs';
++import { join } from 'node:path';
++import { fileURLToPath } from 'node:url';
++import { parseGrading, gate, gateV3, ceilingCheck } from './lib/learn.mjs';
++import { scoreReport, aggregate } from './lib/grade.mjs';
++
++const ROOT = fileURLToPath(new URL('..', import.meta.url));
++const P = (...a) => join(ROOT, ...a);
++const readJson = (f) => JSON.parse(readFileSync(f, 'utf8').replace(/^﻿/, ''));
++const flags = Object.fromEntries(process.argv.slice(2).filter((a) => a.startsWith('--')).map((a) => { const [k, ...v] = a.slice(2).split('='); return [k, v.join('=') || true]; }));
++const ledger = readFileSync(P('learning', 'ledger.jsonl'), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((r) => !['KEY_LOCK', 'SKIPPED_CEILING'].includes(r.verdict));
++const norm = (p) => String(p).replace(/\\/g, '/');
++
++// ---------- per-defect matrices ----------
++/** From a blind-grader GRADING.md: arms (letters, in rep order) -> { id: { gtSev, score[], agree[] } } */
++function matrixFromGrading(dir, letters) {
++  const g = parseGrading(readFileSync(P(dir, 'GRADING.md'), 'utf8'));
++  const m = {};
++  for (const d of g.defects) m[d.id] = { gtSev: d.gtSev, score: letters.map((a) => d.per[a].score), agree: letters.map((a) => (d.per[a].score > 0 && d.per[a].sev && d.gtSev ? d.per[a].sev === d.gtSev : null)) };
++  return m;
++}
++const lettersFor = (dir, labels) => { const k = readJson(P(dir, 'BLIND-KEY.json')); return labels.map((l) => Object.keys(k).find((x) => k[x] === l)); };
++/** From stored REG reports: re-score with the KEY/DECOYS/LABELS that sit in the grading folder. */
++function matrixFromReg(label, cid) {
++  const gd = P('state', 'grading', `REG-${label}`, cid);
++  if (!existsSync(join(gd, 'KEY.json'))) return null;
++  const key = readJson(join(gd, 'KEY.json')), decoys = existsSync(join(gd, 'DECOYS.json')) ? readJson(join(gd, 'DECOYS.json')) : null;
++  const labels = existsSync(join(gd, 'LABELS.json')) ? readJson(join(gd, 'LABELS.json')) : null;
++  const reps = [1, 2, 3].map((i) => `REPORT-R${i}.md`).filter((n) => existsSync(join(gd, n)))
++    .map((n) => scoreReport(readFileSync(join(gd, n), 'utf8'), key, { decoys, labels: labels?.per_report?.[n] ?? labels }));
++  return reps.length ? aggregate(reps) : null;
++}
++
++/** Ledger row -> [{ case, before, after }] with per_defect where the data exists, plus a note. */
++function casesFor(row) {
++  const b = norm(row.before), a = norm(row.after);
++  const before = readJson(P(b)), after = readJson(P(a));
++  const reg = a.match(/REG-(.+)-(cm-\d+)\.json$/);
++  if (reg) {
++    const bl = b.match(/REG-(.+)-(cm-\d+)\.json$/)[1], cid = reg[2];
++    const mb = matrixFromReg(bl, cid), ma = matrixFromReg(reg[1], cid);
++    const drift = [[bl, before, mb], [reg[1], after, ma]].filter(([, s, r]) => r && (Math.abs(r.recall_points - s.recall_points) > 0.01 || Math.abs(r.severity_agreement_pct - s.severity_agreement_pct) > 0.1))
++      .map(([l, s, r]) => `${l}: stored ${s.recall_points}/${s.severity_agreement_pct}% vs re-scored ${r.recall_points}/${r.severity_agreement_pct}%`);
++    return { cases: [{ case: cid, before: { ...before, per_defect: mb?.per_defect }, after: { ...after, per_defect: ma?.per_defect } }], source: 're-scored REG reports + KEY', drift };
++  }
++  if (/RUN-003-/.test(a)) {
++    const dir = 'state/grading/RUN-003';
++    return { cases: [{ case: 'RUN-003', before: { ...before, per_defect: matrixFromGrading(dir, lettersFor(dir, ['B1', 'B2'])) }, after: { ...after, per_defect: matrixFromGrading(dir, lettersFor(dir, ['C1', 'C2'])) } }], source: 'blind GRADING.md (B1-C1, B2-C2)', drift: [] };
++  }
++  const r5 = a.match(/RUN-005-([ABC])\.json$/);
++  if (r5) {
++    const dir = 'state/grading/RUN-005/landing', bl = b.match(/RUN-005-([ABC])\.json$/)[1];
++    const arm = (x) => [1, 2, 3].map((i) => `${x}-${i}`);
++    return { cases: [{ case: 'RUN-005/landing', before: { ...before, per_defect: matrixFromGrading(dir, lettersFor(dir, arm(bl))) }, after: { ...after, per_defect: matrixFromGrading(dir, lettersFor(dir, arm(r5[1]))) } }], source: 'blind GRADING.md (rep i - rep i)', drift: [] };
++  }
++  if (/RUN-007-R7C/.test(a)) {
++    const dir = 'state/grading/RUN-007';
++    return { cases: [{ case: 'RUN-007', before: { ...before, per_defect: matrixFromGrading(dir, lettersFor(dir, ['R7B1', 'R7B2', 'R7B3'])) }, after: { ...after, per_defect: matrixFromGrading(dir, lettersFor(dir, ['R7C1', 'R7C2', 'R7C3'])) } }], source: 'blind GRADING.md (rep i - rep i)', drift: [] };
++  }
++  return { cases: [{ case: a.split('/').slice(-2, -1)[0], before, after }], source: 'MISSING: only aggregate before/after.json; no per-rep reports or per-defect table in the package', drift: [] };
++}
++
++// ---------- AL-03 replay ----------
++const rows = ledger.map((row, i) => {
++  const { cases, source, drift } = casesFor(row);
++  const v3 = gateV3(cases, { target: row.target, reps: row.reps });
++  const v2now = gate(cases[0].before, cases[0].after, { target: row.target, reps: row.reps });
++  const st = v3.sign_test ?? {};
++  return { row: i + 1, proposal: row.proposal, target: row.target, old: `${row.verdict}${row.provisional ? ' (prov)' : ''}`, v2now: `${v2now.verdict}${v2now.provisional ? ' (prov)' : ''}`, new: v3.verdict, plus: st.plus, minus: st.minus, p: st.p, source, drift, reasons: v3.reasons, cases };
++});
++
++// pooled per proposal and target (the >= 2 cases rule can only be met here)
++const groups = {};
++for (const r of rows) { const pid = String(r.proposal).split('/')[0]; if (r.source.startsWith('MISSING')) continue; (groups[`${pid}|${r.target}`] ??= []).push(...r.cases); }
++const pooled = Object.entries(groups).filter(([, cs]) => cs.length >= 2).map(([k, cs]) => { const [pid, target] = k.split('|'); const v = gateV3(cs, { target, reps: 3 }); return { proposal: pid, target, cases: cs.map((c) => c.case), verdict: v.verdict, plus: v.sign_test.plus, minus: v.sign_test.minus, p: v.sign_test.p, up: v.cases_up, down: v.cases_down }; });
++// what-if: each multi-case proposal judged on BOTH recall and severity over all its cases
++const byProp = {};
++for (const r of rows) { const pid = String(r.proposal).split('/')[0]; if (!r.source.startsWith('MISSING')) (byProp[pid] ??= []).push(...r.cases); }
++const whatIf = Object.entries(byProp).filter(([, cs]) => cs.length >= 2).flatMap(([pid, cs]) => ['recall', 'severity'].map((t) => { const v = gateV3(cs, { target: t, reps: 3 }); return { proposal: pid, target: t, cases: cs.map((c) => c.case), verdict: v.verdict, plus: v.sign_test.plus, minus: v.sign_test.minus, p: v.sign_test.p }; }));
++
++// ---------- AL-02 replay ----------
++const pre = [];
++const targetOf = (re) => ledger.find((r) => re.test(norm(r.after)))?.target ?? 'recall';
++const verdictOf = (re) => ledger.filter((r) => re.test(norm(r.after))).map((r) => r.verdict).join('/') || '-';
++for (const run of ['RUN-013-SEO-SENIOR', 'RUN-014-SEO-SENIOR-V2', 'RUN-015-SEO-FIELD', 'RUN-023-SEO-CLAUDESEO']) {
++  const m = readJson(P('learning', 'runs', run, 'before.json')); const re = new RegExp(run);
++  const t = targetOf(re); const c = ceilingCheck(m, { target: t });
++  pre.push({ baseline: run, target: t, value: c.value, rep1: null, skip: c.ceiling, ledger: verdictOf(re) });
++}
++for (const [role, cases] of [['cm', ['cm-01', 'cm-02', 'cm-03']], ['corax', ['cm-01', 'cm-02']], ['dorn', ['cm-01', 'cm-03']]]) for (const cid of cases) {
++  const m = readJson(P('learning', 'eval', `REG-${role}-base-${cid}.json`)); const re = new RegExp(`REG-${role}-cand-${cid}`);
++  const t = targetOf(re); const c1 = ceilingCheck(m, { target: t, rep: 1 }), cm = ceilingCheck(m, { target: t });
++  pre.push({ baseline: `${role}-base/${cid}`, target: t, value: cm.value, rep1: t === 'recall' ? c1.value : null, skip: c1.ceiling, ledger: verdictOf(re) });
++}
++
++// ---------- output ----------
++const f = (x) => (x == null ? '-' : x);
++console.log('## AL-02 precheck replay (recall >= 0.95, severity >= 0.90; rep 1 where per-rep data exists)');
++console.log('| Baseline | Target | Mean | Rep 1 | Precheck | Ledger verdict |\n|---|---|---|---|---|---|');
++for (const r of pre) console.log(`| ${r.baseline} | ${r.target} | ${r.value} | ${f(r.rep1)} | ${r.skip ? '**SKIP**' : 'run'} | ${r.ledger} |`);
++console.log('\n## AL-03 v3 replay per ledger row (one case per row, so >= 2 cases cannot be met: PROVISIONAL at best)');
++console.log('| # | Proposal | Target | Ledger (as decided) | v2 today | v3 | +/- pairs | p | Data |\n|---|---|---|---|---|---|---|---|---|');
++for (const r of rows) console.log(`| ${r.row} | ${r.proposal} | ${r.target} | ${r.old} | ${r.v2now} | ${r.new} | ${r.plus ?? '-'}/${r.minus ?? '-'} | ${f(r.p)} | ${r.source.startsWith('MISSING') ? 'missing' : r.source}${r.drift.length ? ' ⚠' : ''} |`);
++console.log('\n## Pooled per proposal (same target, >= 2 cases)');
++console.log('| Proposal | Target | Cases | v3 | +/- | p |\n|---|---|---|---|---|---|');
++for (const r of pooled) console.log(`| ${r.proposal} | ${r.target} | ${r.cases.join(', ')} | ${r.verdict} | ${r.plus}/${r.minus} | ${r.p} |`);
++console.log('\n## What-if: all cases of a proposal on each target');
++console.log('| Proposal | Target | Cases | v3 | +/- | p |\n|---|---|---|---|---|---|');
++for (const r of whatIf) console.log(`| ${r.proposal} | ${r.target} | ${r.cases.join(', ')} | ${r.verdict} | ${r.plus}/${r.minus} | ${r.p} |`);
++const drift = rows.filter((r) => r.drift.length);
++if (drift.length) { console.log('\n## Stored vs re-scored drift (key edited after the stored eval was written?)'); for (const r of drift) console.log(`- row ${r.row}: ${r.drift.join('; ')}`); }
++for (const r of rows.filter((x) => x.reasons.length)) console.log(`- row ${r.row} reasons: ${r.reasons.join('; ')}`);
++if (flags.out) writeFileSync(P(flags.out), JSON.stringify({ precheck: pre, rows: rows.map(({ cases, ...x }) => x), pooled, whatIf }, null, 2));
+diff --git a/tests/gate-v3.test.mjs b/tests/gate-v3.test.mjs
+new file mode 100644
+index 0000000..16f913e
+--- /dev/null
++++ b/tests/gate-v3.test.mjs
+@@ -0,0 +1,145 @@
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { spawnSync } from 'node:child_process';
++import { writeFileSync, mkdtempSync, mkdirSync, cpSync, readFileSync } from 'node:fs';
++import { tmpdir } from 'node:os';
++import { join } from 'node:path';
++import { fileURLToPath } from 'node:url';
++import { signTest, discordantPairs, gateV3, checkKeyLock, ceilingCheck, fileSha256 } from '../scripts/lib/learn.mjs';
++import { aggregate, scoreReport } from '../scripts/lib/grade.mjs';
++
++const ROOT = fileURLToPath(new URL('..', import.meta.url));
++
++test('signTest: exact two-sided binomial values', () => {
++  assert.equal(signTest(6, 6), 0.03125); // 2 / 64
++  assert.equal(signTest(8, 9), 0.0390625); // 2 * 10 / 512
++  assert.equal(signTest(9, 10), 0.021484375); // 2 * 11 / 1024
++  assert.equal(signTest(5, 5), 0.0625); // 5/5 is not enough at alpha 0.05
++  assert.equal(signTest(7, 9), 0.1796875);
++  assert.equal(signTest(3, 6), 1); // capped at 1
++  assert.equal(signTest(0, 0), 1); // no discordant pairs: no evidence
++  assert.equal(signTest(1, 6), signTest(5, 6)); // symmetric
++  assert.throws(() => signTest(7, 6));
++});
++
++const M = (found, agree, gtSev = 'major') => ({ gtSev, found, agree: agree ?? found.map((f) => (f ? true : null)) });
++const ev = (per_defect, extra = {}) => ({ grading: 'scripted:grade.mjs@1', recall_points: 5, max_points: 6, severity_agreement_pct: 50, extras_valid: 0, extras_noise: 0, extras_false: 0, per_defect, ...extra });
++
++test('discordantPairs: recall pairs by rep index, severity only where both rated', () => {
++  const b = { D1: M([false, false, true]), D2: M([true, true, true], [false, false, true]) };
++  const a = { D1: M([true, true, true]), D2: M([true, true, true], [true, false, false]) };
++  assert.deepEqual(discordantPairs(b, a, 'recall'), { plus: 2, minus: 0, ties: 4, pairs: 6, unpaired: 0, defects_missing: [] });
++  const s = discordantPairs(b, a, 'severity'); // D1 reps 1-2 not rated in before -> skipped
++  assert.equal(s.plus, 1); assert.equal(s.minus, 1); assert.equal(s.pairs, 4);
++  // blind-grader scores 0 / 0.5 / 1 also work
++  assert.equal(discordantPairs({ X: { score: [0.5, 1] } }, { X: { score: [1, 1] } }, 'recall').plus, 1);
++});
++
++const sixUp = { D1: [M([false, false, false]), M([true, true, true])], D2: [M([false, false, false]), M([true, true, true])] };
++const caseOf = (name, defs) => ({ case: name, before: ev(Object.fromEntries(Object.entries(defs).map(([k, v]) => [k, v[0]]))), after: ev(Object.fromEntries(Object.entries(defs).map(([k, v]) => [k, v[1]])), { recall_points: 5.5 }) });
++
++test('gateV3: ACCEPT needs p <= 0.05 and the same sign on >= 2 cases', () => {
++  const two = gateV3([caseOf('c1', { D1: sixUp.D1 }), caseOf('c2', { D2: sixUp.D2 })], { target: 'recall', reps: 3 });
++  assert.equal(two.verdict, 'ACCEPT', two.reasons.join('; '));
++  assert.equal(two.sign_test.p, 0.0313);
++  assert.equal(two.cases_up, 2);
++  // the same 6 pairs on ONE case: significant but only one case -> PROVISIONAL
++  const one = gateV3([caseOf('c1', sixUp)], { target: 'recall', reps: 3 });
++  assert.equal(one.verdict, 'PROVISIONAL');
++  assert.ok(one.reasons.some((r) => /positive on 1 case/.test(r)));
++});
++
++test('gateV3: one flipped defect is PROVISIONAL, not ACCEPT (the v2 weakness)', () => {
++  const flip = { D1: [M([false, true, true]), M([true, true, true])] };
++  const r = gateV3([caseOf('c1', flip), caseOf('c2', flip)], { target: 'recall', reps: 3 });
++  assert.equal(r.sign_test.discordant, 2);
++  assert.equal(r.verdict, 'PROVISIONAL');
++});
++
++test('gateV3: no paired gain or a v2 veto is REJECT; missing data is PROVISIONAL at best', () => {
++  const down = gateV3([caseOf('c1', { D1: [M([true, true, true]), M([false, false, false])] })], { target: 'recall', reps: 3 });
++  assert.equal(down.verdict, 'REJECT');
++  const veto = caseOf('c1', sixUp); veto.after.recall_points = 4; // severity target, but recall mean dropped
++  assert.equal(gateV3([veto], { target: 'severity', reps: 3 }).verdict, 'REJECT');
++  const noData = { case: 'old', before: { ...ev(null), per_defect: undefined, recall_points: 5 }, after: { ...ev(null), per_defect: undefined, recall_points: 6 } };
++  const r = gateV3([noData], { target: 'recall', reps: 3 });
++  assert.equal(r.verdict, 'PROVISIONAL');
++  assert.ok(r.reasons.some((x) => /no per-defect data/.test(x)));
++});
++
++test('gateV3: token target keeps the v2 logic per case', () => {
++  const b = { ...ev(null), recall_points: 6, tokens: 50000 }, a = { ...b, tokens: 40000 };
++  assert.equal(gateV3([{ case: 'c1', before: b, after: a }], { target: 'tokens', reps: 3 }).verdict, 'ACCEPT');
++  assert.equal(gateV3([{ case: 'c1', before: b, after: { ...b, tokens: 48000 } }], { target: 'tokens', reps: 3 }).verdict, 'REJECT');
++});
++
++test('checkKeyLock: refuses a missing lock and a key changed after lock', () => {
++  const lock = { verdict: 'KEY_LOCK', label: 'L', case: 'cm-01', key_sha256: 'a'.repeat(64), decoys_sha256: null };
++  assert.deepEqual(checkKeyLock({ label: 'L', case: 'cm-01', key_sha256: 'a'.repeat(64) }, [lock]), []);
++  assert.match(checkKeyLock({ label: 'L', case: 'cm-01', key_sha256: 'b'.repeat(64) }, [lock])[0], /KEY\.json changed after lock/);
++  assert.match(checkKeyLock({ label: 'L', case: 'cm-01', key_sha256: 'a'.repeat(64), decoys_sha256: 'c'.repeat(64) }, [lock])[0], /DECOYS\.json changed/);
++  assert.match(checkKeyLock({ label: 'M', case: 'cm-01', key_sha256: 'a'.repeat(64) }, [lock])[0], /no KEY_LOCK/);
++});
++
++test('gate CLI v3 refuses eval files without a key lock; v2 stays the default', () => {
++  const dir = mkdtempSync(join(tmpdir(), 'gate3-'));
++  const a = join(dir, 'a.json'), b = join(dir, 'b.json');
++  const m = { ...ev({ D1: M([true]) }), label: 'no-such-label', case: 'cm-01', key_sha256: 'f'.repeat(64) };
++  writeFileSync(a, JSON.stringify(m)); writeFileSync(b, JSON.stringify(m));
++  const r = spawnSync(process.execPath, ['scripts/learn.mjs', 'gate', '--gate=v3', `--before=${a}`, `--after=${b}`, '--target=recall'], { encoding: 'utf8', cwd: ROOT });
++  assert.equal(r.status, 2);
++  assert.match(r.stderr, /refused \(gate v3\)[\s\S]*no KEY_LOCK ledger row for no-such-label\/cm-01/);
++  const bad = spawnSync(process.execPath, ['scripts/learn.mjs', 'gate', '--gate=v9', `--before=${a}`, `--after=${b}`, '--target=recall'], { encoding: 'utf8', cwd: ROOT });
++  assert.equal(bad.status, 2);
++});
++
++test('ceilingCheck: thresholds are parameters; rep 1 can be judged alone', () => {
++  assert.equal(ceilingCheck({ recall_points: 42, max_points: 42 }, { target: 'recall' }).ceiling, true);
++  assert.equal(ceilingCheck({ recall_points: 39, max_points: 42 }, { target: 'recall' }).ceiling, false); // 0.929 < 0.95
++  assert.equal(ceilingCheck({ recall_points: 19, max_points: 20 }, { target: 'recall' }).ceiling, true); // exactly 0.95
++  assert.equal(ceilingCheck({ recall_points: 39, max_points: 42 }, { target: 'recall', threshold: 0.9 }).ceiling, true);
++  assert.equal(ceilingCheck({ recall_points: 9.67, max_points: 10, per_rep: [10, 9, 10] }, { target: 'recall', rep: 2 }).ceiling, false);
++  assert.equal(ceilingCheck({ severity_agreement_pct: 91 }, { target: 'severity' }).ceiling, true);
++  assert.equal(ceilingCheck({ severity_agreement_pct: 80 }, { target: 'severity' }).ceiling, false);
++  assert.throws(() => ceilingCheck({}, { target: 'tokens' }));
++});
++
++test('aggregate carries a per-defect x rep matrix for the paired gate', () => {
++  const key = { defects: [{ id: 'D01', severity: 'major', detector: { any: ['noindex'] } }, { id: 'D02', severity: 'minor', detector: { any: ['alt'] } }] };
++  const r1 = '## FINDINGS\n1. [major] [seo] noindex on page\n2. [major] [a11y] alt missing', r2 = '## FINDINGS\n1. [minor] [seo] noindex on page';
++  const agg = aggregate([scoreReport(r1, key), scoreReport(r2, key)]);
++  assert.deepEqual(agg.per_defect.D01, { gtSev: 'major', found: [true, true], agree: [true, false] });
++  assert.deepEqual(agg.per_defect.D02, { gtSev: 'minor', found: [true, false], agree: [false, null] });
++});
++
++test('regress precheck: a ceiling baseline gets SKIPPED_CEILING and a below-ceiling one does not', () => {
++  const root = mkdtempSync(join(tmpdir(), 'precheck-'));
++  cpSync(join(ROOT, 'scripts'), join(root, 'scripts'), { recursive: true });
++  mkdirSync(join(root, 'learning', 'regress'), { recursive: true });
++  writeFileSync(join(root, 'learning', 'eval-set.json'), JSON.stringify({ cases: [] }));
++  writeFileSync(join(root, 'learning', 'ledger.jsonl'), '');
++  writeFileSync(join(root, 'learning', 'regress', 'pc.json'), JSON.stringify({ label: 'pc', cases: {
++    'cm-a': { type: 'workspace', role: 'solo', metrics: { recall_points: 8, max_points: 8, severity_agreement_pct: 50, per_rep: [8] } },
++    'cm-b': { type: 'workspace', role: 'solo', metrics: { recall_points: 9, max_points: 10, severity_agreement_pct: 50, per_rep: [9] } },
++  } }));
++  const r = spawnSync(process.execPath, [join(root, 'scripts', 'regress.mjs'), 'precheck', 'pc', '--target=recall'], { encoding: 'utf8', cwd: root });
++  assert.equal(r.status, 0, r.stderr);
++  const rows = readFileSync(join(root, 'learning', 'ledger.jsonl'), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
++  assert.equal(rows.length, 1);
++  assert.equal(rows[0].verdict, 'SKIPPED_CEILING');
++  assert.equal(rows[0].case, 'cm-a');
++  assert.equal(rows[0].role, 'solo');
++  const run = JSON.parse(readFileSync(join(root, 'learning', 'regress', 'pc.json'), 'utf8'));
++  assert.equal(run.cases['cm-b'].precheck.ceiling, false);
++  // a lower threshold is a parameter: now cm-b (0.9) is at the ceiling too
++  const r2 = spawnSync(process.execPath, [join(root, 'scripts', 'regress.mjs'), 'precheck', 'pc', '--target=recall', '--threshold=0.9', '--cases=cm-b'], { encoding: 'utf8', cwd: root });
++  assert.equal(r2.status, 0, r2.stderr);
++  assert.equal(readFileSync(join(root, 'learning', 'ledger.jsonl'), 'utf8').trim().split('\n').length, 2);
++});
++
++test('fileSha256 hashes bytes and returns null for an absent file', () => {
++  const dir = mkdtempSync(join(tmpdir(), 'sha-'));
++  writeFileSync(join(dir, 'k.json'), 'abc');
++  assert.equal(fileSha256(join(dir, 'k.json')), 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad');
++  assert.equal(fileSha256(join(dir, 'none.json')), null);
++});

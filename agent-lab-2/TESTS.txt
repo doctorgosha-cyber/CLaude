@@ -1,0 +1,52 @@
+# npm test (Node v22.22.2) in the package root with the patch applied
+# 5 failures are pre-existing and identical without the patch: the package has no config/, agents/ or checks/ (ENOENT).
+
+# failing (all ENOENT on config/, agents/, checks/):
+not ok 1 - tests/core.test.mjs
+not ok 2 - no mojibake in the system sources
+not ok 37 - every regression check in checks/ passes
+not ok 11 - tests/standing-approvals.test.mjs
+not ok 12 - tests/v02.test.mjs
+
+  ---
+  duration_ms: 1.336305
+  type: 'test'
+  ...
+# Subtest: blank buffer output is caught
+ok 56 - blank buffer output is caught
+  ---
+  duration_ms: 1.142158
+  type: 'test'
+  ...
+# Subtest: checkPage combines inline and external CSS
+ok 57 - checkPage combines inline and external CSS
+  ---
+  duration_ms: 0.660987
+  type: 'test'
+  ...
+1..57
+# tests 57
+# suites 0
+# pass 52
+# fail 5
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 665.287056
+
+# new tests only: node --test tests/gate-v3.test.mjs
+ok 1 - signTest: exact two-sided binomial values
+ok 2 - discordantPairs: recall pairs by rep index, severity only where both rated
+ok 3 - gateV3: ACCEPT needs p <= 0.05 and the same sign on >= 2 cases
+ok 4 - gateV3: one flipped defect is PROVISIONAL, not ACCEPT (the v2 weakness)
+ok 5 - gateV3: no paired gain or a v2 veto is REJECT; missing data is PROVISIONAL at best
+ok 6 - gateV3: token target keeps the v2 logic per case
+ok 7 - checkKeyLock: refuses a missing lock and a key changed after lock
+ok 8 - gate CLI v3 refuses eval files without a key lock; v2 stays the default
+ok 9 - ceilingCheck: thresholds are parameters; rep 1 can be judged alone
+ok 10 - aggregate carries a per-defect x rep matrix for the paired gate
+ok 11 - regress precheck: a ceiling baseline gets SKIPPED_CEILING and a below-ceiling one does not
+ok 12 - fileSha256 hashes bytes and returns null for an absent file
+# tests 12
+# pass 12
+# fail 0

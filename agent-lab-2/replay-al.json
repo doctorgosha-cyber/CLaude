@@ -1,0 +1,436 @@
+{
+  "precheck": [
+    {
+      "baseline": "RUN-013-SEO-SENIOR",
+      "target": "recall",
+      "value": 0.9286,
+      "rep1": null,
+      "skip": false,
+      "ledger": "REJECT"
+    },
+    {
+      "baseline": "RUN-014-SEO-SENIOR-V2",
+      "target": "recall",
+      "value": 1,
+      "rep1": null,
+      "skip": true,
+      "ledger": "REJECT"
+    },
+    {
+      "baseline": "RUN-015-SEO-FIELD",
+      "target": "recall",
+      "value": 0.68,
+      "rep1": null,
+      "skip": false,
+      "ledger": "REJECT"
+    },
+    {
+      "baseline": "RUN-023-SEO-CLAUDESEO",
+      "target": "recall",
+      "value": 1,
+      "rep1": null,
+      "skip": true,
+      "ledger": "REJECT"
+    },
+    {
+      "baseline": "cm-base/cm-01",
+      "target": "severity",
+      "value": 0.5417,
+      "rep1": null,
+      "skip": false,
+      "ledger": "ACCEPT"
+    },
+    {
+      "baseline": "cm-base/cm-02",
+      "target": "recall",
+      "value": 0.9,
+      "rep1": 0.9,
+      "skip": false,
+      "ledger": "ACCEPT"
+    },
+    {
+      "baseline": "cm-base/cm-03",
+      "target": "recall",
+      "value": 0.933,
+      "rep1": 0.9,
+      "skip": false,
+      "ledger": "ACCEPT"
+    },
+    {
+      "baseline": "corax-base/cm-01",
+      "target": "severity",
+      "value": 0.4583,
+      "rep1": null,
+      "skip": false,
+      "ledger": "REJECT"
+    },
+    {
+      "baseline": "corax-base/cm-02",
+      "target": "recall",
+      "value": 0.967,
+      "rep1": 1,
+      "skip": true,
+      "ledger": "REJECT"
+    },
+    {
+      "baseline": "dorn-base/cm-01",
+      "target": "severity",
+      "value": 0.375,
+      "rep1": null,
+      "skip": false,
+      "ledger": "ACCEPT"
+    },
+    {
+      "baseline": "dorn-base/cm-03",
+      "target": "recall",
+      "value": 0.9,
+      "rep1": 0.9,
+      "skip": false,
+      "ledger": "REJECT"
+    }
+  ],
+  "rows": [
+    {
+      "row": 1,
+      "proposal": "R3-CAWL-001-P3+P5",
+      "target": "severity",
+      "old": "REJECT (prov)",
+      "v2now": "REJECT (prov)",
+      "new": "REJECT",
+      "plus": 9,
+      "minus": 5,
+      "p": 0.424,
+      "source": "blind GRADING.md (B1-C1, B2-C2)",
+      "drift": [],
+      "reasons": [
+        "RUN-003: noise ratio rose by 0.125"
+      ]
+    },
+    {
+      "row": 2,
+      "proposal": "R5-severity-rubric",
+      "target": "severity",
+      "old": "ACCEPT",
+      "v2now": "ACCEPT",
+      "new": "PROVISIONAL",
+      "plus": 24,
+      "minus": 7,
+      "p": 0.0033,
+      "source": "blind GRADING.md (rep i - rep i)",
+      "drift": [],
+      "reasons": [
+        "positive on 1 case(s), 2 required"
+      ]
+    },
+    {
+      "row": 3,
+      "proposal": "R5-reviewer",
+      "target": "severity",
+      "old": "REJECT",
+      "v2now": "REJECT",
+      "new": "REJECT",
+      "plus": 2,
+      "minus": 1,
+      "p": 1,
+      "source": "blind GRADING.md (rep i - rep i)",
+      "drift": [],
+      "reasons": [
+        "RUN-005/landing: noise ratio rose by 0.0616",
+        "RUN-005/landing: cost per verified finding rose 110 % (limit 30 %)"
+      ]
+    },
+    {
+      "row": 4,
+      "proposal": "R7-domain-pass-security",
+      "target": "recall",
+      "old": "REJECT",
+      "v2now": "REJECT",
+      "new": "PROVISIONAL",
+      "plus": 2,
+      "minus": 0,
+      "p": 0.5,
+      "source": "blind GRADING.md (rep i - rep i)",
+      "drift": [],
+      "reasons": [
+        "sign test p=0.500 > 0.05 (2 of 2 discordant pairs better)",
+        "positive on 1 case(s), 2 required"
+      ]
+    },
+    {
+      "row": 5,
+      "proposal": "SEO-SENIOR-v1",
+      "target": "recall",
+      "old": "REJECT",
+      "v2now": "ACCEPT",
+      "new": "PROVISIONAL",
+      "plus": 0,
+      "minus": 0,
+      "p": 1,
+      "source": "MISSING: only aggregate before/after.json; no per-rep reports or per-defect table in the package",
+      "drift": [],
+      "reasons": [
+        "no per-defect data for RUN-013-SEO-SENIOR"
+      ]
+    },
+    {
+      "row": 6,
+      "proposal": "SEO-SENIOR-v2",
+      "target": "recall",
+      "old": "REJECT",
+      "v2now": "REJECT",
+      "new": "REJECT",
+      "plus": 0,
+      "minus": 0,
+      "p": 1,
+      "source": "MISSING: only aggregate before/after.json; no per-rep reports or per-defect table in the package",
+      "drift": [],
+      "reasons": [
+        "no per-defect data for RUN-014-SEO-SENIOR-V2",
+        "RUN-014-SEO-SENIOR-V2: target \"recall\" gain 0 < required 0.02"
+      ]
+    },
+    {
+      "row": 7,
+      "proposal": "SEO-SENIOR-v2-field",
+      "target": "recall",
+      "old": "REJECT",
+      "v2now": "REJECT",
+      "new": "REJECT",
+      "plus": 0,
+      "minus": 0,
+      "p": 1,
+      "source": "MISSING: only aggregate before/after.json; no per-rep reports or per-defect table in the package",
+      "drift": [],
+      "reasons": [
+        "RUN-015-SEO-FIELD: recall dropped (-0.0622)",
+        "no per-defect data for RUN-015-SEO-FIELD"
+      ]
+    },
+    {
+      "row": 8,
+      "proposal": "RUN-023-claude-seo-modules",
+      "target": "recall",
+      "old": "REJECT",
+      "v2now": "REJECT",
+      "new": "REJECT",
+      "plus": 0,
+      "minus": 0,
+      "p": 1,
+      "source": "MISSING: only aggregate before/after.json; no per-rep reports or per-defect table in the package",
+      "drift": [],
+      "reasons": [
+        "RUN-023-SEO-CLAUDESEO: cost per verified finding rose 45 % (limit 30 %)",
+        "no per-defect data for RUN-023-SEO-CLAUDESEO"
+      ]
+    },
+    {
+      "row": 9,
+      "proposal": "CM-SOLO-V1/cm-02",
+      "target": "recall",
+      "old": "ACCEPT",
+      "v2now": "ACCEPT",
+      "new": "PROVISIONAL",
+      "plus": 3,
+      "minus": 0,
+      "p": 0.25,
+      "source": "re-scored REG reports + KEY",
+      "drift": [],
+      "reasons": [
+        "sign test p=0.250 > 0.05 (3 of 3 discordant pairs better)",
+        "positive on 1 case(s), 2 required"
+      ]
+    },
+    {
+      "row": 10,
+      "proposal": "CM-SOLO-V1/cm-03",
+      "target": "recall",
+      "old": "ACCEPT (prov)",
+      "v2now": "ACCEPT (prov)",
+      "new": "PROVISIONAL",
+      "plus": 2,
+      "minus": 0,
+      "p": 0.5,
+      "source": "re-scored REG reports + KEY",
+      "drift": [],
+      "reasons": [
+        "sign test p=0.500 > 0.05 (2 of 2 discordant pairs better)",
+        "positive on 1 case(s), 2 required"
+      ]
+    },
+    {
+      "row": 11,
+      "proposal": "CM-SOLO-V1/cm-01",
+      "target": "severity",
+      "old": "ACCEPT",
+      "v2now": "ACCEPT",
+      "new": "PROVISIONAL",
+      "plus": 5,
+      "minus": 1,
+      "p": 0.2188,
+      "source": "re-scored REG reports + KEY",
+      "drift": [],
+      "reasons": [
+        "sign test p=0.219 > 0.05 (5 of 6 discordant pairs better)",
+        "positive on 1 case(s), 2 required"
+      ]
+    },
+    {
+      "row": 12,
+      "proposal": "CM-CORAX-V1/cm-02",
+      "target": "recall",
+      "old": "REJECT (prov)",
+      "v2now": "REJECT (prov)",
+      "new": "REJECT",
+      "plus": 0,
+      "minus": 3,
+      "p": 0.25,
+      "source": "re-scored REG reports + KEY",
+      "drift": [],
+      "reasons": [
+        "cm-02: recall dropped (-0.1)"
+      ]
+    },
+    {
+      "row": 13,
+      "proposal": "CM-CORAX-V1/cm-01",
+      "target": "severity",
+      "old": "REJECT",
+      "v2now": "REJECT",
+      "new": "PROVISIONAL",
+      "plus": 1,
+      "minus": 0,
+      "p": 1,
+      "source": "re-scored REG reports + KEY",
+      "drift": [],
+      "reasons": [
+        "sign test p=1.000 > 0.05 (1 of 1 discordant pairs better)",
+        "positive on 1 case(s), 2 required"
+      ]
+    },
+    {
+      "row": 14,
+      "proposal": "CM-DORN-V1/cm-03",
+      "target": "recall",
+      "old": "REJECT (prov)",
+      "v2now": "REJECT (prov)",
+      "new": "REJECT",
+      "plus": 2,
+      "minus": 2,
+      "p": 1,
+      "source": "re-scored REG reports + KEY",
+      "drift": [],
+      "reasons": [
+        "no paired gain on \"recall\" (2 better vs 2 worse discordant pairs)"
+      ]
+    },
+    {
+      "row": 15,
+      "proposal": "CM-DORN-V1/cm-01",
+      "target": "severity",
+      "old": "ACCEPT",
+      "v2now": "ACCEPT",
+      "new": "PROVISIONAL",
+      "plus": 3,
+      "minus": 0,
+      "p": 0.25,
+      "source": "re-scored REG reports + KEY",
+      "drift": [],
+      "reasons": [
+        "sign test p=0.250 > 0.05 (3 of 3 discordant pairs better)",
+        "positive on 1 case(s), 2 required"
+      ]
+    }
+  ],
+  "pooled": [
+    {
+      "proposal": "CM-SOLO-V1",
+      "target": "recall",
+      "cases": [
+        "cm-02",
+        "cm-03"
+      ],
+      "verdict": "PROVISIONAL",
+      "plus": 5,
+      "minus": 0,
+      "p": 0.0625,
+      "up": 2,
+      "down": 0
+    }
+  ],
+  "whatIf": [
+    {
+      "proposal": "CM-SOLO-V1",
+      "target": "recall",
+      "cases": [
+        "cm-02",
+        "cm-03",
+        "cm-01"
+      ],
+      "verdict": "PROVISIONAL",
+      "plus": 5,
+      "minus": 0,
+      "p": 0.0625
+    },
+    {
+      "proposal": "CM-SOLO-V1",
+      "target": "severity",
+      "cases": [
+        "cm-02",
+        "cm-03",
+        "cm-01"
+      ],
+      "verdict": "REJECT",
+      "plus": 8,
+      "minus": 4,
+      "p": 0.3877
+    },
+    {
+      "proposal": "CM-CORAX-V1",
+      "target": "recall",
+      "cases": [
+        "cm-02",
+        "cm-01"
+      ],
+      "verdict": "REJECT",
+      "plus": 0,
+      "minus": 3,
+      "p": 0.25
+    },
+    {
+      "proposal": "CM-CORAX-V1",
+      "target": "severity",
+      "cases": [
+        "cm-02",
+        "cm-01"
+      ],
+      "verdict": "REJECT",
+      "plus": 1,
+      "minus": 5,
+      "p": 0.2188
+    },
+    {
+      "proposal": "CM-DORN-V1",
+      "target": "recall",
+      "cases": [
+        "cm-03",
+        "cm-01"
+      ],
+      "verdict": "REJECT",
+      "plus": 2,
+      "minus": 2,
+      "p": 1
+    },
+    {
+      "proposal": "CM-DORN-V1",
+      "target": "severity",
+      "cases": [
+        "cm-03",
+        "cm-01"
+      ],
+      "verdict": "PROVISIONAL",
+      "plus": 7,
+      "minus": 3,
+      "p": 0.3438
+    }
+  ]
+}
