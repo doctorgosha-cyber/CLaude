@@ -51,16 +51,7 @@ Precheck позначає RUN-014 і RUN-023, як і вимагалося. Жо
 5. **Severity-пари рахуються лише там, де обидва плечі знайшли дефект**, тож зміна recall впливає на кількість severity-пар.
 
 ## Що змінено в коді (деталі в `changes.diff`)
-- **`regress precheck`**: два виклики.
-  - 1-й готує baseline з 1 повтору через звичайний `prepare --reps=1`.
-  - 2-й оцінює кожен кейс. Якщо кейс на стелі, пише в ledger `SKIPPED_CEILING` з полями role і threshold. Поріг задається параметром `--threshold`.
-  - Після цього `prepare --variant` пропускає такий кейс для тієї ж ролі; обійти можна через `--force-ceiling`.
-- **Key lock**: `prepare` пише в ledger рядок `KEY_LOCK` з хешем sha256 файлів KEY/DECOYS або GROUND-TRUTH ще до першого повтору.
-  - Повторний `prepare` того самого label зі зміненим ключем відмовляє.
-  - `grade` додає хеші в eval-файл, а `gate --gate=v3` відмовляє (exit 2), якщо хеш не збігається з KEY_LOCK або ключі before/after різні.
-  - Для старих файлів є прапорець `--allow-unlocked`, і в рядку ledger тоді пишеться `key_lock: "unchecked"`.
-- **`grade` aggregate**: додано поле `per_defect` (матриця дефект × повтор). Решта полів без змін.
-- **`learn gate`**: v2 лишається за замовчуванням і поводиться як раніше.
-  - `--gate=v3` приймає файли через кому, які спаровуються за позицією, а також `--alpha` і `--min-cases`.
-  - Цілі tokens/noise/cost/false_claims рахуються за логікою v2 для кожного кейсу.
-- **Тести**: 12 нових, усі проходять. `npm test` дає 52 з 57. 5 падінь ті самі й без патча: у пакеті немає config/, agents/, checks/. Деталі в `TESTS.txt`.
+- **`regress precheck`**: 1-й виклик готує baseline з 1 повтору (`prepare --reps=1`). 2-й оцінює кейси: якщо кейс на стелі, пише в ledger `SKIPPED_CEILING` (role, `--threshold`), і після цього `prepare --variant` пропускає цей кейс для тієї ж ролі (обійти: `--force-ceiling`).
+- **Key lock**: `prepare` пише `KEY_LOCK` (sha256 KEY/DECOYS або GROUND-TRUTH) до першого повтору, а повторний `prepare` зі зміненим ключем відмовляє. `grade` додає хеші в eval-файл, а `gate --gate=v3` відмовляє (exit 2), якщо хеш не збігається; для старих файлів є `--allow-unlocked`.
+- **`grade` aggregate** + `per_defect` (дефект × повтор). **`learn gate`**: v2 лишається за замовчуванням без змін; `--gate=v3` приймає файли через кому, `--alpha`, `--min-cases`; цілі tokens/noise/cost за логікою v2.
+- **Тести**: 12 нових, усі проходять. `npm test` дає 52 з 57; 5 падінь ті самі й без патча (у пакеті немає config/, agents/, checks/). Деталі в `TESTS.txt`.
