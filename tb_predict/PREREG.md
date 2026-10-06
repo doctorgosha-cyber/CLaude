@@ -91,3 +91,12 @@ min(1, 0.60 / predicted annualised vol of the held basket), no leverage.
   costs is higher.
 A result that passes on development but fails on the holdout is reported as
 "does not work".
+
+## Amendments made during development (all before the holdout run)
+* 2026-10-06 13:40 UTC — minimum training rows made horizon-specific (4h 5000,
+  1d 1500, 1w 400): with a flat 2000 the weekly walk-forward could not start
+  before mid-2022. DSR trial variance is now computed in annualised units
+  (per-period Sharpe of 4h and weekly strategies are not comparable).
+  Q3 drawdown table gains one metrics-only row: ranking by the ridge vol
+  forecast. No trading strategy was added; N stays 24 (23 realised: the
+  momentum benchmark in Q4 is not counted as a trial).

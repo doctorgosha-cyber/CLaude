@@ -30,7 +30,7 @@ def clean_panel(panel, horizon):
 
 def test_blocks(start, end, months=C.TEST_BLOCK_MONTHS):
     s0 = pd.Timestamp(start, tz="UTC").to_period("M").to_timestamp().tz_localize("UTC")
-    starts = pd.date_range(s0, end, freq=f"{months}MS", tz="UTC")
+    starts = pd.date_range(s0, pd.Timestamp(end, tz="UTC"), freq=f"{months}MS")
     out = []
     for s in starts:
         e = min(s + pd.DateOffset(months=months), pd.Timestamp(end, tz="UTC"))
@@ -81,7 +81,7 @@ def walk_forward(panel, features, horizon, target="y", models=("logit", "lgbm"),
         tr = p[(p["ts"] >= tr_start) & (p["ts"] <= tr_end)]
         if train_mask is not None:
             tr = tr[train_mask.reindex(tr.index).fillna(False).values]
-        if len(tr) < C.MIN_TRAIN_ROWS:
+        if len(tr) < C.MIN_TRAIN_ROWS[horizon]:
             continue
         Xtr, ytr, Xte = tr[features].values, tr[target].values, te[features].values
         res = te.copy()

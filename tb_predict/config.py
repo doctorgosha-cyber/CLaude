@@ -48,7 +48,7 @@ HORIZONS = {  # name -> (pandas resample rule, bars per year, purge bars, embarg
 }
 TRAIN_YEARS = 3           # rolling training window length
 TEST_BLOCK_MONTHS = 3     # refit every quarter, predict the next quarter
-MIN_TRAIN_ROWS = 2000
+MIN_TRAIN_ROWS = {"4h": 5000, "1d": 1500, "1w": 400}  # per horizon
 
 # ---------------------------------------------------------------- models
 LGBM_PARAMS = dict(n_estimators=300, learning_rate=0.03, num_leaves=15, max_depth=4,

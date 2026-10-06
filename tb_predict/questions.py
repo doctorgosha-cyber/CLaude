@@ -212,10 +212,12 @@ def q3_vol(panels, feats, phase, preds, out):
     dd = wf(pm.dropna(subset=["dd10", "log_rv_now"]), vf, "1w", phase, target="dd10", models=("logit", "lgbm"),
             shuffle_control=True)
     rows = []
-    for name, p in [("rv_now (baseline ranking)", dd["log_rv_now"]), ("logit", dd["p_logit"]), ("lgbm", dd["p_lgbm"]),
-                    ("shuffle", dd["p_shuffle"])]:
-        hit, auc, n = hit_auc(dd["dd10"], p if name != "rv_now (baseline ranking)" else stats.rankdata(p) / len(p))
-        rows.append(dict(model=name, n=n, auc=auc, base_rate_dd10=float(dd["dd10"].mean())))
+    dd = dd.merge(rv[["ts", "symbol", "p_ridge"]], on=["ts", "symbol"], how="left")
+    for name, p in [("rv_now (baseline ranking)", dd["log_rv_now"]), ("ridge predicted vol (ranking)", dd["p_ridge"]),
+                    ("logit", dd["p_logit"]), ("lgbm", dd["p_lgbm"]), ("shuffle", dd["p_shuffle"])]:
+        ok = p.notna()
+        hit, auc, n = hit_auc(dd.loc[ok, "dd10"], stats.rankdata(p[ok]) / ok.sum())
+        rows.append(dict(model=name, n=n, auc=auc, base_rate_dd10=float(dd.loc[ok, "dd10"].mean())))
     t_dd = pd.DataFrame(rows)
     # --- M5-B100 with target-vol sizing
     wk = pm[phase_rows(pm, phase).values].copy()
@@ -242,16 +244,17 @@ def q3_vol(panels, feats, phase, preds, out):
     rv_now_map = wk.set_index(["ts", "symbol"])["rv_now"]
     s_real = basket_scale(rv_now_map)
     s_model = basket_scale(np.exp(pred_rv))
-    real, _, turn_r = m5b100_returns(wk, scale=s_real)
-    model, _, turn_m = m5b100_returns(wk, scale=s_model)
+    real, W_r, turn_r = m5b100_returns(wk, scale=s_real)
+    model, W_m, turn_m = m5b100_returns(wk, scale=s_model)
     rows = []
-    for name, r, t in [("M5-B100 (no sizing)", base, turn), ("M5-B100 target-vol, realised vol", real, turn_r),
-                       ("M5-B100 target-vol, model vol", model, turn_m)]:
+    for name, r, t, Wx in [("M5-B100 (no sizing)", base, turn, W), ("M5-B100 target-vol, realised vol", real, turn_r, W_r),
+                           ("M5-B100 target-vol, model vol", model, turn_m, W_m)]:
         pf = perf(r, 52)
         if "target-vol" in name:
             _record_trial("Q3 " + name, r, 52)
         rows.append(dict(strategy=name, weeks=len(r), ann_ret=pf["ann_ret"], sharpe=pf["sharpe"], maxdd=pf["maxdd"],
-                         turnover_per_yr=float(t.mean() * 52), avg_exposure=float(W.sum(axis=1).mean())))
+                         turnover_per_yr=float(t.mean() * 52), avg_exposure=float(Wx.sum(axis=1).mean()),
+                         weeks_with_model_vol=int(s_model.reindex(Wx.index).lt(1.0).sum()) if "model" in name else np.nan))
     btc = wk[wk["symbol"] == "BTCUSDT"].drop_duplicates("ts").sort_values("ts")
     pf = perf(btc["fwd_ret"], 52)
     rows.append(dict(strategy="BTC buy-and-hold", weeks=len(btc), ann_ret=pf["ann_ret"], sharpe=pf["sharpe"],
@@ -317,11 +320,13 @@ def trials_table(phase, out):
     if t.empty:
         return t
     n = len(t)
-    var_sr = t["sr"].var()
+    t["sr_ann"] = t["sr"] * np.sqrt(t["bpy"])
+    var_sr_ann = t["sr_ann"].var()   # trial variance in annualised units (horizons differ)
     rows = []
     for _, r in t.iterrows():
-        dsr, sr0 = deflated_sharpe(r["sr"], n, r["T"], r["skew"], r["kurt"], var_sr)
-        rows.append(dict(strategy=r["name"], sharpe_ann=r["sr"] * np.sqrt(r["bpy"]), periods=r["T"], dsr=dsr,
+        var_period = var_sr_ann / r["bpy"]
+        dsr, sr0 = deflated_sharpe(r["sr"], n, r["T"], r["skew"], r["kurt"], var_period)
+        rows.append(dict(strategy=r["name"], sharpe_ann=r["sr_ann"], periods=r["T"], dsr=dsr,
                          sr0_ann=sr0 * np.sqrt(r["bpy"]) if sr0 == sr0 else np.nan))
     tt = pd.DataFrame(rows)
     txt = (f"# Deflated Sharpe Ratio — {phase}\n\nN = {n} trading-strategy trials (prereg: 24). "
