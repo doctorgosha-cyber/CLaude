@@ -6,16 +6,14 @@ passes the preregistered holdout + Deflated Sharpe test. No new alpha arm is pro
 One risk-side overlay (realised-vol sizing of M5-B100) cut max drawdown in both periods
 and is specified below as an optional paper experiment, not as an edge.
 
-Setup (details in PREREG.md): Binance spot 1h klines 2019-01 .. 2026-10-03 for BTC, ETH
-and 20 fixed alts (XMR kept although delisted), from two public GitHub mirrors because the
-Binance hosts are blocked from the research box; the mirrors agree bar-for-bar. OHLCV only
-(no taker-buy ratio, no funding, no trade count). 37 price/volume features, logistic
-regression and LightGBM with fixed parameters, pooled across symbols, rolling 3-year
-training, quarterly refits, 1-horizon purge + 7-day embargo. Costs 0.15 %/side. Shuffled
-labels as control. Development OOS = 2020-01 .. 2025-09. Holdout, read once:
-2025-10-01 .. 2026-10-03 for the 10 symbols with data to 2026 (BTC, ETH, BNB, XRP, ADA,
-TRX, DOGE, ZEC, BCH, SOL; BTC fell 25 % in that year) plus 2023-03-15 .. 2024-03-14 for the
-12 alts whose mirror ends there. 23 trading variants counted for the DSR.
+Setup (PREREG.md): Binance spot 1h klines 2019-01 .. 2026-10-03, BTC, ETH + 20 fixed alts
+(XMR kept although delisted), from two public GitHub mirrors (Binance hosts are blocked from
+the research box; mirrors agree bar-for-bar). OHLCV only: no taker-buy ratio, funding or trade
+count. 37 price/volume features, logistic regression + LightGBM with fixed parameters, pooled,
+rolling 3-year training, quarterly refits, 1-horizon purge + 7-day embargo, 0.15 %/side costs,
+shuffled-label control. Development OOS 2020-01 .. 2025-09. Holdout, read once: 2025-10-01 ..
+2026-10-03 for the 10 symbols with data to 2026 (BTC fell 25 % that year) plus 2023-03-15 ..
+2024-03-14 for the 12 alts whose mirror ends there. 23 trading variants counted for the DSR.
 
 ## Q1 Direction — does not work after costs
 | horizon | model | dev AUC | holdout AUC | holdout hit | shuffle AUC | strat Sharpe (holdout) | B&H Sharpe |
@@ -24,21 +22,19 @@ TRX, DOGE, ZEC, BCH, SOL; BTC fell 25 % in that year) plus 2023-03-15 .. 2024-03
 | 1d | logit | 0.529 | 0.531 | 52.3 % ±1.1 | 0.49 | 0.43 | 0.61 |
 | 1d | LightGBM | 0.536 | 0.508 | 51.2 % ±1.1 | 0.49 | 0.10 | 0.61 |
 | 1w | LightGBM | 0.519 | 0.519 | 51.9 % ±3.0 | 0.46 | 0.26 | 0.69 |
-There is a real but tiny signal at 4h and 1d (AUC ≈ 0.53, control ≈ 0.49, 48k holdout
-rows), driven by alts; for BTC and ETH alone the holdout AUC is 0.43–0.53, i.e. nothing.
-It is far too small to pay 0.3 % per round trip: every long/cash variant (thresholds 0.50
-and 0.55) trails equal-weight buy-and-hold on Sharpe in the holdout, 4h variants lose
-8–31 %/yr, and all DSR values are ≤ 0.01 (benchmark SR0 ≈ 2.1 for 23 trials). The best
-development result (1d LightGBM, Sharpe 1.32 vs B&H 1.28, DSR 0.45) did not survive
+A real but tiny signal exists at 4h and 1d (AUC ≈ 0.53, control ≈ 0.49, 48k holdout rows),
+driven by alts; BTC and ETH alone score 0.43–0.53, i.e. nothing. It cannot pay 0.3 % per round
+trip: every long/cash variant (thresholds 0.50, 0.55) trails equal-weight buy-and-hold on
+Sharpe in the holdout, 4h variants lose 8–31 %/yr, all DSR ≤ 0.01 (SR0 ≈ 2.1 for 23 trials).
+The best development result (1d LightGBM, Sharpe 1.32 vs B&H 1.28, DSR 0.45) did not survive
 (holdout Sharpe 0.10). Weekly direction is indistinguishable from chance.
 
 ## Q2 Calm regime — does not help
-Calm (RV72h below 90-day median, no 3σ 1h shock in 72h, 72h volume z < 2) covers 35–48 %
-of bars. Holdout AUC inside vs outside calm: 4h 0.534 vs 0.536, 1d 0.499 vs 0.513
-(LightGBM) and 0.536 vs 0.531 (logit), 1w 0.500 vs 0.534. The development hint at 1w
-(0.54 vs 0.50) reversed. Training on calm bars only is worse everywhere. Trading only in
-calm windows loses money at every horizon (holdout Sharpe −3.0 .. +0.35, exposure < 10 %).
-Calm bars simply have half the return variance and no extra predictability.
+Calm (RV72h below 90-day median, no 3σ 1h shock in 72h, 72h volume z < 2) covers 35–48 % of
+bars. Holdout AUC inside vs outside calm: 4h 0.534 vs 0.536, 1d 0.499 vs 0.513 (LightGBM) and
+0.536 vs 0.531 (logit), 1w 0.500 vs 0.534; the development hint at 1w (0.54 vs 0.50) reversed.
+Calm-only training is worse everywhere; trading only in calm windows loses at every horizon
+(holdout Sharpe −3.0 .. +0.35). Calm bars have half the variance and no extra predictability.
 
 ## Q3 Volatility and drawdown — predictable, but the model adds little
 | next-week RV (log) | dev R² vs persistence | holdout R² vs persistence | holdout Spearman |
@@ -82,7 +78,6 @@ Sharpe roughly unchanged. Run it as a paper arm beside M5-B100 for ≥ 26 weeks 
 decision. Everything else in this brief (direction models, calm filters, ML ranking, model
 vol) should not be built into the bot.
 
-## Caveats
-Holdout year was risk-off (BTC −25 %) and covers only 10 symbols; the alt holdout is 2023-24.
-Taker-buy ratio and funding were unavailable, so the "volume" leg is base volume only.
-M5-B100 is a reconstruction from the brief, not the bot's code. Tables: `tables/*.md`.
+Caveats: the holdout year was risk-off and covers 10 symbols (alts' holdout is 2023-24);
+taker-buy ratio and funding were unavailable; M5-B100 is a reconstruction from the brief,
+not the bot's code. Full tables per question: `tables/*.md`.
