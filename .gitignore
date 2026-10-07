@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 tb_predict/tables/*.parquet
 tb_predict/tables/*.log
+work/
