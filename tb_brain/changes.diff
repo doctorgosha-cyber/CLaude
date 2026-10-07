@@ -1,0 +1,1275 @@
+--- a/projects/trading-bot/src/alt70.mjs	2026-10-07 08:32:59.442012011 +0000
++++ b/projects/trading-bot/src/alt70.mjs	2026-10-07 08:49:43.398497532 +0000
+@@ -56,6 +56,26 @@
+   return out;
+ }
+ 
++/**
++ * TB-BRAIN proposal M5-B100-TV (from TB-PREDICT): target-vol overlay. scale = min(1, target / basket vol) where basket vol is
++ * the mean over `pairs` of the annualised std of the last `days` daily log returns ending at the close of t (data <= t).
++ * A pair without enough closes is skipped; with no usable pair the scale is 1 (no sizing). Pure; never used unless a
++ * variant sets vol_target (the live M5-B100 / C8 params and fingerprints are untouched).
++ */
++export function volScale({ closeAt, pairs, t, days = 7, target }) {
++  const vols = [];
++  for (const p of pairs) {
++    const r = [];
++    for (let k = days - 1; k >= 0; k--) { const a = closeAt(p, t - k * DAY), z = closeAt(p, t - (k + 1) * DAY); if (a > 0 && z > 0) r.push(Math.log(a / z)); }
++    if (r.length < days) continue;
++    const m = r.reduce((s, x) => s + x, 0) / r.length, v = r.reduce((s, x) => s + (x - m) ** 2, 0) / Math.max(1, r.length - 1);
++    vols.push(Math.sqrt(v) * Math.sqrt(365));
++  }
++  if (!vols.length || !(target > 0)) return { scale: 1, basket_vol: null, n: 0 };
++  const bv = vols.reduce((s, x) => s + x, 0) / vols.length;
++  return { scale: Math.min(1, bv > 0 ? target / bv : 1), basket_vol: Math.round(bv * 1e4) / 1e4, n: vols.length };
++}
++
+ /** C8 alt targets: tier 2 (as S3-M0) with a finite rel90 and close > own EMA, by rel90 desc (ties by symbol). */
+ export function tier2EmaTargets(ctx, t, P) {
+   const { universe, ranked } = tier2Targets(ctx, t, P);
+@@ -131,13 +151,21 @@
+       if (frozen(l.pair)) { (ev.frozen_dropped ??= []).push({ pair: l.pair, lot: l.id, reason: o.reason }); continue; } // frozen: stop retrying
+       if (!sell(l, o.reason)) st.pend.push(o);
+     }
++    // M5-B100-TV (proposal, OFF unless params.vol_target): one scale per fill day from the decision close t - 1 day over the
++    // sleeve targets (pending buys + held lots); applied to the buy size only (held lots are not trimmed: entry sizing overlay)
++    let tv = null;
++    if (P.vol_target) {
++      const tp = [...new Set([...B.map((o) => o.pair), ...sl().map((l) => l.pair)])];
++      tv = volScale({ closeAt: (p, d) => Cd(p, d), pairs: tp, t: t - DAY, days: P.vol_days ?? 7, target: P.vol_target });
++      ev.tv = { time: iso(t), ...tv, pairs: tp };
++    }
+     for (const o of B) {
+       const why = frozen(o.pair) ? 'frozen' : blockedAt(o.pair, t - DAY);
+       if (why) { (ev.guard ??= []).push({ time: iso(t), pair: o.pair, action: 'pending_buy_dropped', reason: why }); continue; }
+       const sv = SV[o.sleeve];
+       if (sl(o.sleeve).some((l) => l.pair === o.pair)) continue;
+       const bk = st.cash.active + sl().reduce((s, l) => s + l.cost, 0);
+-      buy('active', 'sleeve', o.pair, Math.min(sv.w * bk / sv.slots, sv.w * 0.25 * bk * (sv.slots > 4 ? 1 : 4 / sv.slots), st.cash.active), o.sleeve);
++      buy('active', 'sleeve', o.pair, Math.min(sv.w * bk / sv.slots, sv.w * 0.25 * bk * (sv.slots > 4 ? 1 : 4 / sv.slots), st.cash.active) * (tv ? tv.scale : 1), o.sleeve);
+     }
+   }
+   // 3) close: mark to market (NET valuation, as the research engine)
+--- a/projects/trading-bot/src/variants.mjs	2026-10-07 08:32:59.445604088 +0000
++++ b/projects/trading-bot/src/variants.mjs	2026-10-07 08:49:43.398521325 +0000
+@@ -154,11 +154,26 @@
+  */
+ export const ALT70_PARAM_DEFAULTS = Object.freeze({ alt_weight: 0.7, slots: 5, universe_top: 40, tier_from: 10, tier_to: 40, lookback_days: 90, turnover_min_fresh: 2,
+   alt_regime_ma_len: 200, core_regime_ma_len: 100, off_closes: 3, alt_turnover: true, alt_ema_filter: null, universe: {} });
++/**
++ * TB-BRAIN proposal M5-B100-TV (TB-PREDICT target-vol overlay): optional alt70 params `vol_target` (annualised, e.g. 0.6) and
++ * `vol_days` (default 7 = the 168 h window of the research, on daily closes). They join the resolved params ONLY when a variant
++ * sets them, so the live M5-B100 / C8 params and fingerprints are byte-identical. OFF by default: not in config.forward.variants.
++ * Labelled NOT A PROVEN EDGE: in TB-PREDICT it lowered MaxDD in both periods at a return cost; Sharpe was flat in development.
++ */
++export const ALT70_TV_PARAMS = Object.freeze({ vol_target: null, vol_days: 7 });
++export const M5_B100_TV_PROPOSAL = Object.freeze({ id: 'M5-B100-TV', strategy: 'alt70', params: { alt_weight: 0.7, slots: 5, universe_top: 40, tier_from: 10, tier_to: 40, lookback_days: 90, turnover_min_fresh: 2,
++  alt_regime_ma_len: 200, core_regime_ma_len: 100, off_closes: 3, alt_turnover: true, alt_ema_filter: null, vol_target: 0.6, vol_days: 7 } });
+ function resolveAlt70(config, v) {
+   const p = v.params ?? {};
+   if (typeof p !== 'object' || Array.isArray(p)) throw new Error(`variant ${v.id}: params must be an object`);
+-  for (const k of Object.keys(p)) if (!(k in ALT70_PARAM_DEFAULTS)) throw new Error(`variant ${v.id}: unknown param ${k}`);
+-  const params = { ...ALT70_PARAM_DEFAULTS, ...p, universe: { ...(p.universe ?? {}) } };
++  for (const k of Object.keys(p)) if (!(k in ALT70_PARAM_DEFAULTS) && !(k in ALT70_TV_PARAMS)) throw new Error(`variant ${v.id}: unknown param ${k}`);
++  const tv = {};
++  if ('vol_target' in p || 'vol_days' in p) {
++    tv.vol_target = p.vol_target ?? null; tv.vol_days = p.vol_days ?? ALT70_TV_PARAMS.vol_days;
++    if (tv.vol_target !== null && !(tv.vol_target > 0 && tv.vol_target <= 3)) throw new Error(`variant ${v.id}: vol_target must be null or in (0, 3] (annualised)`);
++    if (!Number.isInteger(tv.vol_days) || tv.vol_days < 2 || tv.vol_days > 90) throw new Error(`variant ${v.id}: vol_days must be an integer in [2, 90]`);
++  }
++  const params = { ...ALT70_PARAM_DEFAULTS, ...p, ...tv, universe: { ...(p.universe ?? {}) } };
+   for (const [k, val] of Object.entries(params.universe)) {
+     if (!(k in TIGHTEN)) throw new Error(`variant ${v.id}: universe param ${k} cannot be overridden`);
+     if (!TIGHTEN[k](val, config.universe[k])) throw new Error(`variant ${v.id}: universe.${k}=${JSON.stringify(val)} would loosen the Owner rule; overrides may only tighten`);
+@@ -175,7 +190,7 @@
+     core_regime: { ma: 'EMA', n: params.core_regime_ma_len, off_after: params.off_closes },
+     alt70: { alt_weight: params.alt_weight, slots: params.slots, universe_top: params.universe_top, tier_from: params.tier_from, tier_to: params.tier_to, exclude: ['ETHUSDT'],
+       lookback_days: params.lookback_days, turnover_min_fresh: params.turnover_min_fresh, alt_turnover: params.alt_turnover, alt_ema_filter: params.alt_ema_filter,
+-      core_pair: 'BTCUSDT', lt_min_buy_usdt: config.longterm.min_buy_usdt },
++      core_pair: 'BTCUSDT', lt_min_buy_usdt: config.longterm.min_buy_usdt, ...(tv.vol_target ? { vol_target: tv.vol_target, vol_days: tv.vol_days } : {}) },
+     run: { allocation: { min_history_bars: 0 } },
+   };
+ }
+--- a/trading-bot/bot.mjs	2026-10-07 08:32:59.456312132 +0000
++++ b/trading-bot/bot.mjs	2026-10-07 08:49:43.402625121 +0000
+@@ -28,6 +28,8 @@
+        node bot.mjs --paper-forward  [--once] [--state=dir] [--out=dir]      forward paper (swing, 15m) on live PUBLIC klines
+        node bot.mjs --paper-forward --once --variant=<id> | --all           A variants (config.forward.variants), daily bars, one pass
+        node bot.mjs --paper-status   [--json]                                combined summary of swing and every variant
++       node bot.mjs signals          [--out=dir] [--state=dir] [--now=<ISO>] [--asof=<YYYY-MM-DD>]
++                                     TB-BRAIN: market-state snapshot + what the tested rules say -> out/signals.json, out/signals.md
+                     test-only: --source=file:<dir> --now=<ISO time>          offline source, simulated clock
+        node bot.mjs --live   (refused: live trading is Owner-gated)`;
+ 
+@@ -37,7 +39,7 @@
+     : 'REFUSED: testnet mode is not implemented in this build (paper only). Rollout step 2 is Owner-gated.');
+   process.exit(3);
+ }
+-const mode = ['--paper', '--replay', '--regimes', '--paper-forward', '--paper-status', '--compare', '--freeze'].find(flag);
++const mode = ['--paper', '--replay', '--regimes', '--paper-forward', '--paper-status', '--compare', '--freeze'].find(flag) ?? (args.includes('signals') || flag('--signals') ? 'signals' : undefined);
+ if (!mode) { console.error(USAGE); process.exit(1); }
+ if (flag('--oos') && mode !== '--compare') { console.error('REFUSED: --oos is only valid with --compare (and needs out/FROZEN.json)'); process.exit(5); }
+ const strategyOpt = opt('--strategy');
+@@ -62,6 +64,7 @@
+ else if (mode === '--compare') await runCompare();
+ else if (mode === '--freeze') await runFreeze();
+ else if (mode === '--paper-status') await runStatus();
++else if (mode === 'signals') await runSignals();
+ else if (flag('--all') || opt('--variant')) await runVariants();
+ else await runForward();
+ 
+@@ -187,6 +190,23 @@
+   }
+ }
+ 
++// ---------------------------------------------------------------- TB-BRAIN: signals & market state (read-only, offline)
++async function runSignals() {
++  const { makeSignals } = await import('./src/signals.mjs');
++  const out = outDir();
++  const stateRoot = resolve(ROOT, opt('--state') ?? config.forward.state_dir);
++  const now = opt('--now') ? Date.parse(opt('--now')) : Date.now();
++  const t = opt('--asof') ? Date.parse(`${opt('--asof')}T00:00:00Z`) : null;
++  const r = makeSignals({ root: ROOT, config, stateRoot, now, t });
++  mkdirSync(out, { recursive: true });
++  writeJsonAtomic(join(out, 'signals.json'), r.signals);
++  writeJsonAtomic(join(out, 'market-state.json'), r.snapshot);
++  writeFileSync(join(out, 'signals.md'), r.markdown);
++  say(`mode: SIGNALS (PAPER; rule outputs on cached public daily closes; no orders)`);
++  say(r.markdown);
++  say(`wrote ${join(out, 'signals.json')}, market-state.json, signals.md`);
++}
++
+ // ---------------------------------------------------------------- research (TB-STRATEGY-V2)
+ async function runCompare() {
+   const R = await import('./src/research.mjs');
+--- a/trading-bot/README.md	2026-10-07 08:32:59.457074352 +0000
++++ b/trading-bot/README.md	2026-10-07 08:49:43.402704997 +0000
+@@ -150,6 +150,13 @@
+ - Full 2021-11 → 2026-10 engine parity (4216.50 / C8 design +26.77 %): `work/TB-ARM1314/parity-research.mjs` (needs the research panel).
+ - Both arms are labelled NO PROVEN EDGE (C8: FULGRIM-STRAT NOT FOUND).
+ 
++## TB-BRAIN: сигнали та стан ринку (`node bot.mjs signals`, read-only)
++- `src/market-state.mjs` — чисті функції над денними закриттями: тренд BTC (EMA50/100/200, дистанція, нахил), режими EMA200/EMA100 за правилом бота, просадка від 90-денного максимуму, реалізована волатильність і її перцентиль, широта (частка монет вище EMA50/200), tier-2 кошик проти BTC (28/84 д), мітка режиму з точним правилом, і те, що правила M5-B100 / C8 / S3-M0 (та пропозиція M5-B100-TV) вимагають зараз. Кожне число має визначення (`defs`).
++- `src/signals.mjs` — «що кажуть протестовані правила»: статус українською, рівень доказів кожного правила (посилання на TB-звіт), головні ризики, відповідь на питання власника з даних, фіксований дисклеймер. Без цін-цілей, без плеча, без «купуй зараз».
++- `node bot.mjs signals [--out=dir] [--state=dir] [--now=<ISO>] [--asof=<YYYY-MM-DD>]` → `out/signals.json`, `out/signals.md`, `out/market-state.json`. Офлайн: читає `data/daily`, `config/assets.json`, `data/exchangeInfo.json` (якщо немає — пул виводиться з файлів даних і це позначається) і `state/*/paper-state.json` (тільки читання). Жодного шляху ордерів.
++- **M5-B100-TV (пропозиція, OFF за замовчуванням):** `variants.mjs` → `M5_B100_TV_PROPOSAL`: M5-B100 плюс параметри `vol_target: 0.6`, `vol_days: 7`. Розмір купівлі в `alt70.mjs` множиться на `min(1, vol_target / річна волатильність кошика за vol_days денних закриттів)` (рішення на закритті, виконання на наступному відкритті; наявні лоти не підрізаються). Параметри приєднуються до `params` лише коли вони задані, тож живі M5-B100 / C8 (fingerprint) незмінні. Не доведена перевага: у TB-PREDICT оверлей знижував MaxDD в обох періодах ціною дохідності. Встановлення — лише через tb-safe-install (NEXUS), додавши запис до `config.forward.variants`.
++- Тести: `test/market-state.test.mjs`, `test/signals.test.mjs`, `test/alt70-tv.test.mjs`.
++
+ ## Capital (`src/capital.mjs`, `config.capital`)
+ - **Default (TB-PAPER-2).** `split { scalp: 0, swing: 1130, reserve: 300 }`, `enabled_buckets ['swing']`, `reinvest_targets ['swing']`, `reinvest_share 0.5`.
+ - **Disabling a bucket.** A disabled bucket must have split 0, and it never signals, trades or receives reinvest. Every enabled bucket must be greater than 0, and the reserve must be strictly smaller than every enabled bucket. `reinvest_targets` must be a subset of the enabled buckets, with no duplicates. The split must sum to the bank (±0.01).
+--- a/office/server.mjs	2026-10-07 08:32:59.120182717 +0000
++++ b/office/server.mjs	2026-10-07 08:49:43.404447822 +0000
+@@ -9,6 +9,7 @@
+ import { createServer } from '../shared/http.mjs';
+ import { readLanFile, lanConfigFromFile, privateIPv4s } from '../shared/lan.mjs';
+ import { readMarketFlag } from '../shared/market.mjs';
++import { signalsReader } from '../shared/signals.mjs';
+ 
+ const HERE = path.dirname(fileURLToPath(import.meta.url));
+ const root = path.resolve(process.env.NEXUS_ROOT || path.join(HERE, '..', '..', '..', '..')); // variant-a -> claude -> OFFICE-2 -> work -> ROOT
+@@ -33,6 +34,9 @@
+     publicDir: path.join(HERE, 'public'), port, root, variant: 'a',
+     ...(lanOn ? { host: '0.0.0.0', lan: { getConfig: lanConfigFromFile(lanFile) } } : {}),
+     market: { getConfig: marketConfig, log: (m) => console.warn(m) },
++    // TB-BRAIN: GET /api/signals = projects/trading-bot/out/signals.json (read-only; written by `node bot.mjs signals`).
++    // The route itself lives in ../shared/http.mjs next to /api/market (see ../shared/signals.mjs for the handler).
++    signals: signalsReader(root),
+   });
+   console.log(`NEXUS Office · Variant A (cats) → ${s.url}`);
+   const mc = marketConfig();
+--- a/office/public/js/trading-panel.js	2026-10-07 08:32:59.120812798 +0000
++++ b/office/public/js/trading-panel.js	2026-10-07 08:49:43.406067738 +0000
+@@ -2,15 +2,20 @@
+ // PAPER banner and the 14-arm table; this module inserts, right after the banner, the equity header + sparkline,
+ // a hand-rolled candlestick chart with symbol tabs (1d from local bars, 1h from local bars or live), the holdings
+ // table, the decisions feed and the regime badge. Everything read-only; there are no buy/sell controls (grep proves it).
++// TB-BRAIN: the panel is split into two clearly separated tabs: «Автоторгівля (папір)» (this module's existing content +
++// the HUD arm table) and «Сигнали та стан ринку» (signals-view.js over GET /api/signals, read-only, refreshed every 5 min).
+ import { drawCandles, drawSparkline, fmtPrice, fmtPct, pctColor, base, pickChartSymbols } from './charts.js';
+ import * as F from './fmt.js';
++import { signalsHtml, tabsHtml, fetchSignals, SIGNALS_CSS, TABS_CSS } from './signals-view.js';
+ 
+ const esc = F.esc;
+ 
+ export function installTradingPanel(hud, { mobile = false } = {}) {
+   const orig = hud.renderTrading.bind(hud);
+-  const st = { symbol: null, interval: '1d', market: null };
++  const st = { symbol: null, interval: '1d', market: null, tab: 'auto', signals: null, signalsAt: 0 };
+   let ro = null;
++  if (!document.getElementById('tp-signals-css')) { const css = document.createElement('style'); css.id = 'tp-signals-css'; css.textContent = TABS_CSS + SIGNALS_CSS; document.head.appendChild(css); }
++  try { const saved = localStorage.getItem('tp.tab'); if (saved === 'signals' || saved === 'auto') st.tab = saved; } catch { /* storage may be blocked */ }
+ 
+   const sel = () => {
+     const m = st.market; if (!m) return null;
+@@ -85,17 +90,46 @@
+     ro?.disconnect(); ro = new ResizeObserver(() => drawChart(sec)); ro.observe(sec.querySelector('.tf-chart-wrap'));
+   }
+ 
++  function applyTab(body) {
++    body.querySelectorAll('.tp-tabs [data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === st.tab)));
++    const auto = body.querySelector('#panel-auto'), sig = body.querySelector('#panel-signals');
++    if (auto) auto.hidden = st.tab !== 'auto';
++    if (sig) sig.hidden = st.tab !== 'signals';
++  }
++  async function refreshSignals(force = false) {
++    if (!force && st.signals && Date.now() - st.signalsAt < 5 * 60_000) return;
++    st.signals = await fetchSignals('/api/signals'); st.signalsAt = Date.now();
++    const sig = document.querySelector('#trading #panel-signals'); if (sig) sig.innerHTML = signalsHtml(st.signals, { mobile });
++  }
++
+   hud.renderTrading = () => {
+     orig();
+     const el = document.querySelector('#trading'); const body = el?.querySelector('.body'); if (!body) return;
+     const banner = body.querySelector('.banner');
++    // tab 1 «Автоторгівля (папір)»: the HUD's own content (the PAPER banner stays above both tabs) + this module's section
++    const auto = document.createElement('div'); auto.id = 'panel-auto'; auto.className = 'tp-panel'; auto.setAttribute('role', 'tabpanel'); auto.setAttribute('aria-labelledby', 'tab-auto');
++    const after = banner ? [...body.children].slice([...body.children].indexOf(banner) + 1) : [...body.children];
+     const sec = document.createElement('div'); sec.innerHTML = html();
+     const node = sec.firstElementChild;
+-    if (banner) banner.after(node); else body.prepend(node);
++    auto.append(node, ...after);
++    // tab 2 «Сигнали та стан ринку»: read-only, from /api/signals
++    const sig = document.createElement('div'); sig.id = 'panel-signals'; sig.className = 'tp-panel'; sig.setAttribute('role', 'tabpanel'); sig.setAttribute('aria-labelledby', 'tab-signals');
++    sig.innerHTML = signalsHtml(st.signals, { mobile });
++    const tabs = document.createElement('div'); tabs.innerHTML = tabsHtml(st.tab);
++    const tabsNode = tabs.firstElementChild;
++    if (banner) banner.after(tabsNode); else body.prepend(tabsNode);
++    tabsNode.after(auto, sig);
++    tabsNode.querySelectorAll('[data-tab]').forEach((b) => b.addEventListener('click', () => {
++      st.tab = b.dataset.tab; try { localStorage.setItem('tp.tab', st.tab); } catch { /* ignore */ }
++      applyTab(body); if (st.tab === 'signals') refreshSignals(); else drawChart(node);
++    }));
++    applyTab(body);
+     wire(node); drawChart(node);
++    refreshSignals();
+   };
+   return {
+     setMarket(m) { st.market = m; if (!document.querySelector('#trading').hidden) hud.renderTrading(); },
++    setSignals(s) { st.signals = s; st.signalsAt = Date.now(); const sig = document.querySelector('#trading #panel-signals'); if (sig) sig.innerHTML = signalsHtml(s, { mobile }); },
+     state: st,
+   };
+ }
+--- /dev/null	2026-10-06 22:03:21.894919590 +0000
++++ b/projects/trading-bot/src/market-state.mjs	2026-10-07 08:49:43.398409546 +0000
+@@ -0,0 +1,268 @@
++// TB-BRAIN: market-state engine. Pure functions over daily closes (no fs, no network, no orders).
++// Every number in the snapshot carries its definition (the `defs` block), and every regime label carries
++// the exact rule that produced it. Paper research only; this module does not decide anything by itself.
++//
++// Inputs are the bot's own compact daily rows [openMs, close, quoteVolume] (data/daily) and, for the arm
++// rules, the same ctx shape momentum2.mjs uses ({ closeAt(p,t), universeAt(t) }). Nothing here mutates its input.
++import { regimeSeries } from './strategies/regime.mjs';
++import { tier2Targets } from './momentum2.mjs';
++import { tier2EmaTargets, volScale, ALT70_DEFAULTS } from './alt70.mjs';
++
++export const DAY = 86_400_000;
++const r2 = (x) => Math.round(x * 100) / 100;
++const r4 = (x) => Math.round(x * 1e4) / 1e4;
++const iso = (t) => new Date(t).toISOString();
++const d10 = (t) => iso(t).slice(0, 10);
++const fin = (x) => (Number.isFinite(x) ? x : null);
++
++/** Compact rows -> [{t, c}] ascending, duplicates dropped, non-positive closes skipped. */
++export function closesOf(rows) {
++  const m = new Map();
++  for (const r of rows ?? []) { const t = Number(r[0]), c = Number(r.length >= 8 ? r[4] : r[1]); if (c > 0) m.set(t, c); }
++  return [...m.entries()].sort((a, b) => a[0] - b[0]).map(([t, c]) => ({ t, c }));
++}
++
++/** EMA seeded with the SMA of the first n closes (the same seed as strategies/regime.mjs). null until seeded. */
++export function emaSeries(bars, n) {
++  const a = 2 / (n + 1), out = [];
++  let ema = null, sum = 0;
++  for (let i = 0; i < bars.length; i++) {
++    const c = bars[i].c;
++    if (i < n) { sum += c; if (i === n - 1) ema = sum / n; }
++    else ema = a * c + (1 - a) * ema;
++    out.push(ema);
++  }
++  return out;
++}
++
++const at = (bars, t) => { let lo = 0, hi = bars.length - 1, k = -1; while (lo <= hi) { const m = (lo + hi) >> 1; if (bars[m].t <= t) { k = m; lo = m + 1; } else hi = m - 1; } return k; };
++
++/** Bars up to and including t (decision at the close of t). */
++export const upTo = (bars, t) => bars.slice(0, at(bars, t) + 1);
++
++/** Annualised realised vol of daily log returns over the last n returns ending at the last bar. */
++export function realizedVol(bars, n = 30) {
++  if (bars.length < n + 1) return null;
++  const r = [];
++  for (let i = bars.length - n; i < bars.length; i++) r.push(Math.log(bars[i].c / bars[i - 1].c));
++  const m = r.reduce((s, x) => s + x, 0) / r.length;
++  const v = r.reduce((s, x) => s + (x - m) ** 2, 0) / Math.max(1, r.length - 1);
++  return Math.sqrt(v) * Math.sqrt(365);
++}
++
++/** Percentile (0..100) of the current n-day vol among the daily vol readings of the last `lookback` days. */
++export function volPercentile(bars, n = 30, lookback = 365) {
++  if (bars.length < n + 2) return null;
++  const vals = [];
++  const from = Math.max(n + 1, bars.length - lookback);
++  for (let i = from; i <= bars.length; i++) { const v = realizedVol(bars.slice(0, i), n); if (v !== null) vals.push(v); }
++  if (vals.length < 20) return null;
++  const cur = vals[vals.length - 1];
++  return r2(100 * vals.filter((v) => v <= cur).length / vals.length);
++}
++
++/** Close vs the highest close of the last `days` bars (inclusive): 0 = at the high, -0.25 = 25 % below. */
++export function drawdownFromHigh(bars, days = 90) {
++  if (!bars.length) return null;
++  const w = bars.slice(-days);
++  const hi = Math.max(...w.map((b) => b.c));
++  return hi > 0 ? bars[bars.length - 1].c / hi - 1 : null;
++}
++
++/** Simple return over `days` calendar days (close at t vs the last close at or before t - days). */
++export function returnOver(bars, t, days) {
++  const i = at(bars, t), j = at(bars, t - days * DAY);
++  if (i < 0 || j < 0 || i === j) return null;
++  return bars[i].c / bars[j].c - 1;
++}
++
++/**
++ * BTC trend block at the close of t: close, EMA50/100/200 with distance %, the EMA200 10-day slope %, and the bot's
++ * regime states (EMA200 for the alt sleeves / A arms, EMA100 for the M5-B100 core): ON above, OFF after `offAfter`
++ * consecutive closes below (strategies/regime.mjs, unchanged).
++ */
++export function btcTrend(btcBars, t, { offAfter = 3, slopeDays = 10 } = {}) {
++  const bars = upTo(btcBars, t);
++  if (bars.length < 2) return null;
++  const close = bars[bars.length - 1].c;
++  const out = { as_of: d10(bars[bars.length - 1].t), close, ema: {}, regime: {} };
++  for (const n of [50, 100, 200]) {
++    const e = emaSeries(bars, n), v = e[e.length - 1], prev = e[e.length - 1 - slopeDays] ?? null;
++    out.ema[`ema${n}`] = v === null ? null : { value: r2(v), dist_pct: r2((close / v - 1) * 100), slope_pct_10d: prev === null || prev === undefined ? null : r2((v / prev - 1) * 100) };
++  }
++  for (const n of [100, 200]) {
++    const s = regimeSeries(bars, { ema_n: n, off_after: offAfter }), last = s[s.length - 1];
++    let below = 0; for (let i = s.length - 1; i >= 0 && s[i].ema !== null && s[i].close < s[i].ema; i--) below++;
++    out.regime[`ema${n}`] = { on: last.on, closes_below: below, rule: `ON when a daily close is above EMA${n}; OFF after ${offAfter} consecutive closes below (the bot's regime rule)` };
++  }
++  out.dd90 = { pct: r2((drawdownFromHigh(bars, 90) ?? 0) * 100), def: 'close vs the highest daily close of the last 90 days' };
++  out.ret = { d7: fin(r4(returnOver(bars, t, 7))), d28: fin(r4(returnOver(bars, t, 28))), d84: fin(r4(returnOver(bars, t, 84))) };
++  const rv = realizedVol(bars, 30);
++  out.vol = { rv30_ann: rv === null ? null : r4(rv), pct_1y: volPercentile(bars, 30, 365), def: 'std of 30 daily log returns x sqrt(365); percentile among the daily readings of the last 365 days' };
++  return out;
++}
++
++/** Share of `pairs` whose close at t is above their own EMA(n) (pairs with fewer than n+1 bars are not counted). */
++export function breadth(barsByPair, pairs, t, n) {
++  let above = 0, total = 0;
++  for (const p of pairs) {
++    const bars = upTo(barsByPair[p] ?? [], t);
++    if (bars.length < n + 1) continue;
++    const e = emaSeries(bars, n)[bars.length - 1];
++    if (e === null) continue;
++    total++; if (bars[bars.length - 1].c > e) above++;
++  }
++  return { above, total, pct: total ? r2(100 * above / total) : null, def: `% of the listed pairs whose close is above their own EMA${n} (SMA-seeded)` };
++}
++
++/** Equal-weight simple return of a basket over `days`; pairs without both closes are skipped. */
++export function basketReturn(barsByPair, pairs, t, days) {
++  const rs = pairs.map((p) => returnOver(barsByPair[p] ?? [], t, days)).filter((x) => x !== null);
++  if (!rs.length) return { n: 0, mean: null, median: null };
++  const s = [...rs].sort((a, b) => a - b);
++  return { n: rs.length, mean: r4(rs.reduce((a, b) => a + b, 0) / rs.length), median: r4(s[s.length >> 1]) };
++}
++
++/** Alt basket vs BTC over several windows: rel = (1 + basket) / (1 + btc) - 1. */
++export function relativeStrength(barsByPair, pairs, btcBars, t, windows = [28, 84]) {
++  const out = {};
++  for (const d of windows) {
++    const b = basketReturn(barsByPair, pairs, t, d), btc = returnOver(btcBars, t, d);
++    out[`d${d}`] = { basket_mean: b.mean, basket_median: b.median, n: b.n, btc: fin(r4(btc)), rel_mean: b.mean === null || btc === null ? null : r4((1 + b.mean) / (1 + btc) - 1) };
++  }
++  out.def = 'equal-weight basket of the pairs listed in `pairs` (tier-2 universe at t) vs BTC, simple returns over the window; rel = (1+basket)/(1+btc)-1';
++  return out;
++}
++
++/**
++ * Regime label. The rules are the whole definition; there is no hidden scoring.
++ *   risk-on            : BTC EMA200 regime ON  AND close > EMA50 AND breadth(EMA200) >= 50 %
++ *   neutral            : BTC EMA200 regime ON  AND (close <= EMA50 OR breadth(EMA200) < 50 %)
++ *   capitulation-watch : BTC EMA200 regime OFF AND drawdown from the 90-day high <= -25 % AND 30-day vol percentile >= 80
++ *   risk-off           : BTC EMA200 regime OFF otherwise
++ */
++export function regimeLabel({ ema200On, closeAboveEma50, breadth200Pct, dd90Pct, volPct1y }) {
++  const b = breadth200Pct === null || breadth200Pct === undefined ? null : breadth200Pct;
++  if (ema200On) {
++    if (closeAboveEma50 && (b === null || b >= 50)) return { label: 'risk-on', rule: `BTC EMA200 regime ON and close > EMA50 and breadth(EMA200) ${b === null ? 'n/a' : `${b} % >= 50 %`}` };
++    return { label: 'neutral', rule: `BTC EMA200 regime ON but ${!closeAboveEma50 ? 'close <= EMA50' : ''}${!closeAboveEma50 && b !== null && b < 50 ? ' and ' : ''}${b !== null && b < 50 ? `breadth(EMA200) ${b} % < 50 %` : ''}` };
++  }
++  if (dd90Pct !== null && dd90Pct <= -25 && volPct1y !== null && volPct1y >= 80) return { label: 'capitulation-watch', rule: `BTC EMA200 regime OFF and drawdown from the 90-day high ${dd90Pct} % <= -25 % and 30-day vol percentile ${volPct1y} >= 80` };
++  return { label: 'risk-off', rule: `BTC EMA200 regime OFF (drawdown ${dd90Pct} %, vol percentile ${volPct1y})` };
++}
++
++/**
++ * What the tested arm rules say at the close of t, computed from data only (independent of the live paper state).
++ * ctx: { closeAt(p,t), universeAt(t) } as in momentum2.mjs; params = the arm's resolved params (variants.mjs).
++ */
++export function armRules(ctx, t, btcBars, arms) {
++  const b = btcTrend(btcBars, t);
++  const out = {};
++  const monday = new Date(t).getUTCDay() === 1;
++  for (const [id, a] of Object.entries(arms)) {
++    const P = { ...ALT70_DEFAULTS, ...a.params };
++    const altOn = b.regime.ema200.on;
++    const tg = (P.alt_ema_filter ? tier2EmaTargets(ctx, t, P) : tier2Targets(ctx, t, P));
++    const targets = tg.ranked.filter((p) => ctx.closeAt(p, t) > 0).slice(0, P.slots);
++    if (a.kind === 'ml2') {
++      out[id] = { kind: 'ml2', regime: { ema200: altOn }, says: altOn ? 'hold the tier-2 top-5' : 'cash (regime off: every sleeve lot is sold at the next open)',
++        targets: altOn ? targets : [], tier2_top: tg.ranked.slice(0, 10), universe_n: tg.universe.length, next_review: monday ? 'this close is a Monday review' : 'next Monday close (or a regime turn-on close)',
++        rule: 'S3-M0: tier-2 momentum (rel90 rank, universe positions 11..40 without ETH), BTC EMA200 regime, weekly, 5 slots, turnover control' };
++    } else {
++      const coreOn = b.regime.ema100.on;
++      const weights = { alt: altOn ? r4(P.alt_weight) : 0, core: coreOn ? r4(1 - P.alt_weight) : 0 };
++      out[id] = { kind: 'alt70', regime: { ema200_alt: altOn, ema100_core: coreOn },
++        says: `${altOn ? `alt sleeve ${Math.round(P.alt_weight * 100)} % in the tier-2 top-5` : 'alt sleeve in cash'}; ${coreOn ? `core ${Math.round((1 - P.alt_weight) * 100)} % in BTC` : 'core in cash'}`,
++        target_weights: weights, cash_weight: r2(1 - weights.alt - weights.core), targets: altOn ? targets : [], core: coreOn ? [P.core_pair] : [], tier2_top: tg.ranked.slice(0, 10), universe_n: tg.universe.length,
++        next_review: monday ? 'this close is a Monday review' : 'next Monday close (core: daily; a regime turn-on close enters at the next open)',
++        rule: P.alt_ema_filter ? `C8: M5-B100 with an own-EMA${P.alt_ema_filter} filter on candidates and exact weekly replacement` : 'M5-B100: 70 % tier-2 momentum (S3-M0 rules, BTC EMA200 regime) + 30 % BTC on the BTC EMA100 regime, weekly' };
++      if (a.vol_target) {
++        const held = [...(altOn ? targets : []), ...(coreOn ? [P.core_pair] : [])];
++        const vs = volScale({ closeAt: ctx.closeAt, pairs: held, t, days: a.vol_days ?? 7, target: a.vol_target });
++        out[id].tv_overlay = { scale: vs.scale, basket_vol_ann: vs.basket_vol, pairs: held, days: a.vol_days ?? 7, target: a.vol_target,
++          effective_weights: { alt: r4(weights.alt * vs.scale), core: r4(weights.core * vs.scale) },
++          def: `scale = min(1, ${a.vol_target} / basket vol); basket vol = mean over the held pairs of the annualised std of the last ${a.vol_days ?? 7} daily log returns (TB-PREDICT M5-B100-TV; NOT a tested edge: it lowered MaxDD in both test periods and cost return)` };
++      }
++    }
++  }
++  return out;
++}
++
++/**
++ * Historical evidence for "BTC falls -> buy alts?": for every Monday close in [from, t - horizon], the forward
++ * `horizon`-day return of BTC and of the equal-weight tier-2 basket (ctx.universeAt at that Monday), split by the BTC
++ * EMA200 regime state at that close and by whether BTC then fell more than `btcDropPct` over the horizon.
++ */
++export function altVsBtcByRegime(ctx, btcBars, t, { from = null, horizon = 28, tier = [10, 40], btcDropPct = 5 } = {}) {
++  const reg = regimeSeries(btcBars, { ema_n: 200, off_after: 3 });
++  const regAt = new Map(reg.map((r) => [Math.floor(r.t / DAY), r.on]));
++  const rows = [];
++  const start = from ?? btcBars[0].t;
++  for (let d = start; d <= t - horizon * DAY; d += DAY) {
++    if (new Date(d).getUTCDay() !== 1) continue;
++    const on = regAt.get(Math.floor(d / DAY)); if (on === undefined) continue;
++    const b0 = ctx.closeAt('BTCUSDT', d), b1 = ctx.closeAt('BTCUSDT', d + horizon * DAY);
++    if (!(b0 > 0 && b1 > 0)) continue;
++    const uni = ctx.universeAt(d).filter((p) => p !== 'BTCUSDT' && p !== 'ETHUSDT').slice(tier[0], tier[1]);
++    const rs = uni.map((p) => { const a = ctx.closeAt(p, d), z = ctx.closeAt(p, d + horizon * DAY); return a > 0 && z > 0 ? z / a - 1 : null; }).filter((x) => x !== null);
++    if (rs.length < 3) continue;
++    rows.push({ t: d, on, btc: b1 / b0 - 1, alt: rs.reduce((a, b) => a + b, 0) / rs.length, n: rs.length });
++  }
++  const stat = (xs) => {
++    if (!xs.length) return { weeks: 0 };
++    const med = (a) => { const s = [...a].sort((x, y) => x - y); return s[s.length >> 1]; };
++    return { weeks: xs.length, btc_median: r4(med(xs.map((x) => x.btc))), alt_median: r4(med(xs.map((x) => x.alt))), alt_mean: r4(xs.reduce((s, x) => s + x.alt, 0) / xs.length),
++      alts_beat_btc_pct: r2(100 * xs.filter((x) => x.alt > x.btc).length / xs.length), alts_positive_pct: r2(100 * xs.filter((x) => x.alt > 0).length / xs.length) };
++  };
++  const drop = rows.filter((x) => x.btc <= -btcDropPct / 100);
++  return {
++    def: `Monday closes from ${d10(start)}; forward ${horizon}-day simple returns; alt basket = equal weight of the tier-2 universe (positions ${tier[0] + 1}..${tier[1]} by 90-day volume, no BTC/ETH) at that Monday; regime = BTC EMA200 rule at that close`,
++    horizon_days: horizon, weeks: rows.length,
++    regime_on: stat(rows.filter((x) => x.on)), regime_off: stat(rows.filter((x) => !x.on)),
++    btc_drop: { def: `weeks where BTC fell more than ${btcDropPct} % over the horizon`, all: stat(drop), regime_on: stat(drop.filter((x) => x.on)), regime_off: stat(drop.filter((x) => !x.on)) },
++    btc_up: stat(rows.filter((x) => x.btc > 0)),
++  };
++}
++
++/**
++ * Full snapshot at the close of t.
++ * @param daily     {pair: compact rows}
++ * @param ctx       { closeAt, universeAt } (point-in-time universe; see bot.mjs signals)
++ * @param arms      {id: {kind: 'alt70'|'ml2', params, vol_target?, vol_days?}}
++ */
++export function marketState({ daily, ctx, arms = {}, t = null, historyFrom = null }) {
++  const bars = Object.fromEntries(Object.entries(daily).map(([p, rows]) => [p, closesOf(rows)]));
++  const btc = bars.BTCUSDT;
++  if (!btc?.length) throw new Error('no BTCUSDT daily closes');
++  const asOf = t ?? btc[btc.length - 1].t;
++  const trend = btcTrend(btc, asOf);
++  const uni = ctx.universeAt(asOf).filter((p) => p !== 'BTCUSDT');
++  const tier2 = uni.filter((p) => p !== 'ETHUSDT').slice(10, 40);
++  const listed = Object.keys(bars).filter((p) => p !== 'BTCUSDT' && (bars[p].at(-1)?.t ?? 0) >= asOf - 3 * DAY);
++  const br50 = breadth(bars, uni, asOf, 50), br200 = breadth(bars, uni, asOf, 200);
++  const brAll50 = breadth(bars, listed, asOf, 50), brAll200 = breadth(bars, listed, asOf, 200);
++  const rel = relativeStrength(bars, tier2, btc, asOf, [28, 84]);
++  const eth = bars.ETHUSDT ? { d28: fin(r4(returnOver(bars.ETHUSDT, asOf, 28))), d84: fin(r4(returnOver(bars.ETHUSDT, asOf, 84))), vs_btc_28: fin(r4((1 + returnOver(bars.ETHUSDT, asOf, 28)) / (1 + returnOver(btc, asOf, 28)) - 1)) } : null;
++  const label = regimeLabel({ ema200On: trend.regime.ema200.on, closeAboveEma50: trend.ema.ema50 ? trend.close > trend.ema.ema50.value : true, breadth200Pct: br200.pct, dd90Pct: trend.dd90.pct, volPct1y: trend.vol.pct_1y });
++  return {
++    label: 'PAPER research snapshot from public daily closes; rule outputs, not advice',
++    as_of: d10(asOf), as_of_ms: asOf, data_last_close: d10(btc[btc.length - 1].t), pairs_with_data: Object.keys(bars).length,
++    btc: trend, eth,
++    breadth: { eligible_universe: { ema50: br50, ema200: br200, n: uni.length, def: 'the bot\'s eligible USDT universe at t (Owner rules, top 40 by 90-day volume), BTC excluded' },
++      all_listed: { ema50: brAll50, ema200: brAll200, n: listed.length, def: 'every USDT pair in the data snapshot with a close in the last 3 days (incl. memes, stables and ineligible names)' } },
++    alt_vs_btc: { ...rel, tier2_pairs: tier2 },
++    regime: label,
++    arms: armRules(ctx, asOf, btc, arms),
++    evidence_alts_when_btc_falls: altVsBtcByRegime(ctx, btc, asOf, { from: historyFrom ?? btc[0].t + 100 * DAY }),
++    defs: {
++      ema: 'EMA seeded with the SMA of the first n closes (the bot\'s regime EMA); dist_pct = close / EMA - 1',
++      regime_ema200: 'ON when a daily close is above EMA200; OFF after 3 consecutive closes below (the A arms and the alt sleeves)',
++      regime_ema100: 'the same rule on EMA100 (the M5-B100 / C8 BTC core sleeve)',
++      dd90: 'close vs the highest daily close of the last 90 days, in %',
++      vol: 'annualised std of daily log returns (30 d); percentile among the last 365 daily readings',
++      breadth: '% of pairs with a close above their own EMA50 / EMA200',
++      alt_vs_btc: 'equal-weight tier-2 basket (eligible universe positions 11..40 by volume, no BTC/ETH) vs BTC over 28 / 84 days',
++      arms: 'targets recomputed from data only (the live paper state may lag or lead by a day); next fills are at the next open after a Monday close',
++    },
++  };
++}
+--- /dev/null	2026-10-06 22:03:21.894919590 +0000
++++ b/projects/trading-bot/src/signals.mjs	2026-10-07 08:49:43.398462199 +0000
+@@ -0,0 +1,198 @@
++// TB-BRAIN: signals & recommendations = the OUTPUT OF TESTED RULES on the current market-state snapshot, with the evidence
++// level of each rule and the main risks. Plain Ukrainian copy. Never a target price, never leverage, never "buy now".
++// buildSignals / renderSignalsMd are pure; collectSignalsInputs reads the bot's files (no network, no orders).
++import { readFileSync, existsSync, readdirSync } from 'node:fs';
++import { join, resolve } from 'node:path';
++import { marketState, DAY } from './market-state.mjs';
++import { makeUniverse, loadDaily } from './realdata.mjs';
++import { resolveVariants, M5_B100_TV_PROPOSAL } from './variants.mjs';
++import { ownEma } from './alt70.mjs';
++
++export const DISCLAIMER = 'Це вихід протестованих правил, не персональна фінансова порада. Папір: жодних ключів, акаунтів чи ордерів.';
++const pct = (x, d = 1) => (x === null || x === undefined ? '—' : `${x > 0 ? '+' : ''}${(x * 100).toFixed(d)} %`);
++const pp = (x, d = 1) => (x === null || x === undefined ? '—' : `${x > 0 ? '+' : ''}${Number(x).toFixed(d)} %`);
++const base = (p) => String(p).replace(/USDT$/, '');
++const r2 = (x) => Math.round(x * 100) / 100;
++
++/** Evidence table: every rule points to the report that tested it and the verdict written there. */
++export const EVIDENCE = Object.freeze({
++  'M5-B100': { report: 'reports/TB-ALT70.md', level: 'forward paper від 2026-10-05; бектест 2021-11..2026-10: CAGR/DD 0.527, MaxDD 46.6 %, DSR ≤ 0.09 — без доведеної переваги' },
++  C8: { report: 'reports/TB-ARM1314.md', level: 'forward paper від 2026-10-05; FULGRIM-STRAT R2 — без доведеної переваги (NOT FOUND)' },
++  'S3-M0': { report: 'reports/TB-RECENT3.md', level: 'forward paper; tier-2 momentum — TB-TIER2: «no tier-2 method beats A0 on risk», без доведеної переваги' },
++  'M5-B100-TV': { report: 'tb_predict/REPORT.md (TB-PREDICT)', level: 'тільки бектест: MaxDD нижчий в обох періодах, Sharpe без змін у design, дохідність нижча; формальний критерій не пройдено; не edge' },
++  regime: { report: 'reports/TB-STRAT-V2-OOS.md', level: 'EMA200-режим — єдиний ризик-контроль A-арм; OOS: жоден кандидат не пройшов' },
++  direction: { report: 'tb_predict/REPORT.md (TB-PREDICT)', level: 'напрямок на 4h/1d/1w після комісій не передбачуваний (усі DSR ≤ 0.01); calm-вікна не допомагають' },
++  dip: { report: 'reports/TB-ARM1314.md / OWNER-RULES.md', level: 'резерв 300 USDT витрачає лише протестоване dip-правило (A5 C2v2: BTC ≤ 70/60/50 % від 365-денного максимуму); інших «купити просадку» правил немає' },
++});
++
++const NEXT_UK = {
++  'this close is a Monday review': 'це закриття понеділка — огляд сьогодні, виконання на наступному відкритті',
++  'next Monday close (or a regime turn-on close)': 'наступне закриття понеділка (або закриття, на якому режим увімкнеться)',
++  'next Monday close (core: daily; a regime turn-on close enters at the next open)': 'наступне закриття понеділка (ядро BTC перевіряється щодня; вмикання режиму = вхід на наступному відкритті)',
++};
++const RULE_UK = {
++  'M5-B100': '70 % tier-2 momentum (правила S3-M0, режим BTC EMA200) + 30 % BTC на режимі BTC EMA100; огляд щопонеділка на закритті, виконання на наступному відкритті',
++  C8: 'як M5-B100, але кандидат має закритися вище власної EMA50, а список замінюється щотижня точно',
++  'S3-M0': 'tier-2 momentum: ранг rel90 (90-денна дохідність проти BTC) серед позицій 11..40 за обсягом без ETH; режим BTC EMA200; 5 слотів; ротація лише при ≥ 2 нових іменах',
++  'M5-B100-TV': 'M5-B100 плюс масштаб ваг min(1, 0.60 / 7-денна річна волатильність кошика) при купівлі; пропозиція з TB-PREDICT, не в живому боті',
++};
++const labelUk = { 'risk-on': 'ризик-он (тренд угору)', neutral: 'нейтрально (тренд угору, але слабшає)', 'risk-off': 'ризик-оф (BTC нижче тренду)', 'capitulation-watch': 'спостереження за капітуляцією' };
++
++/** Live paper arms from state/<id>/paper-state.json (read-only). */
++export function readArms(stateRoot) {
++  const out = [];
++  if (!existsSync(stateRoot)) return out;
++  for (const id of readdirSync(stateRoot)) {
++    const f = join(stateRoot, id, 'paper-state.json');
++    if (!existsSync(f)) continue;
++    try {
++      const s = JSON.parse(readFileSync(f, 'utf8')), P = s.portfolio ?? {};
++      const kind = P.kind ?? 'regime';
++      const lots = kind === 'ml2' || kind === 'alt70' ? (P.lots ?? []).filter((l) => l.role === 'sleeve') : kind === 'rel' ? [] : (P.pos ?? []);
++      out.push({ id, kind, updated_at: s.updated_at, last_day: P.lastT ? new Date(P.lastT).toISOString().slice(0, 10) : null,
++        equity_total: r2(P.equity?.total ?? NaN), start_total: P.start_total ?? null, regime: kind === 'alt70' ? P.regimes : kind === 'rel' ? null : { on: P.regime_on },
++        positions: lots.map((l) => ({ pair: l.pair, sleeve: l.sleeve ?? null, cost: r2(l.cost) })), pending: (P.pend ?? P.pending?.sells ?? []).length, last_targets: P.last_targets ?? null, label: s.label ?? null });
++    } catch (e) { out.push({ id, broken: String(e.message).slice(0, 120) }); }
++  }
++  return out.sort((a, b) => a.id.localeCompare(b.id, 'en', { numeric: true }));
++}
++
++/**
++ * Inputs from the bot's files: daily compact closes (data/daily), config/assets.json, data/exchangeInfo.json when present
++ * (else a pool derived from the data files, flagged), live arm states. No network.
++ */
++export function collectSignalsInputs({ root, config, dataDir = null, stateRoot = null }) {
++  const D = resolve(root, dataDir ?? config.real.data_dir);
++  const { daily, first } = loadDaily(D);
++  const meta = new Map(JSON.parse(readFileSync(resolve(root, config.real.assets), 'utf8')).assets.map((a) => [a.symbol, a]));
++  const exPath = join(D, 'exchangeInfo.json');
++  let ex, exNote;
++  if (existsSync(exPath)) { ex = JSON.parse(readFileSync(exPath, 'utf8')); exNote = 'data/exchangeInfo.json'; }
++  else { ex = { symbols: Object.keys(daily).map((p) => ({ symbol: p, baseAsset: p.slice(0, -config.real.quote.length), quoteAsset: config.real.quote, status: 'TRADING', filters: [] })) }; exNote = 'derived from the data files (data/exchangeInfo.json absent): statuses unknown, all treated as TRADING'; }
++  const cfgU = { ...config, real: { ...config.real, max_trade_pairs: 1000 } };
++  const U = makeUniverse({ config: cfgU, ex, meta, daily, first });
++  const closeAt = (p, d) => { const ix = U.idx[p]; if (!ix) return undefined; const i = Math.floor(d / DAY) - ix.d0; return i >= 0 && i < ix.n && ix.has[i] ? ix.close[i] : undefined; };
++  const uniCache = new Map();
++  const universeAt = (t) => { const k = Math.floor(t / DAY); if (!uniCache.has(k)) uniCache.set(k, U.tradeUniverse(t + DAY).trade_pairs); return uniCache.get(k); };
++  const emaCache = new Map();
++  const emaAt = (p, d, n) => { // C8 own-EMA filter, exactly as forward-daily.mjs buildContext
++    const ix = U.idx[p]; if (!ix) return NaN;
++    const key = `${p}:${n}`;
++    if (!emaCache.has(key)) { const c = new Float64Array(ix.n); for (let i = 0; i < ix.n; i++) c[i] = ix.has[i] ? ix.close[i] : NaN; emaCache.set(key, ownEma(c, n)); }
++    const i = Math.floor(d / DAY) - ix.d0, a = emaCache.get(key);
++    return i >= 0 && i < a.length ? a[i] : NaN;
++  };
++  const V = Object.fromEntries(resolveVariants(config).map((v) => [v.id, v]));
++  const arms = {};
++  for (const id of ['M5-B100', 'C8', 'S3-M0']) if (V[id]) arms[id] = { kind: V[id].strategy === 'ml2' ? 'ml2' : 'alt70', params: V[id].strategy === 'ml2' ? V[id].ml2 : V[id].alt70 };
++  const tvv = resolveVariants({ ...config, forward: { ...config.forward, variants: [M5_B100_TV_PROPOSAL] } })[0];
++  arms['M5-B100-TV'] = { kind: 'alt70', params: tvv.alt70, vol_target: tvv.alt70.vol_target, vol_days: tvv.alt70.vol_days, proposal: true };
++  return { daily, ctx: { closeAt, universeAt, emaAt }, arms, exchange_info: exNote, live_arms: readArms(resolve(root, stateRoot ?? config.forward.state_dir)) };
++}
++
++/** Pure: snapshot (+ live arms) -> signals object. */
++export function buildSignals(snap, { liveArms = [], now = null, exchangeInfoNote = null } = {}) {
++  const b = snap.btc, e200 = b.regime.ema200, e100 = b.regime.ema100;
++  const rel = snap.alt_vs_btc, ev = snap.evidence_alts_when_btc_falls;
++  const status = [];
++  status.push(`BTC ${b.close.toLocaleString('en-US')} USDT на ${snap.as_of}: ${pp(b.ema.ema200.dist_pct)} до EMA200, ${pp(b.ema.ema50.dist_pct)} до EMA50; ${pp(b.dd90.pct)} від 90-денного максимуму; за 28 днів ${pct(b.ret.d28)}.`);
++  status.push(`Режим EMA200 (правило бота): ${e200.on ? 'УВІМКНЕНО' : `ВИМКНЕНО (${e200.closes_below} закриттів нижче)`}; режим EMA100 (ядро M5-B100): ${e100.on ? 'увімкнено' : 'вимкнено'}.`);
++  status.push(`Широта: ${snap.breadth.eligible_universe.ema200.pct ?? '—'} % придатних монет вище EMA200 (${snap.breadth.eligible_universe.ema200.above}/${snap.breadth.eligible_universe.ema200.total}), ${snap.breadth.eligible_universe.ema50.pct ?? '—'} % вище EMA50.`);
++  status.push(`Tier-2 кошик проти BTC: 28 днів ${pct(rel.d28.rel_mean)} (кошик ${pct(rel.d28.basket_mean)}, BTC ${pct(rel.d28.btc)}); 84 дні ${pct(rel.d84.rel_mean)}.`);
++  status.push(`Волатильність BTC (30 д): ${b.vol.rv30_ann === null ? '—' : `${(b.vol.rv30_ann * 100).toFixed(0)} % річних`}, перцентиль за рік ${b.vol.pct_1y ?? '—'}.`);
++  status.push(`Мітка режиму: ${labelUk[snap.regime.label] ?? snap.regime.label} — правило: ${snap.regime.rule}.`);
++
++  const rules = [];
++  for (const [id, a] of Object.entries(snap.arms)) {
++    const evd = EVIDENCE[id] ?? { report: '—', level: 'без оцінки' };
++    let says;
++    if (a.kind === 'ml2') says = a.regime.ema200 ? `правило S3-M0 зараз вимагає тримати tier-2 top-5: ${a.targets.map(base).join(', ') || '—'}` : 'правило S3-M0 зараз вимагає кеш (режим EMA200 вимкнено: усі лоти продаються на наступному відкритті)';
++    else {
++      const parts = [];
++      parts.push(a.regime.ema200_alt ? `альт-рукав ${Math.round(a.target_weights.alt * 100)} % у tier-2 top-5: ${a.targets.map(base).join(', ') || '—'}` : 'альт-рукав у кеші (режим EMA200 вимкнено)');
++      parts.push(a.regime.ema100_core ? `ядро ${Math.round(a.target_weights.core * 100)} % у BTC` : 'ядро у кеші (режим EMA100 вимкнено)');
++      if (a.cash_weight > 0) parts.push(`кеш ${Math.round(a.cash_weight * 100)} %`);
++      says = `правило ${id} зараз вимагає: ${parts.join('; ')}`;
++      if (a.tv_overlay) says += `; TV-оверлей: масштаб ${a.tv_overlay.scale.toFixed(2)} (вол. кошика ${a.tv_overlay.basket_vol_ann === null ? '—' : `${(a.tv_overlay.basket_vol_ann * 100).toFixed(0)} %`} проти цілі ${(a.tv_overlay.target * 100).toFixed(0)} %) → ефективно альти ${(a.tv_overlay.effective_weights.alt * 100).toFixed(0)} %, BTC ${(a.tv_overlay.effective_weights.core * 100).toFixed(0)} %`;
++    }
++    rules.push({ id, says, next_review: NEXT_UK[a.next_review] ?? a.next_review, rule: RULE_UK[id] ?? a.rule, evidence: evd, proposal: !!a.tv_overlay, targets: a.targets ?? [], tier2_top: a.tier2_top ?? [], regime: a.regime, target_weights: a.target_weights ?? null, tv_overlay: a.tv_overlay ?? null });
++  }
++
++  // the Owner's question, answered from the rules and the data
++  const on = ev.regime_on, off = ev.regime_off, drop = ev.btc_drop;
++  const ownerQuestion = {
++    question: '«BTC падає — може, купувати альти?»',
++    rules_say: e200.on
++      ? `Правила бота НЕ бачать падіння нижче тренду: BTC на ${pp(b.ema.ema200.dist_pct)} вище EMA200, режим увімкнено, тому альт-рукави M5-B100 / C8 / S3-M0 і так у tier-2 top-5. Окремого правила «купити альти, бо BTC падає» немає і воно не тестоване.`
++      : `Режим EMA200 вимкнено: усі протестовані правила вимагають кеш (альти) ${e100.on ? 'і BTC-ядро 30 %' : 'і кеш у ядрі'}. Жодне правило не купує альти, коли BTC нижче тренду. Резерв витрачає тільки dip-правило A5 (BTC ≤ 70 % від річного максимуму).`,
++    evidence: `Дані ${ev.def}. За ${ev.weeks} понеділків: коли режим EMA200 УВІМКНЕНО (${on.weeks} тижнів), медіана 28-денного результату tier-2 кошика ${pct(on.alt_median)} проти BTC ${pct(on.btc_median)}, альти обганяли BTC у ${on.alts_beat_btc_pct ?? '—'} % випадків; коли ВИМКНЕНО (${off.weeks} тижнів): кошик ${pct(off.alt_median)} проти BTC ${pct(off.btc_median)}, обганяли у ${off.alts_beat_btc_pct ?? '—'} %, кошик був у плюсі лише у ${off.alts_positive_pct ?? '—'} % тижнів. У тижні, коли BTC далі падав > 5 % (${drop.all.weeks}): кошик ${pct(drop.all.alt_median)} при BTC ${pct(drop.all.btc_median)}${drop.regime_off.weeks ? `; з них при вимкненому режимі (${drop.regime_off.weeks}): кошик ${pct(drop.regime_off.alt_median)}` : ''}.`,
++    verdict: (off.alt_median !== undefined && off.alt_median !== null && off.alt_median < (on.alt_median ?? 0) && (drop.all.alt_median ?? 0) < (drop.all.btc_median ?? 0))
++      ? 'Історія в наших даних каже: коли BTC нижче тренду або продовжує падати, tier-2 альти в середньому падають СИЛЬНІШЕ за BTC. Ідея «BTC падає → купити альти» правилами не підтримується.'
++      : 'У наших даних немає стійкого підтвердження, що альти виграють, коли BTC падає. Ідея правилами не підтримується.',
++  };
++
++  const risks = [
++    'Жодна арма не має доведеної переваги над утриманням BTC після комісій (DSR); усі помічені «NO PROVEN EDGE».',
++    `Поточна просадка BTC від 90-денного максимуму ${pp(b.dd90.pct)}; у 2022 утримання втратило близько двох третин.`,
++    e200.on ? `Режим вимкнеться після 3 закриттів нижче EMA200 (${b.ema.ema200.value.toLocaleString('en-US')}): тоді правила продають усі альт-лоти на наступному відкритті.` : 'Режим вимкнено: правила не купують альти, доки закриття не повернеться вище EMA200.',
++    'Tier-2 кошик концентрований (5 імен) і торгується раз на тиждень; між оглядами правила нічого не роблять, навіть якщо ціна падає.',
++    'Дані = денні закриття зі знімка пакета; хмарне середовище не має доступу до Binance, тож знімок може відставати від живого стану на 1–3 дні.',
++  ];
++  if (exchangeInfoNote && /derived/.test(exchangeInfoNote)) risks.push('exchangeInfo відсутній у пакеті: пул пар виведено з файлів даних, статуси торгівлі невідомі.');
++
++  return {
++    label: 'СИГНАЛИ · PAPER · вихід протестованих правил', generated_at: new Date(now ?? Date.now()).toISOString(), as_of: snap.as_of, data_last_close: snap.data_last_close,
++    disclaimer: DISCLAIMER, regime: { label: snap.regime.label, label_uk: labelUk[snap.regime.label] ?? snap.regime.label, rule: snap.regime.rule },
++    status, rules, owner_question: ownerQuestion, risks,
++    market: { btc: b, eth: snap.eth, breadth: snap.breadth, alt_vs_btc: snap.alt_vs_btc, evidence_alts_when_btc_falls: ev },
++    live_arms: liveArms, defs: snap.defs, exchange_info: exchangeInfoNote, no_order_path: true,
++  };
++}
++
++/** Pure: signals -> Ukrainian markdown. */
++export function renderSignalsMd(s) {
++  const L = [];
++  L.push(`# Сигнали та стан ринку · PAPER · станом на ${s.as_of} (закриття дня, UTC)`);
++  L.push('');
++  L.push(`> ${s.disclaimer}`);
++  L.push('');
++  L.push(`**Режим:** ${s.regime.label_uk} · правило: ${s.regime.rule}`);
++  L.push('');
++  L.push('## Стан ринку');
++  for (const x of s.status) L.push(`- ${x}`);
++  L.push('');
++  L.push('## Що кажуть протестовані правила зараз');
++  for (const r of s.rules) {
++    L.push(`- **${r.id}${r.proposal ? ' (пропозиція, не в живому боті)' : ''}:** ${r.says}.`);
++    L.push(`  - наступний огляд: ${r.next_review}; правило: ${r.rule}`);
++    L.push(`  - рівень доказів: ${r.evidence.level} (${r.evidence.report})`);
++  }
++  L.push('');
++  L.push(`## ${s.owner_question.question}`);
++  L.push(`- Правила: ${s.owner_question.rules_say}`);
++  L.push(`- Докази: ${s.owner_question.evidence}`);
++  L.push(`- Висновок: ${s.owner_question.verdict}`);
++  L.push('');
++  L.push('## Головні ризики');
++  for (const x of s.risks) L.push(`- ${x}`);
++  L.push('');
++  if (s.live_arms?.length) {
++    L.push('## Живі paper-арми (стан файлів)');
++    for (const a of s.live_arms) {
++      if (a.broken) { L.push(`- ${a.id}: стан не читається (${a.broken})`); continue; }
++      const pos = a.positions.map((p) => base(p.pair)).join(', ') || 'кеш';
++      L.push(`- ${a.id}: капітал ${a.equity_total} / старт ${a.start_total}, день ${a.last_day}, позиції: ${pos}${a.pending ? `, відкладених ордерів ${a.pending}` : ''}`);
++    }
++    L.push('');
++  }
++  L.push(`_Згенеровано ${s.generated_at}; дані до ${s.data_last_close}; ${s.exchange_info ?? ''}. Жодного шляху ордерів у коді немає._`);
++  return L.join('\n') + '\n';
++}
++
++/** Orchestration used by `node bot.mjs signals`. */
++export function makeSignals({ root, config, dataDir = null, stateRoot = null, now = null, t = null }) {
++  const inp = collectSignalsInputs({ root, config, dataDir, stateRoot });
++  const snap = marketState({ daily: inp.daily, ctx: inp.ctx, arms: inp.arms, t });
++  const signals = buildSignals(snap, { liveArms: inp.live_arms, now, exchangeInfoNote: inp.exchange_info });
++  return { snapshot: snap, signals, markdown: renderSignalsMd(signals) };
++}
+--- /dev/null	2026-10-06 22:03:21.894919590 +0000
++++ b/projects/trading-bot/test/market-state.test.mjs	2026-10-07 08:49:43.400240364 +0000
+@@ -0,0 +1,145 @@
++// TB-BRAIN: market-state engine (src/market-state.mjs). Offline, synthetic. Pure functions: no fs, no network, no orders.
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { closesOf, emaSeries, realizedVol, volPercentile, drawdownFromHigh, returnOver, btcTrend, breadth, basketReturn, relativeStrength, regimeLabel, armRules, altVsBtcByRegime, marketState, DAY } from '../src/market-state.mjs';
++import { regimeSeries } from '../src/strategies/regime.mjs';
++import { volScale } from '../src/alt70.mjs';
++
++const T0 = Date.UTC(2025, 0, 6); // a Monday
++const N = 420;
++function walk(seed, p0, vol, drift) {
++  let s = seed, p = p0; const rnd = () => ((s = (s * 1103515245 + 12345) % 2147483648) / 2147483648);
++  const rows = [];
++  for (let i = 0; i < N; i++) { p = p * Math.exp(drift(i) + (rnd() - 0.5) * vol); rows.push([T0 + i * DAY, Math.round(p * 1e4) / 1e4, 1e6]); }
++  return rows;
++}
++const DAILY = {
++  BTCUSDT: walk(3, 50000, 0.03, (i) => (i < 300 ? 0.004 : -0.012)),
++  ETHUSDT: walk(5, 3000, 0.04, (i) => (i < 300 ? 0.005 : -0.015)),
++  AAAUSDT: walk(9, 10, 0.05, (i) => (i < 300 ? 0.006 : -0.02)), BBBUSDT: walk(11, 5, 0.05, (i) => (i < 300 ? 0.005 : -0.02)),
++  CCCUSDT: walk(13, 2, 0.05, (i) => (i < 300 ? 0.004 : -0.02)), DDDUSDT: walk(15, 1, 0.06, (i) => (i < 300 ? 0.003 : -0.02)),
++  EEEUSDT: walk(17, 3, 0.05, (i) => (i < 300 ? 0.002 : -0.02)), FFFUSDT: walk(19, 7, 0.05, (i) => (i < 300 ? 0.001 : -0.02)),
++};
++const PAIRS = Object.keys(DAILY);
++const bars = Object.fromEntries(PAIRS.map((p) => [p, closesOf(DAILY[p])]));
++const maps = Object.fromEntries(PAIRS.map((p) => [p, new Map(DAILY[p].map((r) => [r[0], r[1]]))]));
++const closeAt = (p, t) => maps[p]?.get(t);
++// the tier-2 slice is positions 11..40 of the universe: pad the synthetic universe with 10 dummies so the 6 alts land in tier 2
++const DUMMY = Array.from({ length: 10 }, (_, k) => `D${k}USDT`);
++const ctx = { closeAt: (p, t) => (p.startsWith('D') ? 1 : closeAt(p, t)), universeAt: () => ['ETHUSDT', ...DUMMY, 'AAAUSDT', 'BBBUSDT', 'CCCUSDT', 'DDDUSDT', 'EEEUSDT', 'FFFUSDT'] };
++const ARMS = { 'M5-B100': { kind: 'alt70', params: { alt_weight: 0.7, slots: 5, universe_top: 40, tier_from: 10, tier_to: 40, lookback_days: 90, turnover_min_fresh: 2, alt_turnover: true, alt_ema_filter: null, core_pair: 'BTCUSDT' } },
++  'S3-M0': { kind: 'ml2', params: { slots: 5, universe_top: 40, tier_from: 10, tier_to: 40, lookback_days: 90 } },
++  'M5-B100-TV': { kind: 'alt70', params: { alt_weight: 0.7, slots: 5, universe_top: 40, tier_from: 10, tier_to: 40, lookback_days: 90, turnover_min_fresh: 2, alt_turnover: true, alt_ema_filter: null, core_pair: 'BTCUSDT' }, vol_target: 0.6, vol_days: 7 } };
++const tUp = T0 + 299 * DAY, tDown = T0 + (N - 1) * DAY;
++
++test('closesOf / emaSeries / returns / drawdown / vol: definitions hold on a hand-made series', () => {
++  const rows = [[T0, 10, 1], [T0 + DAY, 11, 1], [T0 + DAY, 11.5, 1], [T0 + 2 * DAY, 12, 1], [T0 + 3 * DAY, 9, 1]];
++  const b = closesOf(rows);
++  assert.deepEqual(b.map((x) => x.c), [10, 11.5, 12, 9], 'duplicates: last wins; ascending');
++  const e = emaSeries(b, 2);
++  assert.equal(e[0], null); assert.equal(e[1], (10 + 11.5) / 2);
++  const k = 2 / 3; assert.ok(Math.abs(e[2] - (k * 12 + (1 - k) * e[1])) < 1e-12);
++  assert.equal(returnOver(b, T0 + 3 * DAY, 3), 9 / 10 - 1);
++  assert.equal(returnOver(b, T0, 3), null, 'no earlier close -> null');
++  assert.equal(drawdownFromHigh(b, 90), 9 / 12 - 1);
++  const rv = realizedVol(b, 3);
++  const r = [Math.log(11.5 / 10), Math.log(12 / 11.5), Math.log(9 / 12)], m = r.reduce((s, x) => s + x) / 3;
++  assert.ok(Math.abs(rv - Math.sqrt(r.reduce((s, x) => s + (x - m) ** 2, 0) / 2) * Math.sqrt(365)) < 1e-12);
++  assert.equal(realizedVol(b, 4), null, 'needs n+1 bars');
++  assert.equal(volPercentile(b, 3, 365), null, 'needs 20 readings');
++});
++
++test('btcTrend: regime states equal strategies/regime.mjs; distances and the 3-close OFF rule', () => {
++  const up = btcTrend(bars.BTCUSDT, tUp), dn = btcTrend(bars.BTCUSDT, tDown);
++  const ref = (t, n) => regimeSeries(bars.BTCUSDT.filter((x) => x.t <= t), { ema_n: n, off_after: 3 }).at(-1);
++  assert.equal(up.regime.ema200.on, ref(tUp, 200).on); assert.equal(up.regime.ema100.on, ref(tUp, 100).on);
++  assert.equal(dn.regime.ema200.on, ref(tDown, 200).on); assert.equal(dn.regime.ema100.on, ref(tDown, 100).on);
++  assert.equal(up.regime.ema200.on, true); assert.equal(dn.regime.ema200.on, false, '120 days of -1.2 %/day: below EMA200');
++  assert.ok(dn.regime.ema200.closes_below >= 3);
++  assert.ok(Math.abs(up.ema.ema200.value - ref(tUp, 200).ema) < 0.01);
++  assert.ok(Math.abs(up.ema.ema200.dist_pct - (up.close / ref(tUp, 200).ema - 1) * 100) < 0.01);
++  assert.ok(up.dd90.pct <= 0 && dn.dd90.pct < -25, `dd90 ${dn.dd90.pct}`);
++  assert.equal(up.as_of, new Date(tUp).toISOString().slice(0, 10));
++  assert.ok(up.vol.rv30_ann > 0 && up.vol.pct_1y >= 0 && up.vol.pct_1y <= 100);
++});
++
++test('breadth / basketReturn / relativeStrength: counted over the given pairs only, short histories skipped', () => {
++  const b = breadth(bars, PAIRS.filter((p) => p !== 'BTCUSDT'), tUp, 200);
++  assert.equal(b.total, 7); assert.equal(b.above, 7); assert.equal(b.pct, 100);
++  const bd = breadth(bars, PAIRS.filter((p) => p !== 'BTCUSDT'), tDown, 200);
++  assert.equal(bd.above, 0);
++  const short = breadth({ X: bars.AAAUSDT.slice(0, 50) }, ['X'], tUp, 200);
++  assert.equal(short.total, 0); assert.equal(short.pct, null);
++  const br = basketReturn(bars, ['AAAUSDT', 'BBBUSDT'], tUp, 28);
++  const a = returnOver(bars.AAAUSDT, tUp, 28), c = returnOver(bars.BBBUSDT, tUp, 28);
++  assert.ok(Math.abs(br.mean - (a + c) / 2) < 1e-4); assert.equal(br.n, 2);
++  const rs = relativeStrength(bars, ['AAAUSDT', 'BBBUSDT'], bars.BTCUSDT, tUp, [28]);
++  const btc = returnOver(bars.BTCUSDT, tUp, 28);
++  assert.ok(Math.abs(rs.d28.rel_mean - ((1 + br.mean) / (1 + btc) - 1)) < 1e-3);
++});
++
++test('regimeLabel: the four labels come from the documented rules only', () => {
++  assert.equal(regimeLabel({ ema200On: true, closeAboveEma50: true, breadth200Pct: 60, dd90Pct: -5, volPct1y: 30 }).label, 'risk-on');
++  assert.equal(regimeLabel({ ema200On: true, closeAboveEma50: false, breadth200Pct: 60, dd90Pct: -5, volPct1y: 30 }).label, 'neutral');
++  assert.equal(regimeLabel({ ema200On: true, closeAboveEma50: true, breadth200Pct: 40, dd90Pct: -5, volPct1y: 30 }).label, 'neutral');
++  assert.equal(regimeLabel({ ema200On: false, closeAboveEma50: false, breadth200Pct: 10, dd90Pct: -20, volPct1y: 90 }).label, 'risk-off');
++  assert.equal(regimeLabel({ ema200On: false, closeAboveEma50: false, breadth200Pct: 10, dd90Pct: -30, volPct1y: 70 }).label, 'risk-off');
++  const cw = regimeLabel({ ema200On: false, closeAboveEma50: false, breadth200Pct: 10, dd90Pct: -30, volPct1y: 85 });
++  assert.equal(cw.label, 'capitulation-watch'); assert.match(cw.rule, /-30 % <= -25 %/);
++  assert.equal(regimeLabel({ ema200On: true, closeAboveEma50: true, breadth200Pct: null, dd90Pct: 0, volPct1y: null }).label, 'risk-on', 'missing breadth does not block');
++});
++
++test('armRules: regime on -> tier-2 top-5 and BTC core; regime off -> cash; TV overlay scale = min(1, target / basket vol)', () => {
++  const on = armRules(ctx, tUp, bars.BTCUSDT, ARMS);
++  assert.equal(on['M5-B100'].targets.length, 5);
++  assert.deepEqual(on['M5-B100'].target_weights, { alt: 0.7, core: 0.3 }); assert.equal(on['M5-B100'].cash_weight, 0);
++  assert.deepEqual(on['S3-M0'].targets, on['M5-B100'].targets, 'the alt sleeve = S3-M0 rules');
++  assert.deepEqual(on['M5-B100'].core, ['BTCUSDT']);
++  for (const p of on['M5-B100'].targets) assert.ok(!p.startsWith('D') && p !== 'ETHUSDT', 'dummies (rank 0.5, no 90-day change) never beat the trending alts; ETH excluded');
++  const tv = on['M5-B100-TV'].tv_overlay;
++  const ref = volScale({ closeAt: ctx.closeAt, pairs: [...on['M5-B100-TV'].targets, 'BTCUSDT'], t: tUp, days: 7, target: 0.6 });
++  assert.equal(tv.scale, ref.scale); assert.ok(tv.scale > 0 && tv.scale <= 1);
++  assert.ok(Math.abs(tv.effective_weights.alt - 0.7 * tv.scale) < 1e-3);
++  const off = armRules(ctx, tDown, bars.BTCUSDT, ARMS);
++  assert.deepEqual(off['M5-B100'].targets, []); assert.deepEqual(off['M5-B100'].core, []); assert.equal(off['M5-B100'].cash_weight, 1);
++  assert.deepEqual(off['S3-M0'].targets, []); assert.match(off['S3-M0'].says, /cash/);
++  assert.equal(off['M5-B100-TV'].tv_overlay.scale, 1, 'nothing held: no sizing');
++});
++
++test('volScale: exact formula, skips short series, 1 without usable pairs or target', () => {
++  const c = (p, t) => (p === 'X' ? 100 * Math.exp(0.1 * Math.round((t - T0) / DAY) % 2 === 0 ? 0 : 0.1) : undefined);
++  const r = volScale({ closeAt: (p, t) => (p === 'X' ? (Math.round((t - T0) / DAY) % 2 ? 110 : 100) : undefined), pairs: ['X', 'Y'], t: T0 + 20 * DAY, days: 4, target: 0.6 });
++  const lr = [Math.log(110 / 100), Math.log(100 / 110), Math.log(110 / 100), Math.log(100 / 110)].reverse();
++  const m = lr.reduce((s, x) => s + x) / 4, sd = Math.sqrt(lr.reduce((s, x) => s + (x - m) ** 2, 0) / 3) * Math.sqrt(365);
++  assert.equal(r.n, 1); assert.ok(Math.abs(r.scale - Math.min(1, 0.6 / sd)) < 1e-9);
++  assert.deepEqual(volScale({ closeAt: () => undefined, pairs: ['Y'], t: T0, days: 7, target: 0.6 }), { scale: 1, basket_vol: null, n: 0 });
++  assert.equal(volScale({ closeAt: c, pairs: ['X'], t: T0 + 20 * DAY, days: 4, target: null }).scale, 1);
++});
++
++test('altVsBtcByRegime: Mondays only, split by regime, forward returns computed from closes (no lookahead into the stats of the past)', () => {
++  const ev = altVsBtcByRegime(ctx, bars.BTCUSDT, tDown, { from: T0 + 200 * DAY, horizon: 28 });
++  assert.ok(ev.weeks > 10);
++  assert.equal(ev.regime_on.weeks + ev.regime_off.weeks, ev.weeks);
++  assert.ok(ev.regime_off.weeks > 0 && ev.regime_on.weeks > 0);
++  assert.ok(ev.regime_off.alt_median < 0, 'the synthetic bear: alts fall when the regime is off');
++  assert.ok(ev.btc_drop.all.weeks > 0 && ev.btc_drop.all.btc_median <= -0.05);
++  // the same call with a longer history changes nothing for the weeks already covered
++  const ev2 = altVsBtcByRegime(ctx, bars.BTCUSDT, tDown - 28 * DAY, { from: T0 + 200 * DAY, horizon: 28 });
++  assert.ok(ev2.weeks < ev.weeks);
++});
++
++test('marketState: snapshot carries definitions, the regime label, the arms and the evidence block; input untouched', () => {
++  const before = JSON.stringify(DAILY);
++  const s = marketState({ daily: DAILY, ctx, arms: ARMS, t: tUp, historyFrom: T0 + 200 * DAY });
++  assert.equal(JSON.stringify(DAILY), before);
++  assert.equal(s.as_of, new Date(tUp).toISOString().slice(0, 10));
++  assert.equal(s.regime.label, 'risk-on'); assert.match(s.regime.rule, /EMA200 regime ON/);
++  assert.ok(s.defs.ema && s.defs.regime_ema200 && s.defs.breadth && s.defs.alt_vs_btc);
++  assert.ok(s.breadth.eligible_universe.ema200.total >= 6);
++  assert.ok(s.alt_vs_btc.d28.rel_mean !== null && s.alt_vs_btc.tier2_pairs.length === 6);
++  assert.ok(s.arms['M5-B100'].targets.length === 5 && s.arms['M5-B100-TV'].tv_overlay);
++  assert.ok(s.evidence_alts_when_btc_falls.weeks > 0);
++  const d = marketState({ daily: DAILY, ctx, arms: ARMS, t: tDown, historyFrom: T0 + 200 * DAY });
++  assert.ok(['risk-off', 'capitulation-watch'].includes(d.regime.label));
++  assert.throws(() => marketState({ daily: { X: DAILY.AAAUSDT }, ctx, arms: {} }), /BTCUSDT/);
++});
+--- /dev/null	2026-10-06 22:03:21.894919590 +0000
++++ b/projects/trading-bot/test/signals.test.mjs	2026-10-07 08:49:43.400272882 +0000
+@@ -0,0 +1,100 @@
++// TB-BRAIN: signals & recommendations (src/signals.mjs). Pure parts on a synthetic snapshot; the CLI on a temp data dir.
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { mkdtempSync, writeFileSync, mkdirSync, readFileSync, existsSync, rmSync } from 'node:fs';
++import { join, dirname, resolve } from 'node:path';
++import { tmpdir } from 'node:os';
++import { spawnSync } from 'node:child_process';
++import { fileURLToPath } from 'node:url';
++import { buildSignals, renderSignalsMd, readArms, DISCLAIMER, EVIDENCE } from '../src/signals.mjs';
++import { marketState, DAY } from '../src/market-state.mjs';
++
++const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
++const T0 = Date.UTC(2025, 0, 6);
++const N = 420;
++function walk(seed, p0, vol, drift) {
++  let s = seed, p = p0; const rnd = () => ((s = (s * 1103515245 + 12345) % 2147483648) / 2147483648);
++  const rows = [];
++  for (let i = 0; i < N; i++) { p = p * Math.exp(drift(i) + (rnd() - 0.5) * vol); rows.push([T0 + i * DAY, Math.round(p * 1e4) / 1e4, 5e6 + 1e4 * i]); }
++  return rows;
++}
++const DAILY = { BTCUSDT: walk(3, 50000, 0.03, (i) => (i < 300 ? 0.004 : -0.012)), ETHUSDT: walk(5, 3000, 0.04, (i) => (i < 300 ? 0.005 : -0.015)) };
++for (const [k, a] of ['AAA', 'BBB', 'CCC', 'DDD', 'EEE', 'FFF'].entries()) DAILY[`${a}USDT`] = walk(9 + 2 * k, 10 - k, 0.05, (i) => (i < 300 ? 0.006 - 0.001 * k : -0.02));
++const maps = Object.fromEntries(Object.keys(DAILY).map((p) => [p, new Map(DAILY[p].map((r) => [r[0], r[1]]))]));
++const DUMMY = Array.from({ length: 10 }, (_, k) => `D${k}USDT`);
++const ctx = { closeAt: (p, t) => (p.startsWith('D') ? 1 : maps[p]?.get(t)), universeAt: () => ['ETHUSDT', ...DUMMY, 'AAAUSDT', 'BBBUSDT', 'CCCUSDT', 'DDDUSDT', 'EEEUSDT', 'FFFUSDT'] };
++const P70 = { alt_weight: 0.7, slots: 5, universe_top: 40, tier_from: 10, tier_to: 40, lookback_days: 90, turnover_min_fresh: 2, alt_turnover: true, alt_ema_filter: null, core_pair: 'BTCUSDT' };
++const ARMS = { 'M5-B100': { kind: 'alt70', params: P70 }, 'S3-M0': { kind: 'ml2', params: { slots: 5, universe_top: 40, tier_from: 10, tier_to: 40, lookback_days: 90 } }, 'M5-B100-TV': { kind: 'alt70', params: P70, vol_target: 0.6, vol_days: 7 } };
++const snapUp = marketState({ daily: DAILY, ctx, arms: ARMS, t: T0 + 299 * DAY, historyFrom: T0 + 200 * DAY });
++const snapDown = marketState({ daily: DAILY, ctx, arms: ARMS, t: T0 + (N - 1) * DAY, historyFrom: T0 + 200 * DAY });
++const FORBIDDEN = /купуй зараз|купіть зараз|buy now|плече|леверидж|leverage|ціль \d|таргет/i;
++
++test('buildSignals (regime on): rules say "hold the tier-2 top-5", every rule carries evidence, disclaimer fixed, no forbidden language', () => {
++  const s = buildSignals(snapUp, { now: Date.UTC(2026, 9, 7), exchangeInfoNote: 'data/exchangeInfo.json' });
++  assert.equal(s.disclaimer, DISCLAIMER); assert.equal(s.no_order_path, true);
++  assert.equal(s.regime.label, 'risk-on'); assert.match(s.regime.label_uk, /ризик-он/);
++  assert.equal(s.rules.length, Object.keys(ARMS).length);
++  for (const r of s.rules) { assert.ok(EVIDENCE[r.id], r.id); assert.match(r.says, new RegExp(`правило ${r.id} зараз вимагає`)); assert.ok(r.evidence.report && r.evidence.level); assert.ok(r.next_review && r.rule); }
++  assert.match(s.rules.find((r) => r.id === 'S3-M0').says, /тримати tier-2 top-5/);
++  assert.ok(s.rules.find((r) => r.id === 'M5-B100-TV').proposal);
++  assert.match(s.owner_question.rules_say, /НЕ бачать падіння нижче тренду/);
++  assert.ok(s.risks.length >= 4);
++  const md = renderSignalsMd(s);
++  assert.match(md, /^# Сигнали та стан ринку/); assert.ok(md.includes(DISCLAIMER));
++  assert.doesNotMatch(md, FORBIDDEN); assert.doesNotMatch(JSON.stringify(s), FORBIDDEN);
++  assert.doesNotMatch(md, /derived from/, 'exchangeInfo present: no derived-pool warning');
++});
++
++test('buildSignals (regime off): rules say cash, the owner question is answered from the data, risks mention the EMA200 return', () => {
++  const s = buildSignals(snapDown, { now: Date.UTC(2026, 9, 7), exchangeInfoNote: 'derived from the data files' });
++  assert.ok(['risk-off', 'capitulation-watch'].includes(s.regime.label));
++  assert.match(s.rules.find((r) => r.id === 'S3-M0').says, /кеш/);
++  assert.match(s.rules.find((r) => r.id === 'M5-B100').says, /альт-рукав у кеші/);
++  assert.match(s.owner_question.rules_say, /вимагають кеш/);
++  assert.match(s.owner_question.evidence, /понеділків/);
++  assert.ok(/не підтримується/.test(s.owner_question.verdict));
++  assert.ok(s.risks.some((r) => /exchangeInfo відсутній/.test(r)));
++  assert.ok(s.risks.some((r) => /Режим вимкнено/.test(r)));
++  const md = renderSignalsMd(s);
++  assert.doesNotMatch(md, FORBIDDEN);
++});
++
++test('readArms: reads ml2 / alt70 / regime states read-only, tolerates a broken file', () => {
++  const dir = mkdtempSync(join(tmpdir(), 'tb-brain-arms-'));
++  const w = (id, obj) => { mkdirSync(join(dir, id)); writeFileSync(join(dir, id, 'paper-state.json'), JSON.stringify(obj)); };
++  w('S3-M0', { updated_at: 'x', portfolio: { kind: 'ml2', lastT: T0, start_total: 1430, equity: { total: 1400.123 }, regime_on: true, lots: [{ role: 'sleeve', pair: 'AAAUSDT', cost: 100 }, { role: 'lt', pair: 'BTCUSDT', cost: 10 }], pend: [] } });
++  w('M5-B100', { updated_at: 'x', portfolio: { kind: 'alt70', lastT: T0, start_total: 1430, equity: { total: 1410 }, regimes: { alt: true, core: false }, lots: [{ role: 'sleeve', sleeve: 'alt', pair: 'BBBUSDT', cost: 100 }], pend: [{ k: 'buy', pair: 'CCCUSDT' }] } });
++  w('A0', { updated_at: 'x', portfolio: { lastT: T0, start_total: 1430, equity: { total: 1420 }, regime_on: false, pos: [{ pair: 'ETHUSDT', cost: 200 }], pending: { sells: [] } } });
++  mkdirSync(join(dir, 'guard')); mkdirSync(join(dir, 'ZZ')); writeFileSync(join(dir, 'ZZ', 'paper-state.json'), '{not json');
++  const arms = readArms(dir);
++  assert.deepEqual(arms.map((a) => a.id), ['A0', 'M5-B100', 'S3-M0', 'ZZ']);
++  const m = arms.find((a) => a.id === 'M5-B100');
++  assert.deepEqual(m.positions, [{ pair: 'BBBUSDT', sleeve: 'alt', cost: 100 }]); assert.equal(m.pending, 1); assert.deepEqual(m.regime, { alt: true, core: false });
++  assert.deepEqual(arms.find((a) => a.id === 'S3-M0').positions.map((p) => p.pair), ['AAAUSDT'], 'longterm lots are not sleeve positions');
++  assert.equal(arms.find((a) => a.id === 'A0').positions[0].pair, 'ETHUSDT');
++  assert.ok(arms.find((a) => a.id === 'ZZ').broken);
++  assert.equal(JSON.parse(readFileSync(join(dir, 'M5-B100', 'paper-state.json'), 'utf8')).portfolio.lots.length, 1, 'states are never written');
++  rmSync(dir, { recursive: true, force: true });
++});
++
++test('CLI: node bot.mjs signals writes out/signals.json + signals.md + market-state.json from a synthetic data dir, offline', () => {
++  const dir = resolve(mkdtempSync(join(tmpdir(), 'tb-brain-cli-')));
++  const D = join(dir, 'data', 'daily'); mkdirSync(D, { recursive: true });
++  const first = {};
++  for (const [p, rows] of Object.entries(DAILY)) { writeFileSync(join(D, `${p}.json`), JSON.stringify(rows)); first[p] = rows[0][0]; }
++  writeFileSync(join(D, '_first.json'), JSON.stringify(first));
++  const cfg = JSON.parse(readFileSync(join(ROOT, 'config/bot.config.json'), 'utf8'));
++  cfg.real.data_dir = join(dir, 'data'); cfg.forward.state_dir = join(dir, 'state'); cfg.real.assets = join(ROOT, 'config/assets.json');
++  mkdirSync(join(dir, 'state')); mkdirSync(join(dir, 'config')); writeFileSync(join(dir, 'config', 'bot.config.json'), JSON.stringify(cfg));
++  const r = spawnSync(process.execPath, [join(ROOT, 'bot.mjs'), 'signals', `--config=${join(dir, 'config', 'bot.config.json')}`, `--out=${join(dir, 'out')}`, '--now=2026-10-07T09:00:00Z', '--quiet'], { encoding: 'utf8' });
++  assert.equal(r.status, 0, r.stderr);
++  const s = JSON.parse(readFileSync(join(dir, 'out', 'signals.json'), 'utf8'));
++  assert.equal(s.disclaimer, DISCLAIMER); assert.equal(s.generated_at, '2026-10-07T09:00:00.000Z');
++  assert.ok(existsSync(join(dir, 'out', 'market-state.json')));
++  const md = readFileSync(join(dir, 'out', 'signals.md'), 'utf8');
++  assert.match(md, /Сигнали та стан ринку/); assert.doesNotMatch(md, FORBIDDEN);
++  assert.ok(s.rules.some((x) => x.id === 'M5-B100') && s.rules.some((x) => x.id === 'M5-B100-TV'));
++  // the synthetic assets have no metadata -> tiny eligible universe; the engine still answers (flagged derived pool)
++  assert.match(s.exchange_info, /derived/);
++  rmSync(dir, { recursive: true, force: true });
++});
+--- /dev/null	2026-10-06 22:03:21.894919590 +0000
++++ b/projects/trading-bot/test/alt70-tv.test.mjs	2026-10-07 08:49:43.400292518 +0000
+@@ -0,0 +1,86 @@
++// TB-BRAIN: M5-B100-TV proposal (target-vol overlay on the alt70 day step). OFF by default; live arms untouched.
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { readFileSync } from 'node:fs';
++import { join, dirname } from 'node:path';
++import { fileURLToPath } from 'node:url';
++import { resolveVariant, resolveVariants, variantFingerprint, variantCapital, M5_B100_TV_PROPOSAL, ALT70_PARAM_DEFAULTS } from '../src/variants.mjs';
++import { createAlt70State, alt70Day, volScale } from '../src/alt70.mjs';
++
++const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
++const config0 = JSON.parse(readFileSync(join(ROOT, 'config/bot.config.json'), 'utf8'));
++const config = { ...config0, capital: variantCapital(config0) };
++const DAY = 864e5, T0 = Date.UTC(2025, 0, 6);
++const ALTS = ['AAAUSDT', 'BBBUSDT', 'CCCUSDT', 'DDDUSDT', 'EEEUSDT', 'FFFUSDT'];
++const G = { AAAUSDT: 0.004, BBBUSDT: 0.0035, CCCUSDT: 0.003, DDDUSDT: 0.0025, EEEUSDT: 0.002, FFFUSDT: 0.0015 };
++
++test('M5-B100-TV: proposal resolves with vol_target / vol_days; not in config.forward.variants (OFF by default); strict validation', () => {
++  assert.ok(!config0.forward.variants.some((v) => v.id === 'M5-B100-TV'), 'OFF by default: NEXUS installs it via tb-safe-install');
++  const v = resolveVariant(config0, M5_B100_TV_PROPOSAL);
++  assert.equal(v.strategy, 'alt70'); assert.equal(v.alt70.vol_target, 0.6); assert.equal(v.alt70.vol_days, 7);
++  assert.equal(v.params.vol_target, 0.6); assert.equal(v.params.vol_days, 7);
++  const { vol_target, vol_days, ...rest } = v.params;
++  assert.deepEqual(rest, { ...ALT70_PARAM_DEFAULTS, universe: {} }, 'everything else = M5-B100');
++  assert.throws(() => resolveVariant(config0, { id: 'Z', strategy: 'alt70', params: { vol_target: 0 } }), /vol_target/);
++  assert.throws(() => resolveVariant(config0, { id: 'Z', strategy: 'alt70', params: { vol_target: 0.6, vol_days: 1 } }), /vol_days/);
++  assert.throws(() => resolveVariant(config0, { id: 'Z', strategy: 'alt70', params: { vol_tgt: 0.6 } }), /unknown param/);
++  const all = resolveVariants(config0);
++  const fp = (id) => JSON.stringify(variantFingerprint(config, all.find((x) => x.id === id)));
++  assert.notEqual(fp('M5-B100'), JSON.stringify(variantFingerprint(config, v)), 'the proposal has its own fingerprint');
++});
++
++test('live M5-B100 and C8 are byte-identical: params, alt70 block and fingerprints unchanged (no exit 4)', () => {
++  const V = Object.fromEntries(resolveVariants(config0).map((v) => [v.id, v]));
++  const base = { alt_weight: 0.7, slots: 5, universe_top: 40, tier_from: 10, tier_to: 40, exclude: ['ETHUSDT'], lookback_days: 90, turnover_min_fresh: 2, core_pair: 'BTCUSDT', lt_min_buy_usdt: 10 };
++  assert.deepEqual(V['M5-B100'].alt70, { ...base, alt_turnover: true, alt_ema_filter: null });
++  assert.deepEqual(V.C8.alt70, { ...base, alt_turnover: false, alt_ema_filter: 50 });
++  assert.ok(!('vol_target' in V['M5-B100'].params) && !('vol_target' in V.C8.params));
++  for (const id of ['M5-B100', 'C8']) {
++    const f = join(ROOT, 'state', id, 'paper-state.json');
++    try {
++      const saved = JSON.parse(readFileSync(f, 'utf8'));
++      const legacy = !('bootstrap_review' in saved.fingerprint); // as test/alt70.test.mjs
++      const fp = legacy ? variantFingerprint(config, V[id]) : { ...variantFingerprint(config, V[id]), bootstrap_review: config0.forward.bootstrap_review === true };
++      assert.equal(JSON.stringify(fp), JSON.stringify(saved.fingerprint), `${id}: live fingerprint`);
++    }
++    catch (e) { if (e.code !== 'ENOENT') throw e; }
++  }
++});
++
++function market(volMul) {
++  // alts with a deterministic zig-zag so the 7-day vol is known; BTC flat up
++  const close = (p, d) => (p === 'BTCUSDT' ? 100 * 1.001 ** d : 10 * (1 + G[p]) ** d * (1 + volMul * (d % 2 ? 0.05 : -0.05)));
++  const bar = (p, t) => { const d = Math.round((t - T0) / DAY); if (d < 0 || d > 400 || !(p === 'BTCUSDT' || G[p])) return undefined; const c = close(p, d); return { t, o: d ? close(p, d - 1) : c, h: c, l: c, c }; };
++  return { bar, closeAt: (p, t) => bar(p, t)?.c };
++}
++function ctxOf(params, volMul) {
++  const m = market(volMul);
++  return { config, params: { ...params, tier_from: 0 }, bar: m.bar, closeAt: m.closeAt, emaAt: () => NaN, universeAt: () => ALTS, ltAt: () => [], ranksAt: () => ({}),
++    market: () => ({ stepSize: 1e-6, minNotional: 5 }), regimes: { alt: () => true, core: () => true }, guard: null, decide: true };
++}
++function run(params, volMul, from = 100, to = 103) {
++  const ctx = ctxOf(params, volMul);
++  const st = createAlt70State(config); st.lastT = T0 + (from - 1) * DAY;
++  const evs = {};
++  for (let d = from; d <= to; d++) evs[d] = alt70Day(st, T0 + d * DAY, ctx);
++  return { st, evs, ctx };
++}
++
++test('TV overlay: buys are scaled by min(1, target / 7-day basket vol) at the fill; without vol_target the fills equal M5-B100', () => {
++  const V = Object.fromEntries(resolveVariants(config0).map((v) => [v.id, v]));
++  const tv = resolveVariant(config0, M5_B100_TV_PROPOSAL).alt70;
++  const base = run(V['M5-B100'].alt70, 1), over = run(tv, 1);
++  const fills = (r) => Object.values(r.evs).flatMap((e) => e.fills);
++  const fb = fills(base), fo = fills(over);
++  assert.equal(fb.length, 6, 'top-5 alts + BTC core'); assert.equal(fo.length, 6);
++  const e = Object.values(over.evs).find((x) => x.tv && x.tv.pairs.length); // the fill day (pending buys from the first close)
++  assert.ok(e && e.tv.scale > 0 && e.tv.scale < 1, `scale ${e?.tv?.scale}`);
++  const ref = volScale({ closeAt: over.ctx.closeAt, pairs: e.tv.pairs, t: e.tv.time ? Date.parse(e.tv.time) - DAY : 0, days: 7, target: 0.6 });
++  assert.equal(e.tv.scale, ref.scale, 'scale computed from the decision close (t - 1 day)');
++  for (const f of fo) { const b = fb.find((x) => x.pair === f.pair); assert.ok(Math.abs(f.cost - b.cost * e.tv.scale) < 0.02, `${f.pair}: ${f.cost} vs ${b.cost} x ${e.tv.scale}`); }
++  assert.ok(over.st.cash.active > base.st.cash.active, 'the overlay keeps cash');
++  // a calm market: scale 1 -> identical fills
++  const calmB = run(V['M5-B100'].alt70, 0), calmO = run(tv, 0);
++  assert.deepEqual(fills(calmO).map((f) => [f.pair, f.cost]), fills(calmB).map((f) => [f.pair, f.cost]));
++  assert.equal(Object.values(calmO.evs).find((x) => x.tv && x.tv.pairs.length).tv.scale, 1);
++});
+--- /dev/null	2026-10-06 22:03:21.894919590 +0000
++++ b/office/public/js/signals-view.js	2026-10-07 08:49:43.406104394 +0000
+@@ -0,0 +1,108 @@
++// TB-BRAIN: «Сигнали та стан ринку» — a read-only view of out/signals.json (served by GET /api/signals). No imports, no
++// buy/sell controls (grep proves it): every line is the output of a tested rule, with its evidence level and the fixed
++// disclaimer. Works in the Khan trading panel (trading-panel.js) and in the standalone preview (signals-preview.html).
++const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
++const base = (p) => String(p).replace(/USDT$/, '');
++const pct = (x, d = 1) => (x === null || x === undefined ? '—' : `${x > 0 ? '+' : ''}${(x * 100).toFixed(d)} %`);
++const pp = (x, d = 1) => (x === null || x === undefined ? '—' : `${x > 0 ? '+' : ''}${Number(x).toFixed(d)} %`);
++const cls = (x) => (x === null || x === undefined ? '' : x > 0 ? 'up' : x < 0 ? 'down' : '');
++const LABEL_CLASS = { 'risk-on': 'on', neutral: 'mid', 'risk-off': 'off', 'capitulation-watch': 'off' };
++const fmtDate = (iso) => { try { return new Date(iso).toLocaleString('uk-UA', { timeZone: 'Europe/Kyiv', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }); } catch { return String(iso ?? '—'); } };
++
++/** HTML for the signals tab. `s` = signals.json or null (loading) / {error} (unavailable). */
++export function signalsHtml(s, { mobile = false } = {}) {
++  if (!s) return '<section class="sg" aria-label="Сигнали та стан ринку"><p class="empty">Сигнали завантажуються…</p></section>';
++  if (s.error) return `<section class="sg" aria-label="Сигнали та стан ринку"><p class="empty">Сигнали недоступні: ${esc(s.error)}. Запустіть <code>node bot.mjs signals</code> у проєкті бота.</p></section>`;
++  const b = s.market?.btc, br = s.market?.breadth?.eligible_universe, rel = s.market?.alt_vs_btc;
++  const stale = s.data_last_close && (Date.now() - Date.parse(`${s.data_last_close}T00:00:00Z`)) > 3 * 864e5;
++  const tiles = b ? `<div class="sg-tiles">
++      <div class="sg-tile"><span class="k">BTC · закриття ${esc(b.as_of)}</span><b class="tnum">${esc(b.close.toLocaleString('en-US'))}</b><span class="d">USDT</span></div>
++      <div class="sg-tile"><span class="k">до EMA200</span><b class="tnum ${cls(b.ema.ema200.dist_pct)}">${esc(pp(b.ema.ema200.dist_pct))}</b><span class="d">режим ${b.regime.ema200.on ? 'увімк.' : `вимк. (${esc(b.regime.ema200.closes_below)} нижче)`}</span></div>
++      <div class="sg-tile"><span class="k">до EMA50</span><b class="tnum ${cls(b.ema.ema50.dist_pct)}">${esc(pp(b.ema.ema50.dist_pct))}</b><span class="d">нахил EMA200 10 д ${esc(pp(b.ema.ema200.slope_pct_10d))}</span></div>
++      <div class="sg-tile"><span class="k">від 90-денного макс.</span><b class="tnum ${cls(b.dd90.pct)}">${esc(pp(b.dd90.pct))}</b><span class="d">за 28 д ${esc(pct(b.ret.d28))}</span></div>
++      <div class="sg-tile"><span class="k">вол. 30 д</span><b class="tnum">${b.vol.rv30_ann == null ? '—' : esc((b.vol.rv30_ann * 100).toFixed(0)) + ' %'}</b><span class="d">перцентиль за рік ${esc(b.vol.pct_1y ?? '—')}</span></div>
++      <div class="sg-tile"><span class="k">широта (вище EMA200)</span><b class="tnum">${br ? esc(br.ema200.pct ?? '—') + ' %' : '—'}</b><span class="d">${br ? `${esc(br.ema200.above)}/${esc(br.ema200.total)} придатних · EMA50 ${esc(br.ema50.pct ?? '—')} %` : ''}</span></div>
++      <div class="sg-tile"><span class="k">tier-2 проти BTC · 28 д</span><b class="tnum ${cls(rel?.d28?.rel_mean)}">${esc(pct(rel?.d28?.rel_mean))}</b><span class="d">кошик ${esc(pct(rel?.d28?.basket_mean))} · BTC ${esc(pct(rel?.d28?.btc))}</span></div>
++      <div class="sg-tile"><span class="k">tier-2 проти BTC · 84 д</span><b class="tnum ${cls(rel?.d84?.rel_mean)}">${esc(pct(rel?.d84?.rel_mean))}</b><span class="d">кошик ${esc(pct(rel?.d84?.basket_mean))} · BTC ${esc(pct(rel?.d84?.btc))}</span></div>
++    </div>` : '';
++  const rules = (s.rules ?? []).map((r) => `<li class="sg-rule${r.proposal ? ' proposal' : ''}">
++      <div class="sg-rule-head"><b class="mono">${esc(r.id)}</b>${r.proposal ? '<span class="sg-tag">пропозиція · не в живому боті</span>' : ''}${r.targets?.length ? `<span class="sg-targets">${r.targets.map((t) => `<i class="mono">${esc(base(t))}</i>`).join('')}</span>` : '<span class="sg-targets"><i class="mono cash">кеш</i></span>'}</div>
++      <p>${esc(r.says)}.</p>
++      <small>Наступний огляд: ${esc(r.next_review)}.</small>
++      <small>Правило: ${esc(r.rule)}.</small>
++      <small class="ev">Докази: ${esc(r.evidence?.level ?? '—')} <span class="mono">(${esc(r.evidence?.report ?? '—')})</span></small>
++    </li>`).join('');
++  const q = s.owner_question;
++  const risks = (s.risks ?? []).map((x) => `<li>${esc(x)}</li>`).join('');
++  return `<section class="sg" aria-label="Сигнали та стан ринку">
++    <p class="sg-disclaimer" role="note">${esc(s.disclaimer)}</p>
++    <div class="sg-head">
++      <span class="sg-regime ${esc(LABEL_CLASS[s.regime?.label] ?? 'na')}" title="${esc(s.regime?.rule ?? '')}">Режим: ${esc(s.regime?.label_uk ?? '—')}</span>
++      <span class="sg-asof${stale ? ' stale' : ''}">дані до ${esc(s.data_last_close ?? '—')} · згенеровано ${esc(fmtDate(s.generated_at))}${stale ? ' · застарілі' : ''}</span>
++    </div>
++    <small class="sg-rule-text">Правило мітки: ${esc(s.regime?.rule ?? '—')}</small>
++    ${tiles}
++    <h3>Стан ринку</h3>
++    <ul class="sg-status">${(s.status ?? []).map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
++    <h3>Що кажуть протестовані правила зараз</h3>
++    <ul class="sg-rules">${rules || '<li class="empty">немає правил</li>'}</ul>
++    ${q ? `<h3>${esc(q.question)}</h3><div class="sg-q"><p><b>Правила:</b> ${esc(q.rules_say)}</p><p><b>Докази:</b> ${esc(q.evidence)}</p><p class="sg-verdict"><b>Висновок:</b> ${esc(q.verdict)}</p></div>` : ''}
++    <h3>Головні ризики</h3>
++    <ul class="sg-risks">${risks}</ul>
++    <p class="note-partial">Усі числа — з денних закриттів (UTC) публічних даних Binance зі знімка бота; визначення кожного числа є в <span class="mono">out/signals.json → defs</span>. Жодної кнопки, що розміщує ордери, тут немає і не буде.</p>
++  </section>`;
++}
++
++/** Minimal CSS for the view (also used by the preview); tokens follow the office palette (slate / cream). */
++export const SIGNALS_CSS = `
++.sg{display:flow-root;color:#E8E3D6;font:14px/1.45 system-ui,"Segoe UI",Roboto,Arial,sans-serif}
++.sg h3{margin:16px 0 6px;font-size:15px}
++.sg .mono{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace}
++.sg .empty{opacity:.7}
++.sg-disclaimer{margin:0 0 8px;padding:8px 10px;border:1px solid #8A7F5B;border-radius:8px;background:#2A2E26;color:#F2E9C9;font-size:13px}
++.sg-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
++.sg-regime{padding:4px 10px;border-radius:999px;font-weight:600;background:#3A4250}
++.sg-regime.on{background:#1F5A3A}.sg-regime.mid{background:#5A4A1F}.sg-regime.off{background:#5A2A2A}
++.sg-asof{font-size:12px;opacity:.8}.sg-asof.stale{color:#F0B35C;opacity:1}
++.sg-rule-text{display:block;margin:4px 0 8px;font-size:12px;opacity:.75}
++.sg-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
++.sg-tile{padding:8px 10px;border-radius:10px;background:#1D252E;min-width:0}
++.sg-tile .k{display:block;font-size:11px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
++.sg-tile .tnum{display:block;font-size:18px;font-variant-numeric:tabular-nums}
++.sg-tile .d{display:block;font-size:11px;opacity:.75}
++.sg .up{color:#7FD1A0}.sg .down{color:#F08A7A}
++.sg-status,.sg-risks{margin:0;padding-left:18px}.sg-status li,.sg-risks li{margin:3px 0}
++.sg-rules{list-style:none;margin:0;padding:0;display:grid;gap:8px}
++.sg-rule{padding:10px 12px;border-radius:10px;background:#1D252E;border-left:3px solid #4F6D8C}
++.sg-rule.proposal{border-left-color:#8A7F5B;opacity:.95}
++.sg-rule-head{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
++.sg-tag{font-size:11px;padding:2px 8px;border-radius:999px;background:#4A3F1F;color:#F2E9C9}
++.sg-targets{display:flex;flex-wrap:wrap;gap:4px;margin-left:auto}
++.sg-targets i{font-style:normal;font-size:12px;padding:2px 7px;border-radius:6px;background:#2B3A4A}
++.sg-targets i.cash{background:#3A3A3A}
++.sg-rule p{margin:6px 0 4px}.sg-rule small{display:block;font-size:12px;opacity:.8}.sg-rule small.ev{opacity:.9;color:#D9CFA8}
++.sg-q{padding:10px 12px;border-radius:10px;background:#1D252E}.sg-q p{margin:4px 0}.sg-verdict{color:#F2E9C9}
++.note-partial{font-size:12px;opacity:.7}
++@media (max-width:420px){.sg-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.sg-tile .tnum{font-size:16px}.sg-targets{margin-left:0}}
++`;
++
++/** Two-tab shell: «Автоторгівля (папір)» | «Сигнали та стан ринку». Tabs are plain buttons; nothing trades. */
++export function tabsHtml(active) {
++  const t = (id, label) => `<button type="button" role="tab" data-tab="${id}" aria-selected="${active === id}" id="tab-${id}" aria-controls="panel-${id}">${label}</button>`;
++  return `<div class="tp-tabs" role="tablist" aria-label="Розділи торгової кімнати">${t('auto', 'Автоторгівля (папір)')}${t('signals', 'Сигнали та стан ринку')}</div>`;
++}
++export const TABS_CSS = `
++.tp-tabs{display:flex;gap:6px;margin:8px 0 10px;position:sticky;top:0;z-index:2;background:inherit}
++.tp-tabs button{flex:1 1 0;min-height:40px;padding:8px 10px;border-radius:10px;border:1px solid #3A4250;background:#1D252E;color:#E8E3D6;font:inherit;font-weight:600;cursor:pointer}
++.tp-tabs button[aria-selected="true"]{background:#4F6D8C;border-color:#4F6D8C;color:#fff}
++.tp-panel[hidden]{display:none}
++`;
++
++/** Fetch /api/signals (read-only). Resolves to the JSON, or {error}. */
++export async function fetchSignals(url = '/api/signals') {
++  try {
++    const r = await fetch(url, { cache: 'no-store' });
++    if (!r.ok) return { error: `HTTP ${r.status}` };
++    return await r.json();
++  } catch (e) { return { error: e?.message ?? 'мережа' }; }
++}
+--- /dev/null	2026-10-06 22:03:21.894919590 +0000
++++ b/office/public/signals-preview.html	2026-10-07 08:49:43.407815842 +0000
+@@ -0,0 +1,47 @@
++<!doctype html>
++<html lang="uk">
++<head>
++<meta charset="utf-8">
++<meta name="viewport" content="width=device-width, initial-scale=1">
++<title>Сигнали · PAPER · прев’ю</title>
++<style>
++  :root{color-scheme:dark}
++  body{margin:0;background:#141A21;color:#E8E3D6;font:14px/1.45 system-ui,"Segoe UI",Roboto,Arial,sans-serif}
++  .wrap{max-width:720px;margin:0 auto;padding:12px 16px 24px}
++  .banner{padding:8px 10px;border-radius:8px;background:#3A2A2A;color:#F2E9C9;font-weight:600;font-size:13px}
++  h1{font-size:16px;margin:10px 0}
++</style>
++</head>
++<body>
++<div class="wrap" id="trading">
++  <div class="body">
++    <div class="banner">PAPER · без доведеної переваги · симульовані угоди, жодних ордерів</div>
++    <h1>Кімната Хана · торговий стіл</h1>
++  </div>
++</div>
++<script type="application/json" id="signals-sample">__SIGNALS_JSON__</script>
++<script type="module">
++  // Preview of the two-tab trading panel: tab 1 is a stub here (the real one needs charts.js/fmt.js and /api/market),
++  // tab 2 renders signals-view.js over the embedded sample (or ?src=/api/signals when served by the office).
++  import { signalsHtml, tabsHtml, fetchSignals, SIGNALS_CSS, TABS_CSS } from './js/signals-view.js';
++  const css = document.createElement('style'); css.textContent = TABS_CSS + SIGNALS_CSS; document.head.appendChild(css);
++  const q = new URLSearchParams(location.search);
++  const mobile = innerWidth < 600;
++  const body = document.querySelector('#trading .body');
++  const st = { tab: q.get('tab') === 'auto' ? 'auto' : 'signals', signals: null };
++  const tabs = document.createElement('div'); tabs.innerHTML = tabsHtml(st.tab); body.appendChild(tabs.firstElementChild);
++  const auto = document.createElement('div'); auto.id = 'panel-auto'; auto.className = 'tp-panel'; auto.innerHTML = '<p class="empty" style="opacity:.7">Тут — наявна вкладка «Автоторгівля (папір)»: капітал рук, свічки, позиції, рішення, таблиця 14 рук (без змін).</p>';
++  const sig = document.createElement('div'); sig.id = 'panel-signals'; sig.className = 'tp-panel';
++  body.append(auto, sig);
++  const apply = () => { body.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === st.tab))); auto.hidden = st.tab !== 'auto'; sig.hidden = st.tab !== 'signals'; };
++  body.querySelectorAll('[data-tab]').forEach((b) => b.addEventListener('click', () => { st.tab = b.dataset.tab; apply(); }));
++  apply();
++  sig.innerHTML = signalsHtml(null, { mobile });
++  const src = q.get('src');
++  const sample = document.getElementById('signals-sample').textContent.trim();
++  st.signals = src ? await fetchSignals(src) : (sample.startsWith('{') ? JSON.parse(sample) : { error: 'немає зразка' });
++  sig.innerHTML = signalsHtml(st.signals, { mobile });
++  document.documentElement.dataset.ready = '1';
++</script>
++</body>
++</html>
+--- /dev/null	2026-10-06 22:03:21.894919590 +0000
++++ b/shared/signals.mjs	2026-10-07 08:49:43.410070163 +0000
+@@ -0,0 +1,27 @@
++// TB-BRAIN: read-only reader for GET /api/signals. Serves projects/trading-bot/out/signals.json (written by
++// `node bot.mjs signals`), re-read on every request (no cache beyond mtime), never anything else from disk.
++// No network, no state, no orders. Pair it with the route in http.mjs (see the patch note in TB-BRAIN REPORT.md):
++//
++//   if (url.pathname === '/api/signals' && req.method === 'GET') return sendJson(res, ...opts.signals.read());
++//
++import { readFileSync, statSync } from 'node:fs';
++import path from 'node:path';
++
++export function signalsReader(root, { file = path.join(root, 'projects', 'trading-bot', 'out', 'signals.json') } = {}) {
++  let cache = null;
++  return {
++    file,
++    /** -> [status, body]. 404 + {error} when the bot has not produced signals yet; 500 + {error} on a malformed file. */
++    read() {
++      let st;
++      try { st = statSync(file); } catch { return [404, { error: 'signals.json не знайдено: запустіть `node bot.mjs signals` у projects/trading-bot', file }]; }
++      if (cache && cache.mtimeMs === st.mtimeMs) return [200, cache.body];
++      try {
++        const body = JSON.parse(readFileSync(file, 'utf8'));
++        if (!body || typeof body !== 'object' || !body.disclaimer) return [500, { error: 'signals.json без обов\'язкового поля disclaimer' }];
++        cache = { mtimeMs: st.mtimeMs, body: { ...body, served_at: new Date().toISOString(), file_mtime: new Date(st.mtimeMs).toISOString() } };
++        return [200, cache.body];
++      } catch (e) { return [500, { error: `signals.json не читається: ${e.message}` }]; }
++    },
++  };
++}
+--- /dev/null	2026-10-06 22:03:21.894919590 +0000
++++ b/shared/http.mjs.PATCH.md	2026-10-07 08:49:43.410212736 +0000
+@@ -0,0 +1,17 @@
++# Patch note: `shared/http.mjs` (file not included in the TB-BRAIN package, so the route is described, not applied)
++
++`office/server.mjs` now passes `signals: signalsReader(root)` into `createServer(...)` (next to `market`).
++Add one GET route to the request dispatcher in `shared/http.mjs`, right beside the `/api/market` route:
++
++```js
++// TB-BRAIN: signals & market state, read-only (projects/trading-bot/out/signals.json)
++if (req.method === 'GET' && url.pathname === '/api/signals' && opts.signals) {
++  const [status, body] = opts.signals.read();
++  res.writeHead(status, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' });
++  return res.end(JSON.stringify(body));
++}
++```
++
++* Same PIN gate / LAN rules as every other `/api/*` route (place it after the gate).
++* No write route, no POST: the trading room only reads.
++* Suggested shared test (`shared/test/signals.test.mjs`): 404 when the file is absent; 200 + `disclaimer` when present; 500 on bad JSON.

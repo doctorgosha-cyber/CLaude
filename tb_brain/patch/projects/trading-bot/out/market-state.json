@@ -1,0 +1,351 @@
+{
+ "label": "PAPER research snapshot from public daily closes; rule outputs, not advice",
+ "as_of": "2026-10-03",
+ "as_of_ms": 1790985600000,
+ "data_last_close": "2026-10-03",
+ "pairs_with_data": 708,
+ "btc": {
+  "as_of": "2026-10-03",
+  "close": 84753.56,
+  "ema": {
+   "ema50": {
+    "value": 78588.56,
+    "dist_pct": 7.84,
+    "slope_pct_10d": 3.67
+   },
+   "ema100": {
+    "value": 74916.79,
+    "dist_pct": 13.13,
+    "slope_pct_10d": 2.83
+   },
+   "ema200": {
+    "value": 74754.24,
+    "dist_pct": 13.38,
+    "slope_pct_10d": 1.35
+   }
+  },
+  "regime": {
+   "ema100": {
+    "on": true,
+    "closes_below": 0,
+    "rule": "ON when a daily close is above EMA100; OFF after 3 consecutive closes below (the bot's regime rule)"
+   },
+   "ema200": {
+    "on": true,
+    "closes_below": 0,
+    "rule": "ON when a daily close is above EMA200; OFF after 3 consecutive closes below (the bot's regime rule)"
+   }
+  },
+  "dd90": {
+   "pct": -2.15,
+   "def": "close vs the highest daily close of the last 90 days"
+  },
+  "ret": {
+   "d7": 0.0038,
+   "d28": 0.0617,
+   "d84": 0.328
+  },
+  "vol": {
+   "rv30_ann": 0.374,
+   "pct_1y": 35.52,
+   "def": "std of 30 daily log returns x sqrt(365); percentile among the daily readings of the last 365 days"
+  }
+ },
+ "eth": {
+  "d28": 0.0834,
+  "d84": 0.5031,
+  "vs_btc_28": 0.0205
+ },
+ "breadth": {
+  "eligible_universe": {
+   "ema50": {
+    "above": 19,
+    "total": 20,
+    "pct": 95,
+    "def": "% of the listed pairs whose close is above their own EMA50 (SMA-seeded)"
+   },
+   "ema200": {
+    "above": 18,
+    "total": 20,
+    "pct": 90,
+    "def": "% of the listed pairs whose close is above their own EMA200 (SMA-seeded)"
+   },
+   "n": 20,
+   "def": "the bot's eligible USDT universe at t (Owner rules, top 40 by 90-day volume), BTC excluded"
+  },
+  "all_listed": {
+   "ema50": {
+    "above": 401,
+    "total": 479,
+    "pct": 83.72,
+    "def": "% of the listed pairs whose close is above their own EMA50 (SMA-seeded)"
+   },
+   "ema200": {
+    "above": 210,
+    "total": 401,
+    "pct": 52.37,
+    "def": "% of the listed pairs whose close is above their own EMA200 (SMA-seeded)"
+   },
+   "n": 502,
+   "def": "every USDT pair in the data snapshot with a close in the last 3 days (incl. memes, stables and ineligible names)"
+  }
+ },
+ "alt_vs_btc": {
+  "d28": {
+   "basket_mean": 0.4623,
+   "basket_median": 0.1449,
+   "n": 9,
+   "btc": 0.0617,
+   "rel_mean": 0.3774
+  },
+  "d84": {
+   "basket_mean": 0.6606,
+   "basket_median": 0.3772,
+   "n": 9,
+   "btc": 0.328,
+   "rel_mean": 0.2504
+  },
+  "def": "equal-weight basket of the pairs listed in `pairs` (tier-2 universe at t) vs BTC, simple returns over the window; rel = (1+basket)/(1+btc)-1",
+  "tier2_pairs": [
+   "DASHUSDT",
+   "POLUSDT",
+   "ETCUSDT",
+   "VETUSDT",
+   "QNTUSDT",
+   "IOTAUSDT",
+   "LUNAUSDT",
+   "NEOUSDT",
+   "FTTUSDT"
+  ]
+ },
+ "regime": {
+  "label": "risk-on",
+  "rule": "BTC EMA200 regime ON and close > EMA50 and breadth(EMA200) 90 % >= 50 %"
+ },
+ "arms": {
+  "M5-B100": {
+   "kind": "alt70",
+   "regime": {
+    "ema200_alt": true,
+    "ema100_core": true
+   },
+   "says": "alt sleeve 70 % in the tier-2 top-5; core 30 % in BTC",
+   "target_weights": {
+    "alt": 0.7,
+    "core": 0.3
+   },
+   "cash_weight": 0,
+   "targets": [
+    "QNTUSDT",
+    "VETUSDT",
+    "DASHUSDT",
+    "POLUSDT",
+    "IOTAUSDT"
+   ],
+   "core": [
+    "BTCUSDT"
+   ],
+   "tier2_top": [
+    "QNTUSDT",
+    "VETUSDT",
+    "DASHUSDT",
+    "POLUSDT",
+    "IOTAUSDT",
+    "NEOUSDT",
+    "ETCUSDT",
+    "FTTUSDT",
+    "LUNAUSDT"
+   ],
+   "universe_n": 20,
+   "next_review": "next Monday close (core: daily; a regime turn-on close enters at the next open)",
+   "rule": "M5-B100: 70 % tier-2 momentum (S3-M0 rules, BTC EMA200 regime) + 30 % BTC on the BTC EMA100 regime, weekly"
+  },
+  "C8": {
+   "kind": "alt70",
+   "regime": {
+    "ema200_alt": true,
+    "ema100_core": true
+   },
+   "says": "alt sleeve 70 % in the tier-2 top-5; core 30 % in BTC",
+   "target_weights": {
+    "alt": 0.7,
+    "core": 0.3
+   },
+   "cash_weight": 0,
+   "targets": [
+    "QNTUSDT",
+    "VETUSDT",
+    "DASHUSDT",
+    "POLUSDT",
+    "IOTAUSDT"
+   ],
+   "core": [
+    "BTCUSDT"
+   ],
+   "tier2_top": [
+    "QNTUSDT",
+    "VETUSDT",
+    "DASHUSDT",
+    "POLUSDT",
+    "IOTAUSDT",
+    "NEOUSDT",
+    "ETCUSDT",
+    "FTTUSDT",
+    "LUNAUSDT"
+   ],
+   "universe_n": 20,
+   "next_review": "next Monday close (core: daily; a regime turn-on close enters at the next open)",
+   "rule": "C8: M5-B100 with an own-EMA50 filter on candidates and exact weekly replacement"
+  },
+  "S3-M0": {
+   "kind": "ml2",
+   "regime": {
+    "ema200": true
+   },
+   "says": "hold the tier-2 top-5",
+   "targets": [
+    "QNTUSDT",
+    "VETUSDT",
+    "DASHUSDT",
+    "POLUSDT",
+    "IOTAUSDT"
+   ],
+   "tier2_top": [
+    "QNTUSDT",
+    "VETUSDT",
+    "DASHUSDT",
+    "POLUSDT",
+    "IOTAUSDT",
+    "NEOUSDT",
+    "ETCUSDT",
+    "FTTUSDT",
+    "LUNAUSDT"
+   ],
+   "universe_n": 20,
+   "next_review": "next Monday close (or a regime turn-on close)",
+   "rule": "S3-M0: tier-2 momentum (rel90 rank, universe positions 11..40 without ETH), BTC EMA200 regime, weekly, 5 slots, turnover control"
+  },
+  "M5-B100-TV": {
+   "kind": "alt70",
+   "regime": {
+    "ema200_alt": true,
+    "ema100_core": true
+   },
+   "says": "alt sleeve 70 % in the tier-2 top-5; core 30 % in BTC",
+   "target_weights": {
+    "alt": 0.7,
+    "core": 0.3
+   },
+   "cash_weight": 0,
+   "targets": [
+    "QNTUSDT",
+    "VETUSDT",
+    "DASHUSDT",
+    "POLUSDT",
+    "IOTAUSDT"
+   ],
+   "core": [
+    "BTCUSDT"
+   ],
+   "tier2_top": [
+    "QNTUSDT",
+    "VETUSDT",
+    "DASHUSDT",
+    "POLUSDT",
+    "IOTAUSDT",
+    "NEOUSDT",
+    "ETCUSDT",
+    "FTTUSDT",
+    "LUNAUSDT"
+   ],
+   "universe_n": 20,
+   "next_review": "next Monday close (core: daily; a regime turn-on close enters at the next open)",
+   "rule": "M5-B100: 70 % tier-2 momentum (S3-M0 rules, BTC EMA200 regime) + 30 % BTC on the BTC EMA100 regime, weekly",
+   "tv_overlay": {
+    "scale": 0.44934576762615,
+    "basket_vol_ann": 1.3353,
+    "pairs": [
+     "QNTUSDT",
+     "VETUSDT",
+     "DASHUSDT",
+     "POLUSDT",
+     "IOTAUSDT",
+     "BTCUSDT"
+    ],
+    "days": 7,
+    "target": 0.6,
+    "effective_weights": {
+     "alt": 0.3145,
+     "core": 0.1348
+    },
+    "def": "scale = min(1, 0.6 / basket vol); basket vol = mean over the held pairs of the annualised std of the last 7 daily log returns (TB-PREDICT M5-B100-TV; NOT a tested edge: it lowered MaxDD in both test periods and cost return)"
+   }
+  }
+ },
+ "evidence_alts_when_btc_falls": {
+  "def": "Monday closes from 2020-09-09; forward 28-day simple returns; alt basket = equal weight of the tier-2 universe (positions 11..40 by 90-day volume, no BTC/ETH) at that Monday; regime = BTC EMA200 rule at that close",
+  "horizon_days": 28,
+  "weeks": 298,
+  "regime_on": {
+   "weeks": 183,
+   "btc_median": 0.0116,
+   "alt_median": 0.0058,
+   "alt_mean": 0.093,
+   "alts_beat_btc_pct": 46.45,
+   "alts_positive_pct": 50.27
+  },
+  "regime_off": {
+   "weeks": 115,
+   "btc_median": 0.0069,
+   "alt_median": -0.0294,
+   "alt_mean": -0.0153,
+   "alts_beat_btc_pct": 36.52,
+   "alts_positive_pct": 40.87
+  },
+  "btc_drop": {
+   "def": "weeks where BTC fell more than 5 % over the horizon",
+   "all": {
+    "weeks": 94,
+    "btc_median": -0.1282,
+    "alt_median": -0.1704,
+    "alt_mean": -0.1416,
+    "alts_beat_btc_pct": 44.68,
+    "alts_positive_pct": 15.96
+   },
+   "regime_on": {
+    "weeks": 56,
+    "btc_median": -0.1065,
+    "alt_median": -0.1636,
+    "alt_mean": -0.1199,
+    "alts_beat_btc_pct": 41.07,
+    "alts_positive_pct": 17.86
+   },
+   "regime_off": {
+    "weeks": 38,
+    "btc_median": -0.1611,
+    "alt_median": -0.1731,
+    "alt_mean": -0.1737,
+    "alts_beat_btc_pct": 50,
+    "alts_positive_pct": 13.16
+   }
+  },
+  "btc_up": {
+   "weeks": 160,
+   "btc_median": 0.1019,
+   "alt_median": 0.097,
+   "alt_mean": 0.1832,
+   "alts_beat_btc_pct": 41.88,
+   "alts_positive_pct": 70
+  }
+ },
+ "defs": {
+  "ema": "EMA seeded with the SMA of the first n closes (the bot's regime EMA); dist_pct = close / EMA - 1",
+  "regime_ema200": "ON when a daily close is above EMA200; OFF after 3 consecutive closes below (the A arms and the alt sleeves)",
+  "regime_ema100": "the same rule on EMA100 (the M5-B100 / C8 BTC core sleeve)",
+  "dd90": "close vs the highest daily close of the last 90 days, in %",
+  "vol": "annualised std of daily log returns (30 d); percentile among the last 365 daily readings",
+  "breadth": "% of pairs with a close above their own EMA50 / EMA200",
+  "alt_vs_btc": "equal-weight tier-2 basket (eligible universe positions 11..40 by volume, no BTC/ETH) vs BTC over 28 / 84 days",
+  "arms": "targets recomputed from data only (the live paper state may lag or lead by a day); next fills are at the next open after a Monday close"
+ }
+}

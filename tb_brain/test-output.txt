@@ -1,0 +1,1132 @@
+
+> bot-z@0.1.0 test
+> node --test "test/*.test.mjs"
+
+TAP version 13
+# Subtest: M5-B100-TV: proposal resolves with vol_target / vol_days; not in config.forward.variants (OFF by default); strict validation
+ok 1 - M5-B100-TV: proposal resolves with vol_target / vol_days; not in config.forward.variants (OFF by default); strict validation
+  ---
+  duration_ms: 4.003185
+  type: 'test'
+  ...
+# Subtest: live M5-B100 and C8 are byte-identical: params, alt70 block and fingerprints unchanged (no exit 4)
+ok 2 - live M5-B100 and C8 are byte-identical: params, alt70 block and fingerprints unchanged (no exit 4)
+  ---
+  duration_ms: 1.11655
+  type: 'test'
+  ...
+# Subtest: TV overlay: buys are scaled by min(1, target / 7-day basket vol) at the fill; without vol_target the fills equal M5-B100
+ok 3 - TV overlay: buys are scaled by min(1, target / 7-day basket vol) at the fill; without vol_target the fills equal M5-B100
+  ---
+  duration_ms: 6.834943
+  type: 'test'
+  ...
+# \# 12 live arm fingerprints match
+# Subtest: M5-B100 and C8 resolve as forward arms 13 and 14 (alt70, research params, own fingerprints)
+ok 4 - M5-B100 and C8 resolve as forward arms 13 and 14 (alt70, research params, own fingerprints)
+  ---
+  duration_ms: 2.808822
+  type: 'test'
+  ...
+# Subtest: existing 12 arms are not reset: live state fingerprints still match with the new code (no exit 4)
+ok 5 - existing 12 arms are not reset: live state fingerprints still match with the new code (no exit 4)
+  ---
+  duration_ms: 4.362223
+  type: 'test'
+  ...
+# Subtest: ownEma: seeded with the first observed close, valid from the n-th observed close, NaN on days without a close
+ok 6 - ownEma: seeded with the first observed close, valid from the n-th observed close, NaN on days without a close
+  ---
+  duration_ms: 0.225943
+  type: 'test'
+  ...
+# Subtest: BTC core: EMA100 turn-on enters at the next open (30 % sleeve, any weekday), G2 sells and blocks it, regime off sells it
+ok 7 - BTC core: EMA100 turn-on enters at the next open (30 % sleeve, any weekday), G2 sells and blocks it, regime off sells it
+  ---
+  duration_ms: 3.546183
+  type: 'test'
+  ...
+# Subtest: freeze: a frozen alt lot keeps its last close, its pending sell is dropped, the BTC core keeps trading
+ok 8 - freeze: a frozen alt lot keeps its last close, its pending sell is dropped, the BTC core keeps trading
+  ---
+  duration_ms: 1.867752
+  type: 'test'
+  ...
+# Subtest: C8 EMA50 exit: a held alt that closes below its EMA50 leaves at the next Monday review (not before); M5-B100 keeps it (turnover)
+ok 9 - C8 EMA50 exit: a held alt that closes below its EMA50 leaves at the next Monday review (not before); M5-B100 keeps it (turnover)
+  ---
+  duration_ms: 6.660393
+  type: 'test'
+  ...
+# Subtest: M5-B100 live-runner parity with the research engine, 2026-02-02..10-03 (W1 -4.69 %, W2 54.61 %)
+ok 10 - M5-B100 live-runner parity with the research engine, 2026-02-02..10-03 (W1 -4.69 %, W2 54.61 %) # SKIP
+  ---
+  duration_ms: 0.190608
+  type: 'test'
+  ...
+# Subtest: C8 live-runner parity with the research engine, 2026-02-02..10-03 (W1 -4.64 %, W2 25.98 %)
+ok 11 - C8 live-runner parity with the research engine, 2026-02-02..10-03 (W1 -4.64 %, W2 25.98 %) # SKIP
+  ---
+  duration_ms: 0.083103
+  type: 'test'
+  ...
+# Subtest: --live exits non-zero with Owner-gated message
+ok 12 - --live exits non-zero with Owner-gated message
+  ---
+  duration_ms: 97.900936
+  type: 'test'
+  ...
+# Subtest: no mode exits non-zero
+ok 13 - no mode exits non-zero
+  ---
+  duration_ms: 44.475887
+  type: 'test'
+  ...
+# Subtest: --paper is deterministic, offline, writes ledger.json + trades.jsonl
+not ok 14 - --paper is deterministic, offline, writes ledger.json + trades.jsonl
+  ---
+  duration_ms: 89.221554
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/bot.test.mjs:28:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    node:fs:440
+        return binding.readFileUtf8(path, stringToFlags(options.flag));
+                       ^
+    
+    Error: ENOENT: no such file or directory, open '/home/user/CLaude/work/bot/fixtures/assets.json'
+        at readFileSync (node:fs:440:20)
+        at readJson (file:///home/user/CLaude/work/bot/bot.mjs:52:36)
+        at runFixturePaper (file:///home/user/CLaude/work/bot/bot.mjs:263:18)
+        at file:///home/user/CLaude/work/bot/bot.mjs:61:25
+        at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+        at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+        at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+      errno: -2,
+      code: 'ENOENT',
+      syscall: 'open',
+      path: '/home/user/CLaude/work/bot/fixtures/assets.json'
+    }
+    
+    Node.js v22.22.0
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    readFileSync (node:fs:440:20)
+    readJson (file:///home/user/CLaude/work/bot/bot.mjs:52:36)
+    runFixturePaper (file:///home/user/CLaude/work/bot/bot.mjs:263:18)
+    file:///home/user/CLaude/work/bot/bot.mjs:61:25
+    ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+    async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/bot.test.mjs:31:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: every trade flows through applyClosedTrade: replay reproduces ledger.json
+not ok 15 - every trade flows through applyClosedTrade: replay reproduces ledger.json
+  ---
+  duration_ms: 0.619538
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/bot.test.mjs:38:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/tmp/botz-a-VcrVop/ledger.json'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:440:20)
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/bot.test.mjs:40:26)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: fills happen at the OPEN of the bar after the signal, with slippage
+not ok 16 - fills happen at the OPEN of the bar after the signal, with slippage
+  ---
+  duration_ms: 0.302433
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/bot.test.mjs:58:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/tmp/botz-a-VcrVop/trades.jsonl'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:440:20)
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/bot.test.mjs:59:18)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: static guard: no order endpoints, no key handling; network only in lib/public-market-data.mjs
+ok 17 - static guard: no order endpoints, no key handling; network only in lib/public-market-data.mjs
+  ---
+  duration_ms: 7.080827
+  type: 'test'
+  ...
+# Subtest: network module refuses non-public hosts and non-market-data paths
+ok 18 - network module refuses non-public hosts and non-market-data paths
+  ---
+  duration_ms: 4.197488
+  type: 'test'
+  ...
+# Subtest: DEFAULT_CONFIG is swing-only (Owner decision TB-PAPER-2); legacy layout kept
+ok 19 - DEFAULT_CONFIG is swing-only (Owner decision TB-PAPER-2); legacy layout kept
+  ---
+  duration_ms: 3.496165
+  type: 'test'
+  ...
+# Subtest: createLedger default (legacy layout)
+ok 20 - createLedger default (legacy layout)
+  ---
+  duration_ms: 0.653851
+  type: 'test'
+  ...
+# Subtest: createLedger throws on bad configs
+ok 21 - createLedger throws on bad configs
+  ---
+  duration_ms: 1.128928
+  type: 'test'
+  ...
+# Subtest: profit split: reinvest pro rata to split, rest to longterm
+ok 22 - profit split: reinvest pro rata to split, rest to longterm
+  ---
+  duration_ms: 0.621702
+  type: 'test'
+  ...
+# Subtest: does not mutate input
+ok 23 - does not mutate input
+  ---
+  duration_ms: 0.233494
+  type: 'test'
+  ...
+# Subtest: loss comes only from originating bucket
+ok 24 - loss comes only from originating bucket
+  ---
+  duration_ms: 0.288228
+  type: 'test'
+  ...
+# Subtest: loss that would overdraw the bucket throws RangeError
+ok 25 - loss that would overdraw the bucket throws RangeError
+  ---
+  duration_ms: 0.200755
+  type: 'test'
+  ...
+# Subtest: QA fix: overdraw check uses unrounded values (-450.004 on 450 throws)
+ok 26 - QA fix: overdraw check uses unrounded values (-450.004 on 450 throws)
+  ---
+  duration_ms: 0.218929
+  type: 'test'
+  ...
+# Subtest: QA fix: non-cent input ledger keeps reserve untouched and conserves the total
+ok 27 - QA fix: non-cent input ledger keeps reserve untouched and conserves the total
+  ---
+  duration_ms: 0.602392
+  type: 'test'
+  ...
+# Subtest: invalid bucket throws
+ok 28 - invalid bucket throws
+  ---
+  duration_ms: 0.608228
+  type: 'test'
+  ...
+# Subtest: reinvest_share 0 and 1 edge cases
+ok 29 - reinvest_share 0 and 1 edge cases
+  ---
+  duration_ms: 0.322101
+  type: 'test'
+  ...
+# Subtest: conservation and cents over many random trades
+ok 30 - conservation and cents over many random trades
+  ---
+  duration_ms: 16.029537
+  type: 'test'
+  ...
+# Subtest: swing-only default: ledger, all reinvest to swing, reserve never topped up
+ok 31 - swing-only default: ledger, all reinvest to swing, reserve never topped up
+  ---
+  duration_ms: 0.31183
+  type: 'test'
+  ...
+# Subtest: bucket disabling rules
+ok 32 - bucket disabling rules
+  ---
+  duration_ms: 0.433514
+  type: 'test'
+  ...
+# Subtest: Owner profit split 45/45/10: cents, residue to longterm, reserve credit only, losses from the bucket
+ok 33 - Owner profit split 45/45/10: cents, residue to longterm, reserve credit only, losses from the bucket
+  ---
+  duration_ms: 17.772027
+  type: 'test'
+  ...
+# Subtest: HWM split: a loss then a recovery is not split until the old peak is passed; exact cents
+ok 34 - HWM split: a loss then a recovery is not split until the old peak is passed; exact cents
+  ---
+  duration_ms: 0.579072
+  type: 'test'
+  ...
+# Subtest: HWM split: 3000-trade fuzz (conservation, cents, peak = running max, reserve = 300 + floor 10 % of excesses)
+ok 35 - HWM split: 3000-trade fuzz (conservation, cents, peak = running max, reserve = 300 + floor 10 % of excesses)
+  ---
+  duration_ms: 31.432921
+  type: 'test'
+  ...
+# Subtest: canOpen
+ok 36 - canOpen
+  ---
+  duration_ms: 0.15527
+  type: 'test'
+  ...
+# Subtest: variants: config list = the pre-registered A0..A3; params resolved and applied
+ok 37 - variants: config list = the pre-registered A0..A3; params resolved and applied
+  ---
+  duration_ms: 9.573931
+  type: 'test'
+  ...
+# Subtest: default path is byte-equivalent to the pre-refactor runner (legacy oracle), regime and momentum
+ok 38 - default path is byte-equivalent to the pre-refactor runner (legacy oracle), regime and momentum
+  ---
+  duration_ms: 71.10706
+  type: 'test'
+  ...
+# Subtest: inv_vol_30d: weights sum to 1 (investable amount), ~1/stdev, closed bars only (no lookahead)
+ok 39 - inv_vol_30d: weights sum to 1 (investable amount), ~1/stdev, closed bars only (no lookahead)
+  ---
+  duration_ms: 20.803893
+  type: 'test'
+  ...
+# Subtest: inv_vol_30d in the day step: target amounts = weights x investable, re-weighted weekly, accounting chain holds
+ok 40 - inv_vol_30d in the day step: target amounts = weights x investable, re-weighted weekly, accounting chain holds
+  ---
+  duration_ms: 46.804388
+  type: 'test'
+  ...
+# Subtest: forward CLI: init without backfill; restarts == one run; idempotent; paired daily logs
+ok 41 - forward CLI: init without backfill; restarts == one run; idempotent; paired daily logs
+  ---
+  duration_ms: 1986.669997
+  type: 'test'
+  ...
+# Subtest: forward CLI: network failure leaves state untouched; crash lines trimmed; config mismatch exit 4; status lists all
+ok 42 - forward CLI: network failure leaves state untouched; crash lines trimmed; config mismatch exit 4; status lists all
+  ---
+  duration_ms: 582.968217
+  type: 'test'
+  ...
+# Subtest: freshness gate (dorn repro): a held/candidate pair without the latest closed bar -> retry, nothing committed
+ok 43 - freshness gate (dorn repro): a held/candidate pair without the latest closed bar -> retry, nothing committed
+  ---
+  duration_ms: 763.474591
+  type: 'test'
+  ...
+# Subtest: bootstrap: fires once on the first processed close (a non-Monday), fills at the next open, then Mondays only
+ok 44 - bootstrap: fires once on the first processed close (a non-Monday), fills at the next open, then Mondays only
+  ---
+  duration_ms: 16.399456
+  type: 'test'
+  ...
+# Subtest: bootstrap: regime off at that close -> no trade, flag set, normal cadence afterwards
+ok 45 - bootstrap: regime off at that close -> no trade, flag set, normal cadence afterwards
+  ---
+  duration_ms: 274.331489
+  type: 'test'
+  ...
+# Subtest: bootstrap: legacy states (no field) - with trades: untouched; with none: bootstrap once; never exit 4
+ok 46 - bootstrap: legacy states (no field) - with trades: untouched; with none: bootstrap once; never exit 4
+  ---
+  duration_ms: 955.864451
+  type: 'test'
+  ...
+# Subtest: A5 dip-buy: tranches 1/3, 1/2, rest at 70/60/50 % of the 365-day high; 70/30 legs; exit at the old high; re-arm only on a new high
+ok 47 - A5 dip-buy: tranches 1/3, 1/2, rest at 70/60/50 % of the 365-day high; 70/30 legs; exit at the old high; re-arm only on a new high
+  ---
+  duration_ms: 7.31431
+  type: 'test'
+  ...
+# Subtest: A4: a regime turn-on at a non-Monday close triggers a review and a buy at the next open; A0 waits for Monday
+ok 48 - A4: a regime turn-on at a non-Monday close triggers a review and a buy at the next open; A0 waits for Monday
+  ---
+  duration_ms: 4.005649
+  type: 'test'
+  ...
+# Subtest: Amendment 1: 30 closed daily bars to be eligible at a review (every variant)
+ok 49 - Amendment 1: 30 closed daily bars to be eligible at a review (every variant)
+  ---
+  duration_ms: 2.24185
+  type: 'test'
+  ...
+# Subtest: variant schema is strict; universe overrides may only tighten the Owner rules
+ok 50 - variant schema is strict; universe overrides may only tighten the Owner rules
+  ---
+  duration_ms: 1.027381
+  type: 'test'
+  ...
+# Subtest: first run initialises state from history and never trades the past
+not ok 51 - first run initialises state from history and never trades the past
+  ---
+  duration_ms: 47.589094
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/forward.test.mjs:26:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    node:fs:440
+        return binding.readFileUtf8(path, stringToFlags(options.flag));
+                       ^
+    
+    Error: ENOENT: no such file or directory, open '/home/user/CLaude/work/bot/fixtures/assets.json'
+        at readFileSync (node:fs:440:20)
+        at readJson (file:///home/user/CLaude/work/bot/bot.mjs:52:36)
+        at runForward (file:///home/user/CLaude/work/bot/bot.mjs:404:20)
+        at file:///home/user/CLaude/work/bot/bot.mjs:69:12
+        at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+        at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+        at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+      errno: -2,
+      code: 'ENOENT',
+      syscall: 'open',
+      path: '/home/user/CLaude/work/bot/fixtures/assets.json'
+    }
+    
+    Node.js v22.22.0
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    readFileSync (node:fs:440:20)
+    readJson (file:///home/user/CLaude/work/bot/bot.mjs:52:36)
+    runForward (file:///home/user/CLaude/work/bot/bot.mjs:404:20)
+    file:///home/user/CLaude/work/bot/bot.mjs:69:12
+    ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+    async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+    ok (file:///home/user/CLaude/work/bot/test/forward.test.mjs:21:28)
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/forward.test.mjs:27:13)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: state survives restarts: one run to bar 4700 == three restarted runs (4100, 4400, 4700)
+not ok 52 - state survives restarts: one run to bar 4700 == three restarted runs (4100, 4400, 4700)
+  ---
+  duration_ms: 47.211596
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/forward.test.mjs:38:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    node:fs:440
+        return binding.readFileUtf8(path, stringToFlags(options.flag));
+                       ^
+    
+    Error: ENOENT: no such file or directory, open '/home/user/CLaude/work/bot/fixtures/assets.json'
+        at readFileSync (node:fs:440:20)
+        at readJson (file:///home/user/CLaude/work/bot/bot.mjs:52:36)
+        at runForward (file:///home/user/CLaude/work/bot/bot.mjs:404:20)
+        at file:///home/user/CLaude/work/bot/bot.mjs:69:12
+        at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+        at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+        at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+      errno: -2,
+      code: 'ENOENT',
+      syscall: 'open',
+      path: '/home/user/CLaude/work/bot/fixtures/assets.json'
+    }
+    
+    Node.js v22.22.0
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    readFileSync (node:fs:440:20)
+    readJson (file:///home/user/CLaude/work/bot/bot.mjs:52:36)
+    runForward (file:///home/user/CLaude/work/bot/bot.mjs:404:20)
+    file:///home/user/CLaude/work/bot/bot.mjs:69:12
+    ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+    async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+    ok (file:///home/user/CLaude/work/bot/test/forward.test.mjs:21:28)
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/forward.test.mjs:39:3)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: idempotent: re-running at the same clock processes nothing and changes nothing
+not ok 53 - idempotent: re-running at the same clock processes nothing and changes nothing
+  ---
+  duration_ms: 0.388263
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/forward.test.mjs:54:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/tmp/botz-fwdB-L9qJb1/state/paper-state.json'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:440:20)
+    read (file:///home/user/CLaude/work/bot/test/forward.test.mjs:19:26)
+    state (file:///home/user/CLaude/work/bot/test/forward.test.mjs:20:35)
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/forward.test.mjs:55:24)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: engine refuses to process the same bar twice
+ok 54 - engine refuses to process the same bar twice
+  ---
+  duration_ms: 25.900468
+  type: 'test'
+  ...
+# Subtest: network failure: logged retry, exit 0, committed state untouched
+not ok 55 - network failure: logged retry, exit 0, committed state untouched
+  ---
+  duration_ms: 0.232965
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/forward.test.mjs:81:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/tmp/botz-fwdB-L9qJb1/state/paper-state.json'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:440:20)
+    read (file:///home/user/CLaude/work/bot/test/forward.test.mjs:19:26)
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/forward.test.mjs:82:18)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: crash between output append and state commit: duplicate lines are dropped on restart
+not ok 56 - crash between output append and state commit: duplicate lines are dropped on restart
+  ---
+  duration_ms: 0.13889
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/forward.test.mjs:94:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/tmp/botz-fwdA-twJlzc/out/forward-trades.jsonl'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:440:20)
+    read (file:///home/user/CLaude/work/bot/test/forward.test.mjs:19:26)
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/forward.test.mjs:95:14)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: forward fills are at the next bar open with slippage, never on the signal bar
+not ok 57 - forward fills are at the next bar open with slippage, never on the signal bar
+  ---
+  duration_ms: 0.295318
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/forward.test.mjs:101:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/tmp/botz-fwdA-twJlzc/out/forward-trades.jsonl'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:440:20)
+    read (file:///home/user/CLaude/work/bot/test/forward.test.mjs:19:26)
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/forward.test.mjs:102:18)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: a state created under another capital config is never resumed
+not ok 58 - a state created under another capital config is never resumed
+  ---
+  duration_ms: 0.576999
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/forward.test.mjs:112:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/tmp/botz-fwdB-L9qJb1/state/paper-state.json'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:440:20)
+    read (file:///home/user/CLaude/work/bot/test/forward.test.mjs:19:26)
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/forward.test.mjs:117:18)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: daily refresh (beforeFetch) runs inside the lock and never on a refused state
+not ok 59 - daily refresh (beforeFetch) runs inside the lock and never on a refused state
+  ---
+  duration_ms: 2.396029
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/forward.test.mjs:125:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/home/user/CLaude/work/bot/fixtures/assets.json'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:440:20)
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/forward.test.mjs:129:38)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: atomic write leaves no temp files
+ok 60 - atomic write leaves no temp files
+  ---
+  duration_ms: 2.356989
+  type: 'test'
+  ...
+# Subtest: fresh listing data: live status/filters merged into the base pool; removed pairs flagged; new listings counted, not added
+ok 61 - fresh listing data: live status/filters merged into the base pool; removed pairs flagged; new listings counted, not added
+  ---
+  duration_ms: 2.829212
+  type: 'test'
+  ...
+# Subtest: guard list: point-in-time tags and announcements; title parser; daily live-set update with a sanity floor
+not ok 62 - guard list: point-in-time tags and announcements; title parser; daily live-set update with a sanity floor
+  ---
+  duration_ms: 1.351087
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/guard.test.mjs:66:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/home/user/CLaude/work/bot/data/guard-seed/monitoring-tags.json'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:440:20)
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/guard.test.mjs:86:27)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: source fetch failure falls back: last files kept, warnings logged, never throws; success writes all three
+not ok 63 - source fetch failure falls back: last files kept, warnings logged, never throws; success writes all three
+  ---
+  duration_ms: 2.078439
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/guard.test.mjs:94:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    4 !== 3
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 3
+  actual: 4
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/guard.test.mjs:101:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: tagged name excluded from new buys in every arm type (A/B4 fixed set/A7 breakout/A6/S3-M0) and in the universe view
+ok 64 - tagged name excluded from new buys in every arm type (A/B4 fixed set/A7 breakout/A6/S3-M0) and in the universe view
+  ---
+  duration_ms: 63.158536
+  type: 'test'
+  ...
+# Subtest: tagged held name is sold at the next daily review (any weekday), in A arms, dip lots, A6 and S3-M0
+ok 65 - tagged held name is sold at the next daily review (any weekday), in A arms, dip lots, A6 and S3-M0
+  ---
+  duration_ms: 6.609193
+  type: 'test'
+  ...
+# Subtest: frozen pair does not block the variant: not-TRADING held pair frozen at its last close, other lots keep running, its pending sell stops retrying
+ok 66 - frozen pair does not block the variant: not-TRADING held pair frozen at its last close, other lots keep running, its pending sell stops retrying
+  ---
+  duration_ms: 39.200017
+  type: 'test'
+  ...
+# Subtest: S3-M0 and A6 freeze: frozen lot keeps its last close, its pending orders are dropped, the other lots keep trading
+ok 67 - S3-M0 and A6 freeze: frozen lot keeps its last close, its pending orders are dropped, the other lots keep trading
+  ---
+  duration_ms: 3.552258
+  type: 'test'
+  ...
+# Subtest: QA F2b (A6): a slot holding BTC whose label alt went BREAK no longer stalls the arm
+ok 68 - QA F2b (A6): a slot holding BTC whose label alt went BREAK no longer stalls the arm
+  ---
+  duration_ms: 21.429198
+  type: 'test'
+  ...
+# Subtest: QA F3 (S3-M0): a longterm lot on a dead pair is frozen at its last close, never sold, and the arm advances
+ok 69 - QA F3 (S3-M0): a longterm lot on a dead pair is frozen at its last close, never sold, and the arm advances
+  ---
+  duration_ms: 13.563968
+  type: 'test'
+  ...
+# Subtest: QA F4 (A arm): a pending buy on a pair that went BREAK is dropped and logged; the arm advances
+ok 70 - QA F4 (A arm): a pending buy on a pair that went BREAK is dropped and logged; the arm advances
+  ---
+  duration_ms: 9.592902
+  type: 'test'
+  ...
+# Subtest: fix round 1: a tag first seen on day D is stamped D-1, so the same run's decision (close D-1) already blocks it
+ok 71 - fix round 1: a tag first seen on day D is stamped D-1, so the same run's decision (close D-1) already blocks it
+  ---
+  duration_ms: 0.348297
+  type: 'test'
+  ...
+# Subtest: fix round 1: under --quiet an arm that throws writes a runs.jsonl error row and --paper-status escalates it
+not ok 72 - fix round 1: under --quiet an arm that throws writes a runs.jsonl error row and --paper-status escalates it
+  ---
+  duration_ms: 70.521521
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/guard.test.mjs:396:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    node:fs:440
+        return binding.readFileUtf8(path, stringToFlags(options.flag));
+                       ^
+    
+    Error: ENOENT: no such file or directory, open '/home/user/CLaude/work/bot/data/exchangeInfo.json'
+        at readFileSync (node:fs:440:20)
+        at readJson (file:///home/user/CLaude/work/bot/bot.mjs:52:36)
+        at variantData (file:///home/user/CLaude/work/bot/bot.mjs:75:16)
+        at async runVariants (file:///home/user/CLaude/work/bot/bot.mjs:123:16)
+        at async file:///home/user/CLaude/work/bot/bot.mjs:68:45 {
+      errno: -2,
+      code: 'ENOENT',
+      syscall: 'open',
+      path: '/home/user/CLaude/work/bot/data/exchangeInfo.json'
+    }
+    
+    Node.js v22.22.0
+    
+    
+    1 !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    readFileSync (node:fs:440:20)
+    readJson (file:///home/user/CLaude/work/bot/bot.mjs:52:36)
+    variantData (file:///home/user/CLaude/work/bot/bot.mjs:75:16)
+    async runVariants (file:///home/user/CLaude/work/bot/bot.mjs:123:16)
+    async file:///home/user/CLaude/work/bot/bot.mjs:68:45 {
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/guard.test.mjs:404:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: existing arms are not reset: the live state fingerprints still match with the new code (no exit 4)
+ok 73 - existing arms are not reset: the live state fingerprints still match with the new code (no exit 4)
+  ---
+  duration_ms: 6.091987
+  type: 'test'
+  ...
+# Subtest: longterm rule: every condition at its boundary
+ok 74 - longterm rule: every condition at its boundary
+  ---
+  duration_ms: 1.5765
+  type: 'test'
+  ...
+# Subtest: volumeRanks: 90d median, point in time, missing days count as 0, stables excluded
+ok 75 - volumeRanks: 90d median, point in time, missing days count as 0, stables excluded
+  ---
+  duration_ms: 3.727672
+  type: 'test'
+  ...
+# Subtest: assetAt computes listedDays from the first kline, and the selector is rule-based
+ok 76 - assetAt computes listedDays from the first kline, and the selector is rule-based
+  ---
+  duration_ms: 5.350015
+  type: 'test'
+  ...
+# Subtest: dated supply history: the emission in force at t is used
+ok 77 - dated supply history: the emission in force at t is used
+  ---
+  duration_ms: 0.267664
+  type: 'test'
+  ...
+# Subtest: CSV parsing normalises microsecond timestamps (Binance spot files from 2025)
+ok 78 - CSV parsing normalises microsecond timestamps (Binance spot files from 2025)
+  ---
+  duration_ms: 0.462487
+  type: 'test'
+  ...
+# Subtest: closesOf / emaSeries / returns / drawdown / vol: definitions hold on a hand-made series
+ok 79 - closesOf / emaSeries / returns / drawdown / vol: definitions hold on a hand-made series
+  ---
+  duration_ms: 2.399185
+  type: 'test'
+  ...
+# Subtest: btcTrend: regime states equal strategies/regime.mjs; distances and the 3-close OFF rule
+ok 80 - btcTrend: regime states equal strategies/regime.mjs; distances and the 3-close OFF rule
+  ---
+  duration_ms: 8.101506
+  type: 'test'
+  ...
+# Subtest: breadth / basketReturn / relativeStrength: counted over the given pairs only, short histories skipped
+ok 81 - breadth / basketReturn / relativeStrength: counted over the given pairs only, short histories skipped
+  ---
+  duration_ms: 1.139077
+  type: 'test'
+  ...
+# Subtest: regimeLabel: the four labels come from the documented rules only
+ok 82 - regimeLabel: the four labels come from the documented rules only
+  ---
+  duration_ms: 0.38724
+  type: 'test'
+  ...
+# Subtest: armRules: regime on -> tier-2 top-5 and BTC core; regime off -> cash; TV overlay scale = min(1, target / basket vol)
+ok 83 - armRules: regime on -> tier-2 top-5 and BTC core; regime off -> cash; TV overlay scale = min(1, target / basket vol)
+  ---
+  duration_ms: 9.14152
+  type: 'test'
+  ...
+# Subtest: volScale: exact formula, skips short series, 1 without usable pairs or target
+ok 84 - volScale: exact formula, skips short series, 1 without usable pairs or target
+  ---
+  duration_ms: 0.471583
+  type: 'test'
+  ...
+# Subtest: altVsBtcByRegime: Mondays only, split by regime, forward returns computed from closes (no lookahead into the stats of the past)
+ok 85 - altVsBtcByRegime: Mondays only, split by regime, forward returns computed from closes (no lookahead into the stats of the past)
+  ---
+  duration_ms: 1.746539
+  type: 'test'
+  ...
+# Subtest: marketState: snapshot carries definitions, the regime label, the arms and the evidence block; input untouched
+ok 86 - marketState: snapshot carries definitions, the regime label, the arms and the evidence block; input untouched
+  ---
+  duration_ms: 10.313579
+  type: 'test'
+  ...
+# Subtest: S3-M0 resolves as the 12th forward arm (ml2, HWM bank, research params)
+ok 87 - S3-M0 resolves as the 12th forward arm (ml2, HWM bank, research params)
+  ---
+  duration_ms: 4.334899
+  type: 'test'
+  ...
+# Subtest: S3-M0 parity with TB-RECENT3 (research metadata: XRP 2.5 %/yr): W1 -4.14 %, W2 +74.18 % within 0.5 pp
+ok 88 - S3-M0 parity with TB-RECENT3 (research metadata: XRP 2.5 %/yr): W1 -4.14 %, W2 +74.18 % within 0.5 pp # SKIP
+  ---
+  duration_ms: 0.214275
+  type: 'test'
+  ...
+# Subtest: A6 variant: R4 frame and params (50 % BTC core + 4 x 12.5 %, SMA90, monthly re-selection), strict schema
+ok 89 - A6 variant: R4 frame and params (50 % BTC core + 4 x 12.5 %, SMA90, monthly re-selection), strict schema
+  ---
+  duration_ms: 2.445775
+  type: 'test'
+  ...
+# Subtest: A6 signal: ALT/BTC > SMA90 from closes <= t only (truncation and scrambled futures)
+ok 90 - A6 signal: ALT/BTC > SMA90 from closes <= t only (truncation and scrambled futures)
+  ---
+  duration_ms: 84.714409
+  type: 'test'
+  ...
+# Subtest: A6 fills: start split 50/12.5x4 at the next open; switches on ALTBTC (one fee) or via USDT (two fees)
+ok 91 - A6 fills: start split 50/12.5x4 at the next open; switches on ALTBTC (one fee) or via USDT (two fees)
+  ---
+  duration_ms: 30.034315
+  type: 'test'
+  ...
+# Subtest: A6 accounting: ledger replay of every sold leg (HWM split), book identity, reserve only from 10 % credits
+ok 92 - A6 accounting: ledger replay of every sold leg (HWM split), book identity, reserve only from 10 % credits
+  ---
+  duration_ms: 46.590246
+  type: 'test'
+  ...
+# Subtest: A6 monthly re-selection: only on the first close of a month; a leaving alt exits via BTC
+ok 93 - A6 monthly re-selection: only on the first close of a month; a leaving alt exits via BTC
+  ---
+  duration_ms: 11.093106
+  type: 'test'
+  ...
+# Subtest: buildSignals (regime on): rules say "hold the tier-2 top-5", every rule carries evidence, disclaimer fixed, no forbidden language
+ok 94 - buildSignals (regime on): rules say "hold the tier-2 top-5", every rule carries evidence, disclaimer fixed, no forbidden language
+  ---
+  duration_ms: 16.060942
+  type: 'test'
+  ...
+# Subtest: buildSignals (regime off): rules say cash, the owner question is answered from the data, risks mention the EMA200 return
+ok 95 - buildSignals (regime off): rules say cash, the owner question is answered from the data, risks mention the EMA200 return
+  ---
+  duration_ms: 0.476525
+  type: 'test'
+  ...
+# Subtest: readArms: reads ml2 / alt70 / regime states read-only, tolerates a broken file
+ok 96 - readArms: reads ml2 / alt70 / regime states read-only, tolerates a broken file
+  ---
+  duration_ms: 6.663453
+  type: 'test'
+  ...
+# Subtest: CLI: node bot.mjs signals writes out/signals.json + signals.md + market-state.json from a synthetic data dir, offline
+ok 97 - CLI: node bot.mjs signals writes out/signals.json + signals.md + market-state.json from a synthetic data dir, offline
+  ---
+  duration_ms: 146.081386
+  type: 'test'
+  ...
+# Subtest: writeAtomic: EPERM on the first 2 renames, success on the 3rd; one warning line, 250 ms backoff
+ok 98 - writeAtomic: EPERM on the first 2 renames, success on the 3rd; one warning line, 250 ms backoff
+  ---
+  duration_ms: 4.176724
+  type: 'test'
+  ...
+# Subtest: writeAtomic: retries exhausted -> the original EPERM is thrown after 6 retries, the target is untouched, tmp removed, one EXHAUSTED line
+ok 99 - writeAtomic: retries exhausted -> the original EPERM is thrown after 6 retries, the target is untouched, tmp removed, one EXHAUSTED line
+  ---
+  duration_ms: 1.656971
+  type: 'test'
+  ...
+# Subtest: writeAtomic: a non-lock error (ENOENT-like) is not retried
+ok 100 - writeAtomic: a non-lock error (ENOENT-like) is not retried
+  ---
+  duration_ms: 0.46018
+  type: 'test'
+  ...
+# Subtest: forward run: state rename locked for good -> throws (error run), state/summary/runs unchanged; the next clean run reconciles the outputs and commits
+ok 101 - forward run: state rename locked for good -> throws (error run), state/summary/runs unchanged; the next clean run reconciles the outputs and commits
+  ---
+  duration_ms: 31.428457
+  type: 'test'
+  ...
+# Subtest: regime: on above EMA200, off only after 3 consecutive closes below
+ok 102 - regime: on above EMA200, off only after 3 consecutive closes below
+  ---
+  duration_ms: 1.468819
+  type: 'test'
+  ...
+# Subtest: regime: no lookahead (truncated and scrambled futures give the same states)
+ok 103 - regime: no lookahead (truncated and scrambled futures give the same states)
+  ---
+  duration_ms: 15.166675
+  type: 'test'
+  ...
+# Subtest: allocation and momentum target rules
+ok 104 - allocation and momentum target rules
+  ---
+  duration_ms: 1.583028
+  type: 'test'
+  ...
+# Subtest: swing-regime: Donchian entry, exit on a completed 4h close below EMA50, no lookahead
+ok 105 - swing-regime: Donchian entry, exit on a completed 4h close below EMA50, no lookahead
+  ---
+  duration_ms: 25.871046
+  type: 'test'
+  ...
+# Subtest: portfolio regime: next-open fills, applyClosedTrade chain, reserve untouched, regime exits
+ok 106 - portfolio regime: next-open fills, applyClosedTrade chain, reserve untouched, regime exits
+  ---
+  duration_ms: 12.098022
+  type: 'test'
+  ...
+# Subtest: portfolio momentum: next-open fills, applyClosedTrade chain, reserve untouched, regime exits
+ok 107 - portfolio momentum: next-open fills, applyClosedTrade chain, reserve untouched, regime exits
+  ---
+  duration_ms: 17.355386
+  type: 'test'
+  ...
+# Subtest: portfolio: no lookahead (future bars scrambled -> identical decisions and trades before the cut)
+ok 108 - portfolio: no lookahead (future bars scrambled -> identical decisions and trades before the cut)
+  ---
+  duration_ms: 28.04728
+  type: 'test'
+  ...
+# Subtest: criteria helpers: top-asset share of gross profit, strategy-own basis, ratio ranking
+ok 109 - criteria helpers: top-asset share of gross profit, strategy-own basis, ratio ranking
+  ---
+  duration_ms: 0.850236
+  type: 'test'
+  ...
+# Subtest: candidate D swing-wide: same swing rules, ATR stop multiple x2 via params only, kill switch unchanged, frozen
+ok 110 - candidate D swing-wide: same swing rules, ATR stop multiple x2 via params only, kill switch unchanged, frozen
+  ---
+  duration_ms: 19.47134
+  type: 'test'
+  ...
+# Subtest: strategy-own equity = split + cumulative raw netPnl (engine and portfolio runners)
+ok 111 - strategy-own equity = split + cumulative raw netPnl (engine and portfolio runners)
+  ---
+  duration_ms: 197.276823
+  type: 'test'
+  ...
+# Subtest: OOS lock: covers every file class (src, src/strategies, lib, config/*, bot.mjs, new files, config.real)
+ok 112 - OOS lock: covers every file class (src, src/strategies, lib, config/*, bot.mjs, new files, config.real)
+  ---
+  duration_ms: 29.05965
+  type: 'test'
+  ...
+# Subtest: OOS lock: opened once (exclusive marker before any computation, sealed with the results hash)
+ok 113 - OOS lock: opened once (exclusive marker before any computation, sealed with the results hash)
+  ---
+  duration_ms: 0.938927
+  type: 'test'
+  ...
+# Subtest: CLI: fixed FROZEN path whatever --out says; OOS refused without a freeze and on a second open; --strategy guards
+ok 114 - CLI: fixed FROZEN path whatever --out says; OOS refused without a freeze and on a second open; --strategy guards
+  ---
+  duration_ms: 470.139903
+  type: 'test'
+  ...
+# Subtest: round-trip cost includes both fees and slippage
+ok 115 - round-trip cost includes both fees and slippage
+  ---
+  duration_ms: 0.875188
+  type: 'test'
+  ...
+# Subtest: scalp: no lookahead (signal identical with future bars removed or scrambled)
+ok 116 - scalp: no lookahead (signal identical with future bars removed or scrambled)
+  ---
+  duration_ms: 59.523358
+  type: 'test'
+  ...
+# Subtest: swing: no lookahead on 4h bars
+ok 117 - swing: no lookahead on 4h bars
+  ---
+  duration_ms: 3.112765
+  type: 'test'
+  ...
+# Subtest: fee-aware: prohibitive costs suppress all entries
+ok 118 - fee-aware: prohibitive costs suppress all entries
+  ---
+  duration_ms: 9.148739
+  type: 'test'
+  ...
+# Subtest: risk: no averaging down, max positions, sizing cap, reserve untradable
+ok 119 - risk: no averaging down, max positions, sizing cap, reserve untradable
+  ---
+  duration_ms: 0.996932
+  type: 'test'
+  ...
+# Subtest: risk: daily loss limit halts until next UTC day; kill switch is permanent
+ok 120 - risk: daily loss limit halts until next UTC day; kill switch is permanent
+  ---
+  duration_ms: 0.314415
+  type: 'test'
+  ...
+# Subtest: DEFAULT_UNIVERSE_CONFIG matches spec (TB-PAPER-1 longterm defaults)
+ok 121 - DEFAULT_UNIVERSE_CONFIG matches spec (TB-PAPER-1 longterm defaults)
+  ---
+  duration_ms: 2.472633
+  type: 'test'
+  ...
+# Subtest: capped_max_emission_pct rejects high emission even with a cap (Owner: no high emission)
+ok 122 - capped_max_emission_pct rejects high emission even with a cap (Owner: no high emission)
+  ---
+  duration_ms: 0.626037
+  type: 'test'
+  ...
+# Subtest: isEligible rejections
+ok 123 - isEligible rejections
+  ---
+  duration_ms: 1.455555
+  type: 'test'
+  ...
+# Subtest: isEligible accepts
+ok 124 - isEligible accepts
+  ---
+  duration_ms: 0.385687
+  type: 'test'
+  ...
+# Subtest: isLongTermEligible ("reliable" rule)
+ok 125 - isLongTermEligible ("reliable" rule)
+  ---
+  duration_ms: 0.54172
+  type: 'test'
+  ...
+# Subtest: buildUniverse checks exchangeInfo and logs reasons (HYPE not listed)
+not ok 126 - buildUniverse checks exchangeInfo and logs reasons (HYPE not listed)
+  ---
+  duration_ms: 0.61348
+  type: 'test'
+  location: '/home/user/CLaude/work/bot/test/universe.test.mjs:49:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/home/user/CLaude/work/bot/fixtures/assets.json'"
+  code: 'ENOENT'
+  stack: |-
+    Object.openSync (node:fs:560:18)
+    readFileSync (node:fs:444:35)
+    TestContext.<anonymous> (file:///home/user/CLaude/work/bot/test/universe.test.mjs:50:29)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: XRP: emission 6 %/yr (dated source note) -> ineligible under the <= 5 % rule
+ok 127 - XRP: emission 6 %/yr (dated source note) -> ineligible under the <= 5 % rule
+  ---
+  duration_ms: 1.427888
+  type: 'test'
+  ...
+# Subtest: Amendment 6 variants: params as pre-registered; HWM 10/45/45 bank; strict validation
+ok 128 - Amendment 6 variants: params as pre-registered; HWM 10/45/45 bank; strict validation
+  ---
+  duration_ms: 1.990403
+  type: 'test'
+  ...
+# Subtest: B4: BTC/ETH 50/50 at entry, immediate entry on a regime turn-on, exits on regime off; reserve idle
+ok 129 - B4: BTC/ETH 50/50 at entry, immediate entry on a regime turn-on, exits on regime off; reserve idle
+  ---
+  duration_ms: 7.341806
+  type: 'test'
+  ...
+# Subtest: A7 breakout: next-open fills on a 20-day high close; exit on a 10-day low close or after 20 days; top-5 entries only
+ok 130 - A7 breakout: next-open fills on a 20-day high close; exit on a 10-day low close or after 20 days; top-5 entries only
+  ---
+  duration_ms: 29.337555
+  type: 'test'
+  ...
+# Subtest: A7 no lookahead: truncated and scrambled futures give identical decisions and fills before the cut
+ok 131 - A7 no lookahead: truncated and scrambled futures give identical decisions and fills before the cut
+  ---
+  duration_ms: 34.846047
+  type: 'test'
+  ...
+# Subtest: LT variants: all LT cash buys the target with the largest value deficit (previous-close values); active book = A5
+ok 132 - LT variants: all LT cash buys the target with the largest value deficit (previous-close values); active book = A5
+  ---
+  duration_ms: 24.477241
+  type: 'test'
+  ...
+1..132
+# tests 132
+# suites 0
+# pass 114
+# fail 15
+# cancelled 0
+# skipped 3
+# todo 0
+# duration_ms 5036.836206

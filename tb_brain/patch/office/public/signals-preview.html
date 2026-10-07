@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сигнали · PAPER · прев’ю</title>
+<style>
+  :root{color-scheme:dark}
+  body{margin:0;background:#141A21;color:#E8E3D6;font:14px/1.45 system-ui,"Segoe UI",Roboto,Arial,sans-serif}
+  .wrap{max-width:720px;margin:0 auto;padding:12px 16px 24px}
+  .banner{padding:8px 10px;border-radius:8px;background:#3A2A2A;color:#F2E9C9;font-weight:600;font-size:13px}
+  h1{font-size:16px;margin:10px 0}
+</style>
+</head>
+<body>
+<div class="wrap" id="trading">
+  <div class="body">
+    <div class="banner">PAPER · без доведеної переваги · симульовані угоди, жодних ордерів</div>
+    <h1>Кімната Хана · торговий стіл</h1>
+  </div>
+</div>
+<script type="application/json" id="signals-sample">__SIGNALS_JSON__</script>
+<script type="module">
+  // Preview of the two-tab trading panel: tab 1 is a stub here (the real one needs charts.js/fmt.js and /api/market),
+  // tab 2 renders signals-view.js over the embedded sample (or ?src=/api/signals when served by the office).
+  import { signalsHtml, tabsHtml, fetchSignals, SIGNALS_CSS, TABS_CSS } from './js/signals-view.js';
+  const css = document.createElement('style'); css.textContent = TABS_CSS + SIGNALS_CSS; document.head.appendChild(css);
+  const q = new URLSearchParams(location.search);
+  const mobile = innerWidth < 600;
+  const body = document.querySelector('#trading .body');
+  const st = { tab: q.get('tab') === 'auto' ? 'auto' : 'signals', signals: null };
+  const tabs = document.createElement('div'); tabs.innerHTML = tabsHtml(st.tab); body.appendChild(tabs.firstElementChild);
+  const auto = document.createElement('div'); auto.id = 'panel-auto'; auto.className = 'tp-panel'; auto.innerHTML = '<p class="empty" style="opacity:.7">Тут — наявна вкладка «Автоторгівля (папір)»: капітал рук, свічки, позиції, рішення, таблиця 14 рук (без змін).</p>';
+  const sig = document.createElement('div'); sig.id = 'panel-signals'; sig.className = 'tp-panel';
+  body.append(auto, sig);
+  const apply = () => { body.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === st.tab))); auto.hidden = st.tab !== 'auto'; sig.hidden = st.tab !== 'signals'; };
+  body.querySelectorAll('[data-tab]').forEach((b) => b.addEventListener('click', () => { st.tab = b.dataset.tab; apply(); }));
+  apply();
+  sig.innerHTML = signalsHtml(null, { mobile });
+  const src = q.get('src');
+  const sample = document.getElementById('signals-sample').textContent.trim();
+  st.signals = src ? await fetchSignals(src) : (sample.startsWith('{') ? JSON.parse(sample) : { error: 'немає зразка' });
+  sig.innerHTML = signalsHtml(st.signals, { mobile });
+  document.documentElement.dataset.ready = '1';
+</script>
+</body>
+</html>
