@@ -1,0 +1,45 @@
+/* Accordion — r214 */
+.acc {
+  border: 1px solid #d9dde3;
+  border-radius: 10px;
+  overflow: hidden;
+  font: 16px/1.5 system-ui, sans-serif;
+}
+.acc-btn {
+  display: block;
+  width: 100%;
+  padding: 14px 18px;
+  border: 0;
+  border-top: 1px solid #d9dde3;
+  background: #f6f7f9;
+  color: #1f2933;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+.acc-btn:first-child {
+  border-top: 0;
+}
+.acc-btn:hover {
+  background: #eceff3;
+}
+.acc-btn:focus-visible {
+  outline: 3px solid #7aa7ff;
+  outline-offset: -3px;
+}
+.acc-btn[aria-expanded="true"] {
+  background: #fff;
+}
+.acc-panel[hidden] {
+  display: none;
+}
+.acc .acc-panel {
+  display: block;
+  padding: 14px 18px 18px;
+  background: #fff;
+  color: #3b4652;
+}
+.acc-panel p:last-child {
+  margin-bottom: 0;
+}

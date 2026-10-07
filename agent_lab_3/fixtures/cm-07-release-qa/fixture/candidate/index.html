@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lantern Supply — hand-finished lanterns and lamp oil</title>
+  <meta name="description" content="Small-batch lanterns, wicks and lamp oil, shipped from our workshop within two days.">
+  <link rel="canonical" href="https://staging.lanternsupply.example/">
+  <meta property="og:title" content="Lantern Supply — hand-finished lanterns and lamp oil">
+  <meta property="og:url" content="https://lanternsupply.example/">
+  <meta property="og:image" content="https://lanternsupply.example/img/og-lantern.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">Lantern Supply</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="/shop/">Shop</a>
+      <a href="/journal/">Journal</a>
+      <a href="/about/">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Light that lasts a winter.</h1>
+      <p>Hand-finished brass and steel lanterns, refillable, repairable, shipped within two working days.</p>
+      <a class="btn" href="/shop/">Browse the shop</a>
+    </section>
+
+    <section class="featured" aria-labelledby="featured-h">
+      <h2 id="featured-h">This season</h2>
+      <ul class="grid">
+        <li class="card"><img src="img/harbour-lantern.webp" alt="Harbour lantern in brushed brass" width="600" height="600"><h3>Harbour lantern</h3><p class="price">$84</p></li>
+        <li class="card"><img src="img/trail-lamp.webp" alt="Trail lamp in matte black steel" width="600" height="600"><h3>Trail lamp</h3><p class="price">$56</p></li>
+        <li class="card"><img src="img/lamp-oil-1l.webp" alt="One-litre bottle of clear lamp oil" width="600" height="600"><h3>Lamp oil, 1 l</h3><p class="price">$12</p></li>
+      </ul>
+    </section>
+
+    <section class="newsletter" aria-labelledby="news-h">
+      <h2 id="news-h">Workshop letter</h2>
+      <p>One email a month: new pieces, repair tips, no discounts spam.</p>
+      <form id="subscribe" novalidate>
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+        <label class="consent"><input id="consent" name="consent" type="checkbox" required> I agree to receive the letter</label>
+        <button type="submit" class="btn">Subscribe</button>
+        <p class="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 Lantern Supply · <a href="/privacy/">Privacy</a> · <a href="/shipping/">Shipping and returns</a></p>
+  </footer>
+  <script src="app.js" defer></script>
+  <script async src="https://metrics.example/tag.js" data-site="lanternsupply"></script>
+</body>
+</html>

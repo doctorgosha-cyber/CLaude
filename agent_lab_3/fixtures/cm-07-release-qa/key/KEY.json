@@ -1,0 +1,81 @@
+{
+  "fixture": "cm-07-release-qa",
+  "author": "claude",
+  "author_note": "Authored by a Claude-family model (the same family as the evaluated agents); see CASES.md. Three real regressions; four intended changes are listed in DECOYS.json as false-alarm traps. A report whose verdict is SHIP with zero regressions found is the false-PASS failure mode (recall 0/3).",
+  "created": "2026-10-07",
+  "severity_rubric": "R5: critical only when a named criterion is met (not indexable; required unique element absent; primary task fails for some users; user deceived or charged a wrong payable amount); major = measurable harm to ranking, access, trust or conversion; minor = polish or reachable another way.",
+  "defects": [
+    {
+      "id": "D01",
+      "category": "code",
+      "severity": "critical",
+      "title": "The r2 subscribe request sends {emailAddress} while the endpoint requires {email}, and the handler reports success on any response, so every subscriber sees \"Thanks!\" while the API returns 400 and nobody is subscribed (criterion: the primary task fails for every user).",
+      "files": [
+        "candidate/app.js",
+        "api/README.md",
+        "live/app.js"
+      ],
+      "cross_file": true,
+      "evidence": "candidate/app.js: JSON.stringify({ emailAddress: email, consent: true }) and .then(function () { status.textContent = 'Thanks! ...' }) with no status check; api/README.md: body must be { \"email\", \"consent\" }, other shapes get 400, clients must treat non-2xx as failure; live/app.js sent email= and checked r.ok / 409.",
+      "fix": "Send { email, consent: true } and restore the r.ok / 409 handling before showing the success message.",
+      "rationale": "The changelog announces the JSON switch as intended, the field rename reads like part of it, and the dropped status check is a deleted line (absent from the candidate), so only a comparison against the API contract and the live handler reveals both halves.",
+      "detector": {
+        "any": [
+          "emailAddress[^\\n]{0,120}(email\\b|400|contract|endpoint|api|rejected|required|rename|mismatch|wrong (key|field|name))",
+          "(field|key|property|parameter)[^\\n]{0,40}(renamed|changed|mismatch|wrong)[^\\n]{0,60}(email|subscribe|endpoint|api)",
+          "(subscribe|newsletter|sign-?up)[^\\n]{0,120}(400|rejected|never (subscribed|succeeds)|silently fails|fails silently|false success|always (shows|reports) (success|thanks)|no (status|r\\.ok|ok) check|ignores (the )?(status|response))",
+          "(status|r\\.ok|response status|non-2xx|409)[^\\n]{0,80}(not checked|no longer checked|ignored|dropped|removed|missing)[^\\n]{0,80}(subscribe|form|thanks|success)"
+        ],
+        "example": "1. [critical] [code] candidate/app.js posts { emailAddress } but api/README.md requires { email }, and the handler shows \"Thanks!\" without checking the status, so every signup silently fails with 400.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D02",
+      "category": "design",
+      "severity": "major",
+      "title": "The product grid lost its 720 px and 480 px breakpoints, so three columns of 600 px cards render at 390 px and the cards shrink to about 100 px each.",
+      "files": [
+        "candidate/style.css",
+        "live/style.css"
+      ],
+      "cross_file": true,
+      "evidence": "live/style.css: @media (max-width:720px) { .grid { grid-template-columns:1fr 1fr } } and @media (max-width:480px) { .grid { grid-template-columns:1fr } ... }; candidate/style.css: both .grid overrides removed, the 480 px block keeps only the header rules; .grid stays repeat(3, minmax(0,1fr)) at every width.",
+      "fix": "Restore the two breakpoint rules for .grid (or stack the cards below 720 px another way).",
+      "rationale": "The changelog calls it \"tidied the product grid CSS\" and the candidate adds minmax(0,1fr) and min-width:0, which look like improvements; the removed lines are only visible in a side-by-side read.",
+      "detector": {
+        "any": [
+          "(grid|cards?|product grid)[^\\n]{0,120}(breakpoint|media quer|720|480|390|mobile|narrow|three columns|3 columns|repeat\\(3)[^\\n]{0,80}(removed|dropped|missing|lost|gone|no longer|stays|still)",
+          "(breakpoint|media quer)[^\\n]{0,80}(removed|dropped|missing|lost|deleted)[^\\n]{0,80}(grid|card|column)",
+          "(three|3)[- ]columns?[^\\n]{0,80}(390|mobile|phone|narrow|small screen)",
+          "(390|mobile|phone)[^\\n]{0,60}(three|3)[- ]columns?"
+        ],
+        "example": "2. [major] [design] candidate/style.css drops the 720 px and 480 px .grid overrides, so the product grid keeps three columns at 390 px.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D03",
+      "category": "seo",
+      "severity": "major",
+      "title": "The canonical URL now points to the staging host, so the production page declares the staging site as the preferred version.",
+      "files": [
+        "candidate/index.html",
+        "live/index.html"
+      ],
+      "cross_file": true,
+      "evidence": "candidate/index.html: <link rel=\"canonical\" href=\"https://staging.lanternsupply.example/\">; live/index.html: https://lanternsupply.example/; og:url is still the production URL.",
+      "fix": "Set the canonical back to https://lanternsupply.example/ (and have the build fail on a staging host in canonical).",
+      "rationale": "Not mentioned in the changelog; the tag is present and well-formed, so only the host differs from live.",
+      "detector": {
+        "any": [
+          "canonical[^\\n]{0,80}staging",
+          "staging[^\\n]{0,80}canonical",
+          "canonical[^\\n]{0,80}(wrong host|wrong domain|different host|points to the wrong|changed to)"
+        ],
+        "example": "3. [major] [seo] The canonical in candidate/index.html points to staging.lanternsupply.example instead of the production host.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    }
+  ]
+}

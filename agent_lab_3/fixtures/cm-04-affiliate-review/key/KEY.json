@@ -1,0 +1,235 @@
+{
+  "fixture": "cm-04-affiliate-review",
+  "author": "claude",
+  "author_note": "Authored by a Claude-family model (the same family as the evaluated agents); see CASES.md for the family-bias risk and how to read results.",
+  "created": "2026-10-07",
+  "severity_rubric": "R5: critical only when a named criterion is met (not indexable; required unique element absent; primary task fails for some users; user deceived or charged a wrong payable amount); major = measurable harm to ranking, access, trust or conversion; minor = polish or reachable another way.",
+  "defects": [
+    {
+      "id": "D01",
+      "category": "a11y",
+      "severity": "major",
+      "title": "The star rating is rendered only as aria-hidden glyphs, so screen-reader users never learn the score.",
+      "files": [
+        "page.html"
+      ],
+      "cross_file": false,
+      "evidence": "<div class=\"rating\"><span class=\"stars\" aria-hidden=\"true\">★★★★☆</span></div> with no text alternative; the numeric score exists only in the Review JSON-LD.",
+      "fix": "Add visible or visually hidden text such as \"4 out of 5\" next to the stars (or an aria-label on the rating container).",
+      "rationale": "The stars look complete and aria-hidden reads like good practice; the missing text alternative is only noticed by asking what a screen reader announces.",
+      "detector": {
+        "any": [
+          "(star|rating)[^\\n]{0,80}(aria-hidden|hidden from (screen|assistive)|no (text|accessible) (alternative|name|equivalent)|not announced|screen.?reader)",
+          "(screen.?reader|assistive)[^\\n]{0,60}(star|rating)",
+          "rating[^\\n]{0,40}(glyphs?|characters?|unicode)[^\\n]{0,40}(only|no text)"
+        ],
+        "example": "2. [major] [a11y] The star rating is aria-hidden with no text alternative, so screen-reader users never hear the score.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D02",
+      "category": "a11y",
+      "severity": "major",
+      "title": "The specification table encodes yes/no as check and cross icons without alt text, so the comparison is empty for assistive technology.",
+      "files": [
+        "page.html"
+      ],
+      "cross_file": false,
+      "evidence": "Nine <img class=\"spec-icon\" src=\".../icon-check.svg\"> and icon-cross.svg cells have no alt attribute.",
+      "fix": "Give each icon alt=\"Yes\" or alt=\"No\" (or replace the icons with text).",
+      "rationale": "Both hero images carry good alt text, which invites skipping the small icons inside the table.",
+      "detector": {
+        "any": [
+          "(icon|check|cross|tick)[^\\n]{0,60}(no|missing|without|lack|empty)[^\\w\\n]{0,6}alt",
+          "(spec|specification|comparison|feature)[^\\n]{0,40}table[^\\n]{0,80}(alt|yes/no|yes or no)[^\\n]{0,40}(missing|absent|lost|empty|no)",
+          "(yes|no|yes/no)[^\\n]{0,30}(icon|image)s?[^\\n]{0,60}(alt|not (conveyed|announced)|screen.?reader)",
+          "spec-icon[^\\n]{0,60}alt"
+        ],
+        "example": "4. [major] [a11y] The spec table check and cross icons have no alt text, so yes/no values are lost for screen-reader users.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D03",
+      "category": "seo",
+      "severity": "major",
+      "title": "The canonical URL carries newsletter tracking parameters, so the canonical and og:url disagree and the tracked URL is declared as the preferred one.",
+      "files": [
+        "page.html"
+      ],
+      "cross_file": false,
+      "evidence": "<link rel=\"canonical\" href=\"https://burrowbramble.example/reviews/pawline-slicker-brush/?utm_source=newsletter&utm_medium=email\"> versus og:url without parameters.",
+      "fix": "Set the canonical to the clean URL https://burrowbramble.example/reviews/pawline-slicker-brush/.",
+      "rationale": "The canonical points to the right page, so a quick check passes; only the query string is wrong.",
+      "detector": {
+        "any": [
+          "canonical[^\\n]{0,80}(utm|tracking|query (string|param)|parameters?)",
+          "(utm|tracking param)[^\\n]{0,60}canonical",
+          "canonical[^\\n]{0,60}(differs|disagrees|mismatch|does not match)[^\\n]{0,30}og:url"
+        ],
+        "example": "1. [major] [seo] The canonical link includes utm_source and utm_medium tracking parameters and no longer matches og:url.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D04",
+      "category": "seo",
+      "severity": "major",
+      "title": "The AggregateRating claims 128 reviews while the page states the rating is based on 12 owner reviews.",
+      "files": [
+        "page.html"
+      ],
+      "cross_file": false,
+      "evidence": "JSON-LD \"aggregateRating\": {\"ratingValue\": \"4.7\", \"reviewCount\": \"128\"}; sidebar: \"Rated 4.7 out of 5, based on 12 owner reviews\".",
+      "fix": "Use the real count (12) in the structured data, or remove the aggregate rating.",
+      "rationale": "The rating value matches, so the count mismatch only shows when both numbers are compared.",
+      "detector": {
+        "any": [
+          "(reviewCount|review count|128)[^\\n]{0,80}(12 owner|12 reviews|twelve|mismatch|contradict|does not match|differs)",
+          "(12 owner reviews|12 reviews)[^\\n]{0,80}(128|reviewCount|structured data|schema|json-ld)",
+          "aggregateRating[^\\n]{0,80}(mismatch|contradict|inflat|does not match|differs|wrong count)"
+        ],
+        "example": "3. [major] [seo] The AggregateRating reviewCount of 128 contradicts the sidebar's 12 owner reviews.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D05",
+      "category": "seo",
+      "severity": "major",
+      "title": "The structured data has dateModified earlier than datePublished and both disagree with the visible 1 October update, so the freshness signal is invalid.",
+      "files": [
+        "page.html"
+      ],
+      "cross_file": false,
+      "evidence": "\"datePublished\": \"2026-08-18\", \"dateModified\": \"2026-06-14\" on the WebPage and Review nodes; byline: \"Last updated 1 October 2026\".",
+      "fix": "Set dateModified to 2026-10-01 on both nodes.",
+      "rationale": "Both dates are valid calendar dates; the defect is their order and their disagreement with the byline.",
+      "detector": {
+        "any": [
+          "dateModified[^\\n]{0,80}(before|earlier|precedes|predates|older than|<)[^\\n]{0,30}datePublished",
+          "datePublished[^\\n]{0,80}(after|later than|>)[^\\n]{0,30}dateModified",
+          "dateModified[^\\n]{0,80}(2026-06-14|1 October|october|byline|does not match|mismatch|contradict|inconsistent|stale|wrong)",
+          "(modified|updated) date[^\\n]{0,80}(before|earlier than|precedes|contradict|mismatch|inconsistent)"
+        ],
+        "example": "5. [major] [seo] dateModified 2026-06-14 is earlier than datePublished 2026-08-18 and contradicts the byline's 1 October update.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D06",
+      "category": "commercial",
+      "severity": "major",
+      "title": "The in-text partner link \"from this listing\" has no rel=\"sponsored\" while the other three partner links do.",
+      "files": [
+        "page.html"
+      ],
+      "cross_file": false,
+      "evidence": "<a href=\"https://partners.example/go/pawline-slicker\" target=\"_blank\">from this listing</a> inside \"How we tested\"; the two CTA links and the mitt link carry rel=\"sponsored noopener\".",
+      "fix": "Add rel=\"sponsored noopener\" to that anchor.",
+      "rationale": "Three of four partner links are correct, so a spot check of the CTA buttons passes.",
+      "detector": {
+        "any": [
+          "(from this listing|in-text|inline|body|how we tested)[^\\n]{0,80}(rel=.?sponsored|sponsored|nofollow)",
+          "(one|1|fourth|a) (of the )?(partner|affiliate)[^\\n]{0,60}(link|anchor)[^\\n]{0,60}(no|missing|without|lacks)[^\\n]{0,20}rel",
+          "(rel=.?sponsored|sponsored)[^\\n]{0,60}(missing|absent|lacking)[^\\n]{0,60}(listing|in-text|inline|one link|one of)"
+        ],
+        "example": "6. [major] [commercial] The in-text partner link \"from this listing\" lacks rel=\"sponsored\" although the CTA links carry it.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D07",
+      "category": "commercial",
+      "severity": "major",
+      "title": "The commission disclosure appears only after the last partner link at the end of the article, not before or near the first one.",
+      "files": [
+        "page.html"
+      ],
+      "cross_file": false,
+      "evidence": "<p class=\"disclosure\"> is the final element of .entry-content, below four partner links and two CTA boxes.",
+      "fix": "Place the disclosure above the first CTA box (or in the byline area) and keep it visible.",
+      "rationale": "A disclosure does exist and is not hidden, so a presence check passes; only its position is wrong.",
+      "detector": {
+        "any": [
+          "disclosure[^\\n]{0,100}(end|bottom|after|below|last|too late|placement|position|not (before|near|above))",
+          "(before|near|above|ahead of)[^\\n]{0,40}(first )?(affiliate|partner|cta)[^\\n]{0,60}disclosure",
+          "disclosure[^\\n]{0,60}(buried|placed after|follows)"
+        ],
+        "example": "7. [major] [commercial] The affiliate disclosure sits at the very end of the article, after every partner link, instead of before the first CTA.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D08",
+      "category": "commercial",
+      "severity": "major",
+      "title": "The page shows three different prices for the same product: $79 in the CTA box, $89 in the specification table and 69.00 in the Offer schema.",
+      "files": [
+        "page.html"
+      ],
+      "cross_file": false,
+      "evidence": ".cta-box .price \"$79\" (checked 28 September 2026); table row Price \"$89\"; JSON-LD \"offers\": {\"price\": \"69.00\"}.",
+      "fix": "Show one verified current price everywhere and date it, or state a price range.",
+      "rationale": "The CTA price is dated and looks authoritative; the table and the schema are easy to skip. Nobody is charged on this page, so the rubric keeps it at major.",
+      "detector": {
+        "any": [
+          "\\$79[^\\n]{0,80}(\\$89|69\\.00|\\$69)",
+          "\\$89[^\\n]{0,80}(\\$79|69\\.00|\\$69)",
+          "(69\\.00|\\$69)[^\\n]{0,80}(\\$79|\\$89)",
+          "price[^\\n]{0,80}(three|3|different|inconsistent|conflicting|stale|mismatch|contradict)[^\\n]{0,40}(price|value|amount|places)",
+          "(stale|outdated|inconsistent|conflicting|mismatch)[^\\n]{0,30}price"
+        ],
+        "example": "8. [major] [commercial] Three prices for one product: $79 in the CTA box, $89 in the spec table and 69.00 in the Offer schema.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D09",
+      "category": "design",
+      "severity": "major",
+      "title": "The theme stylesheet overrides the CTA box's auto margins, so the 560 px box sits flush left inside the 760 px column instead of centred.",
+      "files": [
+        "theme/style.css",
+        "page.html"
+      ],
+      "cross_file": true,
+      "evidence": "Inline: .cta-box { max-width:560px; margin:32px auto; }. Theme (loaded after): .entry-content .cta-box { margin:28px 0; } and .entry-content > * { margin-left:0; margin-right:0; } win on specificity and order; at 1280 px the box is left-aligned with 200 px of empty space on the right. At 390 px the box fills the column, so the drift is invisible on mobile.",
+      "fix": "Keep the horizontal auto margins (e.g. .entry-content .cta-box { margin:28px auto; }) or centre the box another way.",
+      "rationale": "The inline rule is correct on its own; the drift only appears when the later theme rule is applied and the desktop width is considered.",
+      "detector": {
+        "any": [
+          "(cta|call.to.action)[^\\n]{0,100}(auto margin|margin:\\s*(28px|32px)?\\s*0|margin-left|margin-right|margin:\\s*0 auto|centr|centered|flush left|left-aligned|not centred|not centered)",
+          "(auto margin|margin:\\s*0 auto|margin[^\\n]{0,20}auto)[^\\n]{0,80}(cta|override|overridden|lost|removed|theme)",
+          "(theme|style\\.css|entry-content)[^\\n]{0,80}(override|overrides|overridden|wins|beats)[^\\n]{0,80}(cta|margin)",
+          "(flush left|left-aligned|off-cent|not cent|uncentered|sits left)[^\\n]{0,60}(box|cta|560)"
+        ],
+        "example": "9. [major] [design] The theme rule .entry-content .cta-box { margin:28px 0 } overrides the inline auto margins, so the 560 px CTA box is flush left in the 760 px column at 1280 px.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D10",
+      "category": "commercial",
+      "severity": "major",
+      "title": "The verdict asserts \"vet-recommended\" and \"shown to reduce hairballs by 40 %\" with no source, study or named vet anywhere on the page.",
+      "files": [
+        "page.html"
+      ],
+      "cross_file": false,
+      "evidence": "Verdict box: \"Vet-recommended and shown to reduce hairballs by 40 %\"; no reference, link, methodology or named professional supports either claim; the test section weighed fur only.",
+      "fix": "Remove the claims or cite the source (who recommends it; what study measured the 40 %).",
+      "rationale": "The claim sits inside an otherwise measured, modest review, which lends it borrowed credibility.",
+      "detector": {
+        "any": [
+          "(vet.recommended|40 ?%|hairball)[^\\n]{0,100}(no source|unsourced|unsupported|without (a )?(source|evidence|citation|study)|not (supported|substantiated|backed)|no (evidence|citation|study|basis))",
+          "(unsourced|unsupported|unsubstantiated|no (source|evidence|basis) for)[^\\n]{0,80}(vet|hairball|40 ?%|claim)",
+          "(claim|claims)[^\\n]{0,60}(vet|hairball|40 ?%)[^\\n]{0,80}(source|evidence|basis|substantiat)"
+        ],
+        "example": "10. [major] [commercial] \"Vet-recommended\" and \"reduces hairballs by 40 %\" are unsupported: no study, source or named vet appears anywhere on the page.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    }
+  ]
+}

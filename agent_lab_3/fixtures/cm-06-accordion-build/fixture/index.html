@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accordion demo</title>
+  <link rel="stylesheet" href="accordion.css">
+  <style>body { margin: 0; padding: 32px 16px; background: #fbfbfc; } .demo { max-width: 640px; margin: 0 auto; }</style>
+</head>
+<body>
+  <div class="demo">
+    <h1>Shipping questions</h1>
+    <div class="acc" id="acc"></div>
+  </div>
+  <script type="module">
+    import { createAccordion, toggle, moveFocus, renderHtml } from './accordion.mjs';
+    const items = [
+      { id: 'times', title: 'How long does delivery take?', content: 'Two to four working days for mainland addresses.' },
+      { id: 'cost', title: 'What does shipping cost?', content: 'Free over 40; otherwise a flat 4.90.' },
+      { id: 'returns', title: 'Can I return an item?', content: 'Yes, within 30 days in its original packaging.' },
+    ];
+    let state = createAccordion(items, { initiallyOpen: ['times'] });
+    const root = document.getElementById('acc');
+    const draw = () => { root.innerHTML = renderHtml(state); root.querySelectorAll('.acc-btn')[state.focus]?.focus(); };
+    root.addEventListener('click', (e) => { const b = e.target.closest('.acc-btn'); if (!b) return; state = toggle(state, b.id.replace('acc-btn-', '')); draw(); });
+    root.addEventListener('keydown', (e) => { const next = moveFocus(state, e.key); if (next !== state) { e.preventDefault(); state = next; draw(); } });
+    draw();
+  </script>
+</body>
+</html>

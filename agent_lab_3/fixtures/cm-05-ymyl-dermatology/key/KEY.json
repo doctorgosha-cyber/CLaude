@@ -1,0 +1,238 @@
+{
+  "fixture": "cm-05-ymyl-dermatology",
+  "author": "claude",
+  "author_note": "Authored by a Claude-family model (the same family as the evaluated agents); see CASES.md for the family-bias risk. All products, studies and journals are fictional; the fixture gives no real medical advice.",
+  "created": "2026-10-07",
+  "severity_rubric": "R5: critical only when a named criterion is met (not indexable; required unique element absent; primary task fails for some users; user deceived or charged a wrong payable amount); major = measurable harm to ranking, access, trust or conversion; minor = polish or reachable another way.",
+  "defects": [
+    {
+      "id": "D01",
+      "category": "commercial",
+      "severity": "major",
+      "title": "The article claims the cream cleared flare-ups in 93 % of users within two weeks, but its own reference [1] reports 43 % improvement at 12 weeks with no 2-week assessment.",
+      "files": [
+        "article.html",
+        "references.html"
+      ],
+      "cross_file": true,
+      "evidence": "article.html: \"cleared flare-ups in 93 % of users within two weeks [1]\"; references.html #ref-1 summary: \"At 12 weeks 43 % of participants reported improvement ... no participant was assessed at 2 weeks\".",
+      "fix": "Restate the claim as the source reports it (43 % improvement at 12 weeks, n = 84, open-label) or remove it.",
+      "rationale": "The citation marker makes the sentence look sourced; the contradiction is only visible after opening the separate reference file.",
+      "detector": {
+        "any": [
+          "93 ?%[^\\n]{0,120}(43 ?%|12 weeks|twelve weeks|reference|source|contradict|does not (match|support)|misrepresent|overstat)",
+          "(43 ?%|12 weeks|twelve weeks)[^\\n]{0,120}(93 ?%|two weeks|2 weeks)",
+          "(reference|source|citation|study)[^\\n]{0,40}\\[?1\\]?[^\\n]{0,80}(contradict|does not (match|support)|misrepresent|overstat|differs)",
+          "(two weeks|2 weeks)[^\\n]{0,80}(not (assessed|measured|supported)|contradict|no (data|assessment))"
+        ],
+        "example": "1. [major] [content] The 93 % within two weeks claim misrepresents reference [1], which reports 43 % improvement at 12 weeks and no 2-week assessment.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D02",
+      "category": "qa",
+      "severity": "major",
+      "title": "The FAQ answer on pregnancy (\"Stop all barrier creams\") contradicts the body, which says barrier creams are generally considered compatible with pregnancy.",
+      "files": [
+        "article.html"
+      ],
+      "cross_file": false,
+      "evidence": "Body under #prescription: \"generally considered compatible with pregnancy, but check with your clinician\"; FAQ and FAQPage schema: \"No. Stop all barrier creams during pregnancy.\"",
+      "fix": "Make the FAQ answer agree with the body (and the schema with both), after an editorial check of which statement is intended.",
+      "rationale": "The FAQ and its schema agree with each other, so a FAQ-to-schema check passes; the contradiction is with a sentence in a different section.",
+      "detector": {
+        "any": [
+          "pregnan[^\\n]{0,120}(contradict|conflict|disagree|opposite|inconsisten|does not match|reverses)",
+          "(contradict|conflict|disagree|inconsisten)[^\\n]{0,80}pregnan",
+          "faq[^\\n]{0,80}(contradict|conflict|disagree|opposite|inconsisten)[^\\n]{0,80}(body|article|text|section)",
+          "(body|article|text)[^\\n]{0,80}(contradict|conflict|disagree|opposite|inconsisten)[^\\n]{0,40}faq"
+        ],
+        "example": "2. [major] [content] The FAQ says to stop all barrier creams during pregnancy while the body says they are generally compatible with pregnancy: a direct contradiction.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D03",
+      "category": "commercial",
+      "severity": "major",
+      "title": "The page promises a medical review but names no reviewer and gives no review date: the reviewer span is empty and the schema has no reviewedBy or lastReviewed.",
+      "files": [
+        "article.html"
+      ],
+      "cross_file": false,
+      "evidence": "<span class=\"reviewed\">Medically reviewed by <span class=\"reviewer-name\"></span></span>; author box: \"She is not a clinician\"; MedicalWebPage node has no reviewedBy / lastReviewed / dateModified.",
+      "fix": "Name a qualified reviewer with credentials and a review date in the byline and in the MedicalWebPage schema, or remove the \"Medically reviewed by\" label.",
+      "rationale": "The label reads as a passed check; the empty span is invisible in a rendered view.",
+      "detector": {
+        "any": [
+          "(medical(ly)? review|reviewer)[^\\n]{0,100}(empty|blank|missing|absent|no name|not named|unnamed|no (review )?date|without)",
+          "(no|missing|absent|without)[^\\n]{0,30}(medical reviewer|reviewer|clinical review|review date|reviewedBy|lastReviewed)",
+          "(reviewedBy|lastReviewed)[^\\n]{0,60}(missing|absent|not set|none)",
+          "reviewer-name[^\\n]{0,40}(empty|blank)"
+        ],
+        "example": "3. [major] [trust] \"Medically reviewed by\" is followed by an empty span and no review date; the schema has no reviewedBy or lastReviewed.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D04",
+      "category": "seo",
+      "severity": "major",
+      "title": "The Article node's dateModified (2026-03-10) precedes its datePublished (2026-07-21), an impossible timeline.",
+      "files": [
+        "article.html"
+      ],
+      "cross_file": false,
+      "evidence": "\"datePublished\": \"2026-07-21\", \"dateModified\": \"2026-03-10\".",
+      "fix": "Set dateModified to the real last-edit date on or after 21 July 2026.",
+      "rationale": "Both values are valid dates; only their order is wrong.",
+      "detector": {
+        "any": [
+          "dateModified[^\\n]{0,80}(before|earlier|precedes|predates|older than|<)[^\\n]{0,30}datePublished",
+          "datePublished[^\\n]{0,80}(after|later than|>)[^\\n]{0,30}dateModified",
+          "(2026-03-10)[^\\n]{0,80}(2026-07-21|published)",
+          "(modified|updated) date[^\\n]{0,80}(before|earlier than|precedes|impossible|inconsistent)"
+        ],
+        "example": "4. [major] [seo] dateModified 2026-03-10 is earlier than datePublished 2026-07-21, so the freshness data is impossible.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D05",
+      "category": "seo",
+      "severity": "major",
+      "title": "The head declares two canonical URLs that differ, so search engines receive conflicting canonical signals.",
+      "files": [
+        "article.html"
+      ],
+      "cross_file": false,
+      "evidence": "<link rel=\"canonical\" href=\"https://clearline.example/guides/barrier-creams/\"> followed by <link rel=\"canonical\" href=\"https://clearline.example/guides/barrier-creams-flare-prone-skin/\">.",
+      "fix": "Keep one canonical, the URL that og:url and the references include use (/guides/barrier-creams/).",
+      "rationale": "The first canonical is correct, so a reader who stops at the first match passes it.",
+      "detector": {
+        "any": [
+          "(two|2|duplicate|multiple|second|conflicting|both)[^\\w\\n]{0,6}canonical",
+          "canonical[^\\n]{0,60}(twice|two (links|tags|urls)|duplicated|conflict|declared (twice|two))",
+          "barrier-creams-flare-prone-skin[^\\n]{0,60}canonical"
+        ],
+        "example": "5. [major] [seo] Two canonical tags with different URLs are declared in the head.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D06",
+      "category": "commercial",
+      "severity": "critical",
+      "title": "A sponsored product card placed directly under the prescription section claims the balm \"works just as well as prescription Lumacort for weeping flares, with no appointment needed\", pushing a purchase through a deceptive medical equivalence (criterion: user pushed by deception).",
+      "files": [
+        "article.html"
+      ],
+      "cross_file": false,
+      "evidence": ".sponsor-card inside #prescription's section: \"works just as well as prescription Lumacort for weeping flares, with no appointment needed. From $14.\" The body two paragraphs above says weeping flares need a clinician.",
+      "fix": "Remove the equivalence claim and move the card out of the prescription section (or drop it from a YMYL page).",
+      "rationale": "The card is correctly labelled Sponsored and its link carries rel=sponsored, so compliance checks on the link pass; the harm is the claim and its placement.",
+      "detector": {
+        "any": [
+          "(sponsor|velvetine|balm|card)[^\\n]{0,120}(just as well|as well as prescription|equivalen|no appointment|replace[^\\n]{0,20}prescription|instead of (a )?prescription)",
+          "(just as well|equivalen|as effective as)[^\\n]{0,80}(prescription|lumacort)",
+          "(sponsor|velvetine|balm|card|ad)[^\\n]{0,80}(under|below|beneath|inside|within|next to|after)[^\\n]{0,40}prescription",
+          "(misleading|deceptive|dangerous|unsafe)[^\\n]{0,60}(sponsor|balm|velvetine|claim)"
+        ],
+        "example": "6. [critical] [commercial] The sponsored Velvetine card under the prescription section claims it works just as well as prescription Lumacort with no appointment needed: a deceptive medical equivalence that pushes a purchase.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D07",
+      "category": "a11y",
+      "severity": "major",
+      "title": "The self-check list conveys its triage level by colour only (green, amber, red dots) with no text or accessible name.",
+      "files": [
+        "article.html"
+      ],
+      "cross_file": false,
+      "evidence": "<span class=\"dot dot-green\"></span>, dot-amber, dot-red are empty spans; the meaning of each colour is explained only in a paragraph below.",
+      "fix": "Add visible or visually hidden text (\"Green: self-care\", \"Amber: book an appointment\", \"Red: see a clinician this week\") to each item.",
+      "rationale": "The explanatory paragraph makes the list look documented, but the per-item mapping still depends on seeing the colour.",
+      "detector": {
+        "any": [
+          "colou?r[^\\n]{0,10}(only|alone|coded)[^\\n]{0,80}(dot|checklist|self-check|triage|list)",
+          "(dot|dots|checklist|self-check|triage)[^\\n]{0,80}(colou?r[^\\n]{0,10}(only|alone)|no text|empty span|not (announced|conveyed)|screen.?reader)",
+          "(green|amber|red)[^\\n]{0,60}(dot|circle)s?[^\\n]{0,80}(colou?r|text|label|screen.?reader|accessible)"
+        ],
+        "example": "7. [major] [a11y] The self-check list signals triage level by colour-only dots (empty spans) with no text alternative.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D08",
+      "category": "a11y",
+      "severity": "minor",
+      "title": "The \"On this page\" link to #causes points at no element (the heading id is what-causes-flares), so that jump link does nothing; the section is still reachable by scrolling.",
+      "files": [
+        "article.html"
+      ],
+      "cross_file": false,
+      "evidence": "<a href=\"#causes\"> in .toc; the heading is <h2 id=\"what-causes-flares\">.",
+      "fix": "Change the link to #what-causes-flares (or the id to causes).",
+      "rationale": "Four of five jump links work, and the target is reachable another way, which is why the rubric rates it minor; agents tend to rate any broken link major.",
+      "detector": {
+        "any": [
+          "#causes[^\\n]{0,80}(what-causes-flares|no (element|target|matching)|does not exist|broken|dead|nonexistent|missing id)",
+          "(jump|anchor|toc|on this page|table of contents)[^\\n]{0,60}(link|href)[^\\n]{0,80}(causes)[^\\n]{0,80}(broken|no (element|target)|does not exist|nonexistent|missing)",
+          "what-causes-flares[^\\n]{0,60}#causes"
+        ],
+        "example": "8. [minor] [a11y] The on-page link #causes targets no element; the heading id is what-causes-flares.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D09",
+      "category": "commercial",
+      "severity": "major",
+      "title": "The steroid-sparing claim cites reference [3], but the reference list contains only two entries, so the claim has no source.",
+      "files": [
+        "article.html",
+        "references.html"
+      ],
+      "cross_file": true,
+      "evidence": "article.html: \"documented steroid-sparing effect ... [3]\" linking to references.html#ref-3; references.html lists #ref-1 and #ref-2 only.",
+      "fix": "Add the missing reference or remove the claim.",
+      "rationale": "The marker looks like every other citation; only counting the entries in the other file reveals the gap.",
+      "detector": {
+        "any": [
+          "\\[?3\\]?[^\\n]{0,80}(does not exist|missing|absent|no (such|third)|not in the (reference|list)|only two|dangling|dead|nonexistent)",
+          "(steroid.sparing)[^\\n]{0,100}(no source|unsourced|unsupported|missing reference|reference (3|\\[3\\]) (is )?missing|does not exist)",
+          "(reference|citation)[^\\n]{0,20}(3|three|\\[3\\])[^\\n]{0,60}(missing|absent|does not exist|not listed|dangling)",
+          "(only two|2) (references|entries)[^\\n]{0,80}(3|three|\\[3\\])"
+        ],
+        "example": "9. [major] [content] The steroid-sparing claim cites [3], but references.html lists only two entries, so the citation is dangling.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D10",
+      "category": "a11y",
+      "severity": "major",
+      "title": "The three application-step photos carry the placeholder alt text \"image\", so the steps' visual instructions are not described.",
+      "files": [
+        "article.html"
+      ],
+      "cross_file": false,
+      "evidence": "<img src=\".../apply-step-1.jpg\" alt=\"image\" ...> and the same for steps 2 and 3.",
+      "fix": "Write descriptive alt text for each step (or alt=\"\" if the captions fully describe them and the images are decorative).",
+      "rationale": "Alt attributes are present and non-empty, so automated checks pass; the value is meaningless.",
+      "detector": {
+        "any": [
+          "alt=.?image.?",
+          "(placeholder|generic|meaningless|non-descriptive|useless|uninformative)[^\\n]{0,30}alt",
+          "alt[^\\n]{0,30}(placeholder|generic|meaningless|non-descriptive|\"image\"|'image'|just .image.)",
+          "(step|application)[^\\n]{0,40}(photo|image)s?[^\\n]{0,60}alt[^\\n]{0,40}(image|placeholder|generic)"
+        ],
+        "example": "10. [major] [a11y] The three application-step photos use the placeholder alt=\"image\", which describes nothing.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    }
+  ]
+}

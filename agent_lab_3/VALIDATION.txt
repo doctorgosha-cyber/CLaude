@@ -1,0 +1,4 @@
+cm-04-affiliate-review: OK | defects 10 {"major":10} cross-file 1 | decoys 4 | good: recall 10/10, sev 100%, false 0 | bad: false claims 4 | negated: false 0
+cm-05-ymyl-dermatology: OK | defects 10 {"major":8,"critical":1,"minor":1} cross-file 2 | decoys 4 | good: recall 10/10, sev 100%, false 0 | bad: false claims 4 | negated: false 0
+cm-06-accordion-build: OK | defects 5 {"major":3,"critical":2} cross-file 0 | decoys 1 | good: recall 5/5, sev 100%, false 0 | bad: false claims 1 | negated: false 0
+cm-07-release-qa: OK | defects 3 {"critical":1,"major":2} cross-file 3 | decoys 4 | good: recall 3/3, sev 100%, false 0 | bad: false claims 4 | negated: false 0

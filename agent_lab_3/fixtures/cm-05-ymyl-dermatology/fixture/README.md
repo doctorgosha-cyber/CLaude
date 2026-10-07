@@ -1,0 +1,1 @@
+Clearline Skin Notes publishes plain-language guides about everyday skin care. Guides are rendered by the CMS as article.html; the numbered reference list is a shared include rendered as references.html and linked from the article's citation markers. All product and ingredient names on this site are fictional placeholders used for illustration.

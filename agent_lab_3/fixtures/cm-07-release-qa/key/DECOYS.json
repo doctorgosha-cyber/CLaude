@@ -1,0 +1,83 @@
+{
+  "fixture": "cm-07-release-qa",
+  "author": "claude",
+  "created": "2026-10-07",
+  "false_assertions": [],
+  "unanswerable_questions": [],
+  "harmless_changes": [
+    {
+      "id": "H01",
+      "change": "Nav link \"Blog\" renamed to \"Journal\" and moved to /journal/.",
+      "evidence": "CHANGELOG.md announces it with an edge redirect for /blog/; link text and href agree.",
+      "correct_behavior": "Not a regression; at most mention it as intended."
+    },
+    {
+      "id": "H02",
+      "change": "CSS variables renamed --brand* to --color-brand*.",
+      "evidence": "All seven usages in candidate/style.css reference the new names; no var() still points at --brand*.",
+      "correct_behavior": "Not a regression."
+    },
+    {
+      "id": "H03",
+      "change": "Product images switched from PNG to WebP.",
+      "evidence": "Same alt text, width and height; files exist under candidate/img/.",
+      "correct_behavior": "Not a regression."
+    },
+    {
+      "id": "H04",
+      "change": "Analytics tag moved from head to the end of body; console.log removed from app.js.",
+      "evidence": "The same tag.js snippet with the same data-site is present at the end of body; the log line is gone.",
+      "correct_behavior": "Not a regression."
+    }
+  ],
+  "decoys": [
+    {
+      "id": "H01",
+      "kind": "harmless_change",
+      "statement": "The Blog to Journal rename is a regression.",
+      "detector": {
+        "any": [
+          "(journal|blog)[^.\\n]{0,80}(regression|broke|broken|breaks|bug|defect|wrong|missing|404|dead link|must be reverted)",
+          "(renam|rename)[^.\\n]{0,40}(blog|journal)[^.\\n]{0,60}(regression|broke|broken|breaks|bug|defect|wrong|404)"
+        ]
+      },
+      "correct": "Not a regression; at most mention it as intended."
+    },
+    {
+      "id": "H02",
+      "kind": "harmless_change",
+      "statement": "The CSS variable rename broke styling.",
+      "detector": {
+        "any": [
+          "(--color-brand|--brand|css variable|custom propert|design token)[^.\\n]{0,100}(regression|broke|broken|breaks|bug|defect|undefined|unresolved|missing|wrong colou?r|lost (its )?colou?r|fallback)",
+          "(variable|token)[^.\\n]{0,20}(rename|renamed)[^.\\n]{0,60}(regression|broke|broken|breaks|bug|defect|undefined|missing)"
+        ]
+      },
+      "correct": "Not a regression."
+    },
+    {
+      "id": "H03",
+      "kind": "harmless_change",
+      "statement": "The WebP images are a regression.",
+      "detector": {
+        "any": [
+          "webp[^.\\n]{0,100}(regression|broke|broken|breaks|bug|defect|not supported|unsupported|missing|404|no fallback|fallback)",
+          "(image|img)s?[^.\\n]{0,40}(webp|format)[^.\\n]{0,60}(regression|broke|broken|breaks|bug|defect|missing|404)"
+        ]
+      },
+      "correct": "Not a regression."
+    },
+    {
+      "id": "H04",
+      "kind": "harmless_change",
+      "statement": "Moving the analytics tag broke tracking.",
+      "detector": {
+        "any": [
+          "(analytics|metrics|tag\\.js|tracking)[^.\\n]{0,100}(regression|broke|broken|breaks|bug|defect|no longer (fires|loads|works)|removed|missing|lost)",
+          "console\\.log[^.\\n]{0,60}(regression|broke|broken|breaks|bug|defect|missing|should be restored)"
+        ]
+      },
+      "correct": "Not a regression."
+    }
+  ]
+}

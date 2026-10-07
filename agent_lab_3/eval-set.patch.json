@@ -1,0 +1,61 @@
+{
+  "_doc": "AGENT-LAB-3: entries to APPEND to learning/eval-set.json → cases[]. tier \"capability\" = held-out capability cases for PROVISIONAL decisions; uses counts the gates that consumed the case (a case used to derive a proposal cannot be its held-out test). Paths assume fixtures/cm-04..07 are copied to learning/fixtures/.",
+  "add": [
+    {
+      "id": "cm-04",
+      "type": "workspace",
+      "tier": "capability",
+      "uses": 0,
+      "domains": ["seo", "a11y", "commercial", "design"],
+      "role": "solo",
+      "dir": "learning/fixtures/cm-04-affiliate-review/fixture",
+      "key": "learning/fixtures/cm-04-affiliate-review/key/KEY.json",
+      "decoys": "learning/fixtures/cm-04-affiliate-review/key/DECOYS.json",
+      "author": "claude",
+      "task": "Read TASK.md in the workspace and do what it asks (audit of a WordPress affiliate review page plus the theme stylesheet that loads after the inline styles: accessibility, SEO/metadata, affiliate compliance, layout at 390 and 1280 px, unsupported claims). Verify every statement in the brief against the files before acting on it. Do not edit files."
+    },
+    {
+      "id": "cm-05",
+      "type": "workspace",
+      "tier": "capability",
+      "uses": 0,
+      "domains": ["commercial", "seo", "a11y", "qa"],
+      "role": "solo",
+      "dir": "learning/fixtures/cm-05-ymyl-dermatology/fixture",
+      "key": "learning/fixtures/cm-05-ymyl-dermatology/key/KEY.json",
+      "decoys": "learning/fixtures/cm-05-ymyl-dermatology/key/DECOYS.json",
+      "author": "claude",
+      "task": "Read TASK.md in the workspace and do what it asks (YMYL health guide: claims vs the separate reference list, FAQ vs body, reviewer and dates, structured data, sponsored content placement, accessibility). Verify every statement in the brief against the files before acting on it. Do not edit files."
+    },
+    {
+      "id": "cm-06",
+      "type": "build",
+      "tier": "capability",
+      "uses": 0,
+      "domains": ["engineering", "a11y"],
+      "role": "vulcan",
+      "dir": "learning/fixtures/cm-06-accordion-build/fixture",
+      "spec": "learning/fixtures/cm-06-accordion-build/fixture/SPEC.md",
+      "tests": "learning/fixtures/cm-06-accordion-build/key/hidden.test.mjs",
+      "deliverables": ["accordion.mjs", "accordion.css"],
+      "key": "learning/fixtures/cm-06-accordion-build/key/KEY.json",
+      "decoys": "learning/fixtures/cm-06-accordion-build/key/DECOYS.json",
+      "author": "claude",
+      "task": "Read TASK.md in the workspace and do what it asks (fix accordion.mjs and accordion.css to SPEC.md so the public tests pass; do not change tests; report one numbered finding per root cause with severity).",
+      "_runner_note": "scripts/regress.mjs hard-codes billing.mjs for build cases (prepare: writes/deliverables; grade-build: the copied file). To run cm-06 it needs: copy `dir` into the workspace (as for type workspace), permission WRITE_PROJECT with `writes` = deliverables, and grade-build copying every file in `deliverables` plus `tests` into the temp dir before `node --test`. Report grading uses `key` + `decoys` with the existing scripted grader."
+    },
+    {
+      "id": "cm-07",
+      "type": "workspace",
+      "tier": "capability",
+      "uses": 0,
+      "domains": ["qa", "engineering", "seo", "design"],
+      "role": "dorn",
+      "dir": "learning/fixtures/cm-07-release-qa/fixture",
+      "key": "learning/fixtures/cm-07-release-qa/key/KEY.json",
+      "decoys": "learning/fixtures/cm-07-release-qa/key/DECOYS.json",
+      "author": "claude",
+      "task": "Read TASK.md in the workspace and do what it asks (release QA: candidate/ against live/ with the developer's changelog and the API contract; list every regression with severity, do not flag intended changes, end with SHIP or DO NOT SHIP). Do not edit files."
+    }
+  ]
+}

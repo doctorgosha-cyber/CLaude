@@ -1,0 +1,1 @@
+Burrow & Bramble is a small editorial site about everyday care for cats and dogs. Reviews are written by the owners after a few weeks of use. The site runs on a block-based WordPress theme; page.html is the rendered response of a published review and theme/style.css is the theme stylesheet, which is loaded after the inline block styles.

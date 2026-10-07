@@ -1,0 +1,120 @@
+{
+  "fixture": "cm-06-accordion-build",
+  "author": "claude",
+  "author_note": "Authored by a Claude-family model (the same family as the evaluated agents); see CASES.md. Grading has two parts: key/hidden.test.mjs against the delivered accordion.mjs + accordion.css (7 tests), and these detectors against the report.",
+  "created": "2026-10-07",
+  "severity_rubric": "R5 applied to a component: critical = the component's primary task fails for some users (keyboard users cannot reach a header; panels cannot be hidden); major = measurable harm to access or correctness; minor = polish.",
+  "defects": [
+    {
+      "id": "D01",
+      "category": "code",
+      "severity": "major",
+      "title": "In single mode toggle() appends the new id to the open list instead of replacing it, so the previously open panel stays open and two panels are expanded.",
+      "files": [
+        "accordion.mjs"
+      ],
+      "cross_file": false,
+      "evidence": "toggle: const open = [...state.open.filter((x) => x !== id), id]; the allowMultiple branch was lost in the r214 refactor, so single mode behaves like multiple mode (public test 'single mode closes the previously open panel' fails with open ['a', 'b']).",
+      "fix": "Return open: state.allowMultiple ? [...state.open.filter((x) => x !== id), id] : [id].",
+      "rationale": "The public test names the symptom, so most agents find it; the detector checks that the report names the cause in toggle (the lost allowMultiple branch), not a patch elsewhere.",
+      "detector": {
+        "any": [
+          "toggle[^\\n]{0,120}(single|allowMultiple|previous|other panel|close)",
+          "(single[- ]open|single mode|allowMultiple[^\\n]{0,10}false)[^\\n]{0,100}(not clos|stays open|keeps|two panels|both open|remain)",
+          "(previous|other|earlier)[^\\n]{0,20}panel[^\\n]{0,60}(not closed|stays open|remains open|kept open)"
+        ],
+        "example": "1. [major] [code] toggle() in single mode appends the new id instead of replacing the open list, so the previously open panel stays open.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D02",
+      "category": "a11y",
+      "severity": "critical",
+      "title": "moveFocus('End') sets focus to items.length, an index past the last header, so keyboard users pressing End lose focus (criterion: primary task fails for keyboard users).",
+      "files": [
+        "accordion.mjs"
+      ],
+      "cross_file": false,
+      "evidence": "case 'End': return { ...state, focus: n }; the demo then calls querySelectorAll('.acc-btn')[n]?.focus() on undefined.",
+      "fix": "Use n - 1.",
+      "rationale": "An off-by-one on a rarely used key; ArrowDown and Home are correct, which the brief's false hint about ArrowDown is meant to distract from.",
+      "detector": {
+        "any": [
+          "End[^\\n]{0,80}(off.by.one|items\\.length|n - 1|n-1|past the last|out of (range|bounds)|one too far|undefined)",
+          "(off.by.one|out of (range|bounds))[^\\n]{0,80}(End|last header|focus)",
+          "focus[^\\n]{0,40}(items\\.length|= n\\b|to n\\b)[^\\n]{0,60}(last|End|range)"
+        ],
+        "example": "2. [critical] [a11y] moveFocus('End') returns focus: n (items.length), one past the last header, so End drops keyboard focus.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D03",
+      "category": "a11y",
+      "severity": "major",
+      "title": "renderHtml sets aria-controls to acc-panel-{index} while the panel id is acc-panel-{id}, so each button references a panel that does not exist.",
+      "files": [
+        "accordion.mjs"
+      ],
+      "cross_file": false,
+      "evidence": "aria-controls=\"acc-panel-${index}\" versus id=\"acc-panel-${item.id}\".",
+      "fix": "Use item.id in aria-controls.",
+      "rationale": "aria-labelledby on the panel is correct, so the markup looks consistent at a glance; only the button side uses the index.",
+      "detector": {
+        "any": [
+          "aria-controls[^\\n]{0,100}(index|\\$\\{index\\}|acc-panel-\\d|does not (match|exist)|mismatch|wrong id|nonexistent|points to)",
+          "(index|\\$\\{index\\})[^\\n]{0,60}aria-controls",
+          "(button|header)[^\\n]{0,60}(references|points to|controls)[^\\n]{0,40}(nonexistent|missing|wrong|non-existent) panel"
+        ],
+        "example": "3. [major] [a11y] aria-controls uses the array index (acc-panel-0) while the panel id uses the item id (acc-panel-a), so the reference is broken.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D04",
+      "category": "code",
+      "severity": "critical",
+      "title": "The rule .acc .acc-panel { display:block } ties the specificity of .acc-panel[hidden] and comes later, so hidden panels are displayed and the accordion cannot collapse (criterion: primary task fails).",
+      "files": [
+        "accordion.css"
+      ],
+      "cross_file": false,
+      "evidence": ".acc-panel[hidden] { display:none } (0,2,0) is followed by .acc .acc-panel { display:block } (0,2,0); the later rule wins.",
+      "fix": "Drop display from the .acc .acc-panel rule (or scope it as .acc-panel and keep display out of it), as SPEC.md requires.",
+      "rationale": "The CSS regression is outside the JS test file, so an agent that only runs tests misses why the demo shows every panel open.",
+      "detector": {
+        "any": [
+          "(\\.acc \\.acc-panel|display:\\s*block)[^\\n]{0,120}(override|overrides|wins|beats|specificity|ties|later|after|cascade|\\[hidden\\]|hidden)",
+          "(\\[hidden\\]|hidden attribute)[^\\n]{0,120}(override|overridden|ignored|defeated|lost|does not hide|no longer hides|display:\\s*block)",
+          "specificity[^\\n]{0,80}(panel|hidden)",
+          "(panels?|accordion)[^\\n]{0,60}(always|all)[^\\n]{0,20}(open|visible|shown|displayed)[^\\n]{0,80}(css|display|rule|hidden)"
+        ],
+        "example": "4. [critical] [code] .acc .acc-panel { display:block } has the same specificity as .acc-panel[hidden] and comes later, so hidden panels still display.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    },
+    {
+      "id": "D05",
+      "category": "code",
+      "severity": "major",
+      "title": "renderHtml escapes the content but not the title, so a title containing markup or quotes is injected unescaped (SPEC: both are escaped).",
+      "files": [
+        "accordion.mjs"
+      ],
+      "cross_file": false,
+      "evidence": ">${item.title}</button> versus >${esc(item.content)}</div>; no public test covers it.",
+      "fix": "Wrap item.title in esc().",
+      "rationale": "Not covered by the public tests and not mentioned in the brief; only a reading of SPEC.md against the code reveals it.",
+      "detector": {
+        "any": [
+          "title[^\\n]{0,60}(not escaped|unescaped|without escaping|escape|esc\\(|xss|injection|raw html)",
+          "(escape|escaping|esc\\(|xss|injection)[^\\n]{0,60}title",
+          "(only|just)[^\\n]{0,20}content[^\\n]{0,40}(escaped|esc\\()"
+        ],
+        "example": "5. [major] [code] renderHtml escapes item.content but inserts item.title raw, contrary to SPEC.md, so markup in a title is injected.",
+        "note": "Match the described effect, not a file-name list. Spans use [^\\n] (not [^.\\n]) so file names with dots inside a one-line finding do not break a match."
+      }
+    }
+  ]
+}
