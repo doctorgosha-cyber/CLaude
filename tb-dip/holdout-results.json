@@ -1,0 +1,102 @@
+{
+  "phase": "holdout",
+  "prereg_sha256": "ae3b74c49ede0e3bcfb77359babbb47e12847826423580e516fb4d17c4beafd0",
+  "dev_summary_sha256": "09d5e82faf1341c74480a5335178ee75653b262949f533184323d3a17750b161",
+  "window": "2025-10-04..2026-10-03",
+  "versions": {
+    "A": {
+      "selected": "F2-Y0-NONE",
+      "decisive": true,
+      "summary": {
+        "id": "F2-Y0-NONE",
+        "n": 12,
+        "mean_final": 313.75,
+        "xs_cash": 4.58,
+        "xs_day1": -4.01,
+        "deployed_pct": 75,
+        "med_days_to_fill": 17,
+        "mean_buys": 0.75,
+        "mean_mdd_pct": 22.5
+      },
+      "ci_cash": {
+        "lo": -2.6573124185249584,
+        "hi": 16.028374202907347
+      },
+      "ci_day1": {
+        "lo": -17.071725557610876,
+        "hi": 5.5522696725874106
+      },
+      "long_path": {
+        "F2-Y0-NONE": {
+          "final": 236.86,
+          "cagr_pct": -21.1,
+          "mdd_pct": 48.8,
+          "buys": 1,
+          "first_fill": "2025-10-18"
+        },
+        "DAY1": {
+          "final": 205.6,
+          "cagr_pct": -31.54,
+          "mdd_pct": 53,
+          "buys": 1,
+          "first_fill": "2025-10-05"
+        }
+      },
+      "pass": {
+        "walkforward": false,
+        "holdout": false,
+        "dsr": false,
+        "ALL": false
+      }
+    },
+    "B": {
+      "selected": "F3-Z4-NONE",
+      "decisive": true,
+      "summary": {
+        "id": "F3-Z4-NONE",
+        "n": 12,
+        "mean_final": 334.32,
+        "xs_cash": 11.44,
+        "xs_day1": -11.29,
+        "deployed_pct": 42,
+        "med_days_to_fill": 36,
+        "mean_buys": 0.42,
+        "mean_mdd_pct": 16.4
+      },
+      "ci_cash": {
+        "lo": 0,
+        "hi": 31.09136278807253
+      },
+      "ci_day1": {
+        "lo": -50.174754804052846,
+        "hi": 30.714322711899246
+      },
+      "long_path": {
+        "F3-Z4-NONE": {
+          "final": 214.4,
+          "cagr_pct": -28.6,
+          "mdd_pct": 65.7,
+          "buys": 1,
+          "first_fill": "2025-10-11"
+        },
+        "DAY1": {
+          "final": 151.6,
+          "cagr_pct": -49.56,
+          "mdd_pct": 72,
+          "buys": 1,
+          "first_fill": "2025-10-05"
+        }
+      },
+      "pass": {
+        "walkforward": false,
+        "holdout": false,
+        "dsr": false,
+        "ALL": false
+      },
+      "basket_pairs_seen": 57,
+      "basket_pairs_stopped_before_end": [
+        "TONUSDT"
+      ]
+    }
+  }
+}

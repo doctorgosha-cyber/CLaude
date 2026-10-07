@@ -1,0 +1,173 @@
+{
+  "phase": "dev",
+  "data_end": "2025-10-03",
+  "variants": 38,
+  "trials_total": 76,
+  "versions": {
+    "A": {
+      "walkforward": [
+        {
+          "fold": "2022-01-01..2022-12-01",
+          "selected": "F2-Y20-NONE",
+          "train_xs_day1": 21.14,
+          "test_n": 12,
+          "test_xs_cash": 25.35,
+          "test_xs_day1": 13.63
+        },
+        {
+          "fold": "2023-01-01..2023-12-01",
+          "selected": "CASH (no variant with xs_cash >= 0)",
+          "train_xs_day1": null,
+          "test_n": 12,
+          "test_xs_cash": 0,
+          "test_xs_day1": -128.97
+        },
+        {
+          "fold": "2024-01-01..2024-12-01",
+          "selected": "F3-Z4-NONE",
+          "train_xs_day1": 11.92,
+          "test_n": 12,
+          "test_xs_cash": 0,
+          "test_xs_day1": -72.39
+        },
+        {
+          "fold": "2025-01-01..2025-09-01",
+          "selected": "F1-L180-X15-ALL-NONE",
+          "train_xs_day1": -0.4,
+          "test_n": 9,
+          "test_xs_cash": 18.57,
+          "test_xs_day1": -3.62
+        }
+      ],
+      "walkforward_oos": {
+        "n": 45,
+        "xs_cash": 10.47,
+        "xs_day1": -50.79,
+        "ci_cash": {
+          "lo": 1.5511229522094816,
+          "hi": 28.667504985321298
+        },
+        "ci_day1": {
+          "lo": -93.41956696718827,
+          "hi": -21.167390994438875
+        }
+      },
+      "selected": {
+        "id": "F2-Y0-NONE",
+        "dev_xs_day1": -0.19,
+        "dev_xs_cash": 41.76
+      },
+      "benchmarks_dev": {
+        "day1_mean_final": 425.83
+      },
+      "long_path_dev": {
+        "DAY1": {
+          "final": 1137.87,
+          "cagr_pct": 32.35,
+          "mdd_pct": 76.6,
+          "buys": 1,
+          "first_fill": "2021-01-02"
+        },
+        "F2-Y0-NONE": {
+          "final": 903.47,
+          "cagr_pct": 26.09,
+          "mdd_pct": 76.6,
+          "buys": 1,
+          "first_fill": "2021-05-20"
+        }
+      },
+      "dsr": {
+        "SR": -0.006,
+        "SR0": 0.7352,
+        "skew": -1.546,
+        "kurt": 5.53,
+        "Teff": 4.75,
+        "N": 76,
+        "DSR": 0.0745
+      }
+    },
+    "B": {
+      "walkforward": [
+        {
+          "fold": "2022-01-01..2022-12-01",
+          "selected": "F1-L90-X15-ALL-NONE",
+          "train_xs_day1": -30.77,
+          "test_n": 12,
+          "test_xs_cash": -37.13,
+          "test_xs_day1": 0.65
+        },
+        {
+          "fold": "2023-01-01..2023-12-01",
+          "selected": "CASH (no variant with xs_cash >= 0)",
+          "train_xs_day1": null,
+          "test_n": 12,
+          "test_xs_cash": 0,
+          "test_xs_day1": -58.05
+        },
+        {
+          "fold": "2024-01-01..2024-12-01",
+          "selected": "F1-L90-X15-ALL-NONE",
+          "train_xs_day1": -9.34,
+          "test_n": 12,
+          "test_xs_cash": -6.52,
+          "test_xs_day1": 5.77
+        },
+        {
+          "fold": "2025-01-01..2025-09-01",
+          "selected": "F1-L180-X15-ALL-NONE",
+          "train_xs_day1": -3.34,
+          "test_n": 9,
+          "test_xs_cash": 1.83,
+          "test_xs_day1": -3.23
+        }
+      ],
+      "walkforward_oos": {
+        "n": 45,
+        "xs_cash": -11.27,
+        "xs_day1": -14.42,
+        "ci_cash": {
+          "lo": -21.407674228177257,
+          "hi": 0.37268157439978356
+        },
+        "ci_day1": {
+          "lo": -35.246945575270686,
+          "hi": 1.7145628732071947
+        }
+      },
+      "selected": {
+        "id": "F3-Z4-NONE",
+        "dev_xs_day1": -2.15,
+        "dev_xs_cash": 17.56
+      },
+      "benchmarks_dev": {
+        "day1_mean_final": 359.12
+      },
+      "long_path_dev": {
+        "DAY1": {
+          "final": 1047.98,
+          "cagr_pct": 30.08,
+          "mdd_pct": 85.2,
+          "buys": 1,
+          "first_fill": "2021-01-02"
+        },
+        "F3-Z4-NONE": {
+          "final": 278.11,
+          "cagr_pct": -1.58,
+          "mdd_pct": 67.7,
+          "buys": 1,
+          "first_fill": "2022-06-14"
+        }
+      },
+      "dsr": {
+        "SR": -0.0123,
+        "SR0": 0.7352,
+        "skew": -6.164,
+        "kurt": 43.421,
+        "Teff": 4.75,
+        "N": 76,
+        "DSR": 0.0662
+      }
+    }
+  },
+  "var_sr_across_trials": 0.09135
+}
