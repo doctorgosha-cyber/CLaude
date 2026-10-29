@@ -58,10 +58,18 @@ const SYMBOLS = { '$': 'USD', '€': 'EUR', '£': 'GBP', '¥': 'JPY', '₴': 'UA
 const CODES = new Set(['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'UAH']);
 const MARKER_RE = /[$€£¥₴]|\b[A-Za-z]{3}\b/g;
 
-// Returns { currency, amount } or throws TypeError.
+const UNIT_PRICE_RE = new RegExp(`^(.*?)${SPS}(?:/|per)${SPS}(kg|lb)$`, 'i');
+
+// Returns { currency, amount, per } (per: null | 'kg' | 'lb') or throws TypeError.
 function parsePrice(priceText) {
   if (typeof priceText !== 'string') fail(priceText);
-  const s = priceText.trim();
+  let s = priceText.trim();
+  let per = null;
+  const u = UNIT_PRICE_RE.exec(s);
+  if (u) {
+    per = u[2].toLowerCase();
+    s = u[1].trim();
+  }
   const markers = [...s.matchAll(MARKER_RE)];
   if (markers.length !== 1) fail(priceText);
   const tok = markers[0][0];
@@ -70,7 +78,7 @@ function parsePrice(priceText) {
   const rest = (s.slice(0, markers[0].index) + s.slice(markers[0].index + tok.length)).trim();
   const amount = parseAmount(rest, priceText);
   if (!(amount > 0) || !Number.isFinite(amount)) fail(priceText);
-  return { currency, amount };
+  return { currency, amount, per };
 }
 
 const SPACE_RE = new RegExp(SP, 'g');
@@ -88,13 +96,19 @@ function parseAmount(text, orig) {
   let frac = '';
   if (hasComma && hasDot) {
     const last = Math.max(body.lastIndexOf(','), body.lastIndexOf('.'));
+    const decimalSep = body[last];
+    const groupSep = decimalSep === ',' ? '\\.' : ',';
+    if (body.indexOf(decimalSep) !== last) fail(orig);
     intPart = body.slice(0, last);
     frac = body.slice(last + 1);
+    if (!new RegExp(`^\\d+(?:${groupSep}\\d{3})*$`).test(intPart)) fail(orig);
   } else if (hasComma || hasDot) {
     const sep = hasComma ? ',' : '.';
     const parts = body.split(sep);
     const grouping = parts.length > 2 || parts[parts.length - 1].length === 3;
-    if (!grouping) {
+    if (grouping) {
+      if (!parts.slice(1).every((g) => g.length === 3)) fail(orig);
+    } else {
       intPart = parts[0];
       frac = parts[1];
     }
@@ -105,8 +119,10 @@ function parseAmount(text, orig) {
 }
 
 export function pricePerKg(priceText, massSpec) {
-  const { currency, amount } = parsePrice(priceText);
+  const { currency, amount, per } = parsePrice(priceText);
   const grams = toGrams(massSpec);
+  if (per === 'kg') return { currency, perKg: amount };
+  if (per === 'lb') return { currency, perKg: amount / 0.45359237 };
   return { currency, perKg: amount / (grams / 1000) };
 }
 

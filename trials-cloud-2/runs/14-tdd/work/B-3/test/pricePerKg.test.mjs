@@ -29,7 +29,17 @@ test('pricePerKg: thousands grouping, decimal mark inference, dash minor units',
   assert.equal(kg('CHF 12.–'), 12);
   assert.equal(kg('CHF 12.-'), 12);
   assert.equal(kg('CHF 12,—'), 12);
-  for (const bad of ['$1,2,3', '$1..2', '$12.', '$,5']) {
+  for (const bad of ['$1..2', '$12.', '$,5', '$12.-5']) {
     assert.throws(() => pricePerKg(bad, '1 kg'), (e) => e instanceof TypeError && e.message.includes(bad), bad);
   }
+});
+
+test('pricePerKg: unit prices per kg or per lb bypass the mass', () => {
+  assert.deepEqual(pricePerKg('$8/kg', '400 g'), { currency: 'USD', perKg: 8 });
+  assert.deepEqual(pricePerKg('8 € per KG', '1 lb'), { currency: 'EUR', perKg: 8 });
+  assert.deepEqual(pricePerKg('£4.50 /lb', '2 kg'), { currency: 'GBP', perKg: 4.5 / 0.45359237 });
+  assert.deepEqual(pricePerKg('GBP 4,50 per lb', '2 kg'), { currency: 'GBP', perKg: 4.5 / 0.45359237 });
+  // mass is still validated
+  assert.throws(() => pricePerKg('$8/kg', '0 g'), (e) => e instanceof TypeError && e.message.includes('0 g'));
+  assert.throws(() => pricePerKg('$8/oz', '1 kg'), (e) => e instanceof TypeError && e.message.includes('$8/oz'));
 });

@@ -125,12 +125,61 @@ export function pricePerKg(priceText, massSpec) {
   return { currency, perKg };
 }
 
-export function formatMoney(amount, currency, locale) {
-  throw new Error('not implemented');
+const MINOR_UNITS = { USD: 2, EUR: 2, GBP: 2, JPY: 0, CHF: 2, UAH: 2 };
+const LOCALES = ['en-US', 'de-DE', 'fr-FR', 'uk-UA'];
+
+// Round half to even on the decimal digits of String(amount); returns an exact
+// decimal string with `places` fraction digits.
+function roundDecimal(amount, places) {
+  const [mant, expStr] = String(amount).toLowerCase().split('e');
+  const [intPart, frac = ''] = mant.split('.');
+  let digits = intPart + frac;
+  const exp = (expStr ? Number(expStr) : 0) - frac.length; // value = digits * 10^exp
+  let n;
+  if (-exp <= places) {
+    n = BigInt(digits + '0'.repeat(places + exp));
+  } else {
+    const keep = digits.length - (-exp - places);
+    const kept = keep > 0 ? digits.slice(0, keep) : '';
+    const rest = keep > 0 ? digits.slice(keep) : '0'.repeat(-keep) + digits;
+    n = BigInt(kept || '0');
+    const first = rest[0];
+    const tailZero = /^0*$/.test(rest.slice(1));
+    const roundUp = first > '5' || (first === '5' && (!tailZero || n % 2n === 1n));
+    if (roundUp) n += 1n;
+  }
+  const str = n.toString().padStart(places + 1, '0');
+  return places === 0 ? str : `${str.slice(0, -places)}.${str.slice(-places)}`;
 }
 
+export function formatMoney(amount, currency, locale) {
+  if (typeof amount !== 'number' || !Number.isFinite(amount) || amount < 0) fail(amount);
+  if (typeof currency !== 'string' || !(currency in MINOR_UNITS)) fail(currency);
+  if (typeof locale !== 'string' || !LOCALES.includes(locale)) fail(locale);
+  const minor = MINOR_UNITS[currency];
+  const rounded = roundDecimal(amount, minor);
+  const out = new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency,
+    currencyDisplay: 'narrowSymbol',
+    minimumFractionDigits: minor,
+    maximumFractionDigits: minor,
+  }).format(rounded);
+  return out.replace(/ /g, ' ');
+}
+
+const KJ_PER_KCAL = 4.184;
+
 export function kcalPer100g(spec) {
-  throw new Error('not implemented');
+  if (typeof spec !== 'string') fail(spec);
+  const s = trim(spec);
+  const m = s.match(new RegExp(`^${NUM}${SP}*(kcal|kj)${SP}*(?:/|per)${SP}*(100${SP}*g|kg)$`, 'i'));
+  if (!m) fail(spec);
+  let value = num(m[1], spec);
+  if (m[2].toLowerCase() === 'kj') value /= KJ_PER_KCAL;
+  if (m[3].toLowerCase() === 'kg') value /= 10;
+  if (!(value >= 50 && value <= 900)) fail(spec);
+  return value;
 }
 
 export function daysSupply(bagGrams, dailyGrams, startISO) {

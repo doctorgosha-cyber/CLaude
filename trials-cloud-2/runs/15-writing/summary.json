@@ -1,0 +1,196 @@
+{
+ "per_card": {
+  "original": {
+   "bytes": 13059,
+   "words": 2198,
+   "tokens_est": 3260,
+   "score": 0.95,
+   "passed": 28,
+   "total": 30,
+   "fails": {
+    "t1": {},
+    "t2": {
+     "R5": 0
+    },
+    "t3": {},
+    "t4": {},
+    "t5": {
+     "R5": 0.5
+    },
+    "t6": {}
+   }
+  },
+  "A-1": {
+   "bytes": 8952,
+   "words": 1485,
+   "tokens_est": 2236,
+   "score": 0.9222,
+   "passed": 27,
+   "total": 30,
+   "fails": {
+    "t1": {},
+    "t2": {
+     "R5": 0
+    },
+    "t3": {},
+    "t4": {},
+    "t5": {
+     "R5": 0.5
+    },
+    "t6": {
+     "R5": 0
+    }
+   }
+  },
+  "A-2": {
+   "bytes": 9113,
+   "words": 1532,
+   "tokens_est": 2276,
+   "score": 0.8764,
+   "passed": 25,
+   "total": 30,
+   "fails": {
+    "t1": {},
+    "t2": {
+     "R5": 0
+    },
+    "t3": {
+     "R4": 0.5
+    },
+    "t4": {},
+    "t5": {
+     "R4": 0.5,
+     "R5": 0.25
+    },
+    "t6": {
+     "R5": 0
+    }
+   }
+  },
+  "A-3": {
+   "bytes": 9040,
+   "words": 1489,
+   "tokens_est": 2254,
+   "score": 0.9125,
+   "passed": 27,
+   "total": 30,
+   "fails": {
+    "t1": {},
+    "t2": {
+     "R5": 0
+    },
+    "t3": {},
+    "t4": {},
+    "t5": {
+     "R5": 0
+    },
+    "t6": {
+     "R5": 0.25
+    }
+   }
+  },
+  "B-1": {
+   "bytes": 8783,
+   "words": 1434,
+   "tokens_est": 2194,
+   "score": 0.9417,
+   "passed": 28,
+   "total": 30,
+   "fails": {
+    "t1": {},
+    "t2": {
+     "R5": 0
+    },
+    "t3": {},
+    "t4": {},
+    "t5": {
+     "R5": 0.25
+    },
+    "t6": {}
+   }
+  },
+  "B-2": {
+   "bytes": 7883,
+   "words": 1271,
+   "tokens_est": 1970,
+   "score": 0.9125,
+   "passed": 27,
+   "total": 30,
+   "fails": {
+    "t1": {},
+    "t2": {
+     "R5": 0
+    },
+    "t3": {},
+    "t4": {},
+    "t5": {
+     "R5": 0
+    },
+    "t6": {
+     "R5": 0.25
+    }
+   }
+  },
+  "B-3": {
+   "bytes": 8194,
+   "words": 1343,
+   "tokens_est": 2045,
+   "score": 0.9292,
+   "passed": 27,
+   "total": 30,
+   "fails": {
+    "t1": {},
+    "t2": {
+     "R5": 0
+    },
+    "t3": {
+     "R4": 0.5
+    },
+    "t4": {},
+    "t5": {
+     "R5": 0.5
+    },
+    "t6": {}
+   }
+  }
+ },
+ "original": {
+  "card_bytes": 13059,
+  "card_tokens_est": 3260,
+  "eval_score": 0.95,
+  "eval_mean_tokens_per_task": 64787,
+  "eval_mean_seconds_per_task": 33.7
+ },
+ "arms": {
+  "A": {
+   "rewrite_mean_tokens": 66461,
+   "rewrite_mean_tool_uses": 4,
+   "rewrite_mean_seconds": 65.0,
+   "card_mean_bytes": 9035,
+   "card_mean_tokens_est": 2255,
+   "eval_mean_score": 0.9037,
+   "eval_scores": [
+    0.9222,
+    0.8764,
+    0.9125
+   ],
+   "eval_mean_tokens_per_task": 63073,
+   "eval_mean_seconds_per_task": 28.7
+  },
+  "B": {
+   "rewrite_mean_tokens": 72723,
+   "rewrite_mean_tool_uses": 4.3,
+   "rewrite_mean_seconds": 90.8,
+   "card_mean_bytes": 8287,
+   "card_mean_tokens_est": 2070,
+   "eval_mean_score": 0.9278,
+   "eval_scores": [
+    0.9417,
+    0.9125,
+    0.9292
+   ],
+   "eval_mean_tokens_per_task": 62805,
+   "eval_mean_seconds_per_task": 26.8
+  }
+ }
+}

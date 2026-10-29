@@ -7,7 +7,6 @@ import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
-import { collectSlopMarkers } from './slop-markers.mjs';
 
 export const TOOLS = process.env.TRIAL_TOOLS_DIR
   || '/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools2/12-frontend-design';
@@ -216,6 +215,7 @@ export async function grade(spec, runDir) {
         await context.close();
       }
       axeViolations = [...seen.values()];
+      const { collectSlopMarkers } = await import('./slop-markers.mjs');
       const { page, context } = await openPage(browser, VIEWPORTS.desktop, server.url);
       slop = await collectSlopMarkers(page).catch((e) => ({ error: String(e.message) }));
       await context.close();

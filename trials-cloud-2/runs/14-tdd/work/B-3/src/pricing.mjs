@@ -58,8 +58,27 @@ const CODES = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'UAH'];
 const MARKER = `(?:[$€£¥₴]|${CODES.join('|')})`;
 
 function parseAmount(text, orig) {
-  if (!new RegExp(`^${NUM}$`).test(text)) throw bad(orig);
-  const v = num(text);
+  let t = text.replace(new RegExp(SP, 'g'), '');
+  // "12.–", "12.-", "12,—": a dash after the decimal mark means zero minor units.
+  const dash = t.match(/^(\d[\d.,]*)([.,])[-\u2013\u2014]$/);
+  if (dash) t = `${dash[1]}${dash[2]}00`;
+  if (!/^\d[\d.,]*\d$|^\d$/.test(t)) throw bad(orig);
+  const hasComma = t.includes(',');
+  const hasDot = t.includes('.');
+  let intPart = t;
+  let frac = '';
+  if (hasComma && hasDot) {
+    const dec = t.lastIndexOf(',') > t.lastIndexOf('.') ? ',' : '.';
+    const parts = t.split(dec === ',' ? '.' : ',').join('').split(dec);
+    if (parts.length !== 2) throw bad(orig);
+    [intPart, frac] = parts;
+  } else if (hasComma || hasDot) {
+    const parts = t.split(hasComma ? ',' : '.');
+    if (parts.some((p) => p === '')) throw bad(orig);
+    if (parts.length > 2 || parts[1].length === 3) intPart = parts.join('');
+    else [intPart, frac] = parts;
+  }
+  const v = Number(frac ? `${intPart}.${frac}` : intPart);
   if (!(v > 0) || !Number.isFinite(v)) throw bad(orig);
   return v;
 }
@@ -67,19 +86,43 @@ function parseAmount(text, orig) {
 export function pricePerKg(priceText, massSpec) {
   if (typeof priceText !== 'string') throw bad(priceText);
   const grams = toGrams(massSpec);
-  const s = priceText.trim();
-  if (s.includes('-')) throw bad(priceText);
+  let s = priceText.trim();
+  let per = null;
+  const unit = s.match(new RegExp(`^(.*?)${SP}*(?:/|per)${SP}*(kg|lb)$`, 'i'));
+  if (unit) {
+    per = unit[2].toLowerCase();
+    s = unit[1];
+  }
   const m = s.match(new RegExp(`^(?:(${MARKER})${SP}*(.+?)|(.+?)${SP}*(${MARKER}))$`, 'i'));
   if (!m) throw bad(priceText);
   const marker = (m[1] ?? m[4]).toUpperCase();
   const currency = SYMBOLS[marker] ?? marker;
   const body = m[2] ?? m[3];
   const amount = parseAmount(body, priceText);
+  if (per === 'kg') return { currency, perKg: amount };
+  if (per === 'lb') return { currency, perKg: amount / (LB / 1000) };
   return { currency, perKg: amount / (grams / 1000) };
 }
 
+const LOCALES = ['en-US', 'de-DE', 'fr-FR', 'uk-UA'];
+
+function minorUnits(currency) {
+  return currency === 'JPY' ? 0 : 2;
+}
+
 export function formatMoney(amount, currency, locale) {
-  throw new Error('not implemented');
+  if (typeof amount !== 'number' || !Number.isFinite(amount) || amount < 0) throw bad(amount);
+  if (!CODES.includes(currency)) throw bad(currency);
+  if (!LOCALES.includes(locale)) throw bad(locale);
+  const digits = minorUnits(currency);
+  const out = new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency,
+    currencyDisplay: 'narrowSymbol',
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(amount);
+  return out.replace(/ /g, '\u00A0');
 }
 
 export function kcalPer100g(spec) {

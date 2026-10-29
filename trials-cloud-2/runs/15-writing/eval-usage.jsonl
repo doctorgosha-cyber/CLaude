@@ -39,3 +39,4 @@
 {"card":"B-2","task":"t4","tokens":62460,"tool_uses":5,"duration_ms":25357}
 {"card":"B-2","task":"t5","tokens":63197,"tool_uses":6,"duration_ms":35948}
 {"card":"B-2","task":"t6","tokens":65126,"tool_uses":5,"duration_ms":28007}
+{"card":"B-2","task":"t1","tokens":64724,"tool_uses":5,"duration_ms":38741}
