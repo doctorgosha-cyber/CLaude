@@ -1,0 +1,174 @@
+{
+  "version": "2026-10-20",
+  "source": "supplier feed export",
+  "products": [
+    {
+      "id": "ck-chicken-dry",
+      "name": "Chicken & Rice Dry",
+      "species": "cat",
+      "form": "dry",
+      "energy": {
+        "value": 372,
+        "unit": "kcal/100g"
+      },
+      "added": "2025-03-01"
+    },
+    {
+      "id": "ck-tuna-dry",
+      "name": "Tuna Complete Dry",
+      "species": "cat",
+      "form": "dry",
+      "energy": {
+        "value": 358,
+        "unit": "kcal/100g"
+      },
+      "added": "2025-03-01"
+    },
+    {
+      "id": "ck-indoor-light",
+      "name": "Indoor Light",
+      "species": "cat",
+      "form": "dry",
+      "energy": {
+        "value": 318,
+        "unit": "kcal/100g"
+      },
+      "added": "2025-05-12"
+    },
+    {
+      "id": "ck-kitten-growth",
+      "name": "Kitten Growth",
+      "species": "cat",
+      "form": "dry",
+      "energy": {
+        "value": 4080,
+        "unit": "kcal/kg"
+      },
+      "suitable_for": [
+        "kitten"
+      ],
+      "added": "2025-05-12"
+    },
+    {
+      "id": "ck-senior-care",
+      "name": "Senior Care 7+",
+      "species": "cat",
+      "form": "dry",
+      "energy": {
+        "value": 341,
+        "unit": "kcal/100g"
+      },
+      "suitable_for": [
+        "senior"
+      ],
+      "added": "2025-08-20"
+    },
+    {
+      "id": "ck-chicken-pate-wet",
+      "name": "Chicken Pate (can)",
+      "species": "cat",
+      "form": "wet",
+      "energy": {
+        "value": 92,
+        "unit": "kcal/100g"
+      },
+      "pack_g": 85,
+      "added": "2025-08-20"
+    },
+    {
+      "id": "dg-beef-dry",
+      "name": "Beef & Barley Dry",
+      "species": "dog",
+      "form": "dry",
+      "energy": {
+        "value": 365,
+        "unit": "kcal/100g"
+      },
+      "added": "2025-03-01"
+    },
+    {
+      "id": "dg-chicken-rice",
+      "name": "Chicken & Rice Adult",
+      "species": "dog",
+      "form": "dry",
+      "energy": {
+        "value": 352,
+        "unit": "kcal/100g"
+      },
+      "added": "2025-03-01"
+    },
+    {
+      "id": "dg-puppy-large",
+      "name": "Puppy Large Breed",
+      "species": "dog",
+      "form": "dry",
+      "energy": {
+        "value": 398,
+        "unit": "kcal/100g"
+      },
+      "suitable_for": [
+        "puppy"
+      ],
+      "added": "2025-05-12"
+    },
+    {
+      "id": "dg-senior-light",
+      "name": "Senior Light 7+",
+      "species": "dog",
+      "form": "dry",
+      "energy": {
+        "value": 322,
+        "unit": "kcal/100g"
+      },
+      "suitable_for": [
+        "senior"
+      ],
+      "added": "2025-08-20"
+    },
+    {
+      "id": "ck-salmon-soft-bites",
+      "name": "Salmon Soft Bites",
+      "species": "cat",
+      "form": "semi-moist",
+      "energy": {
+        "value": 3850,
+        "unit": "kcal/100g"
+      },
+      "added": "2026-10-20"
+    },
+    {
+      "id": "ck-ocean-fish-dry",
+      "name": "Ocean Fish Dry",
+      "species": "cat",
+      "form": "dry",
+      "energy": {
+        "value": 4120,
+        "unit": "kcal/kg "
+      },
+      "added": "2026-10-20"
+    },
+    {
+      "id": "dg-lamb-rice-dry",
+      "name": "Lamb & Rice Dry",
+      "species": "dog",
+      "form": "dry",
+      "energy": {
+        "value": 3560,
+        "unit": "kcal per kg"
+      },
+      "added": "2026-10-20"
+    },
+    {
+      "id": "dg-beef-stew-wet",
+      "name": "Beef Stew (can)",
+      "species": "dog",
+      "form": "wet",
+      "energy": {
+        "value": 390,
+        "unit": "kcal/can"
+      },
+      "pack_g": 400,
+      "added": "2026-10-20"
+    }
+  ]
+}
