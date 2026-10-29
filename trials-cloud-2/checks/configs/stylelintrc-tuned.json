@@ -1,0 +1,15 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "hue-degree-notation": null,
+    "lightness-notation": null,
+    "property-no-vendor-prefix": null,
+    "declaration-no-important": true,
+    "color-no-invalid-hex": true,
+    "unit-no-unknown": true,
+    "no-duplicate-selectors": true,
+    "property-no-unknown": true,
+    "declaration-property-value-no-unknown": true,
+    "declaration-block-no-duplicate-properties": [true, { "ignore": ["consecutive-duplicates-with-different-syntaxes"] }]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "uniqueKey": "id",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "brand",
+      "product",
+      "species",
+      "life_stage",
+      "form",
+      "kcal_per_100g",
+      "protein_pct",
+      "fat_pct",
+      "moisture_pct",
+      "fibre_pct",
+      "source_url",
+      "source_date",
+      "label_year"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^P[0-9]{3}$"
+      },
+      "brand": {
+        "type": "string",
+        "minLength": 1
+      },
+      "product": {
+        "type": "string",
+        "minLength": 1
+      },
+      "species": {
+        "type": "string",
+        "enum": [
+          "dog",
+          "cat"
+        ]
+      },
+      "life_stage": {
+        "type": "string",
+        "enum": [
+          "puppy",
+          "kitten",
+          "adult",
+          "senior"
+        ]
+      },
+      "form": {
+        "type": "string",
+        "enum": [
+          "dry",
+          "wet"
+        ]
+      },
+      "kcal_per_100g": {
+        "type": "number",
+        "minimum": 50,
+        "maximum": 600
+      },
+      "protein_pct": {
+        "type": "number",
+        "minimum": 3,
+        "maximum": 60
+      },
+      "fat_pct": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 40
+      },
+      "moisture_pct": {
+        "type": "number",
+        "minimum": 3,
+        "maximum": 90
+      },
+      "fibre_pct": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 15
+      },
+      "source_url": {
+        "type": "string",
+        "format": "uri"
+      },
+      "source_date": {
+        "type": "string",
+        "format": "date"
+      },
+      "label_year": {
+        "type": "integer",
+        "minimum": 2022,
+        "maximum": 2026
+      }
+    },
+    "additionalProperties": false,
+    "if": {
+      "properties": {
+        "form": {
+          "const": "dry"
+        }
+      }
+    },
+    "then": {
+      "properties": {
+        "kcal_per_100g": {
+          "type": "number",
+          "minimum": 200,
+          "maximum": 600
+        },
+        "moisture_pct": {
+          "type": "number",
+          "maximum": 14
+        }
+      },
+      "proteinGteFat": true
+    },
+    "else": {
+      "properties": {
+        "kcal_per_100g": {
+          "type": "number",
+          "minimum": 50,
+          "maximum": 200
+        },
+        "moisture_pct": {
+          "type": "number",
+          "minimum": 60
+        }
+      }
+    }
+  }
+}

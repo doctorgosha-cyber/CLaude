@@ -132,7 +132,7 @@
       "form": "semi-moist",
       "energy": {
         "value": 3850,
-        "unit": "kcal/100g"
+        "unit": "kcal/kg"
       },
       "added": "2026-10-20"
     },

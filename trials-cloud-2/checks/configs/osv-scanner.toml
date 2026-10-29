@@ -1,0 +1,6 @@
+# Tuned osv-scanner config (placed next to the scanned lockfile / passed with --config).
+# Ignore ONE advisory with a documented reason + expiry; everything else still reported.
+[[IgnoredVulns]]
+id = "GHSA-c2qf-rxjj-qqgw"
+ignoreUntil = 2027-01-01
+reason = "semver ReDoS (CVE-2022-25883): new Range() is only called on trusted, hard-coded version strings in this project; upgrade scheduled."

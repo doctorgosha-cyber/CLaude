@@ -1,0 +1,29 @@
+id: js-eval
+language: javascript
+severity: error
+message: "eval reached directly, through an alias, or through a computed global lookup"
+rule:
+  any:
+    # direct call
+    - pattern: eval($$$)
+    # the identifier `eval` used as a value (aliasing: const e = eval; cb(eval); ...)
+    - all:
+        - kind: identifier
+        - regex: ^eval$
+        - not:
+            inside:
+              kind: call_expression
+              field: function
+    # window['ev'+'al'](...) / globalThis[name](...): computed lookup on a global that is then called
+    - all:
+        - pattern: $G[$K]($$$)
+        - has:
+            kind: subscript_expression
+            field: function
+            has:
+              field: index
+              not:
+                kind: string
+constraints:
+  G:
+    regex: ^(window|globalThis|self)$

@@ -1,0 +1,20 @@
+id: js-innerhtml-nonliteral
+language: javascript
+severity: error
+message: "HTML sink assigned a non-constant value (use textContent or an escaper)"
+rule:
+  any:
+    - pattern: $EL.innerHTML = $V
+    - pattern: $EL.innerHTML += $V
+    - pattern: $EL.outerHTML = $V
+    - pattern: $EL.insertAdjacentHTML($POS, $V)
+constraints:
+  V:
+    not:
+      any:
+        - kind: string
+        - all:
+            - kind: template_string
+            - not:
+                has:
+                  kind: template_substitution

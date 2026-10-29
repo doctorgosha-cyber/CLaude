@@ -1,0 +1,31 @@
+id: php-wpdb-interpolated-sql
+language: php
+severity: error
+message: "SQL string built with interpolation/concatenation of a variable; use $wpdb->prepare() with placeholders"
+rule:
+  any:
+    # tree-sitter-php: a pattern with a literal comma needs >=2 args, so list both arities
+    - pattern: $wpdb->$M($SQL)
+    - pattern: $wpdb->$M($SQL, $$$)
+constraints:
+  M:
+    regex: '^(query|get_results|get_var|get_row|get_col)$'
+  # $SQL captures the `argument` wrapper node in tree-sitter-php, so look one level down
+  SQL:
+    any:
+      # "DELETE ... $id" / "... '$slug'"  (plain variables interpolated; {$wpdb->prefix} is a member access, allowed)
+      - has:
+          kind: encapsed_string
+          has:
+            any:
+              - kind: variable_name
+              - kind: subscript_expression
+      # "..." . $x . "..."  (concatenation with a variable that is not $wpdb->something)
+      - has:
+          kind: binary_expression
+          has:
+            stopBy: end
+            kind: variable_name
+            not:
+              inside:
+                kind: member_access_expression

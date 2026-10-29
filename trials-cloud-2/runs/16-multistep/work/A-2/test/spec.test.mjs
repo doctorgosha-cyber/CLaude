@@ -96,8 +96,8 @@ test('safety cap applies to dry food for non-growth stages and carries capped: t
 test('wet food: never capped, carries cans to one decimal', () => {
   const body = ok('species=cat&weight=5.5&stage=neutered_adult&activity=normal&product=ck-chicken-pate-wet');
   assert.equal(body.capped, false);
-  assert.equal(body.grams, 328);
-  assert.equal(body.cans, 3.9);
+  assert.equal(body.grams, 273); // 251.4 kcal (neutered factor 1.0, not adult) / 92 * 100
+  assert.equal(body.cans, 3.2);
   const dog = ok('species=dog&weight=21&stage=adult&activity=normal&product=dg-beef-stew-wet');
   assert.equal(dog.cans, Math.round((dog.grams / 400) * 10) / 10);
 });

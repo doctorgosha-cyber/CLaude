@@ -23,7 +23,7 @@ export function portionFor({ species, weightKg, stage, activity }, product) {
   let grams = uncapped;
   let capped = false;
   if (product.form !== 'wet' && !growth) {
-    const cap = weightKg * CAP_SHARE[species];
+    const cap = weightKg * 1000 * CAP_SHARE[species]; // grams per day
     if (uncapped > cap) {
       grams = cap;
       capped = true;

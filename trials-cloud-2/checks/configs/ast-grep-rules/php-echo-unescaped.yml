@@ -1,0 +1,20 @@
+id: php-echo-unescaped
+language: php
+severity: error
+message: "echo of a variable/property/non-escaping call; wrap in esc_html()/esc_attr()/esc_url()/wp_kses()"
+rule:
+  any:
+    - pattern: echo $X
+    - pattern: print $X
+constraints:
+  X:
+    any:
+      - kind: variable_name
+      - kind: member_access_expression
+      - kind: subscript_expression
+      - all:
+          - kind: function_call_expression
+          - not:
+              has:
+                field: function
+                regex: '^(esc_[a-z_]+|wp_kses[a-z_]*|__|_e|_x|_n|_nx|_ex|esc_html__|esc_attr__|number_format(_i18n)?|intval|absint|wp_json_encode|json_encode|get_search_form|wp_nonce_field|paginate_links|get_the_date|get_the_time|wp_get_attachment_image|get_avatar|get_the_post_thumbnail|wp_kses_post|checked|selected|disabled|the_[a-z_]+)$'

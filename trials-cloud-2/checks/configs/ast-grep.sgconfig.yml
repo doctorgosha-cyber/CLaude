@@ -1,0 +1,3 @@
+# ast-grep project config for checks/patterns.mjs (tuned run). Run: ast-grep scan -c sgconfig.yml --json=compact <dir>
+ruleDirs:
+  - rules

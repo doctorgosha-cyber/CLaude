@@ -114,7 +114,7 @@ function buildCard(p) {
   const stats = document.createElement('dl');
   stats.className = 'card__stats';
   for (const [label, value] of [
-    ['Energy', `${p.kcalPer100g} kcal / 100 g`],
+    ['Energy', `${p.kcalPer100g} kcal/100 g`],
     ['Protein', `${p.proteinPct}% protein`],
   ]) {
     const wrap = document.createElement('div');

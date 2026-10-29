@@ -1,0 +1,6 @@
+id: js-new-function
+language: javascript
+severity: error
+message: "new Function() compiles a string into code"
+rule:
+  pattern: new Function($$$)

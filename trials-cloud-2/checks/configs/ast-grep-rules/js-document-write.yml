@@ -1,0 +1,8 @@
+id: js-document-write
+language: javascript
+severity: error
+message: "document.write/writeln injects raw markup"
+rule:
+  any:
+    - pattern: document.write($$$)
+    - pattern: document.writeln($$$)

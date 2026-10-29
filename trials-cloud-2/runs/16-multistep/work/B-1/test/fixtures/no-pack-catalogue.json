@@ -1,0 +1,3 @@
+{ "version": "test", "products": [
+  { "id": "no-pack", "name": "Bad", "species": "dog", "form": "wet", "energy": { "value": 390, "unit": "kcal/can" } }
+] }

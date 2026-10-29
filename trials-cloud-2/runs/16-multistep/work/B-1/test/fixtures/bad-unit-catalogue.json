@@ -1,0 +1,3 @@
+{ "version": "test", "products": [
+  { "id": "bad-unit", "name": "Bad", "species": "cat", "form": "dry", "energy": { "value": 380, "unit": "kcal/cup" } }
+] }
