@@ -1,0 +1,8 @@
+# NEXUS project word list (brands, products, series names, jargon) for cspell
+Thermoflask
+Kailh
+Cherry
+Anatomy
+oklch
+WebGL
+Grammkraft

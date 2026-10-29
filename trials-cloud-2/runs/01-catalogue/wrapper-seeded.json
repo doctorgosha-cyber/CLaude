@@ -1,0 +1,91 @@
+{
+  "file": "/home/user/CLaude/trials-cloud-2/fixtures/01-catalogue/catalogue.json",
+  "rows": 40,
+  "ok": false,
+  "findings": [
+    {
+      "row": 0,
+      "id": "P001",
+      "path": "/0/kcal_per_100g",
+      "rule": "maximum",
+      "message": "must be <= 600"
+    },
+    {
+      "row": 0,
+      "id": "P001",
+      "path": "/0/kcal_per_100g",
+      "rule": "maximum",
+      "message": "must be <= 600"
+    },
+    {
+      "row": 4,
+      "id": "P005",
+      "path": "/4/protein_pct",
+      "rule": "maximum",
+      "message": "must be <= 60"
+    },
+    {
+      "row": 6,
+      "id": "P007",
+      "path": "/6/moisture_pct",
+      "rule": "minimum",
+      "message": "must be >= 3"
+    },
+    {
+      "row": 10,
+      "id": "P011",
+      "path": "/10/kcal_per_100g",
+      "rule": "maximum",
+      "message": "must be <= 600"
+    },
+    {
+      "row": 10,
+      "id": "P011",
+      "path": "/10/kcal_per_100g",
+      "rule": "maximum",
+      "message": "must be <= 600"
+    },
+    {
+      "row": 12,
+      "id": "P013",
+      "path": "/12",
+      "rule": "required",
+      "message": "must have required property 'source_date'"
+    },
+    {
+      "row": 18,
+      "id": "P019",
+      "path": "/18/species",
+      "rule": "enum",
+      "message": "must be equal to one of the allowed values"
+    },
+    {
+      "row": 22,
+      "id": "P023",
+      "path": "/22/moisture_pct",
+      "rule": "minimum",
+      "message": "must be >= 3"
+    },
+    {
+      "row": 24,
+      "id": "P025",
+      "path": "/24",
+      "rule": "proteinGteFat",
+      "message": "protein 12 < fat 32"
+    },
+    {
+      "row": 28,
+      "id": "P029",
+      "path": "/28/label_year",
+      "rule": "minimum",
+      "message": "must be >= 2022"
+    },
+    {
+      "row": 16,
+      "id": "P016",
+      "path": "/16/id",
+      "rule": "uniqueKey",
+      "message": "duplicate id P016 (rows 15, 16)"
+    }
+  ]
+}

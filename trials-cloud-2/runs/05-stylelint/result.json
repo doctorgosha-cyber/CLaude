@@ -1,0 +1,70 @@
+{
+  "id": 5,
+  "tool": "stylelint + stylelint-config-standard (theme CSS linting)",
+  "versions": {"stylelint": "17.16.0", "stylelint-config-standard": "40.0.0", "stylelint-config-recommended (transitive)": "18.0.0", "node": "22.22.0", "npm": "10.9.4"},
+  "licences": {"stylelint": "MIT", "stylelint-config-standard": "MIT", "stylelint-config-recommended": "MIT", "transitive (103 packages)": "MIT, MIT-0, ISC, BSD-3-Clause, Python-2.0, CC0-1.0; no GPL/AGPL/MPL/LGPL found"},
+  "install": {
+    "command": "npm i stylelint@17.16.0 stylelint-config-standard@40.0.0",
+    "seconds": 13.7,
+    "size_mb": 19,
+    "packages": 103,
+    "windows": "yes - pure JavaScript: 0 .node binaries, 0 binding.gyp, no optionalDependencies, package.json os unrestricted, engines node>=20.19.0; stylelint ships Windows CI in its repo"
+  },
+  "fixtures": "fixtures/05-stylelint/: 8 hand-written CSS files in a modern theme style (custom properties on :root, @layer, @property, clamp(), @container + cqi, nesting, :is/:where/:has, logical properties, color-mix(), oklch(), light-dark(), @supports, media range syntax, @view-transition, @starting-style, @scope, anchor positioning, ::details-content). Seeded C1..C8 in cards.css, typography.css, tokens.css, calculator.css; controls base.css, components.css, motion.css, figures.css. KEY.json lists each defect with line and expected rule.",
+  "baseline": {
+    "what": "none - NEXUS does not lint CSS today; runs/05-stylelint/baseline.sh reproduces that (prints an empty finding list)",
+    "command": "runs/05-stylelint/baseline.sh",
+    "recall": "0/8",
+    "false_positives": 0,
+    "runtime_s": 0.01
+  },
+  "candidate_default": {
+    "config": "{ \"extends\": \"stylelint-config-standard\" } (runs/05-stylelint/stylelintrc-default.json)",
+    "commands": ["stylelint \"**/*.css\" --config runs/05-stylelint/stylelintrc-default.json --config-basedir <install dir> --formatter json"],
+    "found": {"C1": true, "C2": true, "C3": false, "C4": true, "C5": true, "C6": false, "C7": true, "C8": true},
+    "found_by_rule": {"C1": "declaration-property-value-no-unknown", "C2": "no-duplicate-selectors", "C3": "MISSED (declaration-no-important is not in config-standard)", "C4": "property-no-unknown", "C5": "declaration-property-value-no-unknown (unit-no-unknown is not in config-standard)", "C6": "MISSED (color-no-invalid-hex is not in config-standard; declaration-property-value-no-unknown skips custom properties)", "C7": "declaration-block-no-duplicate-properties", "C8": "CssSyntaxError"},
+    "recall": "6/8",
+    "false_positives": 6,
+    "false_positives_detail": {"base.css": ["lightness-notation x3 (oklch(0.65 ...), light-dark(oklch(0.2 ...), oklch(0.95 ...)) wants 65%/20%/95%)", "hue-degree-notation x2 (oklch hue 250 wants 250deg)"], "components.css": ["property-no-vendor-prefix x1 (-webkit-mask next to mask)"], "motion.css": [], "figures.css": []},
+    "false_positive_rules": ["lightness-notation", "hue-degree-notation", "property-no-vendor-prefix"],
+    "modern_features_that_did_NOT_fire": "clamp, @container/cqi, nesting, :is/:where/:has, logical props, color-mix, light-dark, @property, @layer, @scope, @view-transition, ::view-transition-*, @starting-style, transition display/overlay allow-discrete, anchor()/anchor-name/position-anchor, ::details-content, interpolate-size, field-sizing, text-wrap: pretty, :nth-child(2n of S), media range syntax, dvh/svh units",
+    "extra_findings_on_seeded": 4,
+    "extra_findings_detail": "tokens.css: lightness-notation x2 + hue-degree-notation x2 on oklch(0.7 0.15 250) / oklch(0.6 0.2 300) - same stylistic rules as the control FPs",
+    "runtime_s": 0.84,
+    "runtime_runs_s": [0.84, 0.83, 0.83],
+    "cli_exit_code": 2,
+    "note": "stylelint 16+/17 writes the formatter report to stderr and exits 2 on lint problems (1 = fatal, 78 = config error)"
+  },
+  "candidate_tuned": {
+    "config": "runs/05-stylelint/stylelintrc-tuned.json: extends config-standard; DISABLED the 3 stylistic rules that fired on controls: lightness-notation (team writes oklch(0.65 ...) not 65%), hue-degree-notation (bare hue numbers), property-no-vendor-prefix (hand-written -webkit-mask fallback, no autoprefixer); ADDED declaration-no-important, color-no-invalid-hex, unit-no-unknown (all exist in 17.16 but are not in config-standard/recommended); no-duplicate-selectors, property-no-unknown, declaration-property-value-no-unknown, declaration-block-no-duplicate-properties were already on via config-recommended and are restated explicitly",
+    "commands": ["stylelint \"**/*.css\" --config runs/05-stylelint/stylelintrc-tuned.json --config-basedir <install dir> --formatter json"],
+    "found": {"C1": true, "C2": true, "C3": true, "C4": true, "C5": true, "C6": true, "C7": true, "C8": true},
+    "found_by_rule": {"C1": "declaration-property-value-no-unknown", "C2": "no-duplicate-selectors", "C3": "declaration-no-important (3 hits, one per declaration)", "C4": "property-no-unknown", "C5": "unit-no-unknown + declaration-property-value-no-unknown (both on the same line)", "C6": "color-no-invalid-hex (works inside a custom property)", "C7": "declaration-block-no-duplicate-properties", "C8": "CssSyntaxError"},
+    "recall": "8/8",
+    "false_positives": 0,
+    "false_positive_rules": [],
+    "extra_findings_on_seeded": 0,
+    "extra_findings_note": "11 warnings total for 8 defects: C3 reports 3 lines (3 !important) and C5 is reported by two rules; both are the seeded defects, not extras",
+    "runtime_s": 0.86,
+    "runtime_runs_s": [1.00, 0.86, 1.66],
+    "cli_exit_code": 2
+  },
+  "wrapper_test": {"clean_exit": 0, "seeded_exit": 1, "bad_config_exit": 2, "clean_runtime_s": 0.77, "seeded_runtime_s": 1.5, "note": "Node API (stylelint.lint) so stdout/stderr and exit codes are normalised to 0/1/2"},
+  "limits": [
+    "config-standard alone misses two of the eight seeded classes (!important creep, invalid hex in a custom property); the three missing rules must be added by hand",
+    "declaration-no-important has no ignore option: the canonical prefers-reduced-motion reset (4x !important) fires 4 errors under the tuned config (side test, runs/05-stylelint/side-reduced-motion.txt); teams using that pattern need a /* stylelint-disable declaration-no-important */ block or must gate animations with prefers-reduced-motion: no-preference instead",
+    "the stylistic rules in config-standard (lightness-notation, hue-degree-notation, property-no-vendor-prefix, plus kebab-case selector/custom-property patterns) encode opinions, not errors; expect to turn more off on a real codebase (BEM __/-- class names would hit selector-class-pattern)",
+    "CLI prints the report to stderr and exits 2 on lint problems (not 1): scripts that assume stdout/exit 1 silently see an empty report - the wrapper uses the Node API instead",
+    "a parse error (C8) stops every other rule for that file, so one stray brace hides any further defect in the same file until fixed",
+    "stylelint knows CSS only through its bundled css-tree/mdn data; bleeding-edge syntax may be flagged as unknown in future versions, so pin the version and re-check controls on upgrade (none fired on this fixture set at 17.16.0)",
+    "runtimes were measured on a shared 4-vCPU box with concurrent trials; expect ~0.8-1.7 s for 8 files, dominated by Node start-up"
+  ],
+  "verdict": "ADOPT",
+  "reason": "Tuned stylelint finds 8/8 seeded defects with 0 false positives on 4 modern-CSS controls (defaults: 6/8 with 6 stylistic FPs from lightness-notation, hue-degree-notation, property-no-vendor-prefix), against a baseline of 0/8 because nothing is checked today. Cost is 13.7 s install, 19 MB, pure Node (Windows yes), under 1 s per run, MIT throughout.",
+  "wrapper": "runs/05-stylelint/wrapper-sketch.mjs",
+  "do_not_adopt_notes": [
+    "do not adopt config-standard unmodified: it misses !important and invalid-hex and produces 6 stylistic errors on clean modern CSS (oklch lightness/hue notation, -webkit-mask)",
+    "do not rely on the CLI exit code 1 / stdout report: stylelint 17 uses stderr and exit 2 for lint problems",
+    "declaration-no-important will flag the common reduced-motion !important reset; decide the team pattern before enabling it"
+  ]
+}

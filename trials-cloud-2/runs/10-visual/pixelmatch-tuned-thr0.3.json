@@ -1,0 +1,268 @@
+{
+ "mode": "tuned",
+ "threshold": 0.3,
+ "results": {
+  "U1-390": {
+   "id": "U1",
+   "width": 390,
+   "size": [
+    390,
+    2333
+   ],
+   "diffPixels": 7159,
+   "diffPixelsInclAA": 11205,
+   "maxWindow16": 84,
+   "pct": 0.7868,
+   "bbox": {
+    "x": 24,
+    "y": 1558,
+    "w": 337,
+    "h": 742
+   },
+   "sizeMismatch": {
+    "before": [
+     390,
+     2331
+    ],
+    "after": [
+     390,
+     2333
+    ]
+   },
+   "shot_s": 1.26,
+   "compare_s": 0.98,
+   "total_s": 2.24
+  },
+  "U1-1280": {
+   "id": "U1",
+   "width": 1280,
+   "size": [
+    1280,
+    1269
+   ],
+   "diffPixels": 7149,
+   "diffPixelsInclAA": 11186,
+   "maxWindow16": 84,
+   "pct": 0.4401,
+   "bbox": {
+    "x": 105,
+    "y": 815,
+    "w": 1058,
+    "h": 423
+   },
+   "sizeMismatch": {
+    "before": [
+     1280,
+     1267
+    ],
+    "after": [
+     1280,
+     1269
+    ]
+   },
+   "shot_s": 1.15,
+   "compare_s": 0.27,
+   "total_s": 1.41
+  },
+  "U2-390": {
+   "id": "U2",
+   "width": 390,
+   "size": [
+    390,
+    2331
+   ],
+   "diffPixels": 0,
+   "diffPixelsInclAA": 0,
+   "maxWindow16": 0,
+   "pct": 0,
+   "bbox": null,
+   "sizeMismatch": null,
+   "shot_s": 1.09,
+   "compare_s": 0.27,
+   "total_s": 1.36
+  },
+  "U2-1280": {
+   "id": "U2",
+   "width": 1280,
+   "size": [
+    1280,
+    1267
+   ],
+   "diffPixels": 0,
+   "diffPixelsInclAA": 0,
+   "maxWindow16": 0,
+   "pct": 0,
+   "bbox": null,
+   "sizeMismatch": null,
+   "shot_s": 0.93,
+   "compare_s": 0.4,
+   "total_s": 1.33
+  },
+  "U3-390": {
+   "id": "U3",
+   "width": 390,
+   "size": [
+    390,
+    2331
+   ],
+   "diffPixels": 1498,
+   "diffPixelsInclAA": 1659,
+   "maxWindow16": 204,
+   "pct": 0.1648,
+   "bbox": {
+    "x": 38,
+    "y": 843,
+    "w": 76,
+    "h": 26
+   },
+   "sizeMismatch": null,
+   "shot_s": 0.95,
+   "compare_s": 0.41,
+   "total_s": 1.36
+  },
+  "U3-1280": {
+   "id": "U3",
+   "width": 1280,
+   "size": [
+    1280,
+    1267
+   ],
+   "diffPixels": 1534,
+   "diffPixelsInclAA": 1689,
+   "maxWindow16": 207,
+   "pct": 0.0946,
+   "bbox": {
+    "x": 483,
+    "y": 447,
+    "w": 77,
+    "h": 26
+   },
+   "sizeMismatch": null,
+   "shot_s": 0.95,
+   "compare_s": 0.68,
+   "total_s": 1.63
+  },
+  "U4-390": {
+   "id": "U4",
+   "width": 390,
+   "size": [
+    390,
+    2331
+   ],
+   "diffPixels": 20884,
+   "diffPixelsInclAA": 31928,
+   "maxWindow16": 152,
+   "pct": 2.2972,
+   "bbox": {
+    "x": 24,
+    "y": 24,
+    "w": 341,
+    "h": 2274
+   },
+   "sizeMismatch": null,
+   "shot_s": 1.1,
+   "compare_s": 0.41,
+   "total_s": 1.51
+  },
+  "U4-1280": {
+   "id": "U4",
+   "width": 1280,
+   "size": [
+    1280,
+    1267
+   ],
+   "diffPixels": 26500,
+   "diffPixelsInclAA": 39848,
+   "maxWindow16": 190,
+   "pct": 1.634,
+   "bbox": {
+    "x": 105,
+    "y": 24,
+    "w": 1071,
+    "h": 1212
+   },
+   "sizeMismatch": null,
+   "shot_s": 1.19,
+   "compare_s": 0.48,
+   "total_s": 1.67
+  },
+  "C1-390": {
+   "id": "C1",
+   "width": 390,
+   "size": [
+    390,
+    2367
+   ],
+   "diffPixels": 0,
+   "diffPixelsInclAA": 0,
+   "maxWindow16": 0,
+   "pct": 0,
+   "bbox": null,
+   "sizeMismatch": null,
+   "shot_s": 1.38,
+   "compare_s": 0.15,
+   "total_s": 1.53
+  },
+  "C1-1280": {
+   "id": "C1",
+   "width": 1280,
+   "size": [
+    1280,
+    1303
+   ],
+   "diffPixels": 0,
+   "diffPixelsInclAA": 0,
+   "maxWindow16": 0,
+   "pct": 0,
+   "bbox": null,
+   "sizeMismatch": null,
+   "shot_s": 1.19,
+   "compare_s": 0.31,
+   "total_s": 1.51
+  },
+  "C2-390": {
+   "id": "C2",
+   "width": 390,
+   "size": [
+    390,
+    2331
+   ],
+   "diffPixels": 5,
+   "diffPixelsInclAA": 6,
+   "maxWindow16": 2,
+   "pct": 0.0006,
+   "bbox": {
+    "x": 25,
+    "y": 275,
+    "w": 149,
+    "h": 30
+   },
+   "sizeMismatch": null,
+   "shot_s": 0.95,
+   "compare_s": 0.14,
+   "total_s": 1.09
+  },
+  "C2-1280": {
+   "id": "C2",
+   "width": 1280,
+   "size": [
+    1280,
+    1267
+   ],
+   "diffPixels": 7,
+   "diffPixelsInclAA": 9,
+   "maxWindow16": 1,
+   "pct": 0.0004,
+   "bbox": {
+    "x": 118,
+    "y": 236,
+    "w": 373,
+    "h": 33
+   },
+   "sizeMismatch": null,
+   "shot_s": 0.79,
+   "compare_s": 0.25,
+   "total_s": 1.04
+  }
+ }
+}

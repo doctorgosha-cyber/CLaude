@@ -1,0 +1,42 @@
+=== odiff on shots/default (odiff defaults threshold 0.1, then --aa)
+default U1-390 default rc=22 out=[21014;2.31] t=0.065 | --aa rc=22 out=[11902;1.31] t=0.062
+default U1-1280 default rc=22 out=[29675;1.83] t=0.094 | --aa rc=22 out=[20602;1.27] t=0.098
+default U2-390 default rc=0 out=[0] t=0.074 | --aa rc=0 out=[0] t=0.079
+default U2-1280 default rc=0 out=[0] t=0.113 | --aa rc=0 out=[0] t=0.057
+default U3-390 default rc=22 out=[1763;0.19] t=0.084 | --aa rc=22 out=[1528;0.17] t=0.061
+default U3-1280 default rc=22 out=[1792;0.11] t=0.097 | --aa rc=22 out=[1576;0.10] t=0.052
+default U4-390 default rc=22 out=[47881;5.27] t=0.073 | --aa rc=22 out=[25900;2.85] t=0.060
+default U4-1280 default rc=22 out=[56594;3.49] t=0.064 | --aa rc=22 out=[31302;1.93] t=0.090
+default C1-390 default rc=22 out=[554;0.06] t=0.068 | --aa rc=22 out=[322;0.03] t=0.054
+default C1-1280 default rc=22 out=[1709;0.10] t=0.079 | --aa rc=22 out=[898;0.05] t=0.075
+default C2-390 default rc=22 out=[3123;0.34] t=0.069 | --aa rc=22 out=[2549;0.28] t=0.074
+default C2-1280 default rc=22 out=[3114;0.19] t=0.118 | --aa rc=22 out=[2725;0.17] t=0.147
+=== odiff on shots/tuned (odiff defaults threshold 0.1, then --aa)
+tuned U1-390 default rc=22 out=[21014;2.31] t=0.079 | --aa rc=22 out=[11902;1.31] t=0.065
+tuned U1-1280 default rc=22 out=[29675;1.83] t=0.096 | --aa rc=22 out=[20602;1.27] t=0.186
+tuned U2-390 default rc=0 out=[0] t=0.089 | --aa rc=0 out=[0] t=0.111
+tuned U2-1280 default rc=0 out=[0] t=0.118 | --aa rc=0 out=[0] t=0.126
+tuned U3-390 default rc=22 out=[1763;0.19] t=0.098 | --aa rc=22 out=[1528;0.17] t=0.072
+tuned U3-1280 default rc=22 out=[1792;0.11] t=0.091 | --aa rc=22 out=[1576;0.10] t=0.088
+tuned U4-390 default rc=22 out=[47881;5.27] t=0.088 | --aa rc=22 out=[25900;2.85] t=0.091
+tuned U4-1280 default rc=22 out=[56594;3.49] t=0.128 | --aa rc=22 out=[31302;1.93] t=0.194
+tuned C1-390 default rc=0 out=[0] t=0.067 | --aa rc=0 out=[0] t=0.064
+tuned C1-1280 default rc=0 out=[0] t=0.094 | --aa rc=0 out=[0] t=0.182
+tuned C2-390 default rc=22 out=[3123;0.34] t=0.066 | --aa rc=22 out=[2549;0.28] t=0.057
+tuned C2-1280 default rc=22 out=[3114;0.19] t=0.087 | --aa rc=22 out=[2725;0.17] t=0.134
+U2-390 t0.005: 35152;3.87
+ rc=22
+U2-390 t0.005 --aa: 34729;3.82
+ rc=22
+U2-1280 t0.005: 91576;5.65
+ rc=22
+U2-1280 t0.005 --aa: 91113;5.62
+ rc=22
+C2-390 t0.005: 5806;0.64
+ rc=22
+C2-390 t0.005 --aa: 4797;0.53
+ rc=22
+C2-1280 t0.005: 5722;0.35
+ rc=22
+C2-1280 t0.005 --aa: 5080;0.31
+ rc=22

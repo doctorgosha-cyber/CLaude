@@ -1,0 +1,35 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en,en-GB",
+  "import": [
+    "@cspell/dict-es-es/cspell-ext.json",
+    "@cspell/dict-pt-br/cspell-ext.json",
+    "@cspell/dict-fr-fr/cspell-ext.json",
+    "@cspell/dict-de-de/cspell-ext.json",
+    "@cspell/dict-ru_ru/cspell-ext.json",
+    "@cspell/dict-uk-ua/cspell-ext.json",
+    "@cspell/dict-id-id/cspell-ext.json"
+  ],
+  "enableFiletypes": ["srt"],
+  "minWordLength": 4,
+  "dictionaryDefinitions": [
+    { "name": "nexus-words", "path": "./cspell-words.txt", "addWords": true }
+  ],
+  "dictionaries": ["nexus-words"],
+  "patterns": [
+    { "name": "srt-timestamp", "pattern": "/\\d{2}:\\d{2}:\\d{2},\\d{3}( --> \\d{2}:\\d{2}:\\d{2},\\d{3})?/g" },
+    { "name": "sku-code", "pattern": "/\\b[A-Z]{3,5}(-[A-Z0-9]{2,6}){2,}\\b/g" }
+  ],
+  "ignoreRegExpList": ["srt-timestamp", "sku-code"],
+  "overrides": [
+    { "filename": "**/*-en.{srt,html}", "language": "en,en-GB" },
+    { "filename": "**/*-es.{srt,html}", "language": "es,en" },
+    { "filename": "**/*-pt.{srt,html}", "language": "pt,en" },
+    { "filename": "**/*-fr.{srt,html}", "language": "fr,en" },
+    { "filename": "**/*-de.{srt,html}", "language": "de,en" },
+    { "filename": "**/*-ru.{srt,html}", "language": "ru,en" },
+    { "filename": "**/*-uk.{srt,html}", "language": "uk,en" },
+    { "filename": "**/*-id.{srt,html}", "language": "id,en" }
+  ]
+}

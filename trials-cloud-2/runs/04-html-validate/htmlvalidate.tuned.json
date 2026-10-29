@@ -1,17 +1,15 @@
 {
   "$schema": "https://html-validate.org/schemas/config.json",
   "extends": ["html-validate:recommended"],
+  "elements": ["html5", "./elements-img-alt.json"],
   "rules": {
     "no-missing-references": "error",
     "form-dup-name": ["error", { "shared": ["radio", "checkbox", "submit", "button", "reset"] }],
     "wcag/h32": "off",
-    "no-inline-style": "off",
-    "no-trailing-whitespace": "off",
     "attr-quotes": "off",
-    "attribute-boolean-style": "off",
     "void-style": "off",
-    "no-self-closing": "off",
-    "long-title": "off",
+    "no-inline-style": "off",
+    "attribute-boolean-style": "off",
     "no-redundant-role": "off"
   }
 }

@@ -1,3 +1,13 @@
 source stems: voice=-20.8 LUFS music=-18.4 LUFS
 C1 pass 1: measured I=-15.6 (target -14, delta 1.60)
 C1 pass 2: measured I=-14.7 (target -14, delta 0.70)
+C1 pass 3: measured I=-14.3 (target -14, delta 0.30)
+C1 pass 4: measured I=-14.2 (target -14, delta 0.20)
+C1 pass 5: measured I=-14.0 (target -14, delta 0.00)
+C2 pass 1: measured I=-15.9 (target -14, delta 1.90)
+C2 pass 2: measured I=-14.7 (target -14, delta 0.70)
+C2 pass 3: measured I=-14.3 (target -14, delta 0.30)
+C2 pass 4: measured I=-14.1 (target -14, delta 0.10)
+L1 pass 1: measured I=-12.9 (target -8, delta 4.90)
+L1 pass 2: measured I=-10.4 (target -8, delta 2.40)
+L1 pass 3: measured I=-9.4 (target -8, delta 1.40)

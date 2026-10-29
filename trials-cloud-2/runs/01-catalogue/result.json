@@ -1,0 +1,73 @@
+{
+  "id": 1,
+  "tool": "Ajv 8 (JSON Schema, JSON) vs Frictionless 5 (Table Schema, CSV) for the pet-food catalogue",
+  "versions": {"ajv": "8.20.0", "ajv-formats": "3.0.1", "frictionless": "5.21.0", "node": "22.22.0", "python": "3.13.16"},
+  "licences": {
+    "ajv": "MIT", "ajv-formats": "MIT", "fast-deep-equal": "MIT", "fast-uri": "BSD-3-Clause", "json-schema-traverse": "MIT", "require-from-string": "MIT",
+    "frictionless": "MIT", "frictionless_deps": "41 packages, all MIT/BSD/Apache/PSF except certifi MPL-2.0 (unmodified dependency: fine); full list in runs/01-catalogue/frictionless-licences.txt; no GPL/AGPL/LGPL"
+  },
+  "install": {
+    "ajv": {"command": "npm i ajv@8.20.0 ajv-formats@3.0.1", "seconds": 3.15, "size_mb": 3.2, "packages": 6, "windows": "yes: pure JavaScript, no optional/native deps (node_modules holds only ajv, ajv-formats, fast-deep-equal, fast-uri, json-schema-traverse, require-from-string)"},
+    "frictionless": {"command": "python3 -m venv venv && venv/bin/pip install frictionless==5.21.0", "seconds": 18.0, "size_mb": 73, "packages": 41, "windows": "yes (untested here): frictionless-5.21.0-py3-none-any.whl; only compiled dep pydantic-core has pydantic_core-2.50.1-cp313-cp313-win_amd64.whl (both downloaded from PyPI as evidence). Needs a Python 3.13 install on the Windows box; the CLI needs --trusted for paths outside cwd."},
+    "command": "npm i ajv@8.20.0 ajv-formats@3.0.1  |  pip install frictionless==5.21.0",
+    "seconds": 3.15,
+    "size_mb": 3.2,
+    "windows": "Ajv yes (pure JS); Frictionless yes-untested (py3-none-any wheel + win_amd64 pydantic-core wheel)"
+  },
+  "fixtures": "fixtures/01-catalogue/: gen.mjs (deterministic) -> catalogue.json + catalogue.csv (40 rows, 10 seeded faults F1-F10 on rows P001,P005,P007,P011,P013,P016/P017,P019,P023,P025,P029; 30 clean rows), catalogue-clean.json/.csv (40 clean control rows), KEY.json (per fault: row, field, what, which keyword/check/custom rule catches it). Fields: id, brand, product, species, life_stage, form(dry|wet, added for ranges), kcal_per_100g, protein_pct, fat_pct, moisture_pct, fibre_pct, source_url, source_date, label_year.",
+  "baseline": {
+    "what": "Home-made 30-line Node validator (runs/01-catalogue/baseline.mjs): required keys present, numbers are numbers, strings are strings. JSON input.",
+    "command": "node baseline.mjs fixtures/01-catalogue/catalogue.json",
+    "found": {"F1": false, "F2": false, "F3": false, "F4": false, "F5": true, "F6": false, "F7": false, "F8": false, "F9": false, "F10": false},
+    "recall": "1/10",
+    "false_positives": 0,
+    "runtime_s": 0.035,
+    "note": "Only the structural fault (missing source_date) is structural; the other 9 are semantic/range/cross-field faults by design, so the team's claim of 8/10 on tabular faults does not transfer to this fixture."
+  },
+  "candidate_default": {
+    "config": "Ajv: schema-default.json = type/required/enum/format(uri,date)/additionalProperties only, Ajv2020 strict+allErrors+ajv-formats. Frictionless: tableschema-default.json = field types + required + enum + date type/uri format, `frictionless validate catalogue.csv --schema ... --trusted --json`.",
+    "commands": ["node ajv-run.mjs schema-default.json catalogue.json", "frictionless validate catalogue.csv --schema tableschema-default.json --trusted --json"],
+    "ajv": {"found": {"F1": false, "F2": false, "F3": false, "F4": false, "F5": true, "F6": false, "F7": true, "F8": false, "F9": false, "F10": false}, "recall": "2/10", "false_positives": 0, "extra_findings_on_seeded": 0, "runtime_s": 0.15, "validate_ms_in_process": 73},
+    "frictionless": {"found": {"F1": false, "F2": false, "F3": false, "F4": false, "F5": true, "F6": false, "F7": true, "F8": false, "F9": false, "F10": false}, "recall": "2/10", "false_positives": 0, "extra_findings_on_seeded": 0, "runtime_s": 0.43},
+    "found": {"F1": false, "F2": false, "F3": false, "F4": false, "F5": true, "F6": false, "F7": true, "F8": false, "F9": false, "F10": false},
+    "recall": "2/10",
+    "false_positives": 0,
+    "extra_findings_on_seeded": 0,
+    "runtime_s": 0.15
+  },
+  "candidate_tuned": {
+    "config": "Ajv: schema-tuned.json adds minimum/maximum on every number (kcal 50-600, protein 3-60, fat 1-40, moisture 3-90, fibre 0-15, label_year 2022-2026), if/then/else on form (dry kcal 200-600 & moisture<=14; wet kcal 50-200 & moisture>=60), id pattern, plus TWO custom keywords registered in ajv-run.mjs: proteinGteFat (row rule, applied under then: for dry) and uniqueKey:'id' (array-level, because uniqueItems compares whole objects). Frictionless: tableschema-tuned.json adds the same minimum/maximum, unique:true + primaryKey on id, pattern; checklist-tuned.json adds two row-constraint checks (simpleeval formulas): `form != 'dry' or protein_pct >= fat_pct` and the per-form kcal/moisture ranges. Why: a type-only schema cannot see magnitudes; ranges are the only schema-level lever against unit faults, and cross-row/cross-field rules need custom logic.",
+    "commands": ["node ajv-run.mjs schema-tuned.json catalogue.json", "frictionless validate catalogue.csv --schema tableschema-tuned.json --checklist checklist-tuned.json --trusted --json"],
+    "ajv": {"found": {"F1": true, "F2": true, "F3": true, "F4": true, "F5": true, "F6": true, "F7": true, "F8": true, "F9": true, "F10": true}, "recall": "10/10", "false_positives": 0, "extra_findings_on_seeded": 0, "error_lines": 15, "note": "15 error objects for 10 faults: kcal maximum fires from both the base property and the then: branch, and Ajv adds an 'if' wrapper error per failing branch (wrapper filters keyword 'if').", "runtime_s": 0.18, "validate_ms_in_process": 143},
+    "frictionless": {"found": {"F1": true, "F2": true, "F3": true, "F4": true, "F5": true, "F6": true, "F7": true, "F8": true, "F9": true, "F10": true}, "recall": "10/10", "false_positives": 0, "extra_findings_on_seeded": 0, "error_lines": 13, "note": "13 errors for 10 faults: F6 reported twice (unique-error + primary-key), F1/F4 twice (constraint maximum + row-constraint).", "runtime_s": 0.52},
+    "caught_by_mechanism": {
+      "schema_defaults_type_required_enum": ["F5", "F7"],
+      "numeric_ranges_min_max": ["F1 (kJ 1500 > max 600)", "F2 (280 > max 60)", "F3 (0.1 < min 3)", "F4 (1200 > max 600)", "F8 (-5 < min 3)", "F10 (2019 < min 2022)"],
+      "custom_logic_ajv": ["F6 duplicate id (custom keyword uniqueKey; JSON Schema has no cross-item key uniqueness)", "F9 protein>=fat (custom keyword proteinGteFat; JSON Schema has no cross-property comparison)"],
+      "custom_logic_frictionless": ["F9 protein>=fat (row-constraint check in checklist; F6 is native via unique/primaryKey)"],
+      "custom_in_both": ["F9 (cross-field row rule). Unit-label faults F1-F3 were caught ONLY because their magnitude fell outside the range; the probe (runs/01-catalogue/probe/) shows a kJ value of 188 on a wet row passes both tuned configs with exit 0 -> unit faults with in-range magnitude are invisible to both tools and need a source-side unit field or a plausibility rule (e.g. Atwater kcal estimate from protein/fat vs declared kcal)."]
+    },
+    "found": {"F1": true, "F2": true, "F3": true, "F4": true, "F5": true, "F6": true, "F7": true, "F8": true, "F9": true, "F10": true},
+    "recall": "10/10",
+    "false_positives": 0,
+    "extra_findings_on_seeded": 0,
+    "runtime_s": 0.18
+  },
+  "limits": [
+    "Both tools at defaults are no better than the baseline on this fixture (2/10 vs 1/10): everything useful came from ranges and custom rules, which the team must author and maintain.",
+    "Unit-label faults are invisible to any schema when the wrong-unit magnitude stays inside the plausible range (probe: 188 kJ on a wet row passes both). Ranges catch only gross unit errors.",
+    "Ajv: JSON Schema cannot express duplicate ids across array items (uniqueItems compares whole objects) nor cross-field comparisons; both needed addKeyword (~6 lines each). Strict mode rejected then/else subschemas lacking 'type' on first try.",
+    "Ajv reports duplicate error objects (base + then branch + 'if' wrapper) for one fault; a wrapper must dedupe/filter.",
+    "Frictionless: CLI refused relative '../' and absolute paths with 'path ... is not safe' until --trusted was passed; the Python runtime adds 73 MB and a second toolchain for a Node team; CLI start-up ~0.4 s per run; row-constraint formulas are simpleeval strings (no editor support, errors only at runtime).",
+    "Frictionless validates the CSV, Ajv the JSON; the calculator consumes JSON, so Frictionless would validate a sibling file unless the JSON is converted (Frictionless can read JSON arrays too, not measured).",
+    "Runtimes measured on a shared 4-vCPU box with other trials running; 40 rows is tiny, numbers are start-up dominated."
+  ],
+  "verdict": "ADOPT (Ajv 8.20.0 tuned schema + two custom keywords); WATCH (Frictionless 5.21.0: equal recall, but Python toolchain and no advantage for a Node team)",
+  "reason": "Baseline catches 1/10; Ajv defaults 2/10 and Frictionless defaults 2/10 with 0 false positives; both tuned configs catch 10/10 with 0 false positives on 40 clean control rows. Ajv costs 3.2 MB / 3 s install, pure JS, 0.18 s per run and lives in the Node repo the calculator already uses; Frictionless matches recall but needs a 73 MB Python venv, --trusted, and 0.52 s per run. 6 of the 10 faults are caught purely by min/max ranges, 2 (dup id, protein>=fat) need custom keywords in Ajv, and in-range unit faults are not detectable by either.",
+  "wrapper": "runs/01-catalogue/wrapper-sketch.mjs (checks/catalogue.mjs; exit 0 on catalogue-clean.json, 1 on catalogue.json with 10 rows flagged, 2 on missing file)",
+  "do_not_adopt_notes": [
+    "Do not adopt Frictionless for this use: identical recall to Ajv after tuning, but adds Python 3.13 + 41 packages (73 MB) to a Node-on-Windows team, needs --trusted for normal paths, and validates CSV rather than the JSON the calculator reads.",
+    "Do not rely on schema defaults alone: type/required/enum caught only F5 and F7, which is no measurable gain over the baseline (1/10).",
+    "Ranges are not unit detection: F1-F3 passed as 'caught' only because 1500, 280 and 0.1 fall outside plausible bounds; a kJ value of 188 on a wet row passed both tuned validators (probe). Add a unit column at the source or an Atwater plausibility rule to close that gap."
+  ]
+}

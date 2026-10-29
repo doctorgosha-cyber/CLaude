@@ -1,0 +1,20 @@
+{
+ "seeded/H1-review-dup-id.html": [],
+ "seeded/H2-cards-nested-anchor.html": [],
+ "seeded/H3-figure-hidden-img-noalt.html": [],
+ "seeded/H4-faq-stray-end-tag.html": [],
+ "seeded/H5-form-label-missing-id.html": [
+  {
+   "id": "label",
+   "impact": "critical",
+   "nodes": [
+    "#comment"
+   ]
+  }
+ ],
+ "seeded/H6-table-deprecated-attr.html": [],
+ "clean/C1-video-page.html": [],
+ "clean/C2-calculator-custom-elements.html": [],
+ "clean/C3-figure-svg-picture.html": [],
+ "clean/C4-faq-details-data-attrs.html": []
+}
