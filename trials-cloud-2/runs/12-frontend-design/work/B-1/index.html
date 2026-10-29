@@ -10,7 +10,68 @@
 </head>
 <body>
   <main>
-    <!-- build the comparison section here -->
+    <section class="compare" data-testid="comparison-section" aria-labelledby="compare-heading">
+      <header class="compare-intro">
+        <h1 id="compare-heading">Six foods, side by side</h1>
+        <p>Every food we reviewed this season, with the figures that matter from the back of the bag. Narrow the list, then pick up to three to compare.</p>
+      </header>
+
+      <form class="controls" aria-label="Filter and sort foods" novalidate>
+        <div class="control">
+          <label for="filter-species">Made for</label>
+          <select id="filter-species" name="species" data-testid="filter-species">
+            <option value="all">Dogs and cats</option>
+            <option value="dog">Dogs</option>
+            <option value="cat">Cats</option>
+          </select>
+        </div>
+        <div class="control control-price">
+          <label for="filter-price-min">Price from</label>
+          <div class="money">
+            <span class="money-symbol" id="symbol-min" aria-hidden="true"></span>
+            <input id="filter-price-min" name="priceMin" type="number" inputmode="decimal" min="0" step="0.01" placeholder="any" data-testid="filter-price-min">
+          </div>
+        </div>
+        <div class="control control-price">
+          <label for="filter-price-max">Price up to</label>
+          <div class="money">
+            <span class="money-symbol" id="symbol-max" aria-hidden="true"></span>
+            <input id="filter-price-max" name="priceMax" type="number" inputmode="decimal" min="0" step="0.01" placeholder="any" data-testid="filter-price-max">
+          </div>
+        </div>
+        <div class="control control-sort">
+          <label for="sort-select">Order by</label>
+          <select id="sort-select" name="sort" data-testid="sort-select">
+            <option value="featured">Our order</option>
+            <option value="price-asc">Price, cheapest first</option>
+            <option value="price-desc">Price, dearest first</option>
+            <option value="rating-desc">Rating, best first</option>
+            <option value="protein-desc">Protein, most first</option>
+          </select>
+        </div>
+      </form>
+
+      <p class="result-count" id="result-count" aria-live="polite"></p>
+
+      <ul class="cards" id="cards" aria-label="Reviewed foods"></ul>
+
+      <p class="empty" id="empty-results" data-testid="empty-results" hidden>
+        No food matches these filters. Widen the price range or choose a different animal to see foods again.
+      </p>
+
+      <div class="compare-bar" id="compare-bar" data-testid="compare-bar" role="region" aria-label="Your comparison" hidden>
+        <p class="compare-bar-count" aria-live="polite">
+          <span class="compare-bar-number" data-testid="compare-count" id="compare-count">0</span>
+          <span id="compare-count-words">of 3 picked</span>
+        </p>
+        <ol class="slots" id="slots" aria-label="Foods picked to compare">
+          <li class="slot" data-slot="0"></li>
+          <li class="slot" data-slot="1"></li>
+          <li class="slot" data-slot="2"></li>
+        </ol>
+        <button type="button" class="compare-clear" id="compare-clear" data-testid="compare-clear">Clear</button>
+      </div>
+    </section>
   </main>
 </body>
 </html>

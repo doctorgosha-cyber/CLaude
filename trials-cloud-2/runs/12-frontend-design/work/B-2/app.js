@@ -118,7 +118,7 @@ function buildCard(p) {
   toggle.dataset.productId = p.id;
   toggle.setAttribute('aria-pressed', 'false');
   toggle.setAttribute('aria-describedby', heading.id);
-  toggle.textContent = 'Add to compare';
+  toggle.textContent = 'Compare';
 
   li.append(figure, heading, brand, panel, toggle);
   return li;
@@ -141,7 +141,6 @@ function syncToggles() {
     const on = state.selected.has(p.id);
     p.node.classList.toggle('is-chosen', on);
     p.toggle.setAttribute('aria-pressed', String(on));
-    p.toggle.textContent = on ? 'Chosen to compare' : 'Add to compare';
     p.toggle.disabled = full && !on;
   }
   renderTray();

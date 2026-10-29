@@ -1,0 +1,91 @@
+{
+ "trial": "13-no-slop",
+ "rows": [
+  {
+   "run": "A-1",
+   "arm": "A",
+   "score": 0.898,
+   "passed": 24,
+   "total": 24,
+   "tokens": 80095,
+   "tool_uses": 12,
+   "seconds": 159.4
+  },
+  {
+   "run": "A-2",
+   "arm": "A",
+   "score": 0.862,
+   "passed": 23,
+   "total": 24,
+   "tokens": 79814,
+   "tool_uses": 15,
+   "seconds": 175
+  },
+  {
+   "run": "A-3",
+   "arm": "A",
+   "score": 0.896,
+   "passed": 24,
+   "total": 24,
+   "tokens": 82297,
+   "tool_uses": 15,
+   "seconds": 178.3
+  },
+  {
+   "run": "B-1",
+   "arm": "B",
+   "score": 1,
+   "passed": 24,
+   "total": 24,
+   "tokens": 88373,
+   "tool_uses": 16,
+   "seconds": 229.6
+  },
+  {
+   "run": "B-2",
+   "arm": "B",
+   "score": 1,
+   "passed": 24,
+   "total": 24,
+   "tokens": 98120,
+   "tool_uses": 23,
+   "seconds": 298.5
+  },
+  {
+   "run": "B-3",
+   "arm": "B",
+   "score": 1,
+   "passed": 24,
+   "total": 24,
+   "tokens": 90164,
+   "tool_uses": 20,
+   "seconds": 229.8
+  }
+ ],
+ "summary": {
+  "A": {
+   "runs": 3,
+   "mean_score": 0.885,
+   "min_score": 0.862,
+   "max_score": 0.898,
+   "mean_tokens": 80735,
+   "mean_tool_uses": 14,
+   "mean_seconds": 170.9
+  },
+  "B": {
+   "runs": 3,
+   "mean_score": 1,
+   "min_score": 1,
+   "max_score": 1,
+   "mean_tokens": 92219,
+   "mean_tool_uses": 19.67,
+   "mean_seconds": 252.6
+  }
+ },
+ "delta_B_vs_A": {
+  "score_points": 11.5,
+  "tokens_pct": 14.2,
+  "tool_uses_pct": 40.5,
+  "seconds_pct": 47.8
+ }
+}
