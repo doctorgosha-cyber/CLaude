@@ -1,0 +1,10 @@
+{
+  "name": "soundbench-headphones-page",
+  "version": "1.4.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node serve.mjs 8080",
+    "test": "node test.mjs"
+  }
+}

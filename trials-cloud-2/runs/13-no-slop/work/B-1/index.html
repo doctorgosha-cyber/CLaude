@@ -10,7 +10,38 @@
 </head>
 <body>
   <main>
-    <!-- build the landing section here -->
+    <section class="hero" data-testid="hero" aria-labelledby="channel-name">
+      <h1 id="channel-name" class="hero__name" data-channel-name>Anatomy of Things</h1>
+      <p class="hero__tagline" data-channel-tagline>Short films that take everyday objects apart to show how they actually work.</p>
+      <div class="hero__lang">
+        <label class="hero__lang-label" for="lang-select">Watch in</label>
+        <select id="lang-select" class="select" data-testid="lang-select"></select>
+      </div>
+    </section>
+
+    <section class="films" aria-labelledby="films-heading">
+      <div class="section-head">
+        <h2 id="films-heading" class="section-head__title">Latest films</h2>
+        <p class="section-head__note">Running time and the number of dubbed versions are listed under each film.</p>
+      </div>
+      <ul class="film-list" data-film-list aria-busy="true"></ul>
+      <p class="films__error" data-film-error hidden>The film list could not be loaded. Reload the page to try again.</p>
+    </section>
+
+    <section class="newsletter" aria-labelledby="newsletter-heading">
+      <div class="newsletter__text">
+        <h2 id="newsletter-heading" class="newsletter__title">One email per film</h2>
+        <p class="newsletter__blurb">We take apart roughly two objects a month. We send a note when the next one is up, and nothing else.</p>
+      </div>
+      <form class="newsletter__form" data-testid="newsletter-form" novalidate action="#" method="post">
+        <label class="newsletter__label" for="newsletter-email">Email address</label>
+        <div class="newsletter__row">
+          <input class="input" id="newsletter-email" data-testid="newsletter-email" type="email" name="email" autocomplete="email" inputmode="email" spellcheck="false" aria-describedby="newsletter-status">
+          <button class="button" type="submit" data-testid="newsletter-submit">Subscribe</button>
+        </div>
+        <p class="newsletter__status" id="newsletter-status" data-testid="newsletter-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
   </main>
 </body>
 </html>

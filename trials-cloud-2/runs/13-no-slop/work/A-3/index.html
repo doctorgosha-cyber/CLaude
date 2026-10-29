@@ -10,7 +10,38 @@
 </head>
 <body>
   <main>
-    <!-- build the landing section here -->
+    <header class="hero" data-testid="hero">
+      <p class="hero__kicker">Explainer films</p>
+      <h1 class="hero__name" id="channel-name">Anatomy of Things</h1>
+      <p class="hero__tagline" id="channel-tagline">Short films that take everyday objects apart to show how they actually work.</p>
+    </header>
+
+    <section class="films" aria-labelledby="films-heading">
+      <div class="films__bar">
+        <h2 id="films-heading">Latest films</h2>
+        <div class="lang">
+          <label for="lang-select" class="lang__label">Titles in</label>
+          <select id="lang-select" data-testid="lang-select" class="lang__select"></select>
+        </div>
+      </div>
+      <p class="films__note" id="films-note" hidden></p>
+      <ul class="film-grid" id="film-grid"></ul>
+    </section>
+
+    <section class="newsletter" aria-labelledby="newsletter-heading">
+      <h2 id="newsletter-heading">New film, new email</h2>
+      <p class="newsletter__blurb">One message when a film is released. Nothing else.</p>
+      <form class="newsletter__form" data-testid="newsletter-form" id="newsletter-form" novalidate>
+        <label for="newsletter-email" class="newsletter__label">Email address</label>
+        <div class="newsletter__row">
+          <input id="newsletter-email" data-testid="newsletter-email" class="newsletter__input"
+                 type="email" name="email" autocomplete="email" spellcheck="false"
+                 aria-describedby="newsletter-status">
+          <button type="submit" data-testid="newsletter-submit" class="newsletter__submit">Subscribe</button>
+        </div>
+        <p id="newsletter-status" data-testid="newsletter-status" class="newsletter__status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
   </main>
 </body>
 </html>

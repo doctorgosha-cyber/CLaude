@@ -10,7 +10,40 @@
 </head>
 <body>
   <main>
-    <!-- build the landing section here -->
+    <header class="hero" data-testid="hero">
+      <div class="hero__title">
+        <h1 id="channel-name">Anatomy of Things</h1>
+        <p class="hero__tagline" id="channel-tagline">Short films that take everyday objects apart to show how they actually work.</p>
+      </div>
+      <div class="hero__cell hero__cell--facts">
+        <p class="hero__facts" id="channel-facts"></p>
+      </div>
+      <div class="hero__cell hero__cell--lang">
+        <label for="lang-select" class="field__label">Watch in</label>
+        <select id="lang-select" name="language" data-testid="lang-select" class="select" autocomplete="off"></select>
+      </div>
+    </header>
+
+    <section class="films" aria-labelledby="films-heading">
+      <h2 id="films-heading" class="section__title">Latest films</h2>
+      <ol class="film-list" id="film-list"></ol>
+    </section>
+
+    <section class="newsletter" aria-labelledby="newsletter-heading">
+      <h2 id="newsletter-heading" class="section__title">Get the next film by email</h2>
+      <p class="newsletter__note">One message when a film is released. Nothing else, and no sharing of your address.</p>
+      <form class="newsletter__form" id="newsletter-form" data-testid="newsletter-form" novalidate action="#" method="post">
+        <div class="newsletter__row">
+          <div class="field">
+            <label for="newsletter-email" class="field__label">Email address</label>
+            <input id="newsletter-email" name="email" type="email" class="input" data-testid="newsletter-email"
+                   autocomplete="email" inputmode="email" spellcheck="false" aria-describedby="newsletter-status">
+          </div>
+          <button type="submit" class="button" data-testid="newsletter-submit">Subscribe</button>
+        </div>
+        <p class="newsletter__status" id="newsletter-status" data-testid="newsletter-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
   </main>
 </body>
 </html>

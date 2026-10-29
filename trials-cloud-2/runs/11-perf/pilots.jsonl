@@ -1,0 +1,2 @@
+{"run":"pilot-A-1","task":"11-perf","tokens":112324,"tool_uses":11,"duration_ms":118193,"note":"resumed after rate limit; usage covers the resumed segment only"}
+{"run":"pilot-A-1","task":"11-perf","score":1.0,"passed":15,"total":15,"lighthouse":100}

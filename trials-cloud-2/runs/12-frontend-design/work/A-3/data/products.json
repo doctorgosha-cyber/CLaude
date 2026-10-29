@@ -1,0 +1,77 @@
+{
+  "currency": { "code": "GBP", "symbol": "£" },
+  "products": [
+    {
+      "id": "oakfield-lamb",
+      "name": "Oakfield Lamb & Barley",
+      "brand": "Oakfield",
+      "species": "dog",
+      "price": 18,
+      "kcalPer100g": 362,
+      "proteinPct": 26,
+      "rating": 4.5,
+      "badge": "Best value",
+      "image": "images/oakfield-lamb.svg"
+    },
+    {
+      "id": "velvetpaw-tuna",
+      "name": "Velvetpaw Tuna Loaf",
+      "brand": "Velvetpaw",
+      "species": "cat",
+      "price": 12.5,
+      "kcalPer100g": 402,
+      "proteinPct": 38,
+      "rating": 4,
+      "badge": "Editor's pick",
+      "image": "images/velvetpaw-tuna.svg"
+    },
+    {
+      "id": "northcoast-salmon",
+      "name": "Northcoast Salmon Grain-Free",
+      "brand": "Northcoast",
+      "species": "dog",
+      "price": 24,
+      "kcalPer100g": 381,
+      "proteinPct": 32,
+      "rating": 4.5,
+      "badge": null,
+      "image": "images/northcoast-salmon.svg"
+    },
+    {
+      "id": "sterling-kitten",
+      "name": "Sterling Kitten Formula",
+      "brand": "Sterling",
+      "species": "cat",
+      "price": 31.75,
+      "kcalPer100g": 418,
+      "proteinPct": 32,
+      "rating": 4.2,
+      "badge": "New",
+      "image": "images/sterling-kitten.svg"
+    },
+    {
+      "id": "bowlco-chicken",
+      "name": "bowl&co Chicken Classic",
+      "brand": "bowl&co",
+      "species": "dog",
+      "price": 9.9,
+      "kcalPer100g": 355,
+      "proteinPct": 22,
+      "rating": 4.5,
+      "badge": null,
+      "image": "images/bowlco-chicken.svg"
+    },
+    {
+      "id": "velvetpaw-duck",
+      "name": "Velvetpaw Duck & Pea",
+      "brand": "Velvetpaw",
+      "species": "cat",
+      "price": 20,
+      "kcalPer100g": 395,
+      "proteinPct": 36,
+      "rating": 4.7,
+      "badge": null,
+      "image": "images/velvetpaw-duck.svg"
+    }
+  ]
+}

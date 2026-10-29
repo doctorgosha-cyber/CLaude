@@ -1,0 +1,2 @@
+{"run":"pilot-A-1","task":"12-frontend-design","tokens":91349,"tool_uses":16,"duration_ms":120371,"note":"resumed after rate limit; usage covers the resumed segment only"}
+{"run":"pilot-A-1","task":"12-frontend-design","score":1.0,"passed":27,"total":27,"slop_total":14}

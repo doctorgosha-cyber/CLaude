@@ -10,7 +10,32 @@
 </head>
 <body>
   <main>
-    <!-- build the landing section here -->
+    <section class="hero" data-testid="hero" aria-labelledby="channel-name">
+      <h1 id="channel-name">Anatomy of Things</h1>
+      <p class="tagline" id="channel-tagline">Short films that take everyday objects apart to show how they actually work.</p>
+      <div class="lang">
+        <label for="lang-select">Film titles in</label>
+        <select id="lang-select" data-testid="lang-select"></select>
+      </div>
+    </section>
+
+    <section class="films" aria-labelledby="films-heading">
+      <h2 id="films-heading">Latest films</h2>
+      <ul class="film-grid" id="film-grid"></ul>
+    </section>
+
+    <section class="newsletter" aria-labelledby="newsletter-heading">
+      <h2 id="newsletter-heading">New film every fortnight</h2>
+      <p class="newsletter-intro">Get an email when a new film is out. No other mail, ever.</p>
+      <form id="newsletter-form" data-testid="newsletter-form" novalidate>
+        <div class="field">
+          <label for="newsletter-email">Email address</label>
+          <input id="newsletter-email" data-testid="newsletter-email" name="email" type="email" autocomplete="email" spellcheck="false" aria-describedby="newsletter-status">
+        </div>
+        <button type="submit" data-testid="newsletter-submit">Subscribe</button>
+        <p class="status" id="newsletter-status" data-testid="newsletter-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
   </main>
 </body>
 </html>

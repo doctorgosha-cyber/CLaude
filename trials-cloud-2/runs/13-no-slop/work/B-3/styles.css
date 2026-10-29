@@ -1,0 +1,289 @@
+/* Anatomy of Things – landing section.
+   Direction: a parts sheet. Paper ground, ink type, hairline rules, numbered
+   films like a parts list, one drafting-blue accent for anything you can act on. */
+
+:root {
+  color-scheme: light;
+  --paper: #f5f2eb;
+  --paper-deep: #ebe6da;
+  --ink: #1d1c1a;
+  --ink-soft: #55524b;
+  --rule: #c9c2b2;
+  --accent: #1b4d9c;
+  --accent-ink: #ffffff;
+  --error: #9f2419;
+  --success: #1c5f38;
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --gutter: 16px;
+  --measure: 72rem;
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --radius: 2px;
+  --focus: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent);
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+main {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding: var(--space-4) var(--gutter) var(--space-5);
+}
+
+h1, h2, h3, p { margin: 0; }
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+/* Hero ------------------------------------------------------------------ */
+
+.hero {
+  display: grid;
+  gap: var(--space-2);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--ink);
+}
+
+.hero__name {
+  font-size: clamp(2.5rem, 2rem + 5vw, 5.5rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  max-width: 12ch;
+}
+
+.hero__tagline {
+  font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+  line-height: 1.35;
+  color: var(--ink-soft);
+  max-width: 34ch;
+}
+
+.hero__lang {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.hero__lang label { font-weight: 600; }
+
+#lang-select {
+  appearance: none;
+  min-height: 44px;
+  min-width: 12rem;
+  padding: 0 2.5rem 0 0.875rem;
+  font: inherit;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3 6l5 5 5-5' fill='none' stroke='%231d1c1a' stroke-width='1.75'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+/* Films ----------------------------------------------------------------- */
+
+.films { padding-top: var(--space-4); }
+
+.films__heading,
+.newsletter__heading {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.films__list {
+  list-style: none;
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0 var(--space-3);
+  border-top: 1px solid var(--rule);
+}
+
+.film {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "index media"
+    "index title"
+    "index meta";
+  column-gap: var(--space-2);
+  row-gap: var(--space-1);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.film__index {
+  grid-area: index;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+  padding-top: 0.125rem;
+}
+
+.film__media { grid-area: media; }
+
+.film__thumb {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+  background: var(--paper-deep);
+}
+
+.film__heading {
+  grid-area: title;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: var(--space-1);
+}
+
+.film__link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.film__link:hover { text-decoration-color: var(--accent); color: var(--accent); }
+
+.film__link:focus-visible { border-radius: var(--radius); }
+
+.film__meta {
+  grid-area: meta;
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.film__langs::before {
+  content: "·";
+  margin-inline: 0.5em;
+}
+
+.films__error {
+  padding: var(--space-3) 0;
+  color: var(--error);
+}
+
+/* Newsletter ------------------------------------------------------------ */
+
+.newsletter {
+  margin-top: var(--space-5);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--ink);
+  max-width: 34rem;
+}
+
+.newsletter__blurb {
+  margin-top: var(--space-1);
+  font-size: 1.125rem;
+}
+
+.newsletter__form {
+  margin-top: var(--space-3);
+  display: grid;
+  gap: var(--space-1);
+}
+
+.newsletter__label { font-weight: 600; }
+
+.newsletter__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.newsletter__input {
+  flex: 1 1 14rem;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 0.875rem;
+  font: inherit;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+}
+
+.newsletter__input[aria-invalid="true"] {
+  border-color: var(--error);
+  box-shadow: inset 0 0 0 1px var(--error);
+}
+
+.newsletter__input[aria-invalid="true"]:focus-visible { box-shadow: var(--focus); }
+
+.newsletter__submit {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0 1.25rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent-ink);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.newsletter__submit:hover { background: #163f80; border-color: #163f80; }
+
+.newsletter__status {
+  min-height: 1.5rem;
+  font-size: 0.9375rem;
+}
+
+.newsletter__status[data-state="error"] { color: var(--error); font-weight: 600; }
+.newsletter__status[data-state="success"] { color: var(--success); font-weight: 600; }
+
+/* Wide ------------------------------------------------------------------ */
+
+@media (min-width: 60rem) {
+  .hero {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "name tagline"
+      "name lang";
+    align-items: end;
+    column-gap: var(--space-4);
+  }
+  .hero__name { grid-area: name; }
+  .hero__tagline { grid-area: tagline; align-self: end; }
+  .hero__lang { grid-area: lang; margin-top: var(--space-2); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .film__link,
+  .newsletter__submit { transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease; }
+}

@@ -10,7 +10,39 @@
 </head>
 <body>
   <main>
-    <!-- build the landing section here -->
+    <section class="hero" data-testid="hero" aria-labelledby="channel-name">
+      <div class="wrap hero-inner">
+        <p class="eyebrow">Explainer films</p>
+        <h1 id="channel-name" class="hero-title">Anatomy of Things</h1>
+        <p class="tagline hero-tagline"></p>
+        <div class="lang-field">
+          <label for="lang-select">Film titles in</label>
+          <select id="lang-select" data-testid="lang-select" class="lang-select"></select>
+        </div>
+      </div>
+    </section>
+
+    <section class="films" aria-labelledby="films-heading">
+      <div class="wrap">
+        <h2 id="films-heading">Latest films</h2>
+        <ul class="film-grid" id="film-grid"></ul>
+      </div>
+    </section>
+
+    <section class="newsletter" aria-labelledby="newsletter-heading">
+      <div class="wrap newsletter-inner">
+        <h2 id="newsletter-heading">New film every fortnight</h2>
+        <p class="newsletter-lead">Get an email when the next object comes apart. No other mail.</p>
+        <form class="newsletter-form" data-testid="newsletter-form" novalidate>
+          <label for="newsletter-email">Email address</label>
+          <div class="field-row">
+            <input id="newsletter-email" data-testid="newsletter-email" type="email" name="email" autocomplete="email" inputmode="email" spellcheck="false" aria-describedby="newsletter-status">
+            <button type="submit" data-testid="newsletter-submit" class="button">Subscribe</button>
+          </div>
+          <p id="newsletter-status" class="status" data-testid="newsletter-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
   </main>
 </body>
 </html>

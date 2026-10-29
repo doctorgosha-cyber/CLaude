@@ -1,3 +1,6 @@
 {"run":"A-1","arm":"A","tokens":87415,"tool_uses":3,"duration_ms":47418,"note":"resumed after rate limit; usage covers the resumed segment only"}
 {"run":"A-2","arm":"A","tokens":87015,"tool_uses":3,"duration_ms":26480,"note":"resumed"}
 {"run":"A-3","arm":"A","tokens":82188,"tool_uses":6,"duration_ms":61963,"note":"resumed"}
+{"run":"B-1","arm":"B","tokens":93884,"tool_uses":7,"duration_ms":106278,"note":"resumed after rate limit; usage covers the resumed segment only"}
+{"run":"B-2","arm":"B","tokens":110119,"tool_uses":6,"duration_ms":120393,"note":"resumed"}
+{"run":"B-3","arm":"B","tokens":103236,"tool_uses":5,"duration_ms":175056,"note":"resumed"}

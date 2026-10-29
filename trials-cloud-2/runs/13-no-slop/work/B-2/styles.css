@@ -1,0 +1,320 @@
+/* Anatomy of Things — landing section
+   Visual idea: the hero is a drawing title block; the film list is a parts list.
+   Paper, ink, hairlines, one accent for interaction and state. */
+
+:root {
+  --paper: #f4f0e8;
+  --paper-deep: #ebe5d9;
+  --ink: #1c1a16;
+  --ink-soft: #595349;
+  --line: #1c1a16;
+  --hairline: #c9c2b4;
+  --accent: #8a2e12;      /* focus ring, hover, error */
+  --success: #1f5f33;
+  --font-text: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+  --font-data: "SF Mono", Menlo, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace;
+  --gutter: 16px;
+  --measure: 1200px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { color-scheme: light; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+main {
+  width: min(100% - 2 * var(--gutter), var(--measure));
+  margin-inline: auto;
+  padding-block: 24px 64px;
+}
+
+h1, h2, h3, p { margin: 0; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- Hero: title block ---------- */
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 1.5px solid var(--line);
+}
+
+.hero__title {
+  padding: 28px 20px 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 2rem + 4vw, 5.25rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+.hero__tagline {
+  margin-top: 16px;
+  max-width: 34ch;
+  font-size: clamp(1.0625rem, 1rem + 0.5vw, 1.375rem);
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.hero__cell {
+  padding: 16px 20px;
+}
+
+.hero__cell--facts {
+  border-bottom: 1px solid var(--line);
+}
+
+.hero__facts {
+  font-family: var(--font-data);
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+  min-height: 1.5em;
+}
+
+.hero__cell--lang {
+  display: grid;
+  gap: 6px;
+}
+
+@media (min-width: 720px) {
+  .hero {
+    grid-template-columns: 1fr minmax(240px, 320px);
+    grid-template-rows: auto auto;
+  }
+  .hero__title {
+    grid-row: 1 / 3;
+    border-bottom: 0;
+    border-right: 1px solid var(--line);
+    padding: 40px 32px 36px;
+  }
+  .hero__cell--facts { align-self: end; }
+  .hero__cell--lang { align-self: end; }
+}
+
+/* ---------- Controls ---------- */
+
+.field__label {
+  display: block;
+  font-family: var(--font-data);
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+}
+
+.select,
+.input {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 0;
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 40px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--ink) 50%),
+    linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.input::placeholder { color: var(--ink-soft); }
+
+.input[aria-invalid="true"] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.button {
+  min-height: 44px;
+  padding: 8px 20px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--paper);
+  background: var(--ink);
+  border: 1.5px solid var(--ink);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.button:hover { background: var(--accent); border-color: var(--accent); }
+
+/* ---------- Films: parts list ---------- */
+
+.films { margin-top: 56px; }
+
+.section__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  padding-bottom: 10px;
+  border-bottom: 1.5px solid var(--line);
+}
+
+.film-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 32px;
+}
+
+.film {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 18px 0 22px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.film__index {
+  font-family: var(--font-data);
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+}
+
+.film__media {
+  aspect-ratio: 16 / 9;
+  background: var(--paper-deep);
+  border: 1px solid var(--hairline);
+  overflow: hidden;
+}
+
+.film__thumb {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.film__title {
+  font-size: 1.25rem;
+  line-height: 1.25;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+.film__link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: var(--hairline);
+}
+
+.film__link:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
+/* Make the whole card the click target while the link keeps its accessible name. */
+.film__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.film__link:focus-visible { outline-offset: 2px; }
+
+.film__meta {
+  display: flex;
+  gap: 8px;
+  font-family: var(--font-data);
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.film-list__error {
+  padding: 18px 0;
+  color: var(--accent);
+}
+
+@media (min-width: 640px) {
+  .film-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1100px) {
+  .film-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .film { padding-top: 20px; }
+}
+
+/* ---------- Newsletter ---------- */
+
+.newsletter {
+  margin-top: 64px;
+  max-width: 640px;
+}
+
+.newsletter__note {
+  margin-top: 12px;
+  color: var(--ink-soft);
+  max-width: 52ch;
+}
+
+.newsletter__form { margin-top: 20px; }
+
+.newsletter__row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  align-items: end;
+}
+
+.field { display: grid; gap: 6px; min-width: 0; }
+
+@media (min-width: 560px) {
+  .newsletter__row { grid-template-columns: minmax(0, 1fr) auto; }
+}
+
+.newsletter__status {
+  margin-top: 12px;
+  min-height: 1.5em;
+  font-size: 0.9375rem;
+}
+
+.newsletter__status[data-state="error"] { color: var(--accent); }
+.newsletter__status[data-state="success"] { color: var(--success); }
+
+.newsletter__status[data-state="error"]::before,
+.newsletter__status[data-state="success"]::before {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin-right: 0.5em;
+  vertical-align: 0.1em;
+  background: currentColor;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .film__link, .button { transition: color 120ms ease, background-color 120ms ease; }
+}

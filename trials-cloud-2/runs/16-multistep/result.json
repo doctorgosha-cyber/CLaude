@@ -1,0 +1,68 @@
+{
+  "id": 16,
+  "tool": "iterate-until-verified skill (MengTo/Skills, agent-skills/codex/iterate-until-verified/SKILL.md), chosen over context-engineering because it prescribes an execute-verify loop for a task; context-engineering is about rules files and session setup",
+  "versions": {
+    "skill": "main @ 2026-10-29 (7,467 B; sha256 in fixtures/skills/SHA256SUMS)",
+    "agent": "Claude Code subagents, same session model in both arms"
+  },
+  "licences": {
+    "skill": "MIT (fixtures/skills/MengTo-Skills.LICENSE.txt)"
+  },
+  "install": {
+    "command": "copy SKILL.md into .claude/skills/iterate-until-verified/",
+    "seconds": 0,
+    "size_mb": 0.008,
+    "windows": "n/a (prompt text)"
+  },
+  "fixtures": "fixtures/16-multistep: a 6-file Node pet-food portion service (api, calculator, needs, catalogue, units, format) + data (14-product catalogue, factors with stage aliases) + logs/app.log (80 lines, 4 complainant lines, one red herring) + docs/PORTION-SPEC.md + a vague support ticket as README; hidden/run-tests.mjs (60 tests), grade.mjs, reference/, KEY.md with the v1\u2192v3 hardening history",
+  "design": "Plain-agent pilot, then hardening, three rounds: v1 (3 causes, explicit README, 23 tests) pilot 23/23; v2 (5 causes, vague README, 39 tests) pilot 39/39; v3 (7 interacting causes incl. a data row, a per-can unit, a stage-alias map, a rounding contract, spec-only rules for caps/meals/cans in docs/, one red-herring complainant whose 'fix' fails hidden tests, 60 tests; untouched 8/60) pilot 60/60. Stopped hardening after v3 as decided in advance. A/B on v3: 3 reps per arm, fresh copies; Arm B = same prompt + SKILL.md inline (Execute mode, verifier role performed by the same agent since no subagents). All six arm runs were interrupted once by an API rate limit and resumed; their usage covers the resumed segment, so the cost comparison is indicative only.",
+  "baseline": {
+    "what": "Arm A plain subagent",
+    "runs": 3,
+    "scores": [
+      1,
+      1,
+      1
+    ],
+    "mean_score": 1.0,
+    "mean_tokens": 85539,
+    "mean_tool_uses": 4,
+    "mean_seconds": 45.3
+  },
+  "candidate_default": {
+    "config": "Arm B with iterate-until-verified",
+    "runs": 3,
+    "scores": [
+      1,
+      1,
+      1
+    ],
+    "mean_score": 1.0,
+    "mean_tokens": 102413,
+    "mean_tool_uses": 6,
+    "mean_seconds": 133.9,
+    "delta_vs_A": {
+      "score_points": 0,
+      "tokens_pct": 19.7,
+      "tool_uses_pct": 50,
+      "seconds_pct": 195.6
+    },
+    "observed": "Arm B wrote acceptance matrices, replayed every log line as a gate (one run recomputed all 69 successful requests with an independent script), and reported assumptions explicitly; Arm A found the same seven causes from the spec and the log without that scaffolding."
+  },
+  "candidate_tuned": {
+    "config": "none",
+    "note": "not run"
+  },
+  "pilots": "runs/16-multistep/pilots.jsonl (v1 23/23 in 78 s, v2 39/39 in 84 s, v3 60/60 in 135 s)",
+  "limits": [
+    "Ceiling after three hardening rounds: the plain agent reads docs/, the log and the data and fixes all seven interacting causes; the task cannot separate the arms on quality.",
+    "Usage numbers for the six arm runs are post-resume segments (the rate limit cut each run once); direction (B costlier) is consistent with trials 10 (round 1) and 14, magnitude is approximate.",
+    "No interactive user and no subagents: the skill's fan-out and independent-verifier steps collapse into one agent, which is also how NEXUS would use it inside a subagent."
+  ],
+  "verdict": "REJECT for bug-fixing tasks of this size (no quality gain at +20 % tokens, +50 % tool calls, roughly 3x wall time); WATCH only for tasks with a real external verifier",
+  "reason": "Both arms scored 60/60 in all reps on a task hardened three times (plain pilot 23/23, 39/39, 60/60). The skill adds structure (gates, replay of the whole log) that costs time without changing the outcome here.",
+  "wrapper": null,
+  "do_not_adopt_notes": [
+    "Do not adopt as a default debugging wrapper; the measured effect is cost only."
+  ]
+}
