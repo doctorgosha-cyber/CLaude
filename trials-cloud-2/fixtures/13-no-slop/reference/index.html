@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anatomy of Things – films about how everyday objects work</title>
+  <meta name="description" content="Short explainer films that take everyday objects apart, dubbed into ten languages.">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <section class="hero" data-testid="hero" aria-labelledby="channel-name">
+      <div class="hero__text">
+        <h1 id="channel-name">Anatomy of Things</h1>
+        <p class="hero__tagline" id="tagline"></p>
+      </div>
+      <div class="hero__lang">
+        <label for="lang">Watch in</label>
+        <select id="lang" data-testid="lang-select"></select>
+      </div>
+    </section>
+
+    <section class="films" aria-labelledby="films-heading">
+      <h2 id="films-heading">Latest films</h2>
+      <ul class="films__list" id="films"></ul>
+    </section>
+
+    <section class="newsletter" aria-labelledby="newsletter-heading">
+      <h2 id="newsletter-heading">One film a fortnight, by email</h2>
+      <p>No tracking, no digest of other people's videos. Just the next film and what we took apart to make it.</p>
+      <form id="newsletter" class="newsletter__form" novalidate data-testid="newsletter-form">
+        <label for="email">Email address</label>
+        <div class="newsletter__row">
+          <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="status" data-testid="newsletter-email">
+          <button type="submit" data-testid="newsletter-submit">Subscribe</button>
+        </div>
+        <p id="status" class="newsletter__status" role="status" data-testid="newsletter-status"></p>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

@@ -14,6 +14,16 @@ export function stagesFor(species) {
   return Object.keys(FACTORS.stage[species] ?? {});
 }
 
+/** Map a client-facing stage key (current or legacy alias) to the current factor key. */
+export function resolveStage(stage) {
+  return FACTORS.aliases?.[stage] ?? stage;
+}
+
+/** True when `stage` (or its alias) exists for `species`. */
+export function isValidStage(species, stage) {
+  return Object.hasOwn(FACTORS.stage[species] ?? {}, resolveStage(stage));
+}
+
 /** Resting energy requirement: 70 * kg^0.75 (kcal/day). */
 export function restingEnergy(weightKg) {
   return FACTORS.rer.coefficient * Math.pow(weightKg, FACTORS.rer.exponent);
@@ -22,8 +32,10 @@ export function restingEnergy(weightKg) {
 function stageFactorFor(species, stage) {
   const table = FACTORS.stage[species];
   if (!table) throw new RangeError(`unknown species: ${species}`);
-  // Clients send a variety of stage labels; anything we do not know is treated as an adult.
-  return table[stage] ?? table[DEFAULT_STAGE];
+  // Legacy client keys are mapped via aliases; anything else is a client bug and is rejected.
+  const key = resolveStage(stage);
+  if (!Object.hasOwn(table, key)) throw new RangeError(`unknown stage for ${species}: ${stage}`);
+  return table[key];
 }
 
 /**

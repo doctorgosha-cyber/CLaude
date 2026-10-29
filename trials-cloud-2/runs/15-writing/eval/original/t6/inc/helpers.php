@@ -7,7 +7,7 @@
  * Star string for a product, e.g. "★★★★☆ 4.2".
  */
 function nexus_rating_stars( array $reviews ): string {
-	$rating = nexus_get_rating( $reviews );
+	$rating = nexus_rating_value( $reviews );
 	if ( null === $rating ) {
 		return 'No reviews yet';
 	}

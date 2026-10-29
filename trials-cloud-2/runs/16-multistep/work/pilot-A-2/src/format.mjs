@@ -5,9 +5,7 @@
  * (The app shows the number as-is; no scoop sizes, no minimums — that is the app's job.)
  */
 export function roundGrams(grams) {
-  const scoop = 5; // standard scoop
-  const scoops = Math.round(grams / scoop);
-  return Math.max(4 * scoop, scoops * scoop);
+  return Math.sign(grams) * Math.round(Math.abs(grams));
 }
 
 /** Energy is quoted to one decimal. */

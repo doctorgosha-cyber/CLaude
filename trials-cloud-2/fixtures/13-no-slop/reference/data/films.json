@@ -1,0 +1,84 @@
+{
+  "channel": {
+    "name": "Anatomy of Things",
+    "tagline": "Short films that take everyday objects apart to show how they actually work."
+  },
+  "languages": [
+    { "code": "en", "name": "English" },
+    { "code": "de", "name": "Deutsch" },
+    { "code": "fr", "name": "Français" },
+    { "code": "es", "name": "Español" },
+    { "code": "pt", "name": "Português" },
+    { "code": "it", "name": "Italiano" },
+    { "code": "nl", "name": "Nederlands" },
+    { "code": "pl", "name": "Polski" },
+    { "code": "tr", "name": "Türkçe" },
+    { "code": "ja", "name": "日本語" }
+  ],
+  "films": [
+    {
+      "id": "zipper",
+      "durationSeconds": 612,
+      "languages": ["en", "de", "fr", "es", "pt", "it", "nl", "pl", "tr", "ja"],
+      "thumbnail": "images/zipper.svg",
+      "url": "/films/zipper",
+      "titles": {
+        "en": "How a zipper locks",
+        "de": "Wie ein Reißverschluss hält",
+        "fr": "Comment une fermeture éclair se verrouille",
+        "es": "Cómo se traba una cremallera",
+        "pt": "Como um zíper trava",
+        "it": "Come si blocca una cerniera",
+        "nl": "Hoe een rits vergrendelt",
+        "pl": "Jak zamek błyskawiczny się blokuje",
+        "tr": "Fermuar nasıl kilitlenir",
+        "ja": "ファスナーはどう噛み合うのか"
+      }
+    },
+    {
+      "id": "kettle",
+      "durationSeconds": 425,
+      "languages": ["en", "de", "fr", "es", "pt", "it", "nl"],
+      "thumbnail": "images/kettle.svg",
+      "url": "/films/kettle",
+      "titles": {
+        "en": "Why a kettle switches itself off",
+        "de": "Warum sich ein Wasserkocher abschaltet",
+        "fr": "Pourquoi une bouilloire s'éteint seule",
+        "es": "Por qué un hervidor se apaga solo",
+        "pt": "Por que uma chaleira se desliga sozinha",
+        "it": "Perché un bollitore si spegne da solo",
+        "nl": "Waarom een waterkoker zichzelf uitschakelt"
+      }
+    },
+    {
+      "id": "pencil",
+      "durationSeconds": 1203,
+      "languages": ["en"],
+      "thumbnail": "images/pencil.svg",
+      "url": "/films/pencil",
+      "titles": {
+        "en": "Inside a pencil"
+      }
+    },
+    {
+      "id": "lock",
+      "durationSeconds": 59,
+      "languages": ["en", "de", "fr", "es", "pt", "it", "nl", "pl", "tr", "ja"],
+      "thumbnail": "images/lock.svg",
+      "url": "/films/lock",
+      "titles": {
+        "en": "A pin tumbler lock in one minute",
+        "de": "Ein Stiftschloss in einer Minute",
+        "fr": "Une serrure à goupilles en une minute",
+        "es": "Una cerradura de pines en un minuto",
+        "pt": "Uma fechadura de pinos em um minuto",
+        "it": "Una serratura a pistoncini in un minuto",
+        "nl": "Een cilinderslot in één minuut",
+        "pl": "Zamek bębenkowy w minutę",
+        "tr": "Bir dakikada pimli kilit",
+        "ja": "ピンタンブラー錠を1分で"
+      }
+    }
+  ]
+}

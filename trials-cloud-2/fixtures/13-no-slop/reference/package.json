@@ -1,0 +1,6 @@
+{
+  "name": "anatomy-of-things-landing",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node check.mjs" }
+}
