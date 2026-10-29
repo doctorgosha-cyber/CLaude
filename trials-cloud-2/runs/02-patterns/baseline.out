@@ -1,0 +1,12 @@
+./assets/js/figure-render.js:4:  el.innerHTML = `<b>${user}</b> rated ${stars}`;   // S2: user data in a template literal
+./assets/js/figure-safe.js:5:  badge.innerHTML = '<b>static</b>';      // constant string, no data
+./assets/js/figure-safe.js:1:// Safe badge renderer. We never eval() user input here; everything goes through textContent.
+./assets/js/timers-safe.js:1:// Deferred init (modern). Replaced the old eval( of the config string with JSON.parse.
+./inc/cleanup.php:10:	$wpdb->query( "DELETE FROM $t WHERE id = $id" );                                   // S4a
+./inc/cleanup.php:15:	return $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}nexus_reviews WHERE slug = '$slug'" ); // S4b
+./inc/cleanup.php:20:	return (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}nexus_reviews" );
+./inc/queries-safe.php:10:	return $wpdb->get_results( $sql );
+./inc/queries-safe.php:15:	$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}nexus_reviews WHERE id = %d", $id ) );
+./assets/js/calc-formula.js:3:  const fn = new Function('weight', 'age', body);   // S5: dynamic code from catalogue data
+./assets/js/legacy-widget.js:5:    document.write(x);          // S6
+./assets/js/timers.js:6:  setTimeout("doIt()", 100);   // S7: string argument is implicit eval

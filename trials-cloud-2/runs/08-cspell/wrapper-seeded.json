@@ -1,0 +1,107 @@
+{
+  "ok": true,
+  "tool": "cspell",
+  "root": "/home/user/CLaude/trials-cloud-2/fixtures/08-cspell",
+  "config": "/home/user/CLaude/trials-cloud-2/runs/08-cspell/config-tuned/cspell.json",
+  "count": 14,
+  "findings": [
+    {
+      "file": "site-en.html",
+      "line": 18,
+      "col": 28,
+      "word": "swtich",
+      "suggestion": "switch"
+    },
+    {
+      "file": "site-en.html",
+      "line": 19,
+      "col": 53,
+      "word": "actu",
+      "suggestion": null
+    },
+    {
+      "file": "site-en.html",
+      "line": 19,
+      "col": 58,
+      "word": "ation",
+      "suggestion": null
+    },
+    {
+      "file": "site-ru.html",
+      "line": 15,
+      "col": 62,
+      "word": "клавеатуре",
+      "suggestion": null
+    },
+    {
+      "file": "site-ru.html",
+      "line": 19,
+      "col": 29,
+      "word": "переклюючателя",
+      "suggestion": null
+    },
+    {
+      "file": "switch-de.srt",
+      "line": 31,
+      "col": 43,
+      "word": "Klickleiste",
+      "suggestion": null
+    },
+    {
+      "file": "switch-de.srt",
+      "line": 39,
+      "col": 5,
+      "word": "Gehäusse",
+      "suggestion": null
+    },
+    {
+      "file": "thermos-en.srt",
+      "line": 3,
+      "col": 25,
+      "word": "vaccum",
+      "suggestion": "vacuum"
+    },
+    {
+      "file": "thermos-en.srt",
+      "line": 35,
+      "col": 31,
+      "word": "insullation",
+      "suggestion": null
+    },
+    {
+      "file": "thermos-es.srt",
+      "line": 31,
+      "col": 4,
+      "word": "tecnica",
+      "suggestion": null
+    },
+    {
+      "file": "thermos-es.srt",
+      "line": 35,
+      "col": 34,
+      "word": "aislami",
+      "suggestion": null
+    },
+    {
+      "file": "thermos-es.srt",
+      "line": 35,
+      "col": 42,
+      "word": "ento",
+      "suggestion": null
+    },
+    {
+      "file": "thermos-pt.srt",
+      "line": 43,
+      "col": 22,
+      "word": "temperatrua",
+      "suggestion": null
+    },
+    {
+      "file": "thermos-uk.srt",
+      "line": 35,
+      "col": 27,
+      "word": "ізоляцыї",
+      "suggestion": null
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "total_flags": 14,
+  "found": {
+    "T1": true,
+    "T2": true,
+    "T3": true,
+    "T4": true,
+    "T5": true,
+    "T6": true,
+    "T7": true,
+    "T8": true,
+    "T9": true,
+    "T10": true,
+    "T11": true,
+    "T12": false
+  },
+  "recall": "11/12",
+  "false_positives_on_controls": 0,
+  "control_breakdown": {},
+  "control_words": [],
+  "extra_findings_on_seeded": 1,
+  "seeded_breakdown": {
+    "real dictionary gap": 1
+  },
+  "seeded_extra_words": [
+    "Klickleiste(real dictionary gap)"
+  ]
+}

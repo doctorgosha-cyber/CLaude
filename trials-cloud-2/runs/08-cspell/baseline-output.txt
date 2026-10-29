@@ -1,0 +1,11 @@
+site-de.html
+site-en.html
+site-es.html
+site-ru.html
+switch-de.srt
+switch-fr.srt
+thermos-en.srt
+thermos-es.srt
+thermos-pt.srt
+thermos-uk.srt
+{"tool":"none (manual proofreading)","findings":[],"recall":"0/12","exit":0}

@@ -17,7 +17,12 @@
    "sizeMismatch": false,
    "diffPixels": 0,
    "pctDiff": 0,
-   "bbox": null,
+   "bbox": {
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 1216
+   },
    "solidBlock16": 256,
    "changed": true,
    "diff": "wrapper-out/U2/diff-390.png"
@@ -31,7 +36,12 @@
    "sizeMismatch": false,
    "diffPixels": 0,
    "pctDiff": 0,
-   "bbox": null,
+   "bbox": {
+    "x": 0,
+    "y": 0,
+    "w": 1280,
+    "h": 473
+   },
    "solidBlock16": 256,
    "changed": true,
    "diff": "wrapper-out/U2/diff-1280.png"

@@ -30,6 +30,7 @@ try {
     const out = new PNG({ width: w, height: h });
     const n = pixelmatch(p1.data, p2.data, out.data, w, h, { threshold: Number(opt.threshold), diffMask: true });
     const solid = opt['solid-check'] === '1' ? pixelmatch(p1.data, p2.data, null, w, h, { threshold: 0.005, windowSize: 16 }) : 0;
+    if (solid >= 256 && n === 0) pixelmatch(p1.data, p2.data, out.data, w, h, { threshold: 0.005, diffMask: true }); // solid colour change: draw it
     const diffPath = path.join(opt.out, `diff-${width}.png`); fs.writeFileSync(diffPath, PNG.sync.write(out));
     const fail = n > Number(opt['max-pixels']) || solid >= 256;
     changed ||= fail;

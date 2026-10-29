@@ -1,0 +1,81 @@
+{
+  "id": 9,
+  "tool": "osv-scanner (Google) offline mode vs npm audit",
+  "versions": {"osv-scanner": "2.7.0 (osv-scalibr 0.5.3, module v2.7.0 tagged 2026-10-12)", "npm": "10.9.4", "node": "22.22.0", "go": "1.24.7 (build only)", "osv_offline_db": "npm all.zip 219 MB + PyPI all.zip, downloaded 2026-10-29 from osv-vulnerabilities.storage.googleapis.com"},
+  "licences": {"osv-scanner": "Apache-2.0 (LICENSE in module root; no copyleft)", "npm audit": "part of npm (Artistic-2.0), already installed", "vulnerability data": "OSV/GHSA advisories, CC-BY 4.0"},
+  "install": {
+    "command": "GOBIN=<tools2/09-osv> go install github.com/google/osv-scanner/v2/cmd/osv-scanner@v2.7.0",
+    "seconds": 151.2,
+    "size_mb": 79,
+    "offline_db_cache_mb": 245,
+    "note": "GitHub releases are blocked here, so built from source via proxy.golang.org (151 s, needs Go). Normal install is a prebuilt release binary (seconds). First offline scan also downloads the per-ecosystem OSV database (npm 219 MB, PyPI ~35 MB) into ~/.cache/osv-scalibr; re-download on each run with --download-offline-databases (it re-fetches, ~8 s extra here) or run with --offline only to use the cache.",
+    "windows": "yes - .goreleaser.yml in the v2.7.0 module lists goos windows/amd64 (release asset osv-scanner_windows_amd64.zip); single static Go binary, no runtime deps. Not executed on Windows here (release download blocked)."
+  },
+  "fixtures": "fixtures/09-osv/: node-vuln/ (package.json + real lockfile v3, 29 packages: seeded V1 lodash@4.17.20, V2 minimist@1.2.5, V3 node-fetch@2.6.6, V4 semver@7.3.7 + clean controls picocolors@1.1.1, nanoid@6.0.2, fast-glob@3.3.3); node-clean/ (6 clean pins incl. lodash@4.18.1, minimist@1.2.8, semver@7.8.5; 23 packages); py-vuln/requirements.txt (P1 requests==2.25.1, P2 pyyaml==5.3.1 + click==8.5.0, idna==3.20, urllib3==2.8.0); py-clean/requirements.txt (all current). gen-lockfiles.sh regenerates lockfiles. KEY.json lists expected ids (author's knowledge, marked expected).",
+  "baseline": {
+    "what": "Today: none (no vulnerability scanning) -> 0/6 by definition. Also measured the obvious free alternative npm audit (npm 10.9.4, registry bulk advisories endpoint reachable).",
+    "command": "cd fixtures/09-osv/node-vuln && npm audit --json   (tuned: npm audit --audit-level=high --json)",
+    "recall": "0/6 (none today); npm audit: 4/4 Node, 0/2 Python = 4/6",
+    "false_positives": 0,
+    "runtime_s": 0.5,
+    "npm_audit": {
+      "found": {"V1": "GHSA-35jh-r3h4-6jhm (CVE-2021-23337) + 4 more lodash advisories", "V2": "GHSA-xvch-5gv4-984h (CVE-2021-44906) critical", "V3": "GHSA-r683-j2x4-v87g (CVE-2022-0235) high", "V4": "GHSA-c2qf-rxjj-qqgw (CVE-2022-25883) high", "P1": false, "P2": false},
+      "recall_node": "4/4", "recall_python": "0/2 (ENOLOCK: 'This command requires an existing lockfile' - npm audit cannot read requirements.txt)",
+      "false_positives_on_controls": 0, "node_clean_exit": 0,
+      "extra_advisories_on_seeded_packages": 4, "extra_findings_on_transitive_deps": 0,
+      "runtime_s": {"vuln_default": 0.65, "clean_default": 0.53, "vuln_high": 0.50, "clean_high": 0.46},
+      "tuned": "--audit-level=high --json: identical findings here (all 4 are high/critical; the moderate lodash advisories are still listed inside the lodash entry but do not change the exit code)",
+      "exit_codes": "1 on findings at/above level, 0 clean", "install": "none (ships with npm)", "windows": "yes (npm itself)"
+    }
+  },
+  "candidate_default": {
+    "config": "osv-scanner scan source --offline --download-offline-databases --format json -r <dir>  (online mode is impossible here: api.osv.dev blocked)",
+    "commands": ["osv-scanner scan source --offline --download-offline-databases --format json -r fixtures/09-osv/node-vuln", "osv-scanner scan source --offline --format json -r fixtures/09-osv/node-vuln", "osv-scanner scan source --offline --download-offline-databases --format json -r fixtures/09-osv/node-clean", "osv-scanner scan source --offline --download-offline-databases --format json -r fixtures/09-osv/py-vuln", "osv-scanner scan source --offline --download-offline-databases --format json -r fixtures/09-osv/py-clean", "osv-scanner scan source --offline --format json -r fixtures/09-osv"],
+    "found": {"V1": true, "V2": true, "V3": true, "V4": true, "P1": true, "P2": true},
+    "reported_ids": {
+      "V1": ["GHSA-35jh-r3h4-6jhm/CVE-2021-23337 (expected)", "GHSA-29mw-wpgm-hmr9/CVE-2020-28500", "GHSA-f23m-r3pf-42rh/CVE-2026-2950", "GHSA-r5fr-rjxr-66jc/CVE-2026-4800", "GHSA-xxjr-mmjv-4gpg/CVE-2025-13465"],
+      "V2": ["GHSA-xvch-5gv4-984h/CVE-2021-44906 (expected)"],
+      "V3": ["GHSA-r683-j2x4-v87g/CVE-2022-0235 (expected)"],
+      "V4": ["GHSA-c2qf-rxjj-qqgw/CVE-2022-25883 (expected)"],
+      "P1": ["PYSEC-2023-74 + GHSA-j8r2-6x86-q33q/CVE-2023-32681 (expected)", "GHSA-9hjg-9r4m-mvj7/CVE-2024-47081", "GHSA-9wx4-h78v-vm56/CVE-2024-35195", "GHSA-gc5v-m9x4-r6x2/CVE-2026-25645 (each also as a PYSEC-2026-* duplicate)"],
+      "P2": ["PYSEC-2021-142 + GHSA-8q59-q68h-6hv4/CVE-2020-14343 (expected)"]
+    },
+    "recall": "6/6 (Node 4/4, Python 2/2)",
+    "false_positives": 0,
+    "controls_detail": "node-clean: 0 findings, exit 0; py-clean: 0 findings, exit 0; in-file controls picocolors/nanoid/fast-glob/click/idna/urllib3: not flagged",
+    "extra_findings_on_seeded": 7,
+    "extra_findings_detail": "4 extra lodash advisories + 3 extra requests advisories: all real, newer advisories on the same seeded packages (same 4 lodash extras as npm audit). Python output lists each advisory twice (PYSEC-* and GHSA-* records are both emitted, cross-aliased) -> 8 vulnerability entries for 4 distinct requests issues. 0 findings on transitive deps (whatwg-url/tr46/webidl-conversions/lru-cache/yallist all clean).",
+    "runtime_s": {"node_vuln_first_run_with_db_download": 20.2, "node_vuln_cached": [12.0, 11.4, 12.9, 14.2], "node_clean": 10.6, "py_vuln": 4.3, "py_clean": 2.5, "all_four_fixtures_one_run": 18.1, "note": "~10-14 s per Node scan is dominated by loading the 219 MB npm all.zip; shared 4-vCPU box, other trials running"},
+    "online_mode": "NOT MEASURED - exit 127 after 20.9 s (4 retries): Error during extraction: (extracting as vulnmatch/osvdev) max retries exceeded: attempt 4: request failed: Post \"https://api.osv.dev/v1/querybatch\": Forbidden",
+    "exit_codes": "0 clean, 1 vulns found, 127 tool/network error (also 128 'no packages found')"
+  },
+  "candidate_tuned": {
+    "config": "fixtures/09-osv/tuned/osv-scanner.toml: [[IgnoredVulns]] id=GHSA-c2qf-rxjj-qqgw, ignoreUntil=2027-01-01, reason='semver ReDoS only on trusted hard-coded version strings' (osv-scanner auto-loads osv-scanner.toml next to a lockfile, or pass --config); plus --format json. Why: shows the per-advisory suppression with a documented reason and expiry, the one thing npm audit has no equivalent for (npm audit has no ignore list without a third-party wrapper like better-npm-audit).",
+    "commands": ["osv-scanner scan source --offline --format json --config fixtures/09-osv/tuned/osv-scanner.toml -r fixtures/09-osv/node-vuln", "osv-scanner scan source --offline --format json --config fixtures/09-osv/tuned/osv-scanner.toml -r fixtures/09-osv/node-clean"],
+    "found": {"V1": true, "V2": true, "V3": true, "V4": "suppressed by config as intended (GHSA-c2qf-rxjj-qqgw ignored)", "P1": "n/a (Node-only run)", "P2": "n/a"},
+    "recall": "3/4 Node by design (V4 deliberately ignored); 4/4 if the ignore is not counted as a miss",
+    "false_positives": 0,
+    "extra_findings_on_seeded": 4,
+    "runtime_s": {"node_vuln": 21.1, "node_clean": 17.7, "note": "slower than the default runs purely from CPU contention at that moment, not from the config"}
+  },
+  "limits": [
+    "api.osv.dev is blocked by this egress proxy, so only offline mode was measurable; offline mode needs ~245 MB of DB zips in ~/.cache/osv-scalibr and ~10-14 s to load the npm DB per run (npm audit: 0.5 s, no cache). On the team's own machines the online mode (no cache, faster) is the normal path.",
+    "osv-scanner built from source here (151 s, Go toolchain) because GitHub releases are blocked; the real install is a ~30 MB prebuilt binary per OS, incl. Windows amd64.",
+    "npm audit cannot read requirements.txt (ENOLOCK) - Python coverage is the only recall difference between the two tools on these fixtures.",
+    "osv-scanner on a bare requirements.txt checks only the pinned direct deps (no transitive resolution for Python); a Node lockfile is scanned fully (all 29 packages).",
+    "Python findings are double-counted in osv-scanner JSON (PYSEC-* and GHSA-* records for the same CVE); a wrapper should dedupe by alias.",
+    "Both tools flag the same 5 lodash advisories; 3 of them (2025/2026 ids) have fixes only in lodash 4.17.23+/4.18.x - i.e. advisory data is live and the controls had to be re-pinned to today's latest to stay clean.",
+    "composer.lock (their WordPress PHP themes) is supported by osv-scanner but was not fixtured or measured here.",
+    "Runtimes are from a shared 4-vCPU box with other trials running (noise of several seconds)."
+  ],
+  "verdict": "WATCH",
+  "reason": "osv-scanner offline found 6/6 seeded (Node 4/4 + Python 2/2) with 0 false positives on 11 controls, but on Node it reports exactly the same advisory set as the free, already-installed npm audit (4/4, 0 FP, 0.5 s vs 10-14 s and 79 MB binary + 245 MB DB cache). Its only measured gain is requirements.txt coverage (2/2 vs 0/2) plus a documented per-advisory ignore list; the online mode could not be measured (api.osv.dev Forbidden). Adopt `npm audit --audit-level=high --json` today at zero cost; promote osv-scanner to ADOPT only if Python (or composer.lock) dependencies are actually part of the repos that get checked.",
+  "wrapper": "runs/09-osv/wrapper-sketch.mjs",
+  "wrapper_tests": {"osv node-vuln": 1, "osv node-clean": 0, "osv py-vuln": 1, "osv py-clean": 0, "npm-fallback node-vuln": 1, "npm-fallback node-clean": 0, "npm-fallback py-vuln": "2 (no lockfile; npm audit cannot scan requirements.txt)"},
+  "do_not_adopt_notes": [
+    "osv-scanner online mode: not measured, api.osv.dev returns 403 Forbidden through the egress proxy (exit 127 after 4 retries / 20.9 s).",
+    "No gain over npm audit on Node lockfiles: identical 4/4 recall, identical 8 advisory ids, identical 0 FP; 20-30x slower in offline mode and ~325 MB footprint vs 0.",
+    "go install of the 79 MB binary took 151 s; on the team's machines use the release binary instead (GitHub releases were blocked here so that path is untested).",
+    "osv-scanner JSON double-lists Python advisories (PYSEC + GHSA); counts need dedupe by alias in any wrapper."
+  ]
+}

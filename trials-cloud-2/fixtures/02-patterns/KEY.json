@@ -1,0 +1,21 @@
+{
+  "fixtures_root": "trials-cloud-2/fixtures/02-patterns/theme",
+  "generator": "trials-cloud-2/fixtures/02-patterns/gen.sh",
+  "note": "A defect counts as found only when every listed location is flagged by the rule family named in 'rule'. Any finding in a control file is a false positive. Any finding on a seeded file at a line not listed here is an 'extra finding'.",
+  "seeded": [
+    {"id":"S1","file":"assets/js/lazy-eval.js","lines":[3,10],"what":"aliased eval (const e = eval; e(str)) and computed-member eval (window['ev'+'al'](code))","rule":"js-eval (aliased / computed)"},
+    {"id":"S2","file":"assets/js/figure-render.js","lines":[4],"what":"el.innerHTML = `<b>${user}</b> ...` (template literal with data)","rule":"js-innerhtml-nonliteral"},
+    {"id":"S3","file":"search.php","lines":[13],"what":"echo $q where $q = $_GET['q'] two statements earlier (line 8)","rule":"php-echo-unescaped / taint $_GET -> echo"},
+    {"id":"S4","file":"inc/cleanup.php","lines":[10,15],"what":"$wpdb->query(\"DELETE FROM $t WHERE id = $id\") and $wpdb->get_results(\"... '$slug'\") with PHP string interpolation","rule":"php-wpdb-interpolated-sql"},
+    {"id":"S5","file":"assets/js/calc-formula.js","lines":[3],"what":"new Function('weight','age', body) with non-literal body","rule":"js-new-function"},
+    {"id":"S6","file":"assets/js/legacy-widget.js","lines":[5],"what":"document.write(x)","rule":"js-document-write"},
+    {"id":"S7","file":"assets/js/timers.js","lines":[6],"what":"setTimeout(\"doIt()\", 100) string argument (implicit eval)","rule":"js-timer-string"},
+    {"id":"S8","file":"template-parts/figure-link.php","lines":[10],"what":"<a href=\"<?php echo $url; ?>\"> without esc_url/esc_attr","rule":"php-echo-unescaped"}
+  ],
+  "controls": [
+    {"id":"C1","file":"search-safe.php","why_clean":"$q from $_GET is echoed through esc_html(); href uses esc_url()"},
+    {"id":"C2","file":"assets/js/figure-safe.js","why_clean":"el.textContent = user; innerHTML assigned a constant string '<b>static</b>'; the word eval() appears only in a comment"},
+    {"id":"C3","file":"inc/queries-safe.php","why_clean":"$wpdb->prepare('... %d', $id) then get_results($sql); $wpdb->query($wpdb->prepare(...)) (baseline grep sees a $ inside the query( call)"},
+    {"id":"C4","file":"assets/js/timers-safe.js","why_clean":"setTimeout(() => doIt(), 100) and setInterval(doIt, ...); JSON.parse instead of eval; 'eval(' appears only in a comment"}
+  ]
+}

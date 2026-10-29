@@ -1,0 +1,53 @@
+{
+  "total_flags": 54,
+  "found": {
+    "T1": true,
+    "T2": true,
+    "T3": true,
+    "T4": true,
+    "T5": true,
+    "T6": true,
+    "T7": true,
+    "T8": true,
+    "T9": true,
+    "T10": true,
+    "T11": true,
+    "T12": false
+  },
+  "recall": "11/12",
+  "false_positives_on_controls": 15,
+  "control_breakdown": {
+    "brand/proper noun": 10,
+    "real dictionary gap": 3,
+    "SKU/code token": 2
+  },
+  "control_words": [
+    "Thermoflask(brand/proper noun)",
+    "hero(real dictionary gap)",
+    "TFLK(SKU/code token)",
+    "Anatomy(brand/proper noun)",
+    "demo(real dictionary gap)",
+    "Kailh(brand/proper noun)",
+    "KBOX(SKU/code token)"
+  ],
+  "extra_findings_on_seeded": 26,
+  "seeded_breakdown": {
+    "brand/proper noun": 17,
+    "SKU/code token": 3,
+    "real dictionary gap": 6
+  },
+  "seeded_extra_words": [
+    "Kailh(brand/proper noun)",
+    "KBOX(SKU/code token)",
+    "CMXR(SKU/code token)",
+    "Colours(real dictionary gap)",
+    "neighbours(real dictionary gap)",
+    "hero(real dictionary gap)",
+    "Anatomy(brand/proper noun)",
+    "demo(real dictionary gap)",
+    "Grammkraft(real dictionary gap)",
+    "Klickleiste(real dictionary gap)",
+    "Cherry(brand/proper noun)",
+    "Thermoflask(brand/proper noun)"
+  ]
+}

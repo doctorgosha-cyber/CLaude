@@ -20,6 +20,8 @@ rm -f voice_raw22k.wav
 ffmpeg -y -hide_banner -loglevel error -f lavfi -i "aevalsrc=exprs='(0.55+0.45*sin(2*PI*t/8))*(if(lt(mod(t\,8)\,4)\, sin(2*PI*220*t)+0.7*sin(2*PI*277.18*t)+0.6*sin(2*PI*329.63*t)\, sin(2*PI*196*t)+0.7*sin(2*PI*246.94*t)+0.6*sin(2*PI*293.66*t)))*0.18|(0.55+0.45*sin(2*PI*t/8))*(if(lt(mod(t\,8)\,4)\, sin(2*PI*220.5*t)+0.7*sin(2*PI*277.5*t)+0.6*sin(2*PI*330*t)\, sin(2*PI*196.4*t)+0.7*sin(2*PI*247.3*t)+0.6*sin(2*PI*294*t)))*0.18':s=48000:d=${DUR}" \
   -f lavfi -i "anoisesrc=c=pink:r=48000:d=${DUR}:a=0.5:s=7,lowpass=f=900,volume=-6dB,aformat=channel_layouts=stereo" \
   -filter_complex "[0][1]amix=inputs=2:normalize=0,tremolo=f=0.25:d=0.5[m]" -map "[m]" -c:a pcm_s16le music.wav
+# 9:16 test-pattern video, encoded once (small bitrate: fixtures are about audio) and copied into every mix
+ffmpeg -y -hide_banner -loglevel error -f lavfi -i "testsrc2=size=1080x1920:rate=25:duration=${DUR}" -c:v libx264 -preset veryfast -b:v 500k -maxrate 600k -bufsize 1M -pix_fmt yuv420p -an video.mp4
 V0=$(lufs voice.wav); M0=$(lufs music.wav)
 echo "source stems: voice=${V0} LUFS music=${M0} LUFS"
 
@@ -41,8 +43,8 @@ build() {
   else
     ffmpeg -y -hide_banner -loglevel error -i "${name}_voice.wav" -i "${name}_music.wav" -filter_complex "$fc" -map "[a]" -c:a pcm_s16le "${name}_mix.wav"
   fi
-  ffmpeg -y -hide_banner -loglevel error -f lavfi -i "testsrc2=size=1080x1920:rate=25:duration=${DUR}" -i "${name}_mix.wav" \
-    -c:v libx264 -preset ultrafast -pix_fmt yuv420p -c:a aac -b:a 192k -shortest -movflags +faststart "${name}.mp4"
+  ffmpeg -y -hide_banner -loglevel error -i video.mp4 -i "${name}_mix.wav" -map 0:v -map 1:a \
+    -c:v copy -c:a aac -b:a 192k -shortest -movflags +faststart "${name}.mp4"
 }
 # iterate NAME TARGET_I VOICE_LUFS MUSIC_LUFS LIMIT [burst]: two linear correction passes on the measured mp4
 iterate() {

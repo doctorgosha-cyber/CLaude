@@ -1,7 +1,7 @@
 // @squoosh/lib 0.5.3 on Node 22 needs: node --no-experimental-global-navigator --no-experimental-fetch
 // webp: quality q (method 4 default; tuned method 6 + use_sharp_yuv); avif: cqLevel = round(63*(100-q)/100) (squoosh has no 0-100 quality knob), speed 6 default
 import { ImagePool } from '@squoosh/lib';
-import sharp from '../node_modules/sharp/lib/index.js';
+import sharp from '../node_modules/sharp/dist/index.mjs';
 import fs from 'node:fs'; import path from 'node:path'; import { performance } from 'node:perf_hooks';
 const SRC = '/home/user/CLaude/trials-cloud-2/fixtures/06-images/src';
 const OUT = '/home/user/CLaude/trials-cloud-2/runs/06-images/out';
