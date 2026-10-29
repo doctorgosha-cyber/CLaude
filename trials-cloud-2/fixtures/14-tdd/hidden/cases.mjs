@@ -104,13 +104,20 @@ export const cases = [
     const r5 = m.pricePerKg('$12,345,678.90', '1 kg');
     assert.equal(r5.currency, 'USD'); near(r5.perKg, 12345678.9, 1e-6);
   } },
-  { id: 'P04', name: 'pricePerKg: Swiss "CHF 12.–" dash means .00', run: (m) => {
+  { id: 'P04', name: 'pricePerKg: Swiss "CHF 12.–" dash means .00; unit prices "/kg" and "per lb" override the mass', run: (m) => {
     const r = m.pricePerKg('CHF 12.–', '500 g');
     assert.equal(r.currency, 'CHF'); near(r.perKg, 24, 1e-9);
     const r2 = m.pricePerKg('CHF 12.-', '500 g');
     assert.equal(r2.currency, 'CHF'); near(r2.perKg, 24, 1e-9);
     const r3 = m.pricePerKg('1.250,— CHF', '1 kg');
     assert.equal(r3.currency, 'CHF'); near(r3.perKg, 1250, 1e-9);
+    const u1 = m.pricePerKg('€4.99/kg', '2 × 400 g');                 // unit price: mass ignored
+    assert.equal(u1.currency, 'EUR'); near(u1.perKg, 4.99, 1e-9);
+    const u2 = m.pricePerKg('$2.20 per lb', '5 lb');                  // per lb → per kg
+    assert.equal(u2.currency, 'USD'); near(u2.perKg, 2.2 / 0.45359237, 1e-9);   // 4.85017...
+    const u3 = m.pricePerKg('12,50 € / KG', '1 kg');
+    assert.equal(u3.currency, 'EUR'); near(u3.perKg, 12.5, 1e-9);
+    throwsType(() => m.pricePerKg('€4.99/kg', '0 g'), '0 g', 'unit price still validates the mass');
   } },
   { id: 'P05', name: 'pricePerKg: € before with space, NBSP and NNBSP group separators, bare integer', run: (m) => {
     const r = m.pricePerKg('€ 1 299,00', '10 kg');
@@ -158,6 +165,8 @@ export const cases = [
     eqStr(m.formatMoney(0, 'EUR', 'en-US'), '€0.00', 'zero');
     eqStr(m.formatMoney(1234.5, 'CHF', 'en-US'), 'CHF' + NBSP + '1,234.50', 'CHF code + NBSP');
     eqStr(m.formatMoney(0.5, 'JPY', 'en-US'), '¥0', '0.5 JPY');
+    eqStr(m.formatMoney(999.5, 'JPY', 'en-US'), '¥1,000', '999.5 JPY: 999 is odd → up, new group');
+    eqStr(m.formatMoney(999.995, 'USD', 'en-US'), '$1,000.00', 'carry into a new group');
     throwsType(() => m.formatMoney(-1, 'USD', 'en-US'), '-1', 'negative');
     throwsType(() => m.formatMoney(NaN, 'USD', 'en-US'), undefined, 'NaN');
     throwsType(() => m.formatMoney('1.00', 'USD', 'en-US'), undefined, 'string amount');
@@ -199,6 +208,7 @@ export const cases = [
     near(m.kcalPer100g('50 kcal/100 g'), 50);     // inclusive bounds
     near(m.kcalPer100g('900 kcal/100 g'), 900);
     throwsType(() => m.kcalPer100g('350 cal/100 g'), undefined, 'unknown unit');
+    throwsType(() => m.kcalPer100g('1,464 kJ/100 g'), '1,464 kJ/100 g', 'comma is a decimal mark here: 1.464 kJ → out of range');
   } },
 
   // ------------------------------------------------------------- daysSupply
@@ -216,6 +226,9 @@ export const cases = [
     assert.equal(m.daysSupply(1000, 1000, '2026-10-29'), '2026-10-29');   // exactly one day
     assert.equal(m.daysSupply(1999, 1000, '2026-10-31'), '2026-10-31');   // 1.999 days → 1
     assert.equal(m.daysSupply(12000, 100, '2026-03-01'), '2026-06-28');   // 120 days
+    assert.equal(m.daysSupply('12 kg', '1 lb', '2028-02-27'), '2028-03-23');   // floor(12000/453.59237)=26 days
+    assert.equal(m.daysSupply('2 × 5 kg', 400, '2027-12-25'), '2028-01-18');  // 25 days
+    assert.equal(m.daysSupply(3000, '4 oz', '2026-10-29'), '2026-11-23');     // floor(3000/113.398)=26 days
   } },
   { id: 'D03', name: 'daysSupply: invalid calendar date, non-strict format, sub-day bag, zero/negative → TypeError', run: (m) => {
     throwsType(() => m.daysSupply(2000, 1000, '2027-02-29'), '2027-02-29', 'not a leap year');
@@ -224,7 +237,9 @@ export const cases = [
     throwsType(() => m.daysSupply(500, 1000, '2028-02-27'), undefined, 'bag smaller than a day');
     throwsType(() => m.daysSupply(2000, 0, '2028-02-27'), undefined, 'zero daily');
     throwsType(() => m.daysSupply(-2000, 100, '2028-02-27'), undefined, 'negative bag');
-    throwsType(() => m.daysSupply('2000', 100, '2028-02-27'), undefined, 'string bag');
+    throwsType(() => m.daysSupply('2000', 100, '2028-02-27'), '2000', 'string bag without unit');
+    throwsType(() => m.daysSupply(2000, '0 g', '2028-02-27'), '0 g', 'zero string daily');
+    assert.equal(m.daysSupply(2000, 1000, ' 2028-02-28 '), '2028-02-29');    // input is trimmed
   } },
 
   // ---------------------------------------------------------------- compare
@@ -242,7 +257,10 @@ export const cases = [
     assert.deepEqual(out.map((r) => r.id), ['c', 'd', 'f', 'b', 'e', 'a', 'g']);
     assert.deepEqual(out[0], { id: 'c', currency: 'GBP', perKg: 10 });
     assert.deepEqual(out[2], { id: 'f', currency: 'UAH', perKg: 10 });
-    near(out[4].perKg, 12 / (LB / 1000), 1e-9); assert.equal(out[4].currency, 'CHF');
+    assert.deepEqual(out[3], { id: 'b', currency: 'EUR', perKg: 15 });        // 14.995 → half-even on "14.995" → 15.00
+    assert.deepEqual(out[4], { id: 'e', currency: 'CHF', perKg: 26.46 });     // 26.4554... → 26.46
+    assert.deepEqual(out[5], { id: 'a', currency: 'USD', perKg: 74.98 });     // 74.975 → 74.98 (7 is odd)
+    assert.deepEqual(out[6], { id: 'g', currency: 'JPY', perKg: 1200 });
   } },
   { id: 'C02', name: 'compare: stable for many ties (same value computed differently)', run: (m) => {
     // every item is exactly 10 per kg; the sort must keep input order
@@ -263,6 +281,14 @@ export const cases = [
     // repeated calls on a reversed copy keep the reversed order
     const rev = [...products].reverse();
     assert.deepEqual(m.compare(rev).map((r) => r.id), [...ids].reverse());
+    // ties are decided on the ROUNDED value: 75 and 74.995 (→ 75.00) tie, so input order wins
+    const tie2 = m.compare([
+      { id: 'x', price: '$75', mass: '1 kg' },        // 75
+      { id: 'y', price: '$149.99', mass: '2 kg' },    // 74.995 → "74.995" → 75.00
+      { id: 'z', price: '$74.99', mass: '1 kg' },     // 74.99 → first
+      { id: 'w', price: '¥1,234.5', mass: '1 kg' },   // JPY: 1234.5 → 1234 (0 decimals)
+    ]);
+    assert.deepEqual(tie2.map((r) => [r.id, r.perKg]), [['z', 74.99], ['x', 75], ['y', 75], ['w', 1234]]);
   } },
   { id: 'C03', name: 'compare: unparseable items last in input order with NaN/null; input not mutated; non-array → TypeError', run: (m) => {
     const products = [
@@ -273,10 +299,11 @@ export const cases = [
       { id: 'bad3', price: '$5', mass: 'two kg' },
       { id: 'bad4', price: undefined, mass: '1 kg' },  // missing price is invalid, not an error
       { id: 'bad5' },
+      null,                                             // not an object: invalid, id undefined
     ];
     const snapshot = JSON.stringify(products);
     const out = m.compare(products);
-    assert.deepEqual(out.map((r) => r.id), ['ok2', 'ok1', 'bad1', 'bad2', 'bad3', 'bad4', 'bad5']);
+    assert.deepEqual(out.map((r) => r.id), ['ok2', 'ok1', 'bad1', 'bad2', 'bad3', 'bad4', 'bad5', undefined]);
     for (const r of out.slice(2)) {
       assert.equal(r.currency, null, r.id + ' currency');
       assert.ok(Number.isNaN(r.perKg), r.id + ' perKg should be NaN');

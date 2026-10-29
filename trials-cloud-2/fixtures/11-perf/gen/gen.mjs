@@ -142,6 +142,8 @@ for (let i = 1; i <= 5; i++) {
   console.log(`avatar-${i}.png`, size);
 }
 
+fs.writeFileSync(path.join(TASK, 'img', 'favicon.svg'), '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0b5fff"/><path d="M8 20a8 8 0 0 1 16 0v4h-3v-4a5 5 0 0 0-10 0v4H8z" fill="#fff"/></svg>\n');
+
 // ---------- fonts (DejaVu, Bitstream Vera licence — unmodified copies) ----------
 for (const f of ['DejaVuSans.ttf', 'DejaVuSans-Bold.ttf', 'DejaVuSerif.ttf', 'DejaVuSansMono.ttf']) {
   fs.copyFileSync(path.join('/usr/share/fonts/truetype/dejavu', f), path.join(TASK, 'fonts', f));

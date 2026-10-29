@@ -172,7 +172,7 @@ async function runLighthouse(url, gradeDir) {
     const cats = res.lhr.categories;
     const failing = Object.values(res.lhr.audits).filter((a) => a.score !== null && a.score < 1 && cats.accessibility.auditRefs.some((r) => r.id === a.id)).map((a) => a.id);
     return { performance: Math.round((cats.performance.score ?? 0) * 100), accessibility: Math.round((cats.accessibility.score ?? 0) * 100), a11yFailing: failing.slice(0, 12), runs: 1 };
-  } finally { await chrome.kill().catch(() => {}); }
+  } finally { try { await chrome.kill(); } catch {} }
 }
 
 /**
@@ -228,6 +228,16 @@ export async function grade(spec, runDir) {
     await rm(gradeDir, { recursive: true, force: true }).catch(() => {});
     console.log = origLog;
   }
+  // A behaviour test counts once: it passes only if it passed at every viewport.
+  const merged = new Map();
+  for (const r of results) {
+    const key = r.name.replace(/^(mobile|desktop):/, '');
+    const vp = r.name.startsWith('mobile:') ? 'mobile' : r.name.startsWith('desktop:') ? 'desktop' : null;
+    const prev = merged.get(key) || { name: key, ok: true, info: [] };
+    if (!r.ok) { prev.ok = false; prev.info.push((vp ? vp + ': ' : '') + (r.info || 'failed')); }
+    merged.set(key, prev);
+  }
+  results = [...merged.values()].map((r) => ({ name: r.name, ok: r.ok, info: r.info.join(' | ') }));
   const passed = results.filter((r) => r.ok).length, total = results.length;
   const behaviourScore = total ? passed / total : 0;
   const axeScore = !rendered ? 0 : axeViolations.length === 0 ? 1 : Math.max(0, 1 - axeViolations.length / 5);

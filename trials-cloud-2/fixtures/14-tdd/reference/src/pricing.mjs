@@ -91,9 +91,18 @@ function parsePrice(text) {
   return { currency, amount };
 }
 
+const UNIT_PRICE_RE = /(?:\/|per) ?(kg|lb)$/i;
+
 export function pricePerKg(priceText, massSpec) {
-  const { currency, amount } = parsePrice(priceText);
+  if (typeof priceText !== 'string') fail(priceText, 'price must be a string');
+  let text = priceText.replace(SPACE, ' ').trim();
+  let unit = null;
+  const um = text.match(UNIT_PRICE_RE);
+  if (um) { unit = um[1].toLowerCase(); text = text.slice(0, um.index).trim(); }
+  const { currency, amount } = parsePrice(text);
   const grams = toGrams(massSpec);
+  if (unit === 'kg') return { currency, perKg: amount };
+  if (unit === 'lb') return { currency, perKg: amount / 0.45359237 };
   return { currency, perKg: amount / (grams / 1000) };
 }
 
@@ -143,14 +152,22 @@ export function kcalPer100g(spec) {
   return v;
 }
 
+function massArg(v, what) {
+  if (typeof v === 'string') return toGrams(v);
+  if (typeof v !== 'number' || !Number.isFinite(v) || v <= 0) fail(v, `bad ${what}`);
+  return v;
+}
+
 export function daysSupply(bagGrams, dailyGrams, startISO) {
-  if (typeof bagGrams !== 'number' || !Number.isFinite(bagGrams) || bagGrams <= 0) fail(bagGrams, 'bad bag size');
-  if (typeof dailyGrams !== 'number' || !Number.isFinite(dailyGrams) || dailyGrams <= 0) fail(dailyGrams, 'bad daily amount');
-  if (typeof startISO !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(startISO)) fail(startISO, 'start date must be YYYY-MM-DD');
+  const bag = massArg(bagGrams, 'bag size');
+  const daily = massArg(dailyGrams, 'daily amount');
+  if (typeof startISO !== 'string') fail(startISO, 'start date must be YYYY-MM-DD');
+  startISO = startISO.replace(SPACE, ' ').trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(startISO)) fail(startISO, 'start date must be YYYY-MM-DD');
   const [y, mo, d] = startISO.split('-').map(Number);
   const start = new Date(Date.UTC(y, mo - 1, d));
   if (start.getUTCFullYear() !== y || start.getUTCMonth() !== mo - 1 || start.getUTCDate() !== d) fail(startISO, 'not a real calendar date');
-  const days = Math.floor(bagGrams / dailyGrams);
+  const days = Math.floor(bag / daily);
   if (days < 1) fail(bagGrams, 'less than one whole day of supply');
   const end = new Date(Date.UTC(y, mo - 1, d + days - 1));
   return end.toISOString().slice(0, 10);
@@ -159,10 +176,10 @@ export function daysSupply(bagGrams, dailyGrams, startISO) {
 export function compare(products) {
   if (!Array.isArray(products)) fail(products, 'products must be an array');
   const rows = products.map((p, i) => {
-    const id = p && p.id;
+    const id = p && typeof p === 'object' ? p.id : undefined;
     try {
       const { currency, perKg } = pricePerKg(p.price, p.mass);
-      return { id, currency, perKg, i };
+      return { id, currency, perKg: Number(roundHalfEven(perKg, MINOR[currency])), i };
     } catch {
       return { id, currency: null, perKg: NaN, i };
     }

@@ -1,0 +1,90 @@
+/* SoundBench — page styles */
+:root {
+  --ink: #1b1f23;
+  --muted: #5b6470;
+  --line: #e2e6ea;
+  --accent: #0b5fff;
+  --accent-ink: #ffffff;
+  --bg: #ffffff;
+  --bg-alt: #f6f8fa;
+  --ok: #157347;
+  --error: #b02a37;
+}
+* { box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.5;
+}
+h1, h2, h3 { font-weight: 400; letter-spacing: -0.01em; line-height: 1.2; margin: 0 0 0.5em; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+p { margin: 0 0 1em; }
+a { color: var(--accent); }
+.site-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1rem; border-bottom: 1px solid var(--line);
+}
+.logo { font-weight: 400; font-size: 1.25rem; text-decoration: none; color: var(--ink); }
+.site-nav a { margin-left: 1rem; text-decoration: none; }
+main { max-width: 64rem; margin: 0 auto; padding: 0 1rem 3rem; }
+section { margin: 2rem 0; }
+.promo-banner {
+  background: #fff4cc; color: #4a3b00; padding: 1rem 1.25rem; text-align: center;
+  border-bottom: 1px solid #f0d77a; font-size: 1.0625rem; line-height: 1.6;
+}
+.promo-banner strong { display: block; font-size: 1.25rem; }
+.hero img { width: 100%; height: auto; display: block; border-radius: 8px; aspect-ratio: 1800 / 1000; }
+.hero-copy { padding-top: 1rem; }
+.lede { font-size: 1.125rem; color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 1rem; align-items: end; margin-bottom: 1rem; }
+.controls label { display: flex; flex-direction: column; font-size: 0.875rem; color: var(--muted); gap: 0.25rem; }
+.controls select, .controls input {
+  font: inherit; padding: 0.4rem 0.6rem; border: 1px solid var(--line); border-radius: 6px; min-width: 12rem;
+}
+.compare-status { font-size: 0.875rem; }
+#compare-count { font-weight: 400; margin-right: 0.5rem; }
+#compare-msg { color: var(--error); }
+table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+th, td { text-align: left; padding: 0.5rem 0.5rem; border-bottom: 1px solid var(--line); }
+th { background: var(--bg-alt); font-weight: 400; color: var(--muted); font-size: 0.8125rem; }
+tr[hidden] { display: none; }
+.col-price, .col-rating, .col-battery, .col-weight { white-space: nowrap; }
+.loading-row td { color: var(--muted); font-style: italic; }
+.related-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 1rem; }
+.related-grid figure { margin: 0; }
+.related-grid img { width: 100%; height: auto; display: block; border-radius: 6px; aspect-ratio: 4 / 3; }
+.related-grid figcaption { font-size: 0.875rem; margin-top: 0.5rem; }
+.review-list { list-style: none; padding: 0; margin: 0; }
+.review { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+.review img { width: 56px; height: 56px; border-radius: 50%; flex: none; }
+.stars { color: #d9900a; margin-left: 0.5rem; }
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-q {
+  width: 100%; text-align: left; background: none; border: 0; font: inherit; padding: 0.75rem 0;
+  cursor: pointer; color: var(--ink); display: flex; justify-content: space-between;
+}
+.faq-q::after { content: "+"; color: var(--muted); }
+.faq-q[aria-expanded="true"]::after { content: "\2013"; }
+.faq-a { padding: 0 0 0.75rem; color: var(--muted); }
+.newsletter { background: var(--bg-alt); padding: 1.5rem; border-radius: 8px; }
+#newsletter { display: grid; gap: 0.5rem; max-width: 24rem; }
+#newsletter input { font: inherit; padding: 0.5rem; border: 1px solid var(--line); border-radius: 6px; }
+#newsletter button {
+  font: inherit; padding: 0.5rem 1rem; background: var(--accent); color: var(--accent-ink);
+  border: 0; border-radius: 6px; cursor: pointer;
+}
+#newsletter-msg { min-height: 1.5em; margin: 0; }
+#newsletter-msg.error { color: var(--error); }
+#newsletter-msg.ok { color: var(--ok); }
+.site-footer { border-top: 1px solid var(--line); padding: 1rem; font-size: 0.875rem; color: var(--muted); text-align: center; }
+@media (max-width: 40rem) {
+  h1 { font-size: 1.5rem; }
+  table { font-size: 0.8125rem; }
+  th, td { padding: 0.4rem 0.3rem; }
+  .col-battery, .col-weight { display: none; }
+  th:nth-child(6), th:nth-child(7) { display: none; }
+}

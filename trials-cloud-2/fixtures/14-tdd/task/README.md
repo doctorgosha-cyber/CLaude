@@ -20,8 +20,8 @@ under any `TZ`.
   between a number and a unit/symbol.
 - **Numbers inside mass and energy specs** use `.` or `,` as the decimal mark
   and never carry a thousands separator. Price texts have their own rule below.
-- **Rounding** happens only in `formatMoney`. Everything else returns full
-  precision Numbers.
+- **Rounding** happens only where stated (`formatMoney`, and `compare` with the
+  same rule). Everything else returns full-precision Numbers.
 
 ## `toGrams(spec: string): number`
 
@@ -40,6 +40,10 @@ Total mass in grams.
 
 `perKg = amount / (toGrams(massSpec) / 1000)`, unrounded.
 
+- Unit prices: a price text ending in `/kg`, `per kg`, `/lb` or `per lb`
+  (optional spaces, case-insensitive) is already a unit price. Then `perKg` is
+  the amount as given (per kg) or `amount / 0.45359237` (per lb); the mass spec
+  is still validated with `toGrams` but does not enter the result.
 - Currency: exactly one marker, before or after the number, optional space:
   symbols `$`→USD, `€`→EUR, `£`→GBP, `¥`→JPY, `₴`→UAH, or ISO codes
   `USD EUR GBP JPY CHF UAH` (case-insensitive). No marker, two markers, or any
@@ -62,7 +66,7 @@ Total mass in grams.
 - Round to the currency's minor units (2 decimals; **JPY has 0**) using
   **round half to even** applied to the decimal digits of the shortest
   round-trip representation of `amount` (what `String(amount)` prints), not to
-  the binary value: `2.125 → 2.12`, `2.135 → 2.14`, `1.005 → 1.00`.
+  the binary value: `2.125 → 2.12`.
 - Layout: the `narrowSymbol` of the currency (`$ € £ ¥ ₴`; CHF has none and
   shows its code `CHF`), placed by locale:
 
@@ -75,8 +79,7 @@ Total mass in grams.
 
 - **Non-breaking space rule:** the output never contains U+0020. Every space is
   U+00A0, except the fr-FR digit-group separator, which is U+202F.
-  (This is exactly what `Intl.NumberFormat` produces for these locales with
-  `currencyDisplay: "narrowSymbol"`, except for the rounding mode.)
+  (`Intl.NumberFormat` with `currencyDisplay: "narrowSymbol"` gives this layout.)
 
 ## `kcalPer100g(spec: string): number`
 
@@ -88,10 +91,12 @@ Energy density normalised to kcal per 100 g.
 - Sanity range: the **normalised result** must be within 50 … 900 kcal/100 g
   inclusive; otherwise TypeError.
 
-## `daysSupply(bagGrams: number, dailyGrams: number, startISO: string): string`
+## `daysSupply(bagGrams, dailyGrams, startISO: string): string`
 
-- The bag lasts `floor(bagGrams / dailyGrams)` whole days; a partial day does
-  not count; fewer than one whole day → TypeError.
+- `bagGrams` and `dailyGrams` are each either a positive Number of grams or a
+  mass spec string accepted by `toGrams` (feeding guides come in oz).
+- The bag lasts `floor(bag / daily)` whole days; a partial day does not count;
+  fewer than one whole day → TypeError.
 - Counting is inclusive: `startISO` is day 1. Return the calendar date of the
   last day as `YYYY-MM-DD`.
 - `startISO` must be exactly `YYYY-MM-DD` and a real calendar date (Gregorian
@@ -103,10 +108,12 @@ Energy density normalised to kcal per 100 g.
 - Input: array of `{ id, price, mass }` (`price` and `mass` are strings as
   above). Not an array → TypeError. The input array and its items are not
   mutated.
-- Output: a new array sorted by `perKg` ascending regardless of currency (no
-  conversion). Items with equal `perKg` keep their input order. Items whose
-  price or mass is invalid are **not** errors: they come last, in input order,
-  as `{ id, currency: null, perKg: NaN }`.
+- Output: a new array of `{ id, currency, perKg }` where `perKg` is rounded to
+  the currency's minor units with the `formatMoney` rounding rule (the table
+  prints it as is), sorted by that rounded `perKg` ascending regardless of
+  currency (no conversion). Items with equal rounded `perKg` keep their input
+  order. Items whose price or mass is invalid are **not** errors: they come
+  last, in input order, as `{ id, currency: null, perKg: NaN }`.
 
 ## Examples
 

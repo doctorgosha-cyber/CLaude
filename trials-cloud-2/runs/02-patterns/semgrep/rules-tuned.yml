@@ -1,0 +1,116 @@
+# Semgrep tuned rules: pattern-either / pattern-not / metavariable-regex + one taint rule. Local only (registry blocked).
+rules:
+  - id: js-eval
+    languages: [javascript]
+    severity: ERROR
+    message: eval reached directly, through an alias, or through a computed global lookup
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: $A = eval
+      - pattern: var $A = eval
+      - pattern: let $A = eval
+      - pattern: const $A = eval
+      - patterns:
+          - pattern: $G[$K](...)
+          - metavariable-regex: { metavariable: $G, regex: ^(window|globalThis|self)$ }
+          - pattern-not: $G["..."](...)
+
+  - id: js-innerhtml-nonliteral
+    languages: [javascript]
+    severity: ERROR
+    message: HTML sink assigned a non-constant value
+    patterns:
+      - pattern-either:
+          - pattern: $EL.innerHTML = $V
+          - pattern: $EL.innerHTML += $V
+          - pattern: $EL.outerHTML = $V
+          - pattern: $EL.insertAdjacentHTML($P, $V)
+      - pattern-not: $EL.innerHTML = "..."
+      - pattern-not: $EL.outerHTML = "..."
+      - pattern-not: $EL.insertAdjacentHTML($P, "...")
+
+  - id: js-new-function
+    languages: [javascript]
+    severity: ERROR
+    message: new Function() compiles a string into code
+    pattern: new Function(...)
+
+  - id: js-document-write
+    languages: [javascript]
+    severity: ERROR
+    message: document.write/writeln injects raw markup
+    pattern-either:
+      - pattern: document.write(...)
+      - pattern: document.writeln(...)
+
+  - id: js-timer-string
+    languages: [javascript]
+    severity: ERROR
+    message: setTimeout/setInterval with a string callback is an implicit eval
+    patterns:
+      - pattern-either:
+          - pattern: setTimeout($CB, ...)
+          - pattern: setInterval($CB, ...)
+      - metavariable-regex:
+          metavariable: $CB
+          regex: '^(["''`]|.*\+)'
+
+  - id: php-echo-tainted-request
+    languages: [php]
+    severity: ERROR
+    message: request data ($_GET/$_POST/...) reaches echo without an escaping function (taint)
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern: $G[...]
+          - metavariable-regex: { metavariable: $G, regex: '^\$_(GET|POST|REQUEST|COOKIE|SERVER)$' }
+    pattern-sanitizers:
+      - pattern-either:
+          - pattern: esc_html(...)
+          - pattern: esc_attr(...)
+          - pattern: esc_url(...)
+          - pattern: esc_url_raw(...)
+          - pattern: esc_js(...)
+          - pattern: esc_textarea(...)
+          - pattern: wp_kses(...)
+          - pattern: wp_kses_post(...)
+          - pattern: sanitize_text_field(...)
+          - pattern: sanitize_key(...)
+          - pattern: rawurlencode(...)
+          - pattern: urlencode(...)
+          - pattern: intval(...)
+          - pattern: absint(...)
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: echo $X;
+              - pattern: print $X;
+          - focus-metavariable: $X
+
+  - id: php-echo-unescaped-var
+    languages: [php]
+    severity: ERROR
+    message: echo of a bare variable/property/index; wrap in esc_html()/esc_attr()/esc_url()
+    patterns:
+      - pattern-either:
+          - pattern: echo $X;
+          - pattern: print $X;
+      - metavariable-regex:
+          metavariable: $X
+          regex: '^\$[A-Za-z_][A-Za-z0-9_]*(->[A-Za-z_][A-Za-z0-9_]*|\[[^\]]*\])*$'
+
+  - id: php-wpdb-interpolated-sql
+    languages: [php]
+    severity: ERROR
+    message: SQL string built with interpolation/concatenation of a variable; use $wpdb->prepare()
+    patterns:
+      - pattern: $wpdb->$M($S, ...)
+      - metavariable-regex: { metavariable: $M, regex: '^(query|get_results|get_var|get_row|get_col)$' }
+      - metavariable-pattern:
+          metavariable: $S
+          pattern-either:
+            - pattern: '"..."'
+            - pattern: $A . $B
+      - metavariable-regex:
+          metavariable: $S
+          regex: '\$(?!wpdb->)[A-Za-z_][A-Za-z0-9_]*'

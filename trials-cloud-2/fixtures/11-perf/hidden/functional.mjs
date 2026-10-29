@@ -30,7 +30,7 @@ export async function runFunctional({ chromium, executablePath, url, expected })
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   const page = await context.newPage();
   const consoleErrors = [], failedRequests = [];
-  page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
+  page.on('console', (m) => { if (m.type() === 'error' && !/favicon/.test(m.location()?.url || '')) consoleErrors.push(m.text() + (m.location()?.url ? ' @ ' + m.location().url : '')); });
   page.on('pageerror', (e) => consoleErrors.push('pageerror: ' + e.message));
   page.on('response', (r) => { if (r.status() >= 400) failedRequests.push(`${r.status()} ${r.url()}`); });
   page.on('requestfailed', (r) => { const t = r.failure()?.errorText || ''; if (!/ERR_ABORTED/.test(t)) failedRequests.push(`${t} ${r.url()}`); });

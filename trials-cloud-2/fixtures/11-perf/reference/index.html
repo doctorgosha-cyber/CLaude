@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Best Wireless Headphones of 2026 – 24 Models Compared | SoundBench</title>
+<link rel="icon" href="img/favicon.svg">
+<meta name="description" content="We tested 24 wireless headphones for sound, comfort, noise cancelling and battery life. Compare prices and ratings side by side.">
+<link rel="preload" as="image" href="img/hero-800.webp" imagesrcset="img/hero-480.webp 480w, img/hero-800.webp 800w, img/hero-1200.webp 1200w" imagesizes="(max-width: 64rem) 100vw, 62rem" fetchpriority="high">
+<style>
+/* SoundBench — page styles */
+:root {
+  --ink: #1b1f23;
+  --muted: #5b6470;
+  --line: #e2e6ea;
+  --accent: #0b5fff;
+  --accent-ink: #ffffff;
+  --bg: #ffffff;
+  --bg-alt: #f6f8fa;
+  --ok: #157347;
+  --error: #b02a37;
+}
+* { box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.5;
+}
+h1, h2, h3 { font-weight: 400; letter-spacing: -0.01em; line-height: 1.2; margin: 0 0 0.5em; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+p { margin: 0 0 1em; }
+a { color: var(--accent); }
+.site-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1rem; border-bottom: 1px solid var(--line);
+}
+.logo { font-weight: 400; font-size: 1.25rem; text-decoration: none; color: var(--ink); }
+.site-nav a { margin-left: 1rem; text-decoration: none; }
+main { max-width: 64rem; margin: 0 auto; padding: 0 1rem 3rem; }
+section { margin: 2rem 0; }
+.promo-banner {
+  background: #fff4cc; color: #4a3b00; padding: 1rem 1.25rem; text-align: center;
+  border-bottom: 1px solid #f0d77a; font-size: 1.0625rem; line-height: 1.6;
+}
+.promo-banner strong { display: block; font-size: 1.25rem; }
+.hero img { width: 100%; height: auto; display: block; border-radius: 8px; aspect-ratio: 1800 / 1000; }
+.hero-copy { padding-top: 1rem; }
+.lede { font-size: 1.125rem; color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 1rem; align-items: end; margin-bottom: 1rem; }
+.controls label { display: flex; flex-direction: column; font-size: 0.875rem; color: var(--muted); gap: 0.25rem; }
+.controls select, .controls input {
+  font: inherit; padding: 0.4rem 0.6rem; border: 1px solid var(--line); border-radius: 6px; min-width: 12rem;
+}
+.compare-status { font-size: 0.875rem; }
+#compare-count { font-weight: 400; margin-right: 0.5rem; }
+#compare-msg { color: var(--error); }
+table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+th, td { text-align: left; padding: 0.5rem 0.5rem; border-bottom: 1px solid var(--line); }
+th { background: var(--bg-alt); font-weight: 400; color: var(--muted); font-size: 0.8125rem; }
+tr[hidden] { display: none; }
+.col-price, .col-rating, .col-battery, .col-weight { white-space: nowrap; }
+.loading-row td { color: var(--muted); font-style: italic; }
+.related-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 1rem; }
+.related-grid figure { margin: 0; }
+.related-grid img { width: 100%; height: auto; display: block; border-radius: 6px; aspect-ratio: 4 / 3; }
+.related-grid figcaption { font-size: 0.875rem; margin-top: 0.5rem; }
+.review-list { list-style: none; padding: 0; margin: 0; }
+.review { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+.review img { width: 56px; height: 56px; border-radius: 50%; flex: none; }
+.stars { color: #d9900a; margin-left: 0.5rem; }
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-q {
+  width: 100%; text-align: left; background: none; border: 0; font: inherit; padding: 0.75rem 0;
+  cursor: pointer; color: var(--ink); display: flex; justify-content: space-between;
+}
+.faq-q::after { content: "+"; color: var(--muted); }
+.faq-q[aria-expanded="true"]::after { content: "\2013"; }
+.faq-a { padding: 0 0 0.75rem; color: var(--muted); }
+.newsletter { background: var(--bg-alt); padding: 1.5rem; border-radius: 8px; }
+#newsletter { display: grid; gap: 0.5rem; max-width: 24rem; }
+#newsletter input { font: inherit; padding: 0.5rem; border: 1px solid var(--line); border-radius: 6px; }
+#newsletter button {
+  font: inherit; padding: 0.5rem 1rem; background: var(--accent); color: var(--accent-ink);
+  border: 0; border-radius: 6px; cursor: pointer;
+}
+#newsletter-msg { min-height: 1.5em; margin: 0; }
+#newsletter-msg.error { color: var(--error); }
+#newsletter-msg.ok { color: var(--ok); }
+.site-footer { border-top: 1px solid var(--line); padding: 1rem; font-size: 0.875rem; color: var(--muted); text-align: center; }
+@media (max-width: 40rem) {
+  h1 { font-size: 1.5rem; }
+  table { font-size: 0.8125rem; }
+  th, td { padding: 0.4rem 0.3rem; }
+  .col-battery, .col-weight { display: none; }
+  th:nth-child(6), th:nth-child(7) { display: none; }
+}
+</style>
+<script src="js/app.js" defer></script>
+</head>
+<body>
+<div class="promo-banner" id="promo-banner"><strong>Free shipping on orders over €50</strong> — this week only, on every model in the table.</div>
+<header class="site-header">
+  <a class="logo" href="#">SoundBench</a>
+  <nav class="site-nav">
+    <a href="#comparison">Comparison</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <img id="hero-image" src="img/hero-800.webp" srcset="img/hero-480.webp 480w, img/hero-800.webp 800w, img/hero-1200.webp 1200w" sizes="(max-width: 64rem) 100vw, 62rem" width="1800" height="1000" fetchpriority="high" decoding="async" alt="Six of the tested wireless headphones laid out on a wooden desk">
+    <div class="hero-copy">
+      <h1>Best Wireless Headphones of 2026: 24 Models Compared</h1>
+      <p class="lede">Six weeks, 24 pairs of headphones, 1,400 hours of listening. Here is everything we learned, with prices and ratings you can sort and filter.</p>
+    </div>
+  </section>
+
+  <section class="method" id="method">
+    <h2>How we tested</h2>
+    <p>Every pair went through the same routine: a 40-track reference playlist at matched loudness, a three-hour comfort session, a commute on the number 12 tram with the noise cancelling at maximum, and a battery rundown at 50 % volume until the headphones switched themselves off. Ratings are the average of three listeners who did not know the prices.</p>
+    <p>Prices are the lowest we found from an authorised retailer on the day of publication. We update the table monthly; the comparison data is loaded live so you always see the current figures.</p>
+  </section>
+
+  <section class="comparison" id="comparison">
+    <h2>Comparison table</h2>
+    <div class="controls">
+      <label>Sort by
+        <select id="sort">
+          <option value="default">Editor's order</option>
+          <option value="price-asc">Price (low to high)</option>
+          <option value="price-desc">Price (high to low)</option>
+          <option value="rating-desc">Rating (best first)</option>
+          <option value="name-asc">Model name (A–Z)</option>
+        </select>
+      </label>
+      <label>Filter
+        <input id="filter" type="search" placeholder="Model or brand…" autocomplete="off">
+      </label>
+      <div class="compare-status">
+        <span id="compare-count">0 selected</span>
+        <span id="compare-msg" role="status" aria-live="polite"></span>
+      </div>
+    </div>
+    <table id="comparison-table">
+      <thead>
+        <tr><th>Compare</th><th>Model</th><th>Brand</th><th>Price</th><th>Rating</th><th>Battery</th><th>Weight</th></tr>
+      </thead>
+      <tbody id="comparison-body">
+        <tr class="loading-row"><td colspan="7">Loading comparison data…</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="related" id="related">
+    <h2>Also worth a look</h2>
+    <div class="related-grid">
+      <figure><img src="img/related-1.webp" width="480" height="360" loading="lazy" decoding="async" alt="Open-back studio headphones on a stand"><figcaption>Best open-back studio headphones</figcaption></figure>
+      <figure><img src="img/related-2.webp" width="480" height="360" loading="lazy" decoding="async" alt="A pair of true wireless earbuds in a charging case"><figcaption>Best true wireless earbuds</figcaption></figure>
+      <figure><img src="img/related-3.webp" width="480" height="360" loading="lazy" decoding="async" alt="A portable DAC and amplifier next to a phone"><figcaption>Portable DACs that actually matter</figcaption></figure>
+      <figure><img src="img/related-4.webp" width="480" height="360" loading="lazy" decoding="async" alt="A headphone stand with cable holder"><figcaption>Stands, cases and cables</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="reviews" id="reviews">
+    <h2>Reader reviews</h2>
+    <ul class="review-list">
+      <li class="review">
+        <img src="img/avatar-1.webp" width="56" height="56" loading="lazy" decoding="async" alt="">
+        <div><strong>Mira K.</strong> <span class="stars" aria-label="5 out of 5">★★★★★</span>
+        <p>Bought the Aero 2 ANC on the strength of this table. The battery estimate was spot on: 41 hours with ANC on, which is more than my phone manages.</p></div>
+      </li>
+      <li class="review">
+        <img src="img/avatar-2.webp" width="56" height="56" loading="lazy" decoding="async" alt="">
+        <div><strong>Tomasz W.</strong> <span class="stars" aria-label="4 out of 5">★★★★☆</span>
+        <p>Returned the Kestrel Flux because the clamping force gave me a headache after an hour. Your comfort note was right; I should have read it twice.</p></div>
+      </li>
+      <li class="review">
+        <img src="img/avatar-3.webp" width="56" height="56" loading="lazy" decoding="async" alt="">
+        <div><strong>Priya S.</strong> <span class="stars" aria-label="5 out of 5">★★★★★</span>
+        <p>The filter box is the best part of this page. Typing my brand and sorting by price took ten seconds and saved me an afternoon of tab-hopping.</p></div>
+      </li>
+      <li class="review">
+        <img src="img/avatar-4.webp" width="56" height="56" loading="lazy" decoding="async" alt="">
+        <div><strong>Jonah B.</strong> <span class="stars" aria-label="3 out of 5">★★★☆☆</span>
+        <p>Decent round-up, though I would have liked a column for codec support. The Orbita Halo sounds great over LDAC and merely fine over AAC.</p></div>
+      </li>
+      <li class="review">
+        <img src="img/avatar-5.webp" width="56" height="56" loading="lazy" decoding="async" alt="">
+        <div><strong>Elin A.</strong> <span class="stars" aria-label="4 out of 5">★★★★☆</span>
+        <p>Comparing models side by side is exactly what I needed. The weight column settled an argument with my brother, who insisted his pair was lighter.</p></div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false" aria-controls="faq-a-1">Do I need noise cancelling?</button>
+      <div class="faq-a" id="faq-a-1" hidden><p>If you commute by tram, train or plane, yes. At home or in a quiet office, a well-sealed closed-back pair without ANC often sounds better for the same money.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false" aria-controls="faq-a-2">How accurate are the battery figures?</button>
+      <div class="faq-a" id="faq-a-2" hidden><p>They are our own measured rundown times at 50 % volume with ANC on, not the manufacturer's claim. Expect a bit less in the cold and with a loud playlist.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false" aria-controls="faq-a-3">Do you test the wired mode?</button>
+      <div class="faq-a" id="faq-a-3" hidden><p>Only to confirm it works. The ratings in the table are for wireless listening, because that is how almost everyone uses these headphones.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false" aria-controls="faq-a-4">How often is the table updated?</button>
+      <div class="faq-a" id="faq-a-4" hidden><p>Monthly, and whenever a model is discontinued. Discontinued models stay in the table for one issue with a note, then drop out.</p></div>
+    </div>
+  </section>
+
+  <section class="newsletter" id="newsletter-section">
+    <h2>Get the monthly round-up</h2>
+    <p>One email a month with price drops and new tests. No tracking pixels, unsubscribe in one click.</p>
+    <form id="newsletter" novalidate>
+      <label for="newsletter-email">Email address</label>
+      <input id="newsletter-email" name="email" type="email" placeholder="you@example.com" required>
+      <button type="submit">Subscribe</button>
+      <p id="newsletter-msg" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>© 2026 SoundBench. Prices in euros, including VAT. We earn a small commission on some links; it never affects the ranking.</p>
+</footer>
+
+<script>window.__tqQueue=[];window.tq=function(){window.__tqQueue.push(Array.prototype.slice.call(arguments));};</script>
+</body>
+</html>

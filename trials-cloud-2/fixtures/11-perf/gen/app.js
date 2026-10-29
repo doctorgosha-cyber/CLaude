@@ -229,8 +229,11 @@
       console.error(err);
     });
 
+    // Marketing wants the banner to slide in once the page has painted, not before.
     window.addEventListener('load', function () {
-      setTimeout(showPromoBanner, 500);
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { setTimeout(showPromoBanner, 300); });
+      });
     });
   }
 

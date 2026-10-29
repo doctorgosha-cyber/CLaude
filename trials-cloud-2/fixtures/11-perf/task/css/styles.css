@@ -62,9 +62,10 @@ main { max-width: 64rem; margin: 0 auto; padding: 0 1rem 3rem; }
 section { margin: 2rem 0; }
 
 .promo-banner {
-  background: #fff4cc; color: #4a3b00; padding: 0.75rem 1rem; text-align: center;
-  border-bottom: 1px solid #f0d77a;
+  background: #fff4cc; color: #4a3b00; padding: 1rem 1.25rem; text-align: center;
+  border-bottom: 1px solid #f0d77a; font-size: 1.0625rem; line-height: 1.6;
 }
+.promo-banner strong { display: block; font-size: 1.25rem; }
 
 .hero img { width: 100%; display: block; border-radius: 8px; }
 .hero-copy { padding-top: 1rem; }
