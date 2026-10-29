@@ -12,12 +12,14 @@ test('compare: sorts by rounded perKg ascending regardless of currency', () => {
 test('compare: rounds with the formatMoney rule before sorting; ties keep input order', () => {
   const out = compare([
     { id: 'x', price: '$29.99', mass: '400 g' },   // 74.975 -> 74.98
-    { id: 'y', price: '$74.975', mass: '1 kg' },   // 74.975 -> 74.98 (tie, stays after x)
+    { id: 'y', price: '$149.95', mass: '2 kg' },   // 74.975 -> 74.98 (tie, stays after x)
     { id: 'z', price: '¥74.5', mass: '1 kg' },     // JPY: 74.5 -> 74
-    { id: 'w', price: '$2.125', mass: '1 kg' },    // 2.125 -> 2.12
+    { id: 'w', price: '$8.5', mass: '4 kg' },      // 2.125 -> 2.12 (half to even)
+    { id: 'v', price: '$8.54', mass: '4 kg' },     // 2.135 -> 2.14 (half to even)
   ]);
   assert.deepEqual(out, [
     { id: 'w', currency: 'USD', perKg: 2.12 },
+    { id: 'v', currency: 'USD', perKg: 2.14 },
     { id: 'z', currency: 'JPY', perKg: 74 },
     { id: 'x', currency: 'USD', perKg: 74.98 },
     { id: 'y', currency: 'USD', perKg: 74.98 },

@@ -166,28 +166,29 @@ function parsePrice(priceText) {
   if (dash) amt = amt.slice(0, dash.index);
   if (/[-–—−]/.test(amt)) throw fail('price', priceText);
 
-  amt = amt.replace(/ /g, '');
   const hasComma = amt.includes(',');
   const hasDot = amt.includes('.');
-  let normalized;
+  let decimal = null;
   if (hasComma && hasDot) {
-    const decimal = amt.lastIndexOf(',') > amt.lastIndexOf('.') ? ',' : '.';
-    const thousands = decimal === ',' ? '.' : ',';
-    normalized = amt.split(thousands).join('');
-    if (normalized.split(decimal).length !== 2) throw fail('price', priceText);
-    normalized = normalized.replace(decimal, '.');
+    // Both present: the last one is the decimal mark, the other groups thousands.
+    decimal = amt.lastIndexOf(',') > amt.lastIndexOf('.') ? ',' : '.';
   } else if (hasComma || hasDot) {
+    // Only one: thousands separator when repeated or followed by exactly three digits.
     const sep = hasComma ? ',' : '.';
     const parts = amt.split(sep);
-    if (parts.length > 2 || /^\d{3}$/.test(parts[1])) {
-      normalized = parts.join('');
-    } else {
-      normalized = parts.join('.');
-    }
-  } else {
-    normalized = amt;
+    if (!(parts.length > 2 || /^\d{3}$/.test(parts[1]))) decimal = sep;
   }
-  if (!/^\d+(?:\.\d+)?$/.test(normalized)) throw fail('price', priceText);
+  let intPart = amt;
+  let fracPart = '';
+  if (decimal) {
+    const i = amt.lastIndexOf(decimal);
+    intPart = amt.slice(0, i);
+    fracPart = amt.slice(i + 1);
+    if (!/^\d+$/.test(fracPart)) throw fail('price', priceText);
+  }
+  // Integer digits are either ungrouped or grouped in threes by space, "," or ".".
+  if (!/^\d+$/.test(intPart) && !/^\d{1,3}(?:[ .,]\d{3})+$/.test(intPart)) throw fail('price', priceText);
+  const normalized = intPart.replace(/[ .,]/g, '') + (fracPart ? `.${fracPart}` : '');
   const amount = Number(normalized);
   if (!Number.isFinite(amount) || amount <= 0) throw fail('price', priceText);
 

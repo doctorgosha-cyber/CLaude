@@ -12,7 +12,7 @@ test('compare: rounds per currency, sorts ascending, invalid items last', () => 
     { id: 'bad-price', price: '29.99', mass: '400 g' },
     { id: 'y', price: '¥7499.5', mass: '100 g' },     // 74995 -> JPY 0 minor: 74996? no: 74995 exactly
     { id: 'z', price: '€8.50', mass: '1 lb 4 oz' },   // 14.99... -> 14.99
-    { id: 'tie2', price: '£2.125', mass: '100 g' },   // 21.25
+    { id: 'tie2', price: '£4.25', mass: '200 g' },    // 21.25
     { id: 'bad-mass', price: '$1', mass: '0 g' },
     { id: 'tie1', price: '£21.25', mass: '1 kg' },    // 21.25
     { id: 'jpy', price: '¥2.5', mass: '1 kg' },       // 2.5 -> 2 (half to even)
