@@ -2,3 +2,5 @@
 {"run":"A-3","arm":"A","tokens":83611,"tool_uses":9,"duration_ms":241204}
 {"run":"B-1","arm":"B","tokens":86134,"tool_uses":21,"duration_ms":258684}
 {"run":"A-1","arm":"A","tokens":84300,"tool_uses":11,"duration_ms":283366}
+{"run":"B-2","arm":"B","tokens":88797,"tool_uses":32,"duration_ms":294733}
+{"run":"B-3","arm":"B","tokens":98001,"tool_uses":31,"duration_ms":305139}
