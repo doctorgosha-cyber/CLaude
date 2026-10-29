@@ -1,0 +1,5 @@
+{"run": "A-1", "score": 0.898, "passed": 24, "total": 24, "axe": 0, "lh_perf": 83, "lh_a11y": 100, "slop_total": 0, "slop": {"fontFamilyCount": 1}}
+{"run": "A-2", "score": 0.862, "passed": 23, "total": 24, "axe": 0, "lh_perf": 74, "lh_a11y": 100, "slop_total": 1, "slop": {"eyebrowLabels": 1, "fontFamilyCount": 1, "total": 1}}
+{"run": "A-3", "score": 0.896, "passed": 24, "total": 24, "axe": 0, "lh_perf": 82, "lh_a11y": 100, "slop_total": 1, "slop": {"eyebrowLabels": 1, "fontFamilyCount": 1, "total": 1}}
+{"run": "B-1", "score": 1, "passed": 24, "total": 24, "axe": 0, "lh_perf": 86, "lh_a11y": 100, "slop_total": 0, "slop": {"fontFamilyCount": 2}, "failed": []}
+{"run": "B-3", "score": 1, "passed": 24, "total": 24, "axe": 0, "lh_perf": 86, "lh_a11y": 100, "slop_total": 0, "slop": {"fontFamilyCount": 1}, "failed": []}

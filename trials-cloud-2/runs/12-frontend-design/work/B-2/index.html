@@ -10,7 +10,78 @@
 </head>
 <body>
   <main>
-    <!-- build the comparison section here -->
+    <section class="compare" data-testid="comparison-section" aria-labelledby="compare-title">
+      <header class="compare-intro">
+        <h1 id="compare-title">Which one goes in the bowl?</h1>
+        <p class="compare-lede">Six foods we have reviewed this season. Narrow them down, then pick up to three to set side by side.</p>
+        <p class="compare-status" id="result-status" aria-live="polite">Loading the foods…</p>
+      </header>
+
+      <form class="filters" id="filters" novalidate aria-label="Filter and sort foods">
+        <fieldset class="filters-group">
+          <legend>Show foods for</legend>
+          <div class="field">
+            <label for="filter-species">Species</label>
+            <select id="filter-species" name="species" data-testid="filter-species">
+              <option value="all">Dogs and cats</option>
+              <option value="dog">Dogs</option>
+              <option value="cat">Cats</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <fieldset class="filters-group">
+          <legend>Price per bag</legend>
+          <div class="field-pair">
+            <div class="field">
+              <label for="filter-price-min">From</label>
+              <div class="money">
+                <span class="money-symbol" id="symbol-min" aria-hidden="true">£</span>
+                <input id="filter-price-min" name="priceMin" type="number" inputmode="decimal" min="0" step="0.01" placeholder="any" data-testid="filter-price-min">
+              </div>
+            </div>
+            <div class="field">
+              <label for="filter-price-max">Up to</label>
+              <div class="money">
+                <span class="money-symbol" id="symbol-max" aria-hidden="true">£</span>
+                <input id="filter-price-max" name="priceMax" type="number" inputmode="decimal" min="0" step="0.01" placeholder="any" data-testid="filter-price-max">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="filters-group">
+          <legend>Order</legend>
+          <div class="field">
+            <label for="sort-select">Sort by</label>
+            <select id="sort-select" name="sort" data-testid="sort-select">
+              <option value="featured">Featured</option>
+              <option value="price-asc">Price, low to high</option>
+              <option value="price-desc">Price, high to low</option>
+              <option value="rating-desc">Rating, high to low</option>
+              <option value="protein-desc">Protein, high to low</option>
+            </select>
+          </div>
+        </fieldset>
+      </form>
+
+      <div class="results">
+        <ul class="cards" id="cards" aria-label="Foods"></ul>
+        <p class="empty" id="empty-results" data-testid="empty-results" hidden>
+          No food matches these filters. Widen the price range or switch species to see more.
+        </p>
+      </div>
+
+      <div class="tray" id="compare-bar" data-testid="compare-bar" role="region" aria-label="Foods to compare" hidden>
+        <ol class="tray-slots" id="tray-slots" aria-hidden="true">
+          <li class="tray-slot"></li>
+          <li class="tray-slot"></li>
+          <li class="tray-slot"></li>
+        </ol>
+        <p class="tray-count"><span class="tray-number" data-testid="compare-count" id="compare-count">0</span> of 3 chosen to compare</p>
+        <button type="button" class="tray-clear" id="compare-clear" data-testid="compare-clear">Clear</button>
+      </div>
+    </section>
   </main>
 </body>
 </html>

@@ -140,6 +140,13 @@ h1, h2, h3, p { margin: 0; }
   border-bottom: 1px solid var(--rule);
 }
 
+/* Once the list is multi-column, one rule under the whole row instead of a
+   broken dash under each card. */
+@media (min-width: 36rem) {
+  .films__list { border-bottom: 1px solid var(--rule); }
+  .film { border-bottom: 0; }
+}
+
 .film__index {
   grid-area: index;
   font-size: 0.875rem;

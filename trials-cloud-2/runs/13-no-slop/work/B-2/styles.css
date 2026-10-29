@@ -188,6 +188,7 @@ h1, h2, h3, p { margin: 0; }
 
 .film {
   position: relative;
+  align-content: start;
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;

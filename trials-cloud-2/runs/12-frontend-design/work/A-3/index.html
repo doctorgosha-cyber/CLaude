@@ -10,7 +10,59 @@
 </head>
 <body>
   <main>
-    <!-- build the comparison section here -->
+    <section class="compare" data-testid="comparison-section" aria-labelledby="compare-heading">
+      <header class="compare__header">
+        <p class="compare__eyebrow">Kibble &amp; Co. reviews</p>
+        <h1 id="compare-heading" class="compare__title">Compare the foods we reviewed</h1>
+        <p class="compare__lead">Filter by species and price, sort the shortlist, then pick up to three foods to compare side by side.</p>
+      </header>
+
+      <div class="toolbar" role="group" aria-label="Filter and sort the foods">
+        <div class="field">
+          <label class="field__label" for="filter-species">Species</label>
+          <select class="field__control" id="filter-species" data-testid="filter-species">
+            <option value="all">All</option>
+            <option value="dog">Dog</option>
+            <option value="cat">Cat</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field__label" for="filter-price-min">Min price</label>
+          <input class="field__control" id="filter-price-min" data-testid="filter-price-min" type="number" min="0" step="0.01" inputmode="decimal" placeholder="No minimum" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="field__label" for="filter-price-max">Max price</label>
+          <input class="field__control" id="filter-price-max" data-testid="filter-price-max" type="number" min="0" step="0.01" inputmode="decimal" placeholder="No maximum" autocomplete="off">
+        </div>
+        <div class="field field--sort">
+          <label class="field__label" for="sort-select">Sort by</label>
+          <select class="field__control" id="sort-select" data-testid="sort-select">
+            <option value="featured">Featured</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="rating-desc">Rating: high to low</option>
+            <option value="protein-desc">Protein: high to low</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="results-status" id="results-status" role="status" aria-live="polite"></p>
+
+      <ul class="cards" id="product-list" aria-label="Reviewed foods"></ul>
+
+      <p class="empty" id="empty-results" data-testid="empty-results" hidden>
+        No foods match these filters. Try widening the price range or choosing another species.
+      </p>
+
+      <div class="compare-bar" id="compare-bar" data-testid="compare-bar" role="region" aria-label="Comparison selection" hidden>
+        <p class="compare-bar__text">
+          <span class="compare-bar__count" data-testid="compare-count" id="compare-count">0</span>
+          <span id="compare-label">of 3 selected to compare</span>
+        </p>
+        <ul class="compare-bar__names" id="compare-names" aria-label="Selected foods"></ul>
+        <button class="btn btn--ghost" type="button" id="compare-clear" data-testid="compare-clear">Clear</button>
+      </div>
+    </section>
   </main>
 </body>
 </html>

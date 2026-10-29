@@ -10,7 +10,73 @@
 </head>
 <body>
   <main>
-    <!-- build the comparison section here -->
+    <section class="compare" data-testid="comparison-section" aria-labelledby="compare-heading">
+      <header class="compare__intro">
+        <p class="compare__eyebrow">Kibble &amp; Co. review lab</p>
+        <h1 id="compare-heading" class="compare__title">Compare the foods we tested</h1>
+        <p class="compare__lede">Six recipes, one kitchen scale. Narrow the list, sort it your way, then pick up to three to compare side by side.</p>
+      </header>
+
+      <div class="toolbar" role="group" aria-label="Filter and sort products">
+        <div class="field">
+          <label for="filter-species">Species</label>
+          <select id="filter-species" data-testid="filter-species" autocomplete="off">
+            <option value="all">All pets</option>
+            <option value="dog">Dogs</option>
+            <option value="cat">Cats</option>
+          </select>
+        </div>
+
+        <div class="field field--price">
+          <label for="filter-price-min">Min price</label>
+          <div class="field__money">
+            <span class="field__symbol" aria-hidden="true" data-currency-symbol>£</span>
+            <input id="filter-price-min" data-testid="filter-price-min" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="field field--price">
+          <label for="filter-price-max">Max price</label>
+          <div class="field__money">
+            <span class="field__symbol" aria-hidden="true" data-currency-symbol>£</span>
+            <input id="filter-price-max" data-testid="filter-price-max" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Any" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="field field--sort">
+          <label for="sort-select">Sort by</label>
+          <select id="sort-select" data-testid="sort-select" autocomplete="off">
+            <option value="featured">Featured</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="rating-desc">Rating: high to low</option>
+            <option value="protein-desc">Protein: high to low</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="results-summary" id="results-summary" aria-live="polite"></p>
+
+      <ul class="grid" id="product-list" aria-label="Products"></ul>
+
+      <p class="empty" id="empty-results" data-testid="empty-results" role="status" hidden>
+        <strong>Nothing matches those filters.</strong>
+        Try widening the price range or switching species.
+      </p>
+
+      <p class="load-error" id="load-error" role="alert" hidden>We couldn't load the product list. Please refresh the page.</p>
+    </section>
   </main>
+
+  <aside class="compare-bar" id="compare-bar" data-testid="compare-bar" aria-label="Comparison selection" hidden>
+    <div class="compare-bar__inner">
+      <p class="compare-bar__status" aria-live="polite">
+        <span class="compare-bar__count" data-testid="compare-count" id="compare-count">0</span>
+        <span class="compare-bar__label" id="compare-label">of 3 selected to compare</span>
+      </p>
+      <ul class="compare-bar__chips" id="compare-chips" aria-label="Selected products"></ul>
+      <button type="button" class="btn btn--ghost" id="compare-clear" data-testid="compare-clear">Clear</button>
+    </div>
+  </aside>
 </body>
 </html>
