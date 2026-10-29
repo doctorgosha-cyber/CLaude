@@ -45,6 +45,7 @@
   }
   select.addEventListener('change', () => applyLanguage(select.value));
   applyLanguage('en');
+  document.querySelector('main').classList.add('ready');
 
   const valid = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   form.addEventListener('submit', (e) => {

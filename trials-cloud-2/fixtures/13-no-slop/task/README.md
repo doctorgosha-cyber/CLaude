@@ -6,6 +6,8 @@ and show how they work, dubbed into ten languages. Build the **landing section**
 
 Aim for under 15 minutes of work. Do not install packages and do not use the network (there is none).
 Do not modify anything under `data/` or `images/`. Run `npm test` if present.
+QA runs a browser suite, axe-core (WCAG A/AA, zero violations expected) and Lighthouse with the mobile preset
+(accessibility ≥ 90, performance ≥ 85).
 
 ## Deliverable
 

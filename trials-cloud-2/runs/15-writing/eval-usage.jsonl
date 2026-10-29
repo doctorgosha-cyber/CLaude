@@ -16,3 +16,9 @@
 {"card":"B-3","task":"t4","tokens":62015,"tool_uses":5,"duration_ms":30662}
 {"card":"B-3","task":"t5","tokens":62809,"tool_uses":5,"duration_ms":29576}
 {"card":"B-3","task":"t6","tokens":63439,"tool_uses":5,"duration_ms":24754}
+{"card":"A-2","task":"t1","tokens":62962,"tool_uses":3,"duration_ms":25354,"note":"resumed after rate limit; usage from the resumed segment"}
+{"card":"A-2","task":"t2","tokens":61491,"tool_uses":3,"duration_ms":20745,"note":"resumed"}
+{"card":"A-2","task":"t3","tokens":61671,"tool_uses":3,"duration_ms":23922,"note":"resumed"}
+{"card":"A-2","task":"t4","tokens":62898,"tool_uses":3,"duration_ms":25085,"note":"resumed"}
+{"card":"A-2","task":"t5","tokens":61586,"tool_uses":3,"duration_ms":21913,"note":"resumed"}
+{"card":"A-2","task":"t6","tokens":65914,"tool_uses":5,"duration_ms":36009,"note":"resumed"}

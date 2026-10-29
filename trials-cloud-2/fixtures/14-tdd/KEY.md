@@ -6,6 +6,9 @@ kcalPer100g, daysSupply, compare) from `task/README.md`. The agent gets `task/` 
 README (the spec), `package.json` (`npm test` = `node --test`), a stub `src/pricing.mjs`
 whose exports throw plain `Error`, and ONE visible smoke test `test/smoke.test.mjs`.
 
+Fixture layout: `task/` (agent gets this only), `hidden/` (25 cases + runner), `grade.mjs`,
+`reference/` (25/25), `calibration/` (the two fresh one-shot plain attempts, graded below).
+
 ## Grading
 
     node /home/user/CLaude/trials-cloud-2/fixtures/14-tdd/grade.mjs <run-dir>
@@ -70,7 +73,32 @@ Method: a fresh cloud session (same model, Fable 5.1) got only the README text a
 instruction "write src/pricing.mjs in one pass, no tests, no iteration, reply with the file".
 The returned file was graded with grade.mjs.
 
-CALIBRATION_PLACEHOLDER
+| attempt | README version | score | failed |
+|---|---|---|---|
+| builder's own one-shot (contaminated: written knowing the traps) | v1 | 25/26 → 24/25 after trimming | P04 (dash + code) |
+| fresh session one-shot #1 (`calibration/oneshot-1-old-readme/`) | v1 (before the 3 extra rules) | 25/25 on the v1 hidden set | – |
+| same file graded on the FINAL hidden set (rules it never saw) | – | 21/25 = 0.84 | P04 D02 C01 C02 |
+| fresh session one-shot #2 (`calibration/oneshot-2-final-readme/`) | FINAL | **24/25 = 0.96** | D03 (untrimmed date " 2028-02-28 ") |
+
+Each fresh session: ~3.5 min, ~13k thinking tokens, ~US$1.2, no tool use, no tests.
+
+Hardening done between #1 and #2 (all stated in the README, each once): unit-price texts
+(`€4.99/kg`, `$2.20 per lb`) override the mass; `daysSupply` accepts mass-spec strings;
+`compare` returns/sorts `perKg` rounded to the currency's minor units (ties decided on the
+rounded value, e.g. 74.995 ties with 75). Giveaway hints removed from the README (the
+"except for the rounding mode" remark about Intl, the 1.005/2.135 examples).
+
+**Calibration verdict: the 40-80 % target was NOT reached.** A fresh one-shot attempt by this
+model lands at 0.96 on the final set. The remaining failure (and the four the v1 file loses
+on the final set) are all "rule read but not applied" slips, i.e. exactly what a red→green
+loop at these seams would catch, so the task still exercises the skill; but the ceiling for
+Arm A is high and the expected skill effect is small (0-2 cases). Pushing the one-shot score
+lower would require making the README vague (both arms then guess the same way: noise, not a
+skill measurement) or adding tricks, which the brief forbids. Decision left to the
+coordinator: run as is (expect Arm A ≈ 0.88-1.0 across reps, variance mostly from D03/C02/P04-
+type slips) or drop the task. Honest expectation: a plain agent that also runs `npm test` and
+writes a few tests of its own will likely reach 1.0; the TDD arm's cost (extra tokens, the
+"confirm seams with the user" step) is the main thing this trial will measure.
 
 ## Expected plain-agent weaknesses (what the hidden set punishes)
 
