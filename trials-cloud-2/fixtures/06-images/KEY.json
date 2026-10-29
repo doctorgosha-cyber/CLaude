@@ -1,0 +1,24 @@
+{
+ "trial": "06-images",
+ "purpose": "Inputs for the WebP/AVIF encoder comparison and the SSIM-gate wrapper test. The 8 src/ images are a SUBSTITUTE for the team's product photos (no photo hosts reachable): 4 bundled scikit-image 0.26.0 sample photos (no pooch download) + 3 synthetic text-on-photo banners + 1 flat product-like render.",
+ "sources": {
+  "src/photo_astronaut.png": {"origin": "skimage.data.astronaut(), NASA Great Images database (Eileen Collins)", "licence": "public domain (no known copyright restrictions)", "size": "512x512"},
+  "src/photo_chelsea.png": {"origin": "skimage.data.chelsea()", "licence": "CC0, photographer Stefan van der Walt", "size": "451x300"},
+  "src/photo_coffee.png": {"origin": "skimage.data.coffee(), courtesy Pikolo Espresso Bar", "licence": "CC0, photographer Rachel Michetti", "size": "600x400"},
+  "src/photo_rocket.png": {"origin": "skimage.data.rocket(), SpaceX DSCOVR launch (bundled as JPEG, decoded to PNG by gen_photos.py)", "licence": "public domain (SpaceX release)", "size": "640x427"},
+  "src/banner_text_chelsea.png": {"origin": "gen_synthetic.mjs: photo_chelsea + crisp SVG text overlay via sharp composite", "licence": "CC0 base photo", "size": "451x300"},
+  "src/banner_text_coffee.png": {"origin": "gen_synthetic.mjs: photo_coffee + SVG text", "licence": "CC0 base photo", "size": "600x400"},
+  "src/banner_text_astronaut.png": {"origin": "gen_synthetic.mjs: photo_astronaut + SVG text", "licence": "public domain base photo", "size": "512x512"},
+  "src/flat_product_box.png": {"origin": "gen_synthetic.mjs: flat-colour SVG packaging render with sharp edges and small label text, rasterised by sharp", "licence": "synthetic (this trial)", "size": "800x600"}
+ },
+ "generators": ["gen_photos.py (run with the trial venv: scikit-image==0.26.0)", "gen_synthetic.mjs (sharp@0.35.5)", "gen_seeded.mjs (sharp@0.35.5)"],
+ "seeded_defects": [
+  {"id": "S1", "file": "seeded/noise_fine.png", "location": "whole image (400x400 deterministic per-pixel random RGB noise, LCG seed 12345)", "what": "content no lossy encoder can reproduce at site qualities; WebP q80 scores SSIM 0.55 and AVIF q60 0.89 against the source", "check": "wrapper SSIM gate: any output with SSIM < --min-ssim (0.92 in the test) must be listed in `failed` and the exit code must be 1"}
+ ],
+ "controls": [
+  {"file": "control/flat_product_box.png", "expect": "passes the gate at every setting tried (WebP q80 SSIM 0.991, AVIF q60 0.999)"},
+  {"file": "control/photo_chelsea.png", "expect": "passes at --min-ssim 0.92 (WebP q80 0.953, AVIF q60 0.957); a finding here at 0.92 = false positive"},
+  {"file": "seeded/flat_product_box.png and seeded/photo_chelsea.png", "expect": "same copies inside the seeded dir; must not be listed in `failed`"}
+ ],
+ "note_on_threshold": "The 0.97 RGB-SSIM bar from the brief is above today's JPEG-80 export (7/8 src images score 0.92-0.955 at JPEG-80), so a run on src/ at --min-ssim 0.97 with the adopted qualities exits 1 by design; 0.92 is the lowest JPEG-80 score on these fixtures and is used as the 'not worse than today' gate in the control/seeded test."
+}
