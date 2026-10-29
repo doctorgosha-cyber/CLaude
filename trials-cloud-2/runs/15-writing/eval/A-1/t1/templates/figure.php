@@ -14,6 +14,6 @@ require_once __DIR__ . '/../inc/helpers.php';
 		<dt>Price</dt>
 		<dd><?php echo esc_html( nexus_format_price( $figure['price'] ) ); ?></dd>
 		<dt>Pack weight</dt>
-		<dd><?php echo esc_html( $figure['weight_kg'] ); ?> kg</dd>
+		<dd><?php echo esc_html( nexus_format_weight( $figure['weight_kg'] ) ); ?></dd>
 	</dl>
 </figure>

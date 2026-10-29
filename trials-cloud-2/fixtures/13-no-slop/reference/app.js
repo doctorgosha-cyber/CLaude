@@ -24,10 +24,10 @@
     li.dataset.testid = 'film-card';
     li.dataset.filmId = f.id;
     li.innerHTML = `
-      <a class="film__thumb" tabindex="-1" aria-hidden="true"><img alt="" width="320" height="180"></a>
+      <img alt="" width="320" height="180">
       <h3><a class="film__title" data-testid="film-link"><span data-testid="film-title"></span></a></h3>
       <p class="film__meta"><span data-testid="film-duration"></span><span data-testid="film-langs"></span></p>`;
-    for (const a of li.querySelectorAll('a')) a.href = f.url;
+    li.querySelector('[data-testid="film-link"]').href = f.url;
     li.querySelector('img').src = f.thumbnail;
     li.querySelector('[data-testid="film-duration"]').textContent = duration(f.durationSeconds);
     li.querySelector('[data-testid="film-langs"]').textContent = langCount(f.languages.length);

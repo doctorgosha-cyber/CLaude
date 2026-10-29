@@ -6,12 +6,12 @@ require_once __DIR__ . '/../functions.php';
 
 $reviews = array( array( 'rating' => 5 ), array( 'rating' => 4 ), array( 'rating' => 4 ) );
 
-$r = nexus_get_rating( $reviews );
+$r = nexus_rating_value( $reviews );
 if ( 4.3 !== $r ) {
 	fwrite( STDERR, "rating: expected 4.3, got " . var_export( $r, true ) . "\n" );
 	exit( 1 );
 }
-if ( null !== nexus_get_rating( array() ) ) {
+if ( null !== nexus_rating_value( array() ) ) {
 	fwrite( STDERR, "rating: expected null for no reviews\n" );
 	exit( 1 );
 }

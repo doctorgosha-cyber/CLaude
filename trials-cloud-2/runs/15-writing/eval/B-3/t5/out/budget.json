@@ -1,0 +1,27 @@
+{
+  "figure-energy-density.html": {
+    "size_bytes": 9102,
+    "budget_bytes": 10240,
+    "over": false
+  },
+  "figure-moisture.html": {
+    "size_bytes": 12002,
+    "budget_bytes": 12000,
+    "over": true
+  },
+  "figure-price-per-kcal.html": {
+    "size_bytes": 22612,
+    "budget_bytes": 20480,
+    "over": true
+  },
+  "figure-protein-share.html": {
+    "size_bytes": 7282,
+    "budget_bytes": 8192,
+    "over": false
+  },
+  "figure-weight-curve.html": {
+    "size_bytes": 18434,
+    "budget_bytes": 16384,
+    "over": true
+  }
+}
