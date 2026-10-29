@@ -21,3 +21,15 @@ function nexus_kind_label( string $kind ): string {
 	);
 	return $labels[ $kind ] ?? ucfirst( $kind );
 }
+
+/**
+ * Format a pack weight for display: grams under 1 kg ("850 g"),
+ * kilograms with one decimal from 1 kg up ("12.5 kg", "2.0 kg").
+ */
+function nexus_format_weight( float $kg ): string {
+	$grams = (int) round( $kg * 1000 );
+	if ( $grams < 1000 ) {
+		return $grams . ' g';
+	}
+	return number_format( $kg, 1, '.', '' ) . ' kg';
+}

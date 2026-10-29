@@ -54,8 +54,60 @@ export function toGrams(spec) {
   return g;
 }
 
+const SYMBOLS = { '$': 'USD', '€': 'EUR', '£': 'GBP', '¥': 'JPY', '₴': 'UAH' };
+const CODES = new Set(['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'UAH']);
+const MARKER_RE = /[$€£¥₴]|\b[A-Za-z]{3}\b/g;
+
+// Returns { currency, amount } or throws TypeError.
+function parsePrice(priceText) {
+  if (typeof priceText !== 'string') fail(priceText);
+  const s = priceText.trim();
+  const markers = [...s.matchAll(MARKER_RE)];
+  if (markers.length !== 1) fail(priceText);
+  const tok = markers[0][0];
+  const currency = SYMBOLS[tok] ?? (CODES.has(tok.toUpperCase()) ? tok.toUpperCase() : undefined);
+  if (!currency) fail(priceText);
+  const rest = (s.slice(0, markers[0].index) + s.slice(markers[0].index + tok.length)).trim();
+  const amount = parseAmount(rest, priceText);
+  if (!(amount > 0) || !Number.isFinite(amount)) fail(priceText);
+  return { currency, amount };
+}
+
+const SPACE_RE = new RegExp(SP, 'g');
+const AMOUNT_RE = /^\d+(?:[.,]\d+)*(?:[.,](?:\d+|[-\u2013\u2014]))?$/;
+
+function parseAmount(text, orig) {
+  const t = text.replace(SPACE_RE, '');
+  if (!AMOUNT_RE.test(t)) fail(orig);
+  // Trailing dash after a separator: zero minor units.
+  const dash = /^(.*)[.,][-\u2013\u2014]$/.exec(t);
+  const body = dash ? dash[1] : t;
+  const hasComma = body.includes(',');
+  const hasDot = body.includes('.');
+  let intPart = body;
+  let frac = '';
+  if (hasComma && hasDot) {
+    const last = Math.max(body.lastIndexOf(','), body.lastIndexOf('.'));
+    intPart = body.slice(0, last);
+    frac = body.slice(last + 1);
+  } else if (hasComma || hasDot) {
+    const sep = hasComma ? ',' : '.';
+    const parts = body.split(sep);
+    const grouping = parts.length > 2 || parts[parts.length - 1].length === 3;
+    if (!grouping) {
+      intPart = parts[0];
+      frac = parts[1];
+    }
+  }
+  intPart = intPart.replace(/[.,]/g, '');
+  if (!/^\d+$/.test(intPart) || !/^\d*$/.test(frac)) fail(orig);
+  return Number(frac ? `${intPart}.${frac}` : intPart);
+}
+
 export function pricePerKg(priceText, massSpec) {
-  throw new Error('not implemented');
+  const { currency, amount } = parsePrice(priceText);
+  const grams = toGrams(massSpec);
+  return { currency, perKg: amount / (grams / 1000) };
 }
 
 export function formatMoney(amount, currency, locale) {

@@ -14,3 +14,22 @@ test('pricePerKg: one currency marker, symbol or ISO code, before or after', () 
   }
   assert.throws(() => pricePerKg('$10', '0 g'), (e) => e instanceof TypeError && e.message.includes('0 g'));
 });
+
+test('pricePerKg: thousands grouping, decimal mark inference, dash minor units', () => {
+  const kg = (p) => pricePerKg(p, '1 kg').perKg;
+  assert.equal(kg('$1,299.00'), 1299);
+  assert.equal(kg('€1.299,00'), 1299);
+  assert.equal(kg('$1,299'), 1299);
+  assert.equal(kg('¥1,200'), 1200);
+  assert.equal(kg('€29,99'), 29.99);
+  assert.equal(kg('$12.5'), 12.5);
+  assert.equal(kg('€1.234.567'), 1234567);
+  assert.equal(kg('UAH 1 234,50'), 1234.5);
+  assert.equal(kg('UAH 1 234 567.5'), 1234567.5);
+  assert.equal(kg('CHF 12.–'), 12);
+  assert.equal(kg('CHF 12.-'), 12);
+  assert.equal(kg('CHF 12,—'), 12);
+  for (const bad of ['$1,2,3', '$1..2', '$12.', '$,5']) {
+    assert.throws(() => pricePerKg(bad, '1 kg'), (e) => e instanceof TypeError && e.message.includes(bad), bad);
+  }
+});

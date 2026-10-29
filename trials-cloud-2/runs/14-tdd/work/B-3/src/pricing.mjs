@@ -53,8 +53,29 @@ export function toGrams(spec) {
   return g;
 }
 
+const SYMBOLS = { '$': 'USD', '€': 'EUR', '£': 'GBP', '¥': 'JPY', '₴': 'UAH' };
+const CODES = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'UAH'];
+const MARKER = `(?:[$€£¥₴]|${CODES.join('|')})`;
+
+function parseAmount(text, orig) {
+  if (!new RegExp(`^${NUM}$`).test(text)) throw bad(orig);
+  const v = num(text);
+  if (!(v > 0) || !Number.isFinite(v)) throw bad(orig);
+  return v;
+}
+
 export function pricePerKg(priceText, massSpec) {
-  throw new Error('not implemented');
+  if (typeof priceText !== 'string') throw bad(priceText);
+  const grams = toGrams(massSpec);
+  const s = priceText.trim();
+  if (s.includes('-')) throw bad(priceText);
+  const m = s.match(new RegExp(`^(?:(${MARKER})${SP}*(.+?)|(.+?)${SP}*(${MARKER}))$`, 'i'));
+  if (!m) throw bad(priceText);
+  const marker = (m[1] ?? m[4]).toUpperCase();
+  const currency = SYMBOLS[marker] ?? marker;
+  const body = m[2] ?? m[3];
+  const amount = parseAmount(body, priceText);
+  return { currency, perKg: amount / (grams / 1000) };
 }
 
 export function formatMoney(amount, currency, locale) {

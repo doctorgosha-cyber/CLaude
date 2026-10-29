@@ -5,7 +5,7 @@
 require_once __DIR__ . '/../inc/compat.php';
 require_once __DIR__ . '/../inc/helpers.php';
 require_once __DIR__ . '/../inc/schema.php';
-$rating = nexus_get_rating( $reviews );
+$rating = nexus_rating_value( $reviews );
 ?>
 <article class="nexus-review-card">
 	<h3><?php echo esc_html( $product['name'] ); ?></h3>

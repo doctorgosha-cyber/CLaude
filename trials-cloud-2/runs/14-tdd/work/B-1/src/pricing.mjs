@@ -64,8 +64,65 @@ export function toGrams(spec) {
   return grams;
 }
 
+const SYMBOLS = { $: 'USD', '€': 'EUR', '£': 'GBP', '¥': 'JPY', '₴': 'UAH' };
+const ISO_CODES = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'UAH'];
+const MARKER_RE = new RegExp(`[$€£¥₴]|(?<![A-Za-z])(?:${ISO_CODES.join('|')})(?![A-Za-z])`, 'gi');
+const SP_G = new RegExp(SP, 'g');
+
+function parseAmount(text, orig) {
+  let t = text.replace(/([.,])[-–—]$/, '$100');
+  if (/[-−–—]/.test(t)) fail(orig);
+  t = t.replace(SP_G, '');
+  if (!/^[\d.,]+$/.test(t) || !/\d/.test(t)) fail(orig);
+  const hasComma = t.includes(',');
+  const hasDot = t.includes('.');
+  let normalized;
+  if (hasComma && hasDot) {
+    const decimal = t.lastIndexOf(',') > t.lastIndexOf('.') ? ',' : '.';
+    const group = decimal === ',' ? '.' : ',';
+    t = t.split(group).join('');
+    if (t.split(decimal).length !== 2) fail(orig);
+    normalized = t.replace(decimal, '.');
+  } else if (hasComma || hasDot) {
+    const sep = hasComma ? ',' : '.';
+    const parts = t.split(sep);
+    const isGroup = parts.length > 2 || /^\d{3}$/.test(parts[1]);
+    normalized = isGroup ? parts.join('') : parts.join('.');
+  } else {
+    normalized = t;
+  }
+  const n = Number(normalized);
+  if (!Number.isFinite(n) || n <= 0) fail(orig);
+  return n;
+}
+
+function parsePrice(priceText) {
+  if (typeof priceText !== 'string') fail(priceText);
+  let s = trim(priceText);
+  let per = null;
+  const unit = s.match(new RegExp(`^(.*?)${SP}*(?:/|per)${SP}*(kg|lb)$`, 'i'));
+  if (unit) {
+    per = unit[2].toLowerCase();
+    s = unit[1];
+  }
+  const markers = [...s.matchAll(MARKER_RE)];
+  if (markers.length !== 1) fail(priceText);
+  const [m] = markers;
+  const token = m[0];
+  if (m.index !== 0 && m.index + token.length !== s.length) fail(priceText);
+  const currency = SYMBOLS[token] ?? token.toUpperCase();
+  const amount = parseAmount(trim(s.slice(0, m.index) + s.slice(m.index + token.length)), priceText);
+  return { currency, amount, per };
+}
+
 export function pricePerKg(priceText, massSpec) {
-  throw new Error('not implemented');
+  const { currency, amount, per } = parsePrice(priceText);
+  const grams = toGrams(massSpec);
+  let perKg;
+  if (per === 'kg') perKg = amount;
+  else if (per === 'lb') perKg = amount / 0.45359237;
+  else perKg = amount / (grams / 1000);
+  return { currency, perKg };
 }
 
 export function formatMoney(amount, currency, locale) {
