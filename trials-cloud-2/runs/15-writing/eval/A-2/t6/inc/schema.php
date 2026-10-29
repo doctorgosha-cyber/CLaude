@@ -9,7 +9,7 @@
  *
  * @param array $reviews Each row has 'rating' (1..5).
  */
-function nexus_get_rating( array $reviews ): ?float {
+function nexus_rating_value( array $reviews ): ?float {
 	if ( empty( $reviews ) ) {
 		return null;
 	}
@@ -29,7 +29,7 @@ function nexus_product_schema( array $product, array $reviews ): array {
 		'@type'    => 'Product',
 		'name'     => $product['name'],
 	);
-	$rating = nexus_get_rating( $reviews );
+	$rating = nexus_rating_value( $reviews );
 	if ( null !== $rating ) {
 		$schema['aggregateRating'] = array(
 			'@type'       => 'AggregateRating',
