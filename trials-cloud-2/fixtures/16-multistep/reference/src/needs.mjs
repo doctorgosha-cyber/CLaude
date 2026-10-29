@@ -8,6 +8,7 @@ const FACTORS = JSON.parse(readFileSync(join(HERE, '..', 'data', 'factors.json')
 
 export const SPECIES = Object.keys(FACTORS.stage);
 export const ACTIVITIES = Object.keys(FACTORS.activity);
+const DEFAULT_STAGE = 'adult';
 
 export function stagesFor(species) {
   return Object.keys(FACTORS.stage[species] ?? {});
@@ -19,15 +20,30 @@ export function restingEnergy(weightKg) {
 }
 
 /**
+ * Map a client stage label (current key or a legacy alias from factors.json) to the
+ * current key for this species; undefined when it is not a known stage.
+ */
+export function resolveStage(species, stage) {
+  const table = FACTORS.stage[species];
+  if (!table) return undefined;
+  const key = FACTORS.aliases?.[stage] ?? stage;
+  return Object.hasOwn(table, key) ? key : undefined;
+}
+
+function stageFactorFor(species, stage) {
+  if (!FACTORS.stage[species]) throw new RangeError(`unknown species: ${species}`);
+  const key = resolveStage(species, stage);
+  if (key === undefined) throw new RangeError(`unknown life stage for ${species}: ${stage}`);
+  return FACTORS.stage[species][key];
+}
+
+/**
  * Daily maintenance energy for an animal.
  * @param {{species:string, weightKg:number, stage?:string, activity?:string}} animal
  * @returns {number} kcal per day
  */
-export function dailyKcal({ species, weightKg, stage = 'adult', activity = 'normal' }) {
-  const stageTable = FACTORS.stage[species];
-  if (!stageTable) throw new RangeError(`unknown species: ${species}`);
-  const stageFactor = stageTable[stage];
-  if (stageFactor === undefined) throw new RangeError(`unknown life stage for ${species}: ${stage}`);
+export function dailyKcal({ species, weightKg, stage = DEFAULT_STAGE, activity = 'normal' }) {
+  const stageFactor = stageFactorFor(species, stage);
   const activityFactor = FACTORS.activity[activity];
   if (activityFactor === undefined) throw new RangeError(`unknown activity level: ${activity}`);
   if (!(weightKg > 0)) throw new RangeError('weightKg must be a positive number');

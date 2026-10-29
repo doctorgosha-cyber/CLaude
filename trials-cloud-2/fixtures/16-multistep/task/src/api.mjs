@@ -1,7 +1,7 @@
 // HTTP-less request handler for GET /portion. Takes the query (string, URLSearchParams
 // or plain object) and returns { status, body }. The server wrapper is out of scope here.
 import { loadCatalogue, findProduct } from './catalogue.mjs';
-import { SPECIES, ACTIVITIES, stagesFor } from './needs.mjs';
+import { SPECIES, ACTIVITIES } from './needs.mjs';
 import { portionFor } from './calculator.mjs';
 import { formatPortion } from './format.mjs';
 import { parseNumber } from './units.mjs';
@@ -35,7 +35,7 @@ function error(status, message) {
 /**
  * Handle one portion request.
  * Query parameters: species (cat|dog), weight (number), units (metric|imperial, default metric),
- * stage (default adult), activity (low|normal|high, default normal), product (catalogue id).
+ * stage (life stage key, default adult), activity (low|normal|high, default normal), product (catalogue id).
  */
 export function handlePortion(input) {
   const q = toParams(input);
@@ -49,8 +49,7 @@ export function handlePortion(input) {
   const weight = parseNumber(q.get('weight'));
   if (!(weight > 0)) return error(400, 'weight is required and must be a positive number');
 
-  const stage = q.get('stage') ?? 'adult';
-  if (!stagesFor(species).includes(stage)) return error(400, `unknown stage for ${species}: ${stage}`);
+  const stage = q.get('stage') ?? 'adult'; // resolved against the factor table downstream
 
   const activity = q.get('activity') ?? 'normal';
   if (!ACTIVITIES.includes(activity)) return error(400, `activity must be one of ${ACTIVITIES.join(', ')}`);

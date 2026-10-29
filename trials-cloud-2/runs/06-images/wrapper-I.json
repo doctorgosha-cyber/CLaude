@@ -1,0 +1,190 @@
+{
+ "tool": "sharp@0.35.5",
+ "settings": {
+  "webpQ": 80,
+  "avifQ": 70,
+  "minSsim": 0.92,
+  "effort": 4
+ },
+ "files": 8,
+ "failed": [],
+ "results": [
+  {
+   "file": "banner_text_astronaut.png",
+   "src_bytes": 603248,
+   "outputs": {
+    "webp": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/banner_text_astronaut.webp",
+     "q": 80,
+     "bytes": 29614,
+     "ssim": 0.9544,
+     "ok": true,
+     "ms": 164
+    },
+    "avif": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/banner_text_astronaut.avif",
+     "q": 70,
+     "bytes": 29851,
+     "ssim": 0.9674,
+     "ok": true,
+     "ms": 1455
+    }
+   }
+  },
+  {
+   "file": "banner_text_chelsea.png",
+   "src_bytes": 292366,
+   "outputs": {
+    "webp": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/banner_text_chelsea.webp",
+     "q": 80,
+     "bytes": 17184,
+     "ssim": 0.9554,
+     "ok": true,
+     "ms": 84
+    },
+    "avif": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/banner_text_chelsea.avif",
+     "q": 70,
+     "bytes": 17588,
+     "ssim": 0.9727,
+     "ok": true,
+     "ms": 731
+    }
+   }
+  },
+  {
+   "file": "banner_text_coffee.png",
+   "src_bytes": 573009,
+   "outputs": {
+    "webp": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/banner_text_coffee.webp",
+     "q": 80,
+     "bytes": 32282,
+     "ssim": 0.9344,
+     "ok": true,
+     "ms": 96
+    },
+    "avif": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/banner_text_coffee.avif",
+     "q": 70,
+     "bytes": 33080,
+     "ssim": 0.958,
+     "ok": true,
+     "ms": 1569
+    }
+   }
+  },
+  {
+   "file": "flat_product_box.png",
+   "src_bytes": 42541,
+   "outputs": {
+    "webp": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/flat_product_box.webp",
+     "q": 80,
+     "bytes": 14236,
+     "ssim": 0.9909,
+     "ok": true,
+     "ms": 272
+    },
+    "avif": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/flat_product_box.avif",
+     "q": 70,
+     "bytes": 9616,
+     "ssim": 0.9994,
+     "ok": true,
+     "ms": 1328
+    }
+   }
+  },
+  {
+   "file": "photo_astronaut.png",
+   "src_bytes": 424520,
+   "outputs": {
+    "webp": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/photo_astronaut.webp",
+     "q": 80,
+     "bytes": 31724,
+     "ssim": 0.9477,
+     "ok": true,
+     "ms": 139
+    },
+    "avif": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/photo_astronaut.avif",
+     "q": 70,
+     "bytes": 31841,
+     "ssim": 0.963,
+     "ok": true,
+     "ms": 1276
+    }
+   }
+  },
+  {
+   "file": "photo_chelsea.png",
+   "src_bytes": 220782,
+   "outputs": {
+    "webp": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/photo_chelsea.webp",
+     "q": 80,
+     "bytes": 16974,
+     "ssim": 0.953,
+     "ok": true,
+     "ms": 56
+    },
+    "avif": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/photo_chelsea.avif",
+     "q": 70,
+     "bytes": 18361,
+     "ssim": 0.9698,
+     "ok": true,
+     "ms": 954
+    }
+   }
+  },
+  {
+   "file": "photo_coffee.png",
+   "src_bytes": 449225,
+   "outputs": {
+    "webp": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/photo_coffee.webp",
+     "q": 80,
+     "bytes": 37994,
+     "ssim": 0.9319,
+     "ok": true,
+     "ms": 131
+    },
+    "avif": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/photo_coffee.avif",
+     "q": 70,
+     "bytes": 39847,
+     "ssim": 0.9539,
+     "ok": true,
+     "ms": 1843
+    }
+   }
+  },
+  {
+   "file": "photo_rocket.png",
+   "src_bytes": 312541,
+   "outputs": {
+    "webp": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/photo_rocket.webp",
+     "q": 80,
+     "bytes": 23634,
+     "ssim": 0.9313,
+     "ok": true,
+     "ms": 100
+    },
+    "avif": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-I/photo_rocket.avif",
+     "q": 70,
+     "bytes": 28995,
+     "ssim": 0.9616,
+     "ok": true,
+     "ms": 1053
+    }
+   }
+  }
+ ],
+ "seconds": 11.319
+}

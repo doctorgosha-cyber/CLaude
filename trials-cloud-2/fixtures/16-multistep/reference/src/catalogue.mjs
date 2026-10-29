@@ -28,6 +28,7 @@ export function canonicalUnit(unit) {
 export function normaliseProduct(raw) {
   const { value, unit } = raw.energy;
   const kcalPer100g = canonicalUnit(unit) === 'kcal/kg' ? kcalPerKgTo100g(value) : value;
+  // PS-402: an implausible energy density is a feed error; refuse the whole catalogue.
   if (!(kcalPer100g >= MIN_KCAL_PER_100G && kcalPer100g <= MAX_KCAL_PER_100G)) {
     throw new Error(
       `catalogue: product ${raw.id} has ${kcalPer100g} kcal/100 g after normalisation ` +

@@ -1,8 +1,14 @@
 {
+  "version": "2026-10-20",
   "rer": { "coefficient": 70, "exponent": 0.75 },
   "stage": {
-    "cat": { "kitten": 2.5, "adult": 1.2, "senior": 1.1 },
-    "dog": { "puppy": 3.0, "adult": 1.6, "senior": 1.4 }
+    "cat": { "kitten": 2.5, "adult": 1.2, "neutered": 1.0, "senior": 1.1 },
+    "dog": { "puppy": 3.0, "adult": 1.6, "neutered": 1.5, "senior": 1.4 }
+  },
+  "aliases": {
+    "neutered_adult": "neutered",
+    "growth": "kitten",
+    "puppy_growth": "puppy"
   },
   "activity": { "low": 0.85, "normal": 1.0, "high": 1.2 }
 }

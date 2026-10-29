@@ -18,7 +18,7 @@ function stamp(ms) { t += ms; return new Date(t).toISOString(); }
 function log(level, msg, ms = 1000 + rnd() * 240000) { lines.push(`${stamp(ms)} ${level.padEnd(5)} ${msg}`); }
 
 log('INFO', 'portion-service v1.4.0 starting pid=18422 node=v22.22.0', 0);
-log('INFO', 'config: port=8080 defaultUnits=metric localeUnits=on', 40);
+log('INFO', 'config: port=8080 defaultUnits=metric localeUnits=on factors=2026-10-20', 40);
 log('INFO', 'catalogue: loaded data/catalogue.json version=2026-10-20 products=12 (3 added since 2026-10-06)', 112);
 log('INFO', 'listening on :8080', 8);
 
@@ -33,14 +33,14 @@ const plan = [];
 // 64 ordinary requests + 3 complaining accounts + a few stragglers, in shuffled order
 for (let i = 0; i < 38; i++) {
   const w = (2.8 + rnd() * 3.4).toFixed(1);
-  const stage = pick(['adult', 'adult', 'adult', 'senior', 'kitten']);
+  const stage = pick(['adult', 'adult', 'neutered_adult', 'neutered_adult', 'senior', 'kitten', 'neutered']);
   const act = pick(['normal', 'normal', 'low', 'high']);
   const units = rnd() < 0.12 ? '&units=metric' : '';
   plan.push([`species=cat&weight=${w}&stage=${stage}&activity=${act}${units}&product=${pick(cats)}`, `u_${String(Math.floor(rnd() * 4000)).padStart(4, '0')}`]);
 }
 for (let i = 0; i < 24; i++) {
   const w = (6 + rnd() * 30).toFixed(1);
-  const stage = pick(['adult', 'adult', 'adult', 'senior', 'puppy']);
+  const stage = pick(['adult', 'adult', 'neutered_adult', 'senior', 'puppy', 'adult']);
   const act = pick(['normal', 'normal', 'low', 'high']);
   const units = rnd() < 0.12 ? '&units=metric' : '';
   plan.push([`species=dog&weight=${w}&stage=${stage}&activity=${act}${units}&product=${pick(dogs)}`, `u_${String(Math.floor(rnd() * 4000)).padStart(4, '0')}`]);
@@ -53,7 +53,7 @@ plan.push(['species=dog&weight=24.5&stage=adult&activity=normal&product=dg-lamb-
 plan.push(['species=dog&weight=48&stage=adult&activity=high&units=imperial&product=dg-lamb-rice-dry', 'u_1981']);
 // the three support tickets
 plan.push(['species=cat&weight=10&stage=adult&activity=normal&units=imperial&product=ck-chicken-dry', 'u_2291']);
-plan.push(['species=cat&weight=11.5&stage=senior&activity=low&units=imperial&product=ck-senior-care', 'u_0874']);
+plan.push(['species=cat&weight=11.5&stage=neutered_adult&activity=low&units=imperial&product=ck-senior-care', 'u_0874']);
 plan.push(['species=cat&weight=3.8&stage=adult&activity=normal&product=ck-ocean-fish-dry', 'u_1536']);
 // a few bad requests
 plan.push(['species=cat&stage=adult&product=ck-tuna-dry', 'u_0098']);

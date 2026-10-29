@@ -1,6 +1,6 @@
 // Behaviour spec for task 12 (product comparison). Imported by grade.mjs; run through hidden/harness.mjs.
 import path from 'node:path';
-import { assert, eq, tabOrder, hasFocusRing, noHorizontalOverflow } from './harness.mjs';
+import { assert, eq, tabOrder, tabTo, hasFocusRing, noHorizontalOverflow } from './harness.mjs';
 
 const here = new URL('.', import.meta.url).pathname;
 export const name = '12-frontend-design';
@@ -148,13 +148,9 @@ export async function behaviour({ page, viewport, data, t }) {
     assert(!(await isVisible(page, 'compare-bar')), 'bar hidden again');
   });
   await t('focus-visible', async () => {
-    await page.evaluate(() => { document.activeElement && document.activeElement.blur(); window.scrollTo(0, 0); });
-    let reached = false;
-    for (let i = 0; i < 60; i++) { await page.keyboard.press('Tab'); const id = await page.evaluate(() => document.activeElement && document.activeElement.getAttribute('data-testid')); if (id === 'compare-toggle') { reached = true; break; } }
-    assert(reached, 'could not tab to a compare-toggle');
+    assert(await tabTo(page, 'compare-toggle'), 'could not tab to a compare-toggle');
     assert(await hasFocusRing(page), 'focused compare-toggle has no visible outline/box-shadow');
-    await page.evaluate(() => document.activeElement.blur());
-    await page.locator(T('filter-species')).focus(); await page.keyboard.press('Shift+Tab'); await page.keyboard.press('Tab');
+    assert(await tabTo(page, 'filter-species'), 'could not tab to filter-species');
     assert(await hasFocusRing(page), 'focused filter-species has no visible focus indicator');
   });
   await t('no-horizontal-overflow', async () => assert(await noHorizontalOverflow(page, viewport.width), `page is wider than ${viewport.width}px`));

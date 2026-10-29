@@ -8,6 +8,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 export const DEFAULT_CATALOGUE = join(HERE, '..', 'data', 'catalogue.json');
 
 const PER_KG = 'kcal/kg';
+// TODO(PS-402): refuse to load a catalogue with an implausible energy density (see data/README.md).
 
 /**
  * Convert a product's declared energy to kcal per 100 g.

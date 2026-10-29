@@ -1,0 +1,58 @@
+{
+ "tool": "sharp@0.35.5",
+ "settings": {
+  "webpQ": 80,
+  "avifQ": 70,
+  "minSsim": 0.92,
+  "effort": 4
+ },
+ "files": 2,
+ "failed": [],
+ "results": [
+  {
+   "file": "flat_product_box.png",
+   "src_bytes": 42541,
+   "outputs": {
+    "webp": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-H/flat_product_box.webp",
+     "q": 80,
+     "bytes": 14236,
+     "ssim": 0.9909,
+     "ok": true,
+     "ms": 331
+    },
+    "avif": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-H/flat_product_box.avif",
+     "q": 70,
+     "bytes": 9616,
+     "ssim": 0.9994,
+     "ok": true,
+     "ms": 1733
+    }
+   }
+  },
+  {
+   "file": "photo_chelsea.png",
+   "src_bytes": 220782,
+   "outputs": {
+    "webp": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-H/photo_chelsea.webp",
+     "q": 80,
+     "bytes": 16974,
+     "ssim": 0.953,
+     "ok": true,
+     "ms": 120
+    },
+    "avif": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-H/photo_chelsea.avif",
+     "q": 70,
+     "bytes": 18361,
+     "ssim": 0.9698,
+     "ok": true,
+     "ms": 688
+    }
+   }
+  }
+ ],
+ "seconds": 2.887
+}

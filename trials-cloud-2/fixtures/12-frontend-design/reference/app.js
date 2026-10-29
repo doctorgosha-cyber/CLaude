@@ -44,7 +44,7 @@
           <dt>Energy</dt><dd class="kcal"></dd>
           <dt>Protein</dt><dd class="protein"></dd>
         </dl>
-        <button type="button" class="card__toggle" data-testid="compare-toggle" aria-pressed="false"></button>
+        <button type="button" class="card__toggle" data-testid="compare-toggle" aria-pressed="false"><span class="card__toggle-text"></span> <span class="visually-hidden"></span></button>
       </div>`;
     if (p.badge) li.querySelector('.card__badge').textContent = p.badge;
     li.querySelector('h2').textContent = p.name;
@@ -55,7 +55,7 @@
     li.querySelector('.kcal').textContent = `${p.kcalPer100g} kcal / 100 g`;
     li.querySelector('.protein').textContent = `${p.proteinPct} % protein`;
     const toggle = li.querySelector('.card__toggle');
-    toggle.setAttribute('aria-label', `Compare ${p.name}`);
+    toggle.querySelector('.visually-hidden').textContent = p.name;
     toggle.addEventListener('click', () => {
       if (selected.has(p.id)) selected.delete(p.id);
       else if (selected.size < MAX_COMPARE) selected.add(p.id);
@@ -91,7 +91,7 @@
       const on = selected.has(id);
       const toggle = card.querySelector('.card__toggle');
       toggle.setAttribute('aria-pressed', String(on));
-      toggle.textContent = on ? 'Remove from compare' : 'Add to compare';
+      toggle.querySelector('.card__toggle-text').textContent = on ? 'Remove from compare' : 'Add to compare';
       toggle.disabled = full && !on;
       card.classList.toggle('card--selected', on);
     }

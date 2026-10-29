@@ -1,0 +1,42 @@
+# Semgrep "defaults": plain patterns only, no pattern-not / regex / taint. Local rules (registry is unreachable here).
+rules:
+  - id: js-eval
+    languages: [javascript]
+    severity: ERROR
+    message: eval()
+    pattern: eval(...)
+  - id: js-innerhtml
+    languages: [javascript]
+    severity: ERROR
+    message: innerHTML assignment
+    pattern: $EL.innerHTML = $V
+  - id: js-new-function
+    languages: [javascript]
+    severity: ERROR
+    message: new Function()
+    pattern: new Function(...)
+  - id: js-document-write
+    languages: [javascript]
+    severity: ERROR
+    message: document.write()
+    pattern: document.write(...)
+  - id: js-timer
+    languages: [javascript]
+    severity: ERROR
+    message: setTimeout with any callback
+    pattern: setTimeout($CB, ...)
+  - id: php-echo-get
+    languages: [php]
+    severity: ERROR
+    message: echo of $_GET
+    pattern: echo $_GET[...];
+  - id: php-wpdb-query
+    languages: [php]
+    severity: ERROR
+    message: $wpdb->query()
+    pattern: $wpdb->query(...)
+  - id: php-wpdb-get-results
+    languages: [php]
+    severity: ERROR
+    message: $wpdb->get_results()
+    pattern: $wpdb->get_results(...)

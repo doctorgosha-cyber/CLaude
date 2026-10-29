@@ -1,0 +1,101 @@
+{
+ "tool": "sharp@0.35.5",
+ "settings": {
+  "webpQ": 80,
+  "avifQ": 60,
+  "minSsim": 0.97,
+  "effort": 4
+ },
+ "files": 3,
+ "failed": [
+  {
+   "file": "noise_fine.png",
+   "format": "webp",
+   "ssim": 0.5529
+  },
+  {
+   "file": "noise_fine.png",
+   "format": "avif",
+   "ssim": 0.893
+  },
+  {
+   "file": "photo_chelsea.png",
+   "format": "webp",
+   "ssim": 0.953
+  },
+  {
+   "file": "photo_chelsea.png",
+   "format": "avif",
+   "ssim": 0.9571
+  }
+ ],
+ "results": [
+  {
+   "file": "flat_product_box.png",
+   "src_bytes": 42541,
+   "outputs": {
+    "webp": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-F/flat_product_box.webp",
+     "q": 80,
+     "bytes": 14236,
+     "ssim": 0.9909,
+     "ok": true,
+     "ms": 337
+    },
+    "avif": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-F/flat_product_box.avif",
+     "q": 60,
+     "bytes": 8452,
+     "ssim": 0.9992,
+     "ok": true,
+     "ms": 1446
+    }
+   }
+  },
+  {
+   "file": "noise_fine.png",
+   "src_bytes": 75479,
+   "outputs": {
+    "webp": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-F/noise_fine.webp",
+     "q": 80,
+     "bytes": 110374,
+     "ssim": 0.5529,
+     "ok": false,
+     "ms": 109
+    },
+    "avif": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-F/noise_fine.avif",
+     "q": 60,
+     "bytes": 123883,
+     "ssim": 0.893,
+     "ok": false,
+     "ms": 1633
+    }
+   }
+  },
+  {
+   "file": "photo_chelsea.png",
+   "src_bytes": 220782,
+   "outputs": {
+    "webp": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-F/photo_chelsea.webp",
+     "q": 80,
+     "bytes": 16974,
+     "ssim": 0.953,
+     "ok": false,
+     "ms": 54
+    },
+    "avif": {
+     "path": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/wrapper-F/photo_chelsea.avif",
+     "q": 60,
+     "bytes": 13512,
+     "ssim": 0.9571,
+     "ok": false,
+     "ms": 655
+    }
+   }
+  }
+ ],
+ "seconds": 4.253
+}

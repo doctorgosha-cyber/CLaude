@@ -126,6 +126,17 @@ export async function tabOrder(page, n = 60) {
   return seen;
 }
 
+/** Tab from the top of the page until the active element has the given data-testid. */
+export async function tabTo(page, testid, n = 60) {
+  await page.evaluate(() => { document.activeElement && document.activeElement.blur(); window.scrollTo(0, 0); });
+  for (let i = 0; i < n; i++) {
+    await page.keyboard.press('Tab');
+    const id = await page.evaluate(() => document.activeElement && document.activeElement.getAttribute('data-testid'));
+    if (id === testid) return true;
+  }
+  return false;
+}
+
 export async function hasFocusRing(page) {
   return page.evaluate(() => {
     const a = document.activeElement; if (!a || a === document.body) return false;
@@ -152,7 +163,9 @@ async function runAxe(page) {
 async function runLighthouse(url, gradeDir) {
   const { default: lighthouse } = await import(pathToFileURL(path.join(TOOLS, 'node_modules/lighthouse/core/index.js')).href);
   const { launch } = await import(pathToFileURL(path.join(TOOLS, 'node_modules/chrome-launcher/dist/index.js')).href);
-  const chrome = await launch({ chromePath: CHROME, userDataDir: path.join(gradeDir, 'chrome-profile'),
+  const profile = path.join(gradeDir, 'chrome-profile');
+  await mkdir(profile, { recursive: true });
+  const chrome = await launch({ chromePath: CHROME, userDataDir: profile,
     chromeFlags: ['--headless=new', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'] });
   try {
     const res = await lighthouse(url, { port: chrome.port, output: 'json', logLevel: 'silent', onlyCategories: ['performance', 'accessibility'] });

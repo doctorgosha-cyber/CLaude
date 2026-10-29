@@ -1,8 +1,13 @@
 // Rounding and response shaping.
 
-/** Portions are quoted in whole grams. */
+/**
+ * Portions are quoted in whole grams: round half away from zero to 1 g.
+ * (The app shows the number as-is; no scoop sizes, no minimums — that is the app's job.)
+ */
 export function roundGrams(grams) {
-  return Math.round(grams);
+  const scoop = 5; // standard scoop
+  const scoops = Math.round(grams / scoop);
+  return Math.max(4 * scoop, scoops * scoop);
 }
 
 /** Energy is quoted to one decimal. */

@@ -32,3 +32,8 @@ node wrapper-sketch.mjs $F/src --out $R/out/wrapper-B --avif --min-ssim 0.92 > $
 node wrapper-sketch.mjs $F/control --out $R/out/wrapper-C --avif --min-ssim 0.92 > $R/wrapper-C.json  # exit 0 (controls clean)
 node wrapper-sketch.mjs $F/seeded --out $R/out/wrapper-D --avif --min-ssim 0.92 > $R/wrapper-D.json   # exit 1 (only noise_fine.png listed)
 node wrapper-sketch.mjs /nonexistent-dir > $R/wrapper-E.json                                        # exit 2
+node wrapper-sketch.mjs $F/seeded --out $R/out/wrapper-F --avif > $R/wrapper-F.json                                   # exit 1 but 0.97 gate also flags control photo_chelsea (FP)
+node wrapper-sketch.mjs $F/seeded --out $R/out/wrapper-G --avif --avif-q 70 --min-ssim 0.92 > $R/wrapper-G.json       # tuned: exit 1, only noise_fine
+node wrapper-sketch.mjs $F/control --out $R/out/wrapper-H --avif --avif-q 70 --min-ssim 0.92 > $R/wrapper-H.json      # tuned: exit 0
+node wrapper-sketch.mjs $F/src --out $R/out/wrapper-I --avif --avif-q 70 --min-ssim 0.92 > $R/wrapper-I.json          # tuned on all 8: exit 0
+rm -rf $R/out/decoded   # ~150 MB of intermediate decoded PNGs removed after scoring (bench.mjs recreates them)

@@ -1,0 +1,649 @@
+{
+  "id": 6,
+  "tool": "sharp (libvips) vs @squoosh/lib vs cwebp/avifenc for WebP/AVIF site images at equal visual quality",
+  "versions": {
+    "sharp": "0.35.5",
+    "@img/sharp-libvips-linux-x64": "1.3.4 (libvips 8.18.7, libwebp 1.6.0, libheif 1.23.5, aom 3.15.1, mozjpeg 0826579)",
+    "@squoosh/lib": "0.5.3 (deprecated; engines node ^12.5||^14||^16)",
+    "cwebp (apt webp)": "1.3.2-0.4build3",
+    "avifenc (apt libavif-bin)": "1.0.4-1ubuntu3 (aom 3.8.2, rav1e 0.7.1, svt 1.7.0)",
+    "scikit-image": "0.26.0 (metric only)",
+    "dssim": "3.5.1 via cargo (metric only; PyPI dssim==1.3.0 is an unrelated discrete-event simulation package)",
+    "node": "22.22.0",
+    "python": "3.13.16"
+  },
+  "licences": {
+    "sharp": "Apache-2.0",
+    "@img/sharp-linux-x64": "Apache-2.0",
+    "@img/sharp-libvips-linux-x64": "LGPL-3.0-or-later (prebuilt libvips + bundled aom/libheif/libwebp/mozjpeg; used unmodified as a dependency: fine, no obligation beyond keeping it replaceable)",
+    "@squoosh/lib": "Apache-2.0",
+    "webp (cwebp)": "BSD-3-Clause",
+    "libavif-bin (avifenc)": "BSD-2-Clause",
+    "scikit-image": "BSD-3-Clause (measurement only)",
+    "dssim": "AGPL-3.0 (measurement CLI only; do not link into the product)"
+  },
+  "install": {
+    "command": "npm i sharp@0.35.5  (alternatives: apt-get install -y webp libavif-bin ; npm i @squoosh/lib@0.5.3)",
+    "seconds": 4.25,
+    "size_mb": 30,
+    "windows": "yes: sharp package.json lists optionalDependencies @img/sharp-win32-x64 / win32-ia32 / win32-arm64 @0.35.5 (prebuilt libvips, no compiler). cwebp/avifenc: untested here (official Windows zips come from downloads.webmproject.org / GitHub releases, both blocked). squoosh: untested (Node+wasm, needs --no-experimental-global-navigator --no-experimental-fetch on Node 22).",
+    "others": {
+      "@squoosh/lib": {
+        "seconds": 1.04,
+        "size_mb": 21
+      },
+      "apt webp+libavif-bin": {
+        "seconds": 7.05,
+        "size_mb": 2.9
+      },
+      "scikit-image venv (metric only)": {
+        "seconds": 35.1,
+        "size_mb": 298
+      },
+      "dssim cargo build (metric only)": {
+        "seconds": 56.6,
+        "size_mb": 25,
+        "binary_mb": 2.1
+      }
+    }
+  },
+  "fixtures": "fixtures/06-images/src: 8 PNG sources = 4 bundled scikit-image sample photos (astronaut NASA PD 512x512, chelsea CC0 451x300, coffee CC0 600x400, rocket SpaceX PD 640x427; no pooch downloads) + 3 synthetic text-on-photo banners (SVG text composited with sharp) + 1 flat product-box render (SVG rasterised). SUBSTITUTE for the team's product photos. fixtures/06-images/seeded: noise_fine.png (S1) + 2 control copies; fixtures/06-images/control: 2 clean images. KEY.json lists sources, licences, S1 and controls.",
+  "baseline": {
+    "what": "assumed hand export: JPEG quality 80 via sharp (encoder 'jpeg-sharp' in bench.mjs) for photos+banners; PNG as-is for the flat render",
+    "command": "cd runs/06-images && node bench.mjs (rows encoder=jpeg-sharp / png-source in bench.json)",
+    "recall": "n/a (no checker today: 0/1 - nothing gates quality)",
+    "false_positives": 0,
+    "runtime_s": 0.21,
+    "total_bytes_jpeg80_8_images": 290584,
+    "total_bytes_mix_jpeg80_plus_png_flat": 301579,
+    "jpeg80_ssim_rgb_per_image": {
+      "banner_text_astronaut": 0.94928,
+      "banner_text_chelsea": 0.94834,
+      "banner_text_coffee": 0.92814,
+      "flat_product_box": 0.98299,
+      "photo_astronaut": 0.94576,
+      "photo_chelsea": 0.95523,
+      "photo_coffee": 0.91901,
+      "photo_rocket": 0.91968
+    },
+    "jpeg80_images_with_ssim_ge_0.97": "1/8 (only flat_product_box, 0.983); photos/banners 0.919-0.955"
+  },
+  "candidate_default": {
+    "config": "wrapper defaults as briefed: sharp webp quality 80 effort 4; avif quality 60 effort 4 (sharp default chroma 4:4:4); gate SSIM(RGB) >= 0.97",
+    "commands": [
+      "node runs/06-images/wrapper-sketch.mjs fixtures/06-images/seeded --out runs/06-images/out/wrapper-F --avif  # exit 1",
+      "node runs/06-images/wrapper-sketch.mjs fixtures/06-images/src --out runs/06-images/out/wrapper-A --avif  # exit 1, 14/16 outputs below 0.97"
+    ],
+    "found": {
+      "S1": true
+    },
+    "recall": "1/1",
+    "false_positives": 2,
+    "false_positive_detail": "control photo_chelsea flagged in both formats (webp 0.953, avif 0.957) because the 0.97 bar is above today's JPEG-80 quality (0.955 on that image)",
+    "extra_findings_on_seeded": 0,
+    "runtime_s": 4.253,
+    "exit_codes": {
+      "src(A)": 1,
+      "seeded(F)": 1,
+      "nonexistent dir(E)": 2
+    },
+    "encoder_comparison": {
+      "method": "5 qualities (50..90) x 8 images x 13 encoder configs; every output decoded with sharp to PNG; SSIM = scikit-image structural_similarity RGB multichannel (data_range 255, also grey); DSSIM = kornelski dssim 3.5.1. Knee A (as briefed) = smallest bytes with SSIM_rgb >= 0.97. Knee B ('equal quality to today') = smallest bytes with SSIM_rgb >= JPEG-80's SSIM on the same image, and separately dssim <= JPEG-80's dssim.",
+      "squoosh_avif_quality_mapping": "cqLevel = round(63*(100-q)/100) (squoosh has no 0-100 quality)",
+      "knees": {
+        "sharp-webp": {
+          "images_reaching_0.97": "3/8",
+          "total_bytes_at_0.97_knee": 68032,
+          "pct_of_jpeg80_same_images": 86.0,
+          "mean_q_at_0.97_knee": 76.7,
+          "cannot_reach_0.97_at_q90": [
+            "banner_text_astronaut",
+            "banner_text_coffee",
+            "photo_astronaut",
+            "photo_coffee",
+            "photo_rocket"
+          ],
+          "match_jpeg80_by_ssim": {
+            "total_bytes": 212410,
+            "pct_of_jpeg80": 73.1,
+            "mean_q": 77.5
+          },
+          "match_jpeg80_by_dssim": {
+            "total_bytes": 324304,
+            "pct_of_jpeg80": 111.6,
+            "mean_q": 85
+          },
+          "mean_encode_ms_per_image": 54.2
+        },
+        "sharp-webp-tuned": {
+          "images_reaching_0.97": "3/8",
+          "total_bytes_at_0.97_knee": 68246,
+          "pct_of_jpeg80_same_images": 86.3,
+          "mean_q_at_0.97_knee": 76.7,
+          "cannot_reach_0.97_at_q90": [
+            "banner_text_astronaut",
+            "banner_text_coffee",
+            "photo_astronaut",
+            "photo_coffee",
+            "photo_rocket"
+          ],
+          "match_jpeg80_by_ssim": {
+            "total_bytes": 206758,
+            "pct_of_jpeg80": 71.2,
+            "mean_q": 76.2
+          },
+          "match_jpeg80_by_dssim": {
+            "total_bytes": 327254,
+            "pct_of_jpeg80": 112.6,
+            "mean_q": 85
+          },
+          "mean_encode_ms_per_image": 289.9
+        },
+        "sharp-avif": {
+          "images_reaching_0.97": "8/8",
+          "total_bytes_at_0.97_knee": 379014,
+          "pct_of_jpeg80_same_images": 130.4,
+          "mean_q_at_0.97_knee": 80,
+          "cannot_reach_0.97_at_q90": [],
+          "match_jpeg80_by_ssim": {
+            "total_bytes": 140860,
+            "pct_of_jpeg80": 48.5,
+            "mean_q": 56.2
+          },
+          "match_jpeg80_by_dssim": {
+            "total_bytes": 199867,
+            "pct_of_jpeg80": 68.8,
+            "mean_q": 66.2
+          },
+          "mean_encode_ms_per_image": 1627.6
+        },
+        "sharp-avif-tuned": {
+          "images_reaching_0.97": "6/8",
+          "total_bytes_at_0.97_knee": 224432,
+          "pct_of_jpeg80_same_images": 106.0,
+          "mean_q_at_0.97_knee": 76.7,
+          "cannot_reach_0.97_at_q90": [
+            "photo_coffee",
+            "photo_rocket"
+          ],
+          "match_jpeg80_by_ssim": {
+            "total_bytes": 140322,
+            "pct_of_jpeg80": 48.3,
+            "mean_q": 57.5
+          },
+          "match_jpeg80_by_dssim": {
+            "total_bytes": 192010,
+            "pct_of_jpeg80": 66.1,
+            "mean_q": 66.2
+          },
+          "mean_encode_ms_per_image": 1526.2
+        },
+        "cwebp": {
+          "images_reaching_0.97": "3/8",
+          "total_bytes_at_0.97_knee": 68032,
+          "pct_of_jpeg80_same_images": 86.0,
+          "mean_q_at_0.97_knee": 76.7,
+          "cannot_reach_0.97_at_q90": [
+            "banner_text_astronaut",
+            "banner_text_coffee",
+            "photo_astronaut",
+            "photo_coffee",
+            "photo_rocket"
+          ],
+          "match_jpeg80_by_ssim": {
+            "total_bytes": 212410,
+            "pct_of_jpeg80": 73.1,
+            "mean_q": 77.5
+          },
+          "match_jpeg80_by_dssim": {
+            "total_bytes": 324304,
+            "pct_of_jpeg80": 111.6,
+            "mean_q": 85
+          },
+          "mean_encode_ms_per_image": 73.6
+        },
+        "cwebp-tuned": {
+          "images_reaching_0.97": "3/8",
+          "total_bytes_at_0.97_knee": 68246,
+          "pct_of_jpeg80_same_images": 86.3,
+          "mean_q_at_0.97_knee": 76.7,
+          "cannot_reach_0.97_at_q90": [
+            "banner_text_astronaut",
+            "banner_text_coffee",
+            "photo_astronaut",
+            "photo_coffee",
+            "photo_rocket"
+          ],
+          "match_jpeg80_by_ssim": {
+            "total_bytes": 206758,
+            "pct_of_jpeg80": 71.2,
+            "mean_q": 76.2
+          },
+          "match_jpeg80_by_dssim": {
+            "total_bytes": 327254,
+            "pct_of_jpeg80": 112.6,
+            "mean_q": 85
+          },
+          "mean_encode_ms_per_image": 155.1
+        },
+        "avifenc": {
+          "images_reaching_0.97": "8/8",
+          "total_bytes_at_0.97_knee": 426760,
+          "pct_of_jpeg80_same_images": 146.9,
+          "mean_q_at_0.97_knee": 77.5,
+          "cannot_reach_0.97_at_q90": [],
+          "match_jpeg80_by_ssim": {
+            "total_bytes": 164729,
+            "pct_of_jpeg80": 56.7,
+            "mean_q": 57.5
+          },
+          "match_jpeg80_by_dssim": {
+            "total_bytes": 212508,
+            "pct_of_jpeg80": 73.1,
+            "mean_q": 65
+          },
+          "mean_encode_ms_per_image": 243.4
+        },
+        "avifenc-tuned": {
+          "images_reaching_0.97": "6/8",
+          "total_bytes_at_0.97_knee": 247097,
+          "pct_of_jpeg80_same_images": 116.7,
+          "mean_q_at_0.97_knee": 76.7,
+          "cannot_reach_0.97_at_q90": [
+            "photo_coffee",
+            "photo_rocket"
+          ],
+          "match_jpeg80_by_ssim": {
+            "total_bytes": 161556,
+            "pct_of_jpeg80": 55.6,
+            "mean_q": 60
+          },
+          "match_jpeg80_by_dssim": {
+            "total_bytes": 200158,
+            "pct_of_jpeg80": 68.9,
+            "mean_q": 67.5
+          },
+          "mean_encode_ms_per_image": 244.1
+        },
+        "squoosh-webp": {
+          "images_reaching_0.97": "3/8",
+          "total_bytes_at_0.97_knee": 68032,
+          "pct_of_jpeg80_same_images": 86.0,
+          "mean_q_at_0.97_knee": 76.7,
+          "cannot_reach_0.97_at_q90": [
+            "banner_text_astronaut",
+            "banner_text_coffee",
+            "photo_astronaut",
+            "photo_coffee",
+            "photo_rocket"
+          ],
+          "match_jpeg80_by_ssim": {
+            "total_bytes": 212410,
+            "pct_of_jpeg80": 73.1,
+            "mean_q": 77.5
+          },
+          "match_jpeg80_by_dssim": {
+            "total_bytes": 324304,
+            "pct_of_jpeg80": 111.6,
+            "mean_q": 85
+          },
+          "mean_encode_ms_per_image": 111.8
+        },
+        "squoosh-webp-tuned": {
+          "images_reaching_0.97": "3/8",
+          "total_bytes_at_0.97_knee": 68438,
+          "pct_of_jpeg80_same_images": 86.6,
+          "mean_q_at_0.97_knee": 76.7,
+          "cannot_reach_0.97_at_q90": [
+            "banner_text_astronaut",
+            "banner_text_coffee",
+            "photo_astronaut",
+            "photo_coffee",
+            "photo_rocket"
+          ],
+          "match_jpeg80_by_ssim": {
+            "total_bytes": 207314,
+            "pct_of_jpeg80": 71.3,
+            "mean_q": 76.2
+          },
+          "match_jpeg80_by_dssim": {
+            "total_bytes": 327414,
+            "pct_of_jpeg80": 112.7,
+            "mean_q": 85
+          },
+          "mean_encode_ms_per_image": 181.7
+        },
+        "squoosh-avif": {
+          "images_reaching_0.97": "6/8",
+          "total_bytes_at_0.97_knee": 240012,
+          "pct_of_jpeg80_same_images": 113.4,
+          "mean_q_at_0.97_knee": 80,
+          "cannot_reach_0.97_at_q90": [
+            "photo_coffee",
+            "photo_rocket"
+          ],
+          "match_jpeg80_by_ssim": {
+            "total_bytes": 146424,
+            "pct_of_jpeg80": 50.4,
+            "mean_q": 60
+          },
+          "match_jpeg80_by_dssim": {
+            "total_bytes": 202340,
+            "pct_of_jpeg80": 69.6,
+            "mean_q": 71.2
+          },
+          "mean_encode_ms_per_image": 555.2
+        },
+        "squoosh-avif-tuned": {
+          "images_reaching_0.97": "6/8",
+          "total_bytes_at_0.97_knee": 236278,
+          "pct_of_jpeg80_same_images": 111.6,
+          "mean_q_at_0.97_knee": 76.7,
+          "cannot_reach_0.97_at_q90": [
+            "photo_coffee",
+            "photo_rocket"
+          ],
+          "match_jpeg80_by_ssim": {
+            "total_bytes": 153741,
+            "pct_of_jpeg80": 52.9,
+            "mean_q": 60
+          },
+          "match_jpeg80_by_dssim": {
+            "total_bytes": 198349,
+            "pct_of_jpeg80": 68.3,
+            "mean_q": 68.8
+          },
+          "mean_encode_ms_per_image": 658.8
+        }
+      },
+      "quality_grid": {
+        "sharp-webp": {
+          "q50": {
+            "total_bytes": 124282,
+            "pct_of_jpeg80": 42.8,
+            "images_ge_jpeg80_ssim": 1,
+            "images_le_jpeg80_dssim": 1,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.9225,
+            "mean_encode_ms": 51
+          },
+          "q60": {
+            "total_bytes": 139554,
+            "pct_of_jpeg80": 48.0,
+            "images_ge_jpeg80_ssim": 1,
+            "images_le_jpeg80_dssim": 1,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.9302,
+            "mean_encode_ms": 46
+          },
+          "q70": {
+            "total_bytes": 157906,
+            "pct_of_jpeg80": 54.3,
+            "images_ge_jpeg80_ssim": 1,
+            "images_le_jpeg80_dssim": 1,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.9374,
+            "mean_encode_ms": 47
+          },
+          "q80": {
+            "total_bytes": 203642,
+            "pct_of_jpeg80": 70.1,
+            "images_ge_jpeg80_ssim": 7,
+            "images_le_jpeg80_dssim": 1,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.9499,
+            "mean_encode_ms": 54
+          },
+          "q90": {
+            "total_bytes": 332102,
+            "pct_of_jpeg80": 114.3,
+            "images_ge_jpeg80_ssim": 8,
+            "images_le_jpeg80_dssim": 8,
+            "images_ssim_ge_0.97": 3,
+            "mean_ssim_rgb": 0.9672,
+            "mean_encode_ms": 72
+          }
+        },
+        "sharp-avif": {
+          "q50": {
+            "total_bytes": 110264,
+            "pct_of_jpeg80": 37.9,
+            "images_ge_jpeg80_ssim": 3,
+            "images_le_jpeg80_dssim": 1,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.9432,
+            "mean_encode_ms": 1425
+          },
+          "q60": {
+            "total_bytes": 155317,
+            "pct_of_jpeg80": 53.4,
+            "images_ge_jpeg80_ssim": 8,
+            "images_le_jpeg80_dssim": 2,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.9582,
+            "mean_encode_ms": 1437
+          },
+          "q70": {
+            "total_bytes": 209179,
+            "pct_of_jpeg80": 72.0,
+            "images_ge_jpeg80_ssim": 8,
+            "images_le_jpeg80_dssim": 8,
+            "images_ssim_ge_0.97": 2,
+            "mean_ssim_rgb": 0.9682,
+            "mean_encode_ms": 1469
+          },
+          "q80": {
+            "total_bytes": 279935,
+            "pct_of_jpeg80": 96.3,
+            "images_ge_jpeg80_ssim": 8,
+            "images_le_jpeg80_dssim": 8,
+            "images_ssim_ge_0.97": 4,
+            "mean_ssim_rgb": 0.9752,
+            "mean_encode_ms": 1643
+          },
+          "q90": {
+            "total_bytes": 441113,
+            "pct_of_jpeg80": 151.8,
+            "images_ge_jpeg80_ssim": 8,
+            "images_le_jpeg80_dssim": 8,
+            "images_ssim_ge_0.97": 8,
+            "mean_ssim_rgb": 0.9844,
+            "mean_encode_ms": 2163
+          }
+        },
+        "avifenc": {
+          "q50": {
+            "total_bytes": 117537,
+            "pct_of_jpeg80": 40.4,
+            "images_ge_jpeg80_ssim": 2,
+            "images_le_jpeg80_dssim": 1,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.9429,
+            "mean_encode_ms": 213
+          },
+          "q60": {
+            "total_bytes": 177715,
+            "pct_of_jpeg80": 61.2,
+            "images_ge_jpeg80_ssim": 8,
+            "images_le_jpeg80_dssim": 3,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.961,
+            "mean_encode_ms": 222
+          },
+          "q70": {
+            "total_bytes": 236760,
+            "pct_of_jpeg80": 81.5,
+            "images_ge_jpeg80_ssim": 8,
+            "images_le_jpeg80_dssim": 8,
+            "images_ssim_ge_0.97": 3,
+            "mean_ssim_rgb": 0.97,
+            "mean_encode_ms": 190
+          },
+          "q80": {
+            "total_bytes": 314416,
+            "pct_of_jpeg80": 108.2,
+            "images_ge_jpeg80_ssim": 8,
+            "images_le_jpeg80_dssim": 8,
+            "images_ssim_ge_0.97": 5,
+            "mean_ssim_rgb": 0.9773,
+            "mean_encode_ms": 252
+          },
+          "q90": {
+            "total_bytes": 554520,
+            "pct_of_jpeg80": 190.8,
+            "images_ge_jpeg80_ssim": 8,
+            "images_le_jpeg80_dssim": 8,
+            "images_ssim_ge_0.97": 8,
+            "mean_ssim_rgb": 0.9875,
+            "mean_encode_ms": 339
+          }
+        },
+        "squoosh-avif": {
+          "q50": {
+            "total_bytes": 97609,
+            "pct_of_jpeg80": 33.6,
+            "images_ge_jpeg80_ssim": 1,
+            "images_le_jpeg80_dssim": 1,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.9298,
+            "mean_encode_ms": 660
+          },
+          "q60": {
+            "total_bytes": 144397,
+            "pct_of_jpeg80": 49.7,
+            "images_ge_jpeg80_ssim": 7,
+            "images_le_jpeg80_dssim": 1,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.9493,
+            "mean_encode_ms": 628
+          },
+          "q70": {
+            "total_bytes": 187982,
+            "pct_of_jpeg80": 64.7,
+            "images_ge_jpeg80_ssim": 8,
+            "images_le_jpeg80_dssim": 5,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.958,
+            "mean_encode_ms": 535
+          },
+          "q80": {
+            "total_bytes": 242988,
+            "pct_of_jpeg80": 83.6,
+            "images_ge_jpeg80_ssim": 8,
+            "images_le_jpeg80_dssim": 8,
+            "images_ssim_ge_0.97": 3,
+            "mean_ssim_rgb": 0.9654,
+            "mean_encode_ms": 491
+          },
+          "q90": {
+            "total_bytes": 398333,
+            "pct_of_jpeg80": 137.1,
+            "images_ge_jpeg80_ssim": 8,
+            "images_le_jpeg80_dssim": 8,
+            "images_ssim_ge_0.97": 6,
+            "mean_ssim_rgb": 0.9754,
+            "mean_encode_ms": 462
+          }
+        },
+        "cwebp": {
+          "q50": {
+            "total_bytes": 124282,
+            "pct_of_jpeg80": 42.8,
+            "images_ge_jpeg80_ssim": 1,
+            "images_le_jpeg80_dssim": 1,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.9225,
+            "mean_encode_ms": 83
+          },
+          "q60": {
+            "total_bytes": 139554,
+            "pct_of_jpeg80": 48.0,
+            "images_ge_jpeg80_ssim": 1,
+            "images_le_jpeg80_dssim": 1,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.9302,
+            "mean_encode_ms": 68
+          },
+          "q70": {
+            "total_bytes": 157906,
+            "pct_of_jpeg80": 54.3,
+            "images_ge_jpeg80_ssim": 1,
+            "images_le_jpeg80_dssim": 1,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.9374,
+            "mean_encode_ms": 81
+          },
+          "q80": {
+            "total_bytes": 203642,
+            "pct_of_jpeg80": 70.1,
+            "images_ge_jpeg80_ssim": 7,
+            "images_le_jpeg80_dssim": 1,
+            "images_ssim_ge_0.97": 1,
+            "mean_ssim_rgb": 0.9499,
+            "mean_encode_ms": 65
+          },
+          "q90": {
+            "total_bytes": 332102,
+            "pct_of_jpeg80": 114.3,
+            "images_ge_jpeg80_ssim": 8,
+            "images_le_jpeg80_dssim": 8,
+            "images_ssim_ge_0.97": 3,
+            "mean_ssim_rgb": 0.9672,
+            "mean_encode_ms": 72
+          }
+        }
+      },
+      "notes": [
+        "WebP bytes are identical across sharp, cwebp and squoosh at default settings (same libwebp encoder) -> encoder choice for WebP is only packaging/runtime.",
+        "Tuned WebP (effort 6 + smartSubsample / -sharp_yuv) changed bytes by <1% and SSIM by <0.001: no gain.",
+        "sharp AVIF default chromaSubsampling is already 4:4:4 (default and 'tuned 4:4:4' outputs byte-identical on banners); 4:2:0 on photos saved 5-25% bytes but dropped RGB-SSIM below the JPEG-80 line on coffee/rocket.",
+        "At the 0.97 bar no WebP encoder reaches it on banner_text_astronaut (0.969 at q90) and banner_text_coffee (0.959 at q90) nor on 3 of 4 photos; all AVIF encoders reach it (q80-90) except squoosh/avifenc-tuned 4:2:0 on coffee/rocket.",
+        "sharp AVIF (libheif+aom 3.15) is 10-12% smaller than avifenc 1.0.4 (aom 3.8.2) at matched quality but ~7x slower per image at effort 4 vs avifenc speed 6 (1.4 s vs 0.2 s per 0.1-0.5 MP image, shared CPU)."
+      ]
+    }
+  },
+  "candidate_tuned": {
+    "config": "sharp webp quality 80 effort 4; avif quality 70 effort 4 (4:4:4, sharp default); gate --min-ssim 0.92 = lowest JPEG-80 score on the fixtures ('not worse than today'). Why: q70 is the lowest grid quality where AVIF beats JPEG-80 on all 8 images under BOTH SSIM and DSSIM; 0.97 rejects today's own export.",
+    "commands": [
+      "node runs/06-images/wrapper-sketch.mjs fixtures/06-images/control --out runs/06-images/out/wrapper-H --avif --avif-q 70 --min-ssim 0.92  # exit 0",
+      "node runs/06-images/wrapper-sketch.mjs fixtures/06-images/seeded --out runs/06-images/out/wrapper-G --avif --avif-q 70 --min-ssim 0.92  # exit 1",
+      "node runs/06-images/wrapper-sketch.mjs fixtures/06-images/src --out runs/06-images/out/wrapper-I --avif --avif-q 70 --min-ssim 0.92  # exit 0"
+    ],
+    "found": {
+      "S1": true
+    },
+    "recall": "1/1",
+    "false_positives": 0,
+    "extra_findings_on_seeded": 0,
+    "runtime_s": 11.319,
+    "runtime_note": "8 images x (webp+avif+2 decodes+2 SSIM) on shared 4 vCPU; AVIF effort 4 dominates (~1.4 s/image)",
+    "exit_codes": {
+      "control(H)": 0,
+      "seeded(G)": 1,
+      "src(I)": 0
+    },
+    "encoder_comparison": "see candidate_default.encoder_comparison (same bench; tuned configs are the *-tuned encoders)",
+    "found_detail": "S1 noise_fine.png flagged via its WebP output (SSIM 0.553); its AVIF q70 output scored above 0.92, so the gate relies on the WebP leg at this setting"
+  },
+  "limits": [
+    "Fixtures are 4 stock photos + synthetic banners, 0.13-0.48 MP, not the team's product photos or 9:16 frames; byte ratios will shift on real inputs.",
+    "SSIM and DSSIM disagree on WebP q80 (SSIM: >= JPEG-80 on 7/8; DSSIM: worse on 7/8). No human viewing done.",
+    "Quality grid is 10 steps; knees are coarse.",
+    "Runtimes on a shared 4 vCPU box with other trials running.",
+    "avifenc defaults (speed 6, yuv auto=444) vs sharp effort 4 are not identical speed settings.",
+    "squoosh runs only with two Node flags and is deprecated upstream; not a maintainable choice.",
+    "Windows for cwebp/avifenc/squoosh not tested (binaries from blocked hosts).",
+    "runs/06-images/out/ (16 MB of encoded outputs) is not shipped; `node runs/06-images/bench.mjs` regenerates it."
+  ],
+  "verdict": "ADOPT",
+  "reason": "sharp@0.35.5 AVIF at quality 70 gives 72% of today's JPEG-80 bytes (209 KB vs 291 KB on 8 images) while scoring >= JPEG-80 on every image under both SSIM and DSSIM (q60: 53% of bytes, passes SSIM 8/8 but DSSIM only 2/8). WebP q80 is 70% of bytes by SSIM but DSSIM rates it below JPEG-80 on 7/8, so WebP is a fallback format only, not the saving. sharp beats avifenc 1.0.4 by ~10% bytes at equal quality, needs one npm install with Windows prebuilts, and the wrapper gate catches the seeded failure with 0 FPs at the 0.92 'not worse than today' threshold.",
+  "wrapper": "runs/06-images/wrapper-sketch.mjs",
+  "do_not_adopt_notes": [
+    "@squoosh/lib 0.5.3: deprecated; on Node 22 import fails with 'TypeError: Cannot set property navigator of #<Object> which has only a getter' (build/index.js:30), then 'TypeError: Failed to parse URL from .../imagequant_node-a4aafbae.wasm'; works only with --no-experimental-global-navigator --no-experimental-fetch. Bytes no better than sharp.",
+    "cwebp 1.3.2: byte-identical WebP to sharp; extra binary to ship on Windows for no gain.",
+    "avifenc 1.0.4 (Ubuntu): 10-12% larger files than sharp at equal quality; Windows builds only via GitHub releases (blocked here).",
+    "The briefed 0.97 RGB-SSIM gate: today's JPEG-80 export itself fails it on 7/8 images and WebP cannot reach it at q90 on 5/8; using it as the default would reject the team's current quality. Wrapper keeps 0.97 as the default per brief but the adopted CI setting is --min-ssim 0.92.",
+    "Tuned WebP (effort 6, smartSubsample) and 4:2:0 AVIF on photos: no gain / quality loss.",
+    "PyPI dssim==1.3.0 is not the image metric (installed then removed)."
+  ]
+}
