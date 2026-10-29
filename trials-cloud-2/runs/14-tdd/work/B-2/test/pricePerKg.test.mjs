@@ -28,3 +28,20 @@ test('pricePerKg: dash after decimal mark means zero minor units', () => {
   assert.equal(pricePerKg('CHF 12.-', '1 kg').perKg, 12);
   assert.equal(pricePerKg('12,— €', '1 kg').perKg, 12);
 });
+
+test('pricePerKg: unit prices are passed through (per lb converted)', () => {
+  assert.deepEqual(pricePerKg('$10/kg', '400 g'), { currency: 'USD', perKg: 10 });
+  assert.deepEqual(pricePerKg('€7.50 per kg', '2 × 400 g'), { currency: 'EUR', perKg: 7.5 });
+  assert.deepEqual(pricePerKg('$4.99 / LB', '1 kg'), { currency: 'USD', perKg: 4.99 / 0.45359237 });
+  assert.deepEqual(pricePerKg('$4.99/lb', '1 kg'), { currency: 'USD', perKg: 4.99 / 0.45359237 });
+  assert.deepEqual(pricePerKg('£3 PER kg', '100 g'), { currency: 'GBP', perKg: 3 });
+  // mass spec is still validated
+  assert.throws(() => pricePerKg('$10/kg', '0 g'), (e) => e instanceof TypeError && e.message.includes('0 g'));
+});
+
+test('pricePerKg: invalid price texts throw TypeError naming the input', () => {
+  for (const bad of ['29.99', '$29.99 €', 'CAD 5', '-$5', '$-5', '$0', '$', '$abc', '$1,2,3.4.5', 'USD', '$5 kg']) {
+    assert.throws(() => pricePerKg(bad, '1 kg'), (e) => e instanceof TypeError && e.message.includes(bad), bad);
+  }
+  assert.throws(() => pricePerKg(5, '1 kg'), (e) => e instanceof TypeError && e.message.includes('5'));
+});

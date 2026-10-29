@@ -34,3 +34,8 @@
 {"card":"A-3","task":"t6","tokens":64844,"tool_uses":5,"duration_ms":24740}
 {"card":"A-3","task":"t5","tokens":63419,"tool_uses":6,"duration_ms":35897}
 {"card":"A-3","task":"t4","tokens":65039,"tool_uses":7,"duration_ms":43248}
+{"card":"B-2","task":"t2","tokens":62090,"tool_uses":5,"duration_ms":26986}
+{"card":"B-2","task":"t3","tokens":63014,"tool_uses":5,"duration_ms":30387}
+{"card":"B-2","task":"t4","tokens":62460,"tool_uses":5,"duration_ms":25357}
+{"card":"B-2","task":"t5","tokens":63197,"tool_uses":6,"duration_ms":35948}
+{"card":"B-2","task":"t6","tokens":65126,"tool_uses":5,"duration_ms":28007}
