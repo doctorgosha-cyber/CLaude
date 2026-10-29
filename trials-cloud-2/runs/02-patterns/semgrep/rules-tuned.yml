@@ -13,7 +13,9 @@ rules:
       - patterns:
           - pattern: $G[$K](...)
           - metavariable-regex: { metavariable: $G, regex: ^(window|globalThis|self)$ }
-          - pattern-not: $G["..."](...)
+          # semgrep constant-folds 'ev'+'al' into a string literal, so pattern-not $G["..."] would hide it;
+          # instead require that the index is not a single plain string literal in the source text
+          - metavariable-regex: { metavariable: $K, regex: '^(?!["''][^"'']*["'']$)' }
 
   - id: js-innerhtml-nonliteral
     languages: [javascript]
@@ -102,15 +104,23 @@ rules:
   - id: php-wpdb-interpolated-sql
     languages: [php]
     severity: ERROR
-    message: SQL string built with interpolation/concatenation of a variable; use $wpdb->prepare()
-    patterns:
-      - pattern: $wpdb->$M($S, ...)
-      - metavariable-regex: { metavariable: $M, regex: '^(query|get_results|get_var|get_row|get_col)$' }
-      - metavariable-pattern:
-          metavariable: $S
-          pattern-either:
-            - pattern: '"..."'
-            - pattern: $A . $B
-      - metavariable-regex:
-          metavariable: $S
-          regex: '\$(?!wpdb->)[A-Za-z_][A-Za-z0-9_]*'
+    message: function parameter reaches a $wpdb query without $wpdb->prepare() (taint)
+    # metavariable-regex cannot see the content of a PHP interpolated string in CE 1.182.1 (tested: regex "DELETE"
+    # never matched), so the interpolation case is expressed as taint: any function parameter -> $wpdb->query/get_*
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-inside: |
+              function $F(..., $P, ...) { ... }
+          - focus-metavariable: $P
+    pattern-sanitizers:
+      - pattern-either:
+          - pattern: $wpdb->prepare(...)
+          - pattern: esc_sql(...)
+          - pattern: intval(...)
+          - pattern: absint(...)
+    pattern-sinks:
+      - patterns:
+          - pattern: $wpdb->$M($S, ...)
+          - metavariable-regex: { metavariable: $M, regex: '^(query|get_results|get_var|get_row|get_col)$' }
+          - focus-metavariable: $S

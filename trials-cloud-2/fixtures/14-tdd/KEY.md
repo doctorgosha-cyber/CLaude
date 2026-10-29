@@ -45,7 +45,7 @@ Expected values and their rationale are inline in `hidden/cases.mjs`. Key choice
   C03 expects unparseable items (including undefined/missing fields) last in input order
   with `{currency:null, perKg:NaN}` and no input mutation; `(a,b)=>a.perKg-b.perKg` fails it.
 
-## Verification record (Node 22.22.0, 2026-10-29)
+## Verification record (Node 22.22.0, 2026-10-29, final hidden set)
 
 | run dir | score | failed |
 |---|---|---|
@@ -54,17 +54,23 @@ Expected values and their rationale are inline in `hidden/cases.mjs`. Key choice
 | reference, rounding delegated to Intl default (halfExpand) | 20/25 = 0.80 | F01 F02 F03 F04 F05 |
 | reference, `amount.toFixed(n)` rounding | 20/25 = 0.80 | F01–F05 |
 | reference, numeric half-even on `amount*100` | 24/25 = 0.96 | F01 (1.015) |
-| reference, `new Date(y,m,d)` local + toISOString (graded under Pacific/Auckland) | 23/25 = 0.92 | D01 D02 |
+| reference, `new Date(y,m,d)` local + toISOString (graded under Pacific/Auckland) | 22/25 = 0.88 | D01 D02 D03 |
 | reference, kcal range checked before kJ/kg normalisation | 23/25 = 0.92 | K01 K02 |
 | reference, comparator `a.perKg - b.perKg` | 24/25 = 0.96 | C03 |
+| reference, compare sorts/returns unrounded perKg | 23/25 = 0.92 | C01 C02 |
+| reference, unit-price suffix stripped but not applied | 24/25 = 0.96 | P04 |
 | reference with Intl `roundingMode:'halfEven'` instead of the string rounder (control) | 25/25 | – |
 
 The degraded variants live in the scratchpad (`…/scratchpad/14-degrade/<name>/src/pricing.mjs`),
 not in the fixture.
 
-## Calibration (plain one-shot attempts)
+## Calibration (plain one-shot attempts, no tests, straight from the README)
 
-See the section at the end (filled after the calibration runs).
+Method: a fresh cloud session (same model, Fable 5.1) got only the README text and the
+instruction "write src/pricing.mjs in one pass, no tests, no iteration, reply with the file".
+The returned file was graded with grade.mjs.
+
+CALIBRATION_PLACEHOLDER
 
 ## Expected plain-agent weaknesses (what the hidden set punishes)
 

@@ -16,10 +16,10 @@
 │ Scan Summary │
 └──────────────┘
 ✅ Scan completed successfully.
- • Findings: 9 (9 blocking)
+ • Findings: 12 (12 blocking)
  • Rules run: 8
  • Targets scanned: 12
  • Parsed lines: ~100.0%
  • Scan was limited to files tracked by git
  • For a detailed list of skipped files and lines, run semgrep with the --verbose flag
-Ran 8 rules on 12 files: 9 findings.
+Ran 8 rules on 12 files: 12 findings.
