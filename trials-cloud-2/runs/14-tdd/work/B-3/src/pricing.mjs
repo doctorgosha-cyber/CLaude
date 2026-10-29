@@ -11,9 +11,13 @@ function num(text) {
   return Number(text.replace(',', '.'));
 }
 
+const OZ = 28.349523125;
+const LB = 453.59237;
 const MASS_UNITS = [
   [/^(?:g|grams?)$/i, 1],
   [/^(?:kg|kilograms?)$/i, 1000],
+  [/^(?:oz|ounces?)$/i, OZ],
+  [/^(?:lbs?|pounds?)$/i, LB],
 ];
 
 function unitFactor(word) {
@@ -24,11 +28,15 @@ function unitFactor(word) {
 export function toGrams(spec) {
   if (typeof spec !== 'string') throw bad(spec);
   const s = spec.trim();
-  const m = s.match(new RegExp(`^(${NUM})${SP}*([a-z]+)$`, 'i'));
+  const m = s.match(new RegExp(`^(${NUM})${SP}*([a-z]+)(?:${SP}+(${NUM})${SP}*([a-z]+))?$`, 'i'));
   if (!m) throw bad(spec);
   const f = unitFactor(m[2]);
   if (f === null) throw bad(spec);
-  const g = num(m[1]) * f;
+  let g = num(m[1]) * f;
+  if (m[3] !== undefined) {
+    if (f !== LB || !/^(?:oz|ounces?)$/i.test(m[4])) throw bad(spec);
+    g += num(m[3]) * OZ;
+  }
   if (!(g > 0) || !Number.isFinite(g)) throw bad(spec);
   return g;
 }
