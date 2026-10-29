@@ -31,14 +31,14 @@ function req(q, user, ms) {
 
 const plan = [];
 // 64 ordinary requests + 3 complaining accounts + a few stragglers, in shuffled order
-for (let i = 0; i < 34; i++) {
+for (let i = 0; i < 38; i++) {
   const w = (2.8 + rnd() * 3.4).toFixed(1);
   const stage = pick(['adult', 'adult', 'adult', 'senior', 'kitten']);
   const act = pick(['normal', 'normal', 'low', 'high']);
   const units = rnd() < 0.12 ? '&units=metric' : '';
   plan.push([`species=cat&weight=${w}&stage=${stage}&activity=${act}${units}&product=${pick(cats)}`, `u_${String(Math.floor(rnd() * 4000)).padStart(4, '0')}`]);
 }
-for (let i = 0; i < 22; i++) {
+for (let i = 0; i < 24; i++) {
   const w = (6 + rnd() * 30).toFixed(1);
   const stage = pick(['adult', 'adult', 'adult', 'senior', 'puppy']);
   const act = pick(['normal', 'normal', 'low', 'high']);

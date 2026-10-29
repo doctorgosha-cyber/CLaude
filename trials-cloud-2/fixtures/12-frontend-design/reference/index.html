@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Compare dog and cat foods – Kibble &amp; Co.</title>
+  <meta name="description" content="Compare six reviewed pet foods by price, calories, protein and rating.">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <section class="compare" data-testid="comparison-section" aria-labelledby="compare-heading">
+      <header class="compare__intro">
+        <h1 id="compare-heading">Six foods we fed for a month</h1>
+        <p>Filter by species and price, sort by what matters to you, then pick up to three to compare side by side.</p>
+      </header>
+
+      <div class="controls" role="group" aria-label="Filter and sort">
+        <div class="field">
+          <label for="species">Species</label>
+          <select id="species" data-testid="filter-species">
+            <option value="all">Dogs and cats</option>
+            <option value="dog">Dogs</option>
+            <option value="cat">Cats</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="price-min">Min price</label>
+          <input id="price-min" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0" data-testid="filter-price-min">
+        </div>
+        <div class="field">
+          <label for="price-max">Max price</label>
+          <input id="price-max" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Any" data-testid="filter-price-max">
+        </div>
+        <div class="field">
+          <label for="sort">Sort by</label>
+          <select id="sort" data-testid="sort-select">
+            <option value="featured">Featured</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="rating-desc">Rating: high to low</option>
+            <option value="protein-desc">Protein: high to low</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="results-count" id="results-count" aria-live="polite"></p>
+
+      <ul class="cards" id="cards" aria-label="Products"></ul>
+
+      <p class="empty" id="empty" data-testid="empty-results" hidden>
+        No food matches these filters. Widen the price range or choose a different species.
+      </p>
+
+      <div class="bar" id="bar" data-testid="compare-bar" hidden>
+        <p class="bar__text">
+          <span class="bar__count" id="count" data-testid="compare-count">0</span>
+          <span id="count-label">of 3 selected to compare</span>
+        </p>
+        <button type="button" class="bar__clear" id="clear" data-testid="compare-clear">Clear selection</button>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,1938 @@
+{
+ "threshold_ssim_rgb": 0.97,
+ "images": [
+  "banner_text_astronaut",
+  "banner_text_chelsea",
+  "banner_text_coffee",
+  "flat_product_box",
+  "photo_astronaut",
+  "photo_chelsea",
+  "photo_coffee",
+  "photo_rocket"
+ ],
+ "png_source_bytes": {
+  "banner_text_astronaut": 603248,
+  "banner_text_chelsea": 292366,
+  "banner_text_coffee": 573009,
+  "flat_product_box": 42541,
+  "photo_astronaut": 424520,
+  "photo_chelsea": 220782,
+  "photo_coffee": 449225,
+  "photo_rocket": 312541
+ },
+ "baseline_jpeg80": {
+  "banner_text_astronaut": {
+   "bytes": 45016,
+   "ssim_rgb": 0.94928,
+   "ssim_gray": 0.97255,
+   "dssim": 0.00122542,
+   "ms": 32.8
+  },
+  "banner_text_chelsea": {
+   "bytes": 24384,
+   "ssim_rgb": 0.94834,
+   "ssim_gray": 0.96612,
+   "dssim": 0.00142106,
+   "ms": 74
+  },
+  "banner_text_coffee": {
+   "bytes": 42280,
+   "ssim_rgb": 0.92814,
+   "ssim_gray": 0.95948,
+   "dssim": 0.0015316,
+   "ms": 42
+  },
+  "flat_product_box": {
+   "bytes": 31546,
+   "ssim_rgb": 0.98299,
+   "ssim_gray": 0.99468,
+   "dssim": 0.00093891,
+   "ms": 15.1
+  },
+  "photo_astronaut": {
+   "bytes": 45321,
+   "ssim_rgb": 0.94576,
+   "ssim_gray": 0.97405,
+   "dssim": 0.00102999,
+   "ms": 9
+  },
+  "photo_chelsea": {
+   "bytes": 23133,
+   "ssim_rgb": 0.95523,
+   "ssim_gray": 0.9692,
+   "dssim": 0.00120159,
+   "ms": 9.3
+  },
+  "photo_coffee": {
+   "bytes": 47265,
+   "ssim_rgb": 0.91901,
+   "ssim_gray": 0.95659,
+   "dssim": 0.00162515,
+   "ms": 9.2
+  },
+  "photo_rocket": {
+   "bytes": 31639,
+   "ssim_rgb": 0.91968,
+   "ssim_gray": 0.97508,
+   "dssim": 0.00211438,
+   "ms": 15.4
+  }
+ },
+ "baseline_jpeg80_total_bytes": 290584,
+ "baseline_mix_total_bytes": 301579,
+ "baseline_jpeg80_images_below_threshold": [
+  "banner_text_astronaut",
+  "banner_text_chelsea",
+  "banner_text_coffee",
+  "photo_astronaut",
+  "photo_chelsea",
+  "photo_coffee",
+  "photo_rocket"
+ ],
+ "encoders": {
+  "sharp-webp": {
+   "knee": {
+    "banner_text_chelsea": {
+     "q": 90,
+     "bytes": 28054,
+     "ssim_rgb": 0.97427,
+     "ssim_gray": 0.9869,
+     "dssim": 0.00073901,
+     "vs_jpeg80_pct": 115.1,
+     "vs_baseline_mix_pct": 115.1
+    },
+    "flat_product_box": {
+     "q": 50,
+     "bytes": 10748,
+     "ssim_rgb": 0.98808,
+     "ssim_gray": 0.99715,
+     "dssim": 0.00061132,
+     "vs_jpeg80_pct": 34.1,
+     "vs_baseline_mix_pct": 25.3
+    },
+    "photo_chelsea": {
+     "q": 90,
+     "bytes": 29230,
+     "ssim_rgb": 0.97578,
+     "ssim_gray": 0.98658,
+     "dssim": 0.00063333,
+     "vs_jpeg80_pct": 126.4,
+     "vs_baseline_mix_pct": 126.4
+    }
+   },
+   "cannot_reach_threshold": [
+    {
+     "image": "banner_text_astronaut",
+     "best_ssim_rgb_at_q90": 0.96885,
+     "bytes_at_q90": 48584
+    },
+    {
+     "image": "banner_text_coffee",
+     "best_ssim_rgb_at_q90": 0.95873,
+     "bytes_at_q90": 52564
+    },
+    {
+     "image": "photo_astronaut",
+     "best_ssim_rgb_at_q90": 0.96476,
+     "bytes_at_q90": 52912
+    },
+    {
+     "image": "photo_coffee",
+     "best_ssim_rgb_at_q90": 0.95722,
+     "bytes_at_q90": 62814
+    },
+    {
+     "image": "photo_rocket",
+     "best_ssim_rgb_at_q90": 0.94595,
+     "bytes_at_q90": 39398
+    }
+   ],
+   "images_reached": 3,
+   "total_bytes_at_knee": 68032,
+   "baseline_jpeg80_bytes_same_images": 79063,
+   "knee_pct_of_jpeg80": 86.0,
+   "baseline_mix_bytes_same_images": 90058,
+   "knee_pct_of_baseline_mix": 75.5,
+   "mean_q_at_knee": 76.7,
+   "median_dssim_at_knee": 0.0006,
+   "mean_encode_ms_per_image": 54.2,
+   "total_bytes_at_q80": 203642,
+   "mean_ssim_rgb_at_q80": 0.9499,
+   "text_images_below_threshold_at_q90": [
+    "banner_text_astronaut",
+    "banner_text_coffee"
+   ],
+   "knee_match_jpeg80": {
+    "per_image": {
+     "banner_text_astronaut": {
+      "q": 80,
+      "bytes": 29614,
+      "ssim_rgb": 0.95437,
+      "pct_of_jpeg80": 65.8,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 48584
+     },
+     "banner_text_chelsea": {
+      "q": 80,
+      "bytes": 17184,
+      "ssim_rgb": 0.95543,
+      "pct_of_jpeg80": 70.5,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 28054
+     },
+     "banner_text_coffee": {
+      "q": 80,
+      "bytes": 32282,
+      "ssim_rgb": 0.93437,
+      "pct_of_jpeg80": 76.4,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 52564
+     },
+     "flat_product_box": {
+      "q": 50,
+      "bytes": 10748,
+      "ssim_rgb": 0.98808,
+      "pct_of_jpeg80": 34.1,
+      "dssim_knee_q": 50,
+      "dssim_knee_bytes": 10748
+     },
+     "photo_astronaut": {
+      "q": 80,
+      "bytes": 31724,
+      "ssim_rgb": 0.9477,
+      "pct_of_jpeg80": 70.0,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 52912
+     },
+     "photo_chelsea": {
+      "q": 90,
+      "bytes": 29230,
+      "ssim_rgb": 0.97578,
+      "pct_of_jpeg80": 126.4,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 29230
+     },
+     "photo_coffee": {
+      "q": 80,
+      "bytes": 37994,
+      "ssim_rgb": 0.93187,
+      "pct_of_jpeg80": 80.4,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 62814
+     },
+     "photo_rocket": {
+      "q": 80,
+      "bytes": 23634,
+      "ssim_rgb": 0.93133,
+      "pct_of_jpeg80": 74.7,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 39398
+     }
+    },
+    "total_bytes": 212410,
+    "pct_of_jpeg80_total": 73.1,
+    "mean_q": 77.5,
+    "dssim_total_bytes": 324304,
+    "dssim_pct_of_jpeg80_total": 111.6,
+    "dssim_mean_q": 85,
+    "dssim_images_matched": 8
+   }
+  },
+  "sharp-webp-tuned": {
+   "knee": {
+    "banner_text_chelsea": {
+     "q": 90,
+     "bytes": 28136,
+     "ssim_rgb": 0.97337,
+     "ssim_gray": 0.98593,
+     "dssim": 0.00069932,
+     "vs_jpeg80_pct": 115.4,
+     "vs_baseline_mix_pct": 115.4
+    },
+    "flat_product_box": {
+     "q": 50,
+     "bytes": 10924,
+     "ssim_rgb": 0.98867,
+     "ssim_gray": 0.99721,
+     "dssim": 0.00054159,
+     "vs_jpeg80_pct": 34.6,
+     "vs_baseline_mix_pct": 25.7
+    },
+    "photo_chelsea": {
+     "q": 90,
+     "bytes": 29186,
+     "ssim_rgb": 0.97523,
+     "ssim_gray": 0.9855,
+     "dssim": 0.00064378,
+     "vs_jpeg80_pct": 126.2,
+     "vs_baseline_mix_pct": 126.2
+    }
+   },
+   "cannot_reach_threshold": [
+    {
+     "image": "banner_text_astronaut",
+     "best_ssim_rgb_at_q90": 0.96845,
+     "bytes_at_q90": 48488
+    },
+    {
+     "image": "banner_text_coffee",
+     "best_ssim_rgb_at_q90": 0.95882,
+     "bytes_at_q90": 53236
+    },
+    {
+     "image": "photo_astronaut",
+     "best_ssim_rgb_at_q90": 0.96477,
+     "bytes_at_q90": 51364
+    },
+    {
+     "image": "photo_coffee",
+     "best_ssim_rgb_at_q90": 0.95871,
+     "bytes_at_q90": 64902
+    },
+    {
+     "image": "photo_rocket",
+     "best_ssim_rgb_at_q90": 0.94908,
+     "bytes_at_q90": 41018
+    }
+   ],
+   "images_reached": 3,
+   "total_bytes_at_knee": 68246,
+   "baseline_jpeg80_bytes_same_images": 79063,
+   "knee_pct_of_jpeg80": 86.3,
+   "baseline_mix_bytes_same_images": 90058,
+   "knee_pct_of_baseline_mix": 75.8,
+   "mean_q_at_knee": 76.7,
+   "median_dssim_at_knee": 0.0006,
+   "mean_encode_ms_per_image": 289.9,
+   "total_bytes_at_q80": 203972,
+   "mean_ssim_rgb_at_q80": 0.9495,
+   "text_images_below_threshold_at_q90": [
+    "banner_text_astronaut",
+    "banner_text_coffee"
+   ],
+   "knee_match_jpeg80": {
+    "per_image": {
+     "banner_text_astronaut": {
+      "q": 80,
+      "bytes": 29630,
+      "ssim_rgb": 0.95382,
+      "pct_of_jpeg80": 65.8,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 48488
+     },
+     "banner_text_chelsea": {
+      "q": 80,
+      "bytes": 16662,
+      "ssim_rgb": 0.95386,
+      "pct_of_jpeg80": 68.3,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 28136
+     },
+     "banner_text_coffee": {
+      "q": 80,
+      "bytes": 31672,
+      "ssim_rgb": 0.93139,
+      "pct_of_jpeg80": 74.9,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 53236
+     },
+     "flat_product_box": {
+      "q": 50,
+      "bytes": 10924,
+      "ssim_rgb": 0.98867,
+      "pct_of_jpeg80": 34.6,
+      "dssim_knee_q": 50,
+      "dssim_knee_bytes": 10924
+     },
+     "photo_astronaut": {
+      "q": 80,
+      "bytes": 31000,
+      "ssim_rgb": 0.94851,
+      "pct_of_jpeg80": 68.4,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 51364
+     },
+     "photo_chelsea": {
+      "q": 90,
+      "bytes": 29186,
+      "ssim_rgb": 0.97523,
+      "pct_of_jpeg80": 126.2,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 29186
+     },
+     "photo_coffee": {
+      "q": 80,
+      "bytes": 38704,
+      "ssim_rgb": 0.93066,
+      "pct_of_jpeg80": 81.9,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 64902
+     },
+     "photo_rocket": {
+      "q": 70,
+      "bytes": 18980,
+      "ssim_rgb": 0.9218,
+      "pct_of_jpeg80": 60.0,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 41018
+     }
+    },
+    "total_bytes": 206758,
+    "pct_of_jpeg80_total": 71.2,
+    "mean_q": 76.2,
+    "dssim_total_bytes": 327254,
+    "dssim_pct_of_jpeg80_total": 112.6,
+    "dssim_mean_q": 85,
+    "dssim_images_matched": 8
+   }
+  },
+  "sharp-avif": {
+   "knee": {
+    "banner_text_astronaut": {
+     "q": 80,
+     "bytes": 39971,
+     "ssim_rgb": 0.97333,
+     "ssim_gray": 0.98602,
+     "dssim": 0.00048918,
+     "vs_jpeg80_pct": 88.8,
+     "vs_baseline_mix_pct": 88.8
+    },
+    "banner_text_chelsea": {
+     "q": 70,
+     "bytes": 17588,
+     "ssim_rgb": 0.97267,
+     "ssim_gray": 0.98114,
+     "dssim": 0.00095359,
+     "vs_jpeg80_pct": 72.1,
+     "vs_baseline_mix_pct": 72.1
+    },
+    "banner_text_coffee": {
+     "q": 90,
+     "bytes": 70045,
+     "ssim_rgb": 0.97941,
+     "ssim_gray": 0.99163,
+     "dssim": 0.0002713,
+     "vs_jpeg80_pct": 165.7,
+     "vs_baseline_mix_pct": 165.7
+    },
+    "flat_product_box": {
+     "q": 50,
+     "bytes": 7511,
+     "ssim_rgb": 0.99897,
+     "ssim_gray": 0.99966,
+     "dssim": 0.00018142,
+     "vs_jpeg80_pct": 23.8,
+     "vs_baseline_mix_pct": 17.7
+    },
+    "photo_astronaut": {
+     "q": 90,
+     "bytes": 72547,
+     "ssim_rgb": 0.98002,
+     "ssim_gray": 0.99215,
+     "dssim": 0.00021815,
+     "vs_jpeg80_pct": 160.1,
+     "vs_baseline_mix_pct": 160.1
+    },
+    "photo_chelsea": {
+     "q": 80,
+     "bytes": 24528,
+     "ssim_rgb": 0.97821,
+     "ssim_gray": 0.98754,
+     "dssim": 0.00049293,
+     "vs_jpeg80_pct": 106.0,
+     "vs_baseline_mix_pct": 106.0
+    },
+    "photo_coffee": {
+     "q": 90,
+     "bytes": 83269,
+     "ssim_rgb": 0.97632,
+     "ssim_gray": 0.9919,
+     "dssim": 0.00023494,
+     "vs_jpeg80_pct": 176.2,
+     "vs_baseline_mix_pct": 176.2
+    },
+    "photo_rocket": {
+     "q": 90,
+     "bytes": 63555,
+     "ssim_rgb": 0.98342,
+     "ssim_gray": 0.99542,
+     "dssim": 0.00026148,
+     "vs_jpeg80_pct": 200.9,
+     "vs_baseline_mix_pct": 200.9
+    }
+   },
+   "cannot_reach_threshold": [],
+   "images_reached": 8,
+   "total_bytes_at_knee": 379014,
+   "baseline_jpeg80_bytes_same_images": 290584,
+   "knee_pct_of_jpeg80": 130.4,
+   "baseline_mix_bytes_same_images": 301579,
+   "knee_pct_of_baseline_mix": 125.7,
+   "mean_q_at_knee": 80,
+   "median_dssim_at_knee": 0.0003,
+   "mean_encode_ms_per_image": 1627.6,
+   "total_bytes_at_q80": 279935,
+   "mean_ssim_rgb_at_q80": 0.9752,
+   "text_images_below_threshold_at_q90": [],
+   "knee_match_jpeg80": {
+    "per_image": {
+     "banner_text_astronaut": {
+      "q": 60,
+      "bytes": 22411,
+      "ssim_rgb": 0.95988,
+      "pct_of_jpeg80": 49.8,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 29851
+     },
+     "banner_text_chelsea": {
+      "q": 60,
+      "bytes": 13429,
+      "ssim_rgb": 0.96173,
+      "pct_of_jpeg80": 55.1,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 17588
+     },
+     "banner_text_coffee": {
+      "q": 50,
+      "bytes": 17134,
+      "ssim_rgb": 0.9283,
+      "pct_of_jpeg80": 40.5,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 33080
+     },
+     "flat_product_box": {
+      "q": 50,
+      "bytes": 7511,
+      "ssim_rgb": 0.99897,
+      "pct_of_jpeg80": 23.8,
+      "dssim_knee_q": 50,
+      "dssim_knee_bytes": 7511
+     },
+     "photo_astronaut": {
+      "q": 60,
+      "bytes": 23002,
+      "ssim_rgb": 0.95411,
+      "pct_of_jpeg80": 50.8,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 31841
+     },
+     "photo_chelsea": {
+      "q": 60,
+      "bytes": 13512,
+      "ssim_rgb": 0.95707,
+      "pct_of_jpeg80": 58.4,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 18361
+     },
+     "photo_coffee": {
+      "q": 60,
+      "bytes": 28237,
+      "ssim_rgb": 0.93666,
+      "pct_of_jpeg80": 59.7,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 39847
+     },
+     "photo_rocket": {
+      "q": 50,
+      "bytes": 15624,
+      "ssim_rgb": 0.93805,
+      "pct_of_jpeg80": 49.4,
+      "dssim_knee_q": 60,
+      "dssim_knee_bytes": 21788
+     }
+    },
+    "total_bytes": 140860,
+    "pct_of_jpeg80_total": 48.5,
+    "mean_q": 56.2,
+    "dssim_total_bytes": 199867,
+    "dssim_pct_of_jpeg80_total": 68.8,
+    "dssim_mean_q": 66.2,
+    "dssim_images_matched": 8
+   }
+  },
+  "sharp-avif-tuned": {
+   "knee": {
+    "banner_text_astronaut": {
+     "q": 80,
+     "bytes": 39971,
+     "ssim_rgb": 0.97333,
+     "ssim_gray": 0.98602,
+     "dssim": 0.00048918,
+     "vs_jpeg80_pct": 88.8,
+     "vs_baseline_mix_pct": 88.8
+    },
+    "banner_text_chelsea": {
+     "q": 70,
+     "bytes": 17588,
+     "ssim_rgb": 0.97267,
+     "ssim_gray": 0.98114,
+     "dssim": 0.00095359,
+     "vs_jpeg80_pct": 72.1,
+     "vs_baseline_mix_pct": 72.1
+    },
+    "banner_text_coffee": {
+     "q": 90,
+     "bytes": 70045,
+     "ssim_rgb": 0.97941,
+     "ssim_gray": 0.99163,
+     "dssim": 0.0002713,
+     "vs_jpeg80_pct": 165.7,
+     "vs_baseline_mix_pct": 165.7
+    },
+    "flat_product_box": {
+     "q": 50,
+     "bytes": 7511,
+     "ssim_rgb": 0.99897,
+     "ssim_gray": 0.99966,
+     "dssim": 0.00018142,
+     "vs_jpeg80_pct": 23.8,
+     "vs_baseline_mix_pct": 17.7
+    },
+    "photo_astronaut": {
+     "q": 90,
+     "bytes": 65591,
+     "ssim_rgb": 0.97268,
+     "ssim_gray": 0.99204,
+     "dssim": 0.00027316,
+     "vs_jpeg80_pct": 144.7,
+     "vs_baseline_mix_pct": 144.7
+    },
+    "photo_chelsea": {
+     "q": 80,
+     "bytes": 23726,
+     "ssim_rgb": 0.97615,
+     "ssim_gray": 0.98737,
+     "dssim": 0.00053135,
+     "vs_jpeg80_pct": 102.6,
+     "vs_baseline_mix_pct": 102.6
+    }
+   },
+   "cannot_reach_threshold": [
+    {
+     "image": "photo_coffee",
+     "best_ssim_rgb_at_q90": 0.96715,
+     "bytes_at_q90": 75018
+    },
+    {
+     "image": "photo_rocket",
+     "best_ssim_rgb_at_q90": 0.95648,
+     "bytes_at_q90": 47782
+    }
+   ],
+   "images_reached": 6,
+   "total_bytes_at_knee": 224432,
+   "baseline_jpeg80_bytes_same_images": 211680,
+   "knee_pct_of_jpeg80": 106.0,
+   "baseline_mix_bytes_same_images": 222675,
+   "knee_pct_of_baseline_mix": 100.8,
+   "mean_q_at_knee": 76.7,
+   "median_dssim_at_knee": 0.0004,
+   "mean_encode_ms_per_image": 1526.2,
+   "total_bytes_at_q80": 269906,
+   "mean_ssim_rgb_at_q80": 0.9713,
+   "text_images_below_threshold_at_q90": [],
+   "knee_match_jpeg80": {
+    "per_image": {
+     "banner_text_astronaut": {
+      "q": 60,
+      "bytes": 22411,
+      "ssim_rgb": 0.95988,
+      "pct_of_jpeg80": 49.8,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 29851
+     },
+     "banner_text_chelsea": {
+      "q": 60,
+      "bytes": 13429,
+      "ssim_rgb": 0.96173,
+      "pct_of_jpeg80": 55.1,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 17588
+     },
+     "banner_text_coffee": {
+      "q": 50,
+      "bytes": 17134,
+      "ssim_rgb": 0.9283,
+      "pct_of_jpeg80": 40.5,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 33080
+     },
+     "flat_product_box": {
+      "q": 50,
+      "bytes": 7511,
+      "ssim_rgb": 0.99897,
+      "pct_of_jpeg80": 23.8,
+      "dssim_knee_q": 50,
+      "dssim_knee_bytes": 7511
+     },
+     "photo_astronaut": {
+      "q": 60,
+      "bytes": 21701,
+      "ssim_rgb": 0.94687,
+      "pct_of_jpeg80": 47.9,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 29811
+     },
+     "photo_chelsea": {
+      "q": 70,
+      "bytes": 17609,
+      "ssim_rgb": 0.96746,
+      "pct_of_jpeg80": 76.1,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 17609
+     },
+     "photo_coffee": {
+      "q": 60,
+      "bytes": 26421,
+      "ssim_rgb": 0.92826,
+      "pct_of_jpeg80": 55.9,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 37260
+     },
+     "photo_rocket": {
+      "q": 50,
+      "bytes": 14106,
+      "ssim_rgb": 0.92493,
+      "pct_of_jpeg80": 44.6,
+      "dssim_knee_q": 60,
+      "dssim_knee_bytes": 19300
+     }
+    },
+    "total_bytes": 140322,
+    "pct_of_jpeg80_total": 48.3,
+    "mean_q": 57.5,
+    "dssim_total_bytes": 192010,
+    "dssim_pct_of_jpeg80_total": 66.1,
+    "dssim_mean_q": 66.2,
+    "dssim_images_matched": 8
+   }
+  },
+  "cwebp": {
+   "knee": {
+    "banner_text_chelsea": {
+     "q": 90,
+     "bytes": 28054,
+     "ssim_rgb": 0.97427,
+     "ssim_gray": 0.9869,
+     "dssim": 0.00073901,
+     "vs_jpeg80_pct": 115.1,
+     "vs_baseline_mix_pct": 115.1
+    },
+    "flat_product_box": {
+     "q": 50,
+     "bytes": 10748,
+     "ssim_rgb": 0.98808,
+     "ssim_gray": 0.99715,
+     "dssim": 0.00061132,
+     "vs_jpeg80_pct": 34.1,
+     "vs_baseline_mix_pct": 25.3
+    },
+    "photo_chelsea": {
+     "q": 90,
+     "bytes": 29230,
+     "ssim_rgb": 0.97578,
+     "ssim_gray": 0.98658,
+     "dssim": 0.00063333,
+     "vs_jpeg80_pct": 126.4,
+     "vs_baseline_mix_pct": 126.4
+    }
+   },
+   "cannot_reach_threshold": [
+    {
+     "image": "banner_text_astronaut",
+     "best_ssim_rgb_at_q90": 0.96885,
+     "bytes_at_q90": 48584
+    },
+    {
+     "image": "banner_text_coffee",
+     "best_ssim_rgb_at_q90": 0.95873,
+     "bytes_at_q90": 52564
+    },
+    {
+     "image": "photo_astronaut",
+     "best_ssim_rgb_at_q90": 0.96476,
+     "bytes_at_q90": 52912
+    },
+    {
+     "image": "photo_coffee",
+     "best_ssim_rgb_at_q90": 0.95722,
+     "bytes_at_q90": 62814
+    },
+    {
+     "image": "photo_rocket",
+     "best_ssim_rgb_at_q90": 0.94595,
+     "bytes_at_q90": 39398
+    }
+   ],
+   "images_reached": 3,
+   "total_bytes_at_knee": 68032,
+   "baseline_jpeg80_bytes_same_images": 79063,
+   "knee_pct_of_jpeg80": 86.0,
+   "baseline_mix_bytes_same_images": 90058,
+   "knee_pct_of_baseline_mix": 75.5,
+   "mean_q_at_knee": 76.7,
+   "median_dssim_at_knee": 0.0006,
+   "mean_encode_ms_per_image": 73.6,
+   "total_bytes_at_q80": 203642,
+   "mean_ssim_rgb_at_q80": 0.9499,
+   "text_images_below_threshold_at_q90": [
+    "banner_text_astronaut",
+    "banner_text_coffee"
+   ],
+   "knee_match_jpeg80": {
+    "per_image": {
+     "banner_text_astronaut": {
+      "q": 80,
+      "bytes": 29614,
+      "ssim_rgb": 0.95437,
+      "pct_of_jpeg80": 65.8,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 48584
+     },
+     "banner_text_chelsea": {
+      "q": 80,
+      "bytes": 17184,
+      "ssim_rgb": 0.95543,
+      "pct_of_jpeg80": 70.5,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 28054
+     },
+     "banner_text_coffee": {
+      "q": 80,
+      "bytes": 32282,
+      "ssim_rgb": 0.93437,
+      "pct_of_jpeg80": 76.4,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 52564
+     },
+     "flat_product_box": {
+      "q": 50,
+      "bytes": 10748,
+      "ssim_rgb": 0.98808,
+      "pct_of_jpeg80": 34.1,
+      "dssim_knee_q": 50,
+      "dssim_knee_bytes": 10748
+     },
+     "photo_astronaut": {
+      "q": 80,
+      "bytes": 31724,
+      "ssim_rgb": 0.9477,
+      "pct_of_jpeg80": 70.0,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 52912
+     },
+     "photo_chelsea": {
+      "q": 90,
+      "bytes": 29230,
+      "ssim_rgb": 0.97578,
+      "pct_of_jpeg80": 126.4,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 29230
+     },
+     "photo_coffee": {
+      "q": 80,
+      "bytes": 37994,
+      "ssim_rgb": 0.93187,
+      "pct_of_jpeg80": 80.4,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 62814
+     },
+     "photo_rocket": {
+      "q": 80,
+      "bytes": 23634,
+      "ssim_rgb": 0.93133,
+      "pct_of_jpeg80": 74.7,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 39398
+     }
+    },
+    "total_bytes": 212410,
+    "pct_of_jpeg80_total": 73.1,
+    "mean_q": 77.5,
+    "dssim_total_bytes": 324304,
+    "dssim_pct_of_jpeg80_total": 111.6,
+    "dssim_mean_q": 85,
+    "dssim_images_matched": 8
+   }
+  },
+  "cwebp-tuned": {
+   "knee": {
+    "banner_text_chelsea": {
+     "q": 90,
+     "bytes": 28136,
+     "ssim_rgb": 0.97337,
+     "ssim_gray": 0.98593,
+     "dssim": 0.00069932,
+     "vs_jpeg80_pct": 115.4,
+     "vs_baseline_mix_pct": 115.4
+    },
+    "flat_product_box": {
+     "q": 50,
+     "bytes": 10924,
+     "ssim_rgb": 0.98867,
+     "ssim_gray": 0.99721,
+     "dssim": 0.00054159,
+     "vs_jpeg80_pct": 34.6,
+     "vs_baseline_mix_pct": 25.7
+    },
+    "photo_chelsea": {
+     "q": 90,
+     "bytes": 29186,
+     "ssim_rgb": 0.97523,
+     "ssim_gray": 0.9855,
+     "dssim": 0.00064378,
+     "vs_jpeg80_pct": 126.2,
+     "vs_baseline_mix_pct": 126.2
+    }
+   },
+   "cannot_reach_threshold": [
+    {
+     "image": "banner_text_astronaut",
+     "best_ssim_rgb_at_q90": 0.96845,
+     "bytes_at_q90": 48488
+    },
+    {
+     "image": "banner_text_coffee",
+     "best_ssim_rgb_at_q90": 0.95882,
+     "bytes_at_q90": 53236
+    },
+    {
+     "image": "photo_astronaut",
+     "best_ssim_rgb_at_q90": 0.96477,
+     "bytes_at_q90": 51364
+    },
+    {
+     "image": "photo_coffee",
+     "best_ssim_rgb_at_q90": 0.95871,
+     "bytes_at_q90": 64902
+    },
+    {
+     "image": "photo_rocket",
+     "best_ssim_rgb_at_q90": 0.94908,
+     "bytes_at_q90": 41018
+    }
+   ],
+   "images_reached": 3,
+   "total_bytes_at_knee": 68246,
+   "baseline_jpeg80_bytes_same_images": 79063,
+   "knee_pct_of_jpeg80": 86.3,
+   "baseline_mix_bytes_same_images": 90058,
+   "knee_pct_of_baseline_mix": 75.8,
+   "mean_q_at_knee": 76.7,
+   "median_dssim_at_knee": 0.0006,
+   "mean_encode_ms_per_image": 155.1,
+   "total_bytes_at_q80": 203972,
+   "mean_ssim_rgb_at_q80": 0.9495,
+   "text_images_below_threshold_at_q90": [
+    "banner_text_astronaut",
+    "banner_text_coffee"
+   ],
+   "knee_match_jpeg80": {
+    "per_image": {
+     "banner_text_astronaut": {
+      "q": 80,
+      "bytes": 29630,
+      "ssim_rgb": 0.95382,
+      "pct_of_jpeg80": 65.8,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 48488
+     },
+     "banner_text_chelsea": {
+      "q": 80,
+      "bytes": 16662,
+      "ssim_rgb": 0.95386,
+      "pct_of_jpeg80": 68.3,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 28136
+     },
+     "banner_text_coffee": {
+      "q": 80,
+      "bytes": 31672,
+      "ssim_rgb": 0.93139,
+      "pct_of_jpeg80": 74.9,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 53236
+     },
+     "flat_product_box": {
+      "q": 50,
+      "bytes": 10924,
+      "ssim_rgb": 0.98867,
+      "pct_of_jpeg80": 34.6,
+      "dssim_knee_q": 50,
+      "dssim_knee_bytes": 10924
+     },
+     "photo_astronaut": {
+      "q": 80,
+      "bytes": 31000,
+      "ssim_rgb": 0.94851,
+      "pct_of_jpeg80": 68.4,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 51364
+     },
+     "photo_chelsea": {
+      "q": 90,
+      "bytes": 29186,
+      "ssim_rgb": 0.97523,
+      "pct_of_jpeg80": 126.2,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 29186
+     },
+     "photo_coffee": {
+      "q": 80,
+      "bytes": 38704,
+      "ssim_rgb": 0.93066,
+      "pct_of_jpeg80": 81.9,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 64902
+     },
+     "photo_rocket": {
+      "q": 70,
+      "bytes": 18980,
+      "ssim_rgb": 0.9218,
+      "pct_of_jpeg80": 60.0,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 41018
+     }
+    },
+    "total_bytes": 206758,
+    "pct_of_jpeg80_total": 71.2,
+    "mean_q": 76.2,
+    "dssim_total_bytes": 327254,
+    "dssim_pct_of_jpeg80_total": 112.6,
+    "dssim_mean_q": 85,
+    "dssim_images_matched": 8
+   }
+  },
+  "avifenc": {
+   "knee": {
+    "banner_text_astronaut": {
+     "q": 80,
+     "bytes": 42624,
+     "ssim_rgb": 0.97222,
+     "ssim_gray": 0.9845,
+     "dssim": 0.00057183,
+     "vs_jpeg80_pct": 94.7,
+     "vs_baseline_mix_pct": 94.7
+    },
+    "banner_text_chelsea": {
+     "q": 70,
+     "bytes": 17993,
+     "ssim_rgb": 0.9726,
+     "ssim_gray": 0.98053,
+     "dssim": 0.00109002,
+     "vs_jpeg80_pct": 73.8,
+     "vs_baseline_mix_pct": 73.8
+    },
+    "banner_text_coffee": {
+     "q": 90,
+     "bytes": 85605,
+     "ssim_rgb": 0.98189,
+     "ssim_gray": 0.99098,
+     "dssim": 0.0002902,
+     "vs_jpeg80_pct": 202.5,
+     "vs_baseline_mix_pct": 202.5
+    },
+    "flat_product_box": {
+     "q": 50,
+     "bytes": 7782,
+     "ssim_rgb": 0.9973,
+     "ssim_gray": 0.99827,
+     "dssim": 0.0002977,
+     "vs_jpeg80_pct": 24.7,
+     "vs_baseline_mix_pct": 18.3
+    },
+    "photo_astronaut": {
+     "q": 90,
+     "bytes": 96801,
+     "ssim_rgb": 0.98254,
+     "ssim_gray": 0.99163,
+     "dssim": 0.00021154,
+     "vs_jpeg80_pct": 213.6,
+     "vs_baseline_mix_pct": 213.6
+    },
+    "photo_chelsea": {
+     "q": 80,
+     "bytes": 25159,
+     "ssim_rgb": 0.97869,
+     "ssim_gray": 0.98672,
+     "dssim": 0.00058151,
+     "vs_jpeg80_pct": 108.8,
+     "vs_baseline_mix_pct": 108.8
+    },
+    "photo_coffee": {
+     "q": 90,
+     "bytes": 109614,
+     "ssim_rgb": 0.98114,
+     "ssim_gray": 0.99149,
+     "dssim": 0.00023617,
+     "vs_jpeg80_pct": 231.9,
+     "vs_baseline_mix_pct": 231.9
+    },
+    "photo_rocket": {
+     "q": 70,
+     "bytes": 41182,
+     "ssim_rgb": 0.97649,
+     "ssim_gray": 0.98688,
+     "dssim": 0.00106422,
+     "vs_jpeg80_pct": 130.2,
+     "vs_baseline_mix_pct": 130.2
+    }
+   },
+   "cannot_reach_threshold": [],
+   "images_reached": 8,
+   "total_bytes_at_knee": 426760,
+   "baseline_jpeg80_bytes_same_images": 290584,
+   "knee_pct_of_jpeg80": 146.9,
+   "baseline_mix_bytes_same_images": 301579,
+   "knee_pct_of_baseline_mix": 141.5,
+   "mean_q_at_knee": 77.5,
+   "median_dssim_at_knee": 0.0004,
+   "mean_encode_ms_per_image": 243.4,
+   "total_bytes_at_q80": 314416,
+   "mean_ssim_rgb_at_q80": 0.9773,
+   "text_images_below_threshold_at_q90": [],
+   "knee_match_jpeg80": {
+    "per_image": {
+     "banner_text_astronaut": {
+      "q": 60,
+      "bytes": 26030,
+      "ssim_rgb": 0.96119,
+      "pct_of_jpeg80": 57.8,
+      "dssim_knee_q": 60,
+      "dssim_knee_bytes": 26030
+     },
+     "banner_text_chelsea": {
+      "q": 60,
+      "bytes": 13967,
+      "ssim_rgb": 0.96346,
+      "pct_of_jpeg80": 57.3,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 17993
+     },
+     "banner_text_coffee": {
+      "q": 60,
+      "bytes": 25712,
+      "ssim_rgb": 0.9445,
+      "pct_of_jpeg80": 60.8,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 34342
+     },
+     "flat_product_box": {
+      "q": 50,
+      "bytes": 7782,
+      "ssim_rgb": 0.9973,
+      "pct_of_jpeg80": 24.7,
+      "dssim_knee_q": 50,
+      "dssim_knee_bytes": 7782
+     },
+     "photo_astronaut": {
+      "q": 60,
+      "bytes": 28328,
+      "ssim_rgb": 0.95705,
+      "pct_of_jpeg80": 62.5,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 36726
+     },
+     "photo_chelsea": {
+      "q": 60,
+      "bytes": 13850,
+      "ssim_rgb": 0.95763,
+      "pct_of_jpeg80": 59.9,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 18523
+     },
+     "photo_coffee": {
+      "q": 60,
+      "bytes": 32844,
+      "ssim_rgb": 0.94318,
+      "pct_of_jpeg80": 69.5,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 43861
+     },
+     "photo_rocket": {
+      "q": 50,
+      "bytes": 16216,
+      "ssim_rgb": 0.94231,
+      "pct_of_jpeg80": 51.3,
+      "dssim_knee_q": 60,
+      "dssim_knee_bytes": 27251
+     }
+    },
+    "total_bytes": 164729,
+    "pct_of_jpeg80_total": 56.7,
+    "mean_q": 57.5,
+    "dssim_total_bytes": 212508,
+    "dssim_pct_of_jpeg80_total": 73.1,
+    "dssim_mean_q": 65,
+    "dssim_images_matched": 8
+   }
+  },
+  "avifenc-tuned": {
+   "knee": {
+    "banner_text_astronaut": {
+     "q": 80,
+     "bytes": 42624,
+     "ssim_rgb": 0.97222,
+     "ssim_gray": 0.9845,
+     "dssim": 0.00057183,
+     "vs_jpeg80_pct": 94.7,
+     "vs_baseline_mix_pct": 94.7
+    },
+    "banner_text_chelsea": {
+     "q": 70,
+     "bytes": 17993,
+     "ssim_rgb": 0.9726,
+     "ssim_gray": 0.98053,
+     "dssim": 0.00109002,
+     "vs_jpeg80_pct": 73.8,
+     "vs_baseline_mix_pct": 73.8
+    },
+    "banner_text_coffee": {
+     "q": 90,
+     "bytes": 85605,
+     "ssim_rgb": 0.98189,
+     "ssim_gray": 0.99098,
+     "dssim": 0.0002902,
+     "vs_jpeg80_pct": 202.5,
+     "vs_baseline_mix_pct": 202.5
+    },
+    "flat_product_box": {
+     "q": 50,
+     "bytes": 7782,
+     "ssim_rgb": 0.9973,
+     "ssim_gray": 0.99827,
+     "dssim": 0.0002977,
+     "vs_jpeg80_pct": 24.7,
+     "vs_baseline_mix_pct": 18.3
+    },
+    "photo_astronaut": {
+     "q": 90,
+     "bytes": 71082,
+     "ssim_rgb": 0.97241,
+     "ssim_gray": 0.99153,
+     "dssim": 0.00029579,
+     "vs_jpeg80_pct": 156.8,
+     "vs_baseline_mix_pct": 156.8
+    },
+    "photo_chelsea": {
+     "q": 80,
+     "bytes": 22011,
+     "ssim_rgb": 0.97435,
+     "ssim_gray": 0.98667,
+     "dssim": 0.00074125,
+     "vs_jpeg80_pct": 95.1,
+     "vs_baseline_mix_pct": 95.1
+    }
+   },
+   "cannot_reach_threshold": [
+    {
+     "image": "photo_coffee",
+     "best_ssim_rgb_at_q90": 0.96656,
+     "bytes_at_q90": 77674
+    },
+    {
+     "image": "photo_rocket",
+     "best_ssim_rgb_at_q90": 0.9558,
+     "bytes_at_q90": 45601
+    }
+   ],
+   "images_reached": 6,
+   "total_bytes_at_knee": 247097,
+   "baseline_jpeg80_bytes_same_images": 211680,
+   "knee_pct_of_jpeg80": 116.7,
+   "baseline_mix_bytes_same_images": 222675,
+   "knee_pct_of_baseline_mix": 111.0,
+   "mean_q_at_knee": 76.7,
+   "median_dssim_at_knee": 0.0004,
+   "mean_encode_ms_per_image": 244.1,
+   "total_bytes_at_q80": 267749,
+   "mean_ssim_rgb_at_q80": 0.9696,
+   "text_images_below_threshold_at_q90": [],
+   "knee_match_jpeg80": {
+    "per_image": {
+     "banner_text_astronaut": {
+      "q": 60,
+      "bytes": 26030,
+      "ssim_rgb": 0.96119,
+      "pct_of_jpeg80": 57.8,
+      "dssim_knee_q": 60,
+      "dssim_knee_bytes": 26030
+     },
+     "banner_text_chelsea": {
+      "q": 60,
+      "bytes": 13967,
+      "ssim_rgb": 0.96346,
+      "pct_of_jpeg80": 57.3,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 17993
+     },
+     "banner_text_coffee": {
+      "q": 60,
+      "bytes": 25712,
+      "ssim_rgb": 0.9445,
+      "pct_of_jpeg80": 60.8,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 34342
+     },
+     "flat_product_box": {
+      "q": 50,
+      "bytes": 7782,
+      "ssim_rgb": 0.9973,
+      "pct_of_jpeg80": 24.7,
+      "dssim_knee_q": 50,
+      "dssim_knee_bytes": 7782
+     },
+     "photo_astronaut": {
+      "q": 60,
+      "bytes": 24252,
+      "ssim_rgb": 0.94775,
+      "pct_of_jpeg80": 53.5,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 31120
+     },
+     "photo_chelsea": {
+      "q": 70,
+      "bytes": 16737,
+      "ssim_rgb": 0.96583,
+      "pct_of_jpeg80": 72.4,
+      "dssim_knee_q": 80,
+      "dssim_knee_bytes": 22011
+     },
+     "photo_coffee": {
+      "q": 60,
+      "bytes": 28436,
+      "ssim_rgb": 0.93118,
+      "pct_of_jpeg80": 60.2,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 36727
+     },
+     "photo_rocket": {
+      "q": 60,
+      "bytes": 18640,
+      "ssim_rgb": 0.93556,
+      "pct_of_jpeg80": 58.9,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 24153
+     }
+    },
+    "total_bytes": 161556,
+    "pct_of_jpeg80_total": 55.6,
+    "mean_q": 60,
+    "dssim_total_bytes": 200158,
+    "dssim_pct_of_jpeg80_total": 68.9,
+    "dssim_mean_q": 67.5,
+    "dssim_images_matched": 8
+   }
+  },
+  "squoosh-webp": {
+   "knee": {
+    "banner_text_chelsea": {
+     "q": 90,
+     "bytes": 28054,
+     "ssim_rgb": 0.97427,
+     "ssim_gray": 0.9869,
+     "dssim": 0.00073901,
+     "vs_jpeg80_pct": 115.1,
+     "vs_baseline_mix_pct": 115.1
+    },
+    "flat_product_box": {
+     "q": 50,
+     "bytes": 10748,
+     "ssim_rgb": 0.98808,
+     "ssim_gray": 0.99715,
+     "dssim": 0.00061132,
+     "vs_jpeg80_pct": 34.1,
+     "vs_baseline_mix_pct": 25.3
+    },
+    "photo_chelsea": {
+     "q": 90,
+     "bytes": 29230,
+     "ssim_rgb": 0.97578,
+     "ssim_gray": 0.98658,
+     "dssim": 0.00063333,
+     "vs_jpeg80_pct": 126.4,
+     "vs_baseline_mix_pct": 126.4
+    }
+   },
+   "cannot_reach_threshold": [
+    {
+     "image": "banner_text_astronaut",
+     "best_ssim_rgb_at_q90": 0.96885,
+     "bytes_at_q90": 48584
+    },
+    {
+     "image": "banner_text_coffee",
+     "best_ssim_rgb_at_q90": 0.95873,
+     "bytes_at_q90": 52564
+    },
+    {
+     "image": "photo_astronaut",
+     "best_ssim_rgb_at_q90": 0.96476,
+     "bytes_at_q90": 52912
+    },
+    {
+     "image": "photo_coffee",
+     "best_ssim_rgb_at_q90": 0.95722,
+     "bytes_at_q90": 62814
+    },
+    {
+     "image": "photo_rocket",
+     "best_ssim_rgb_at_q90": 0.94595,
+     "bytes_at_q90": 39398
+    }
+   ],
+   "images_reached": 3,
+   "total_bytes_at_knee": 68032,
+   "baseline_jpeg80_bytes_same_images": 79063,
+   "knee_pct_of_jpeg80": 86.0,
+   "baseline_mix_bytes_same_images": 90058,
+   "knee_pct_of_baseline_mix": 75.5,
+   "mean_q_at_knee": 76.7,
+   "median_dssim_at_knee": 0.0006,
+   "mean_encode_ms_per_image": 111.8,
+   "total_bytes_at_q80": 203642,
+   "mean_ssim_rgb_at_q80": 0.9499,
+   "text_images_below_threshold_at_q90": [
+    "banner_text_astronaut",
+    "banner_text_coffee"
+   ],
+   "knee_match_jpeg80": {
+    "per_image": {
+     "banner_text_astronaut": {
+      "q": 80,
+      "bytes": 29614,
+      "ssim_rgb": 0.95437,
+      "pct_of_jpeg80": 65.8,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 48584
+     },
+     "banner_text_chelsea": {
+      "q": 80,
+      "bytes": 17184,
+      "ssim_rgb": 0.95543,
+      "pct_of_jpeg80": 70.5,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 28054
+     },
+     "banner_text_coffee": {
+      "q": 80,
+      "bytes": 32282,
+      "ssim_rgb": 0.93437,
+      "pct_of_jpeg80": 76.4,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 52564
+     },
+     "flat_product_box": {
+      "q": 50,
+      "bytes": 10748,
+      "ssim_rgb": 0.98808,
+      "pct_of_jpeg80": 34.1,
+      "dssim_knee_q": 50,
+      "dssim_knee_bytes": 10748
+     },
+     "photo_astronaut": {
+      "q": 80,
+      "bytes": 31724,
+      "ssim_rgb": 0.9477,
+      "pct_of_jpeg80": 70.0,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 52912
+     },
+     "photo_chelsea": {
+      "q": 90,
+      "bytes": 29230,
+      "ssim_rgb": 0.97578,
+      "pct_of_jpeg80": 126.4,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 29230
+     },
+     "photo_coffee": {
+      "q": 80,
+      "bytes": 37994,
+      "ssim_rgb": 0.93187,
+      "pct_of_jpeg80": 80.4,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 62814
+     },
+     "photo_rocket": {
+      "q": 80,
+      "bytes": 23634,
+      "ssim_rgb": 0.93133,
+      "pct_of_jpeg80": 74.7,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 39398
+     }
+    },
+    "total_bytes": 212410,
+    "pct_of_jpeg80_total": 73.1,
+    "mean_q": 77.5,
+    "dssim_total_bytes": 324304,
+    "dssim_pct_of_jpeg80_total": 111.6,
+    "dssim_mean_q": 85,
+    "dssim_images_matched": 8
+   }
+  },
+  "squoosh-webp-tuned": {
+   "knee": {
+    "banner_text_chelsea": {
+     "q": 90,
+     "bytes": 28124,
+     "ssim_rgb": 0.9734,
+     "ssim_gray": 0.98588,
+     "dssim": 0.00071209,
+     "vs_jpeg80_pct": 115.3,
+     "vs_baseline_mix_pct": 115.3
+    },
+    "flat_product_box": {
+     "q": 50,
+     "bytes": 11038,
+     "ssim_rgb": 0.98869,
+     "ssim_gray": 0.99706,
+     "dssim": 0.00056486,
+     "vs_jpeg80_pct": 35.0,
+     "vs_baseline_mix_pct": 25.9
+    },
+    "photo_chelsea": {
+     "q": 90,
+     "bytes": 29276,
+     "ssim_rgb": 0.97527,
+     "ssim_gray": 0.98578,
+     "dssim": 0.00063931,
+     "vs_jpeg80_pct": 126.6,
+     "vs_baseline_mix_pct": 126.6
+    }
+   },
+   "cannot_reach_threshold": [
+    {
+     "image": "banner_text_astronaut",
+     "best_ssim_rgb_at_q90": 0.96816,
+     "bytes_at_q90": 48402
+    },
+    {
+     "image": "banner_text_coffee",
+     "best_ssim_rgb_at_q90": 0.95864,
+     "bytes_at_q90": 53426
+    },
+    {
+     "image": "photo_astronaut",
+     "best_ssim_rgb_at_q90": 0.9642,
+     "bytes_at_q90": 51448
+    },
+    {
+     "image": "photo_coffee",
+     "best_ssim_rgb_at_q90": 0.95805,
+     "bytes_at_q90": 64728
+    },
+    {
+     "image": "photo_rocket",
+     "best_ssim_rgb_at_q90": 0.94902,
+     "bytes_at_q90": 40972
+    }
+   ],
+   "images_reached": 3,
+   "total_bytes_at_knee": 68438,
+   "baseline_jpeg80_bytes_same_images": 79063,
+   "knee_pct_of_jpeg80": 86.6,
+   "baseline_mix_bytes_same_images": 90058,
+   "knee_pct_of_baseline_mix": 76.0,
+   "mean_q_at_knee": 76.7,
+   "median_dssim_at_knee": 0.0006,
+   "mean_encode_ms_per_image": 181.7,
+   "total_bytes_at_q80": 204110,
+   "mean_ssim_rgb_at_q80": 0.9497,
+   "text_images_below_threshold_at_q90": [
+    "banner_text_astronaut",
+    "banner_text_coffee"
+   ],
+   "knee_match_jpeg80": {
+    "per_image": {
+     "banner_text_astronaut": {
+      "q": 80,
+      "bytes": 29606,
+      "ssim_rgb": 0.95419,
+      "pct_of_jpeg80": 65.8,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 48402
+     },
+     "banner_text_chelsea": {
+      "q": 80,
+      "bytes": 16728,
+      "ssim_rgb": 0.95357,
+      "pct_of_jpeg80": 68.6,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 28124
+     },
+     "banner_text_coffee": {
+      "q": 80,
+      "bytes": 31920,
+      "ssim_rgb": 0.93313,
+      "pct_of_jpeg80": 75.5,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 53426
+     },
+     "flat_product_box": {
+      "q": 50,
+      "bytes": 11038,
+      "ssim_rgb": 0.98869,
+      "pct_of_jpeg80": 35.0,
+      "dssim_knee_q": 50,
+      "dssim_knee_bytes": 11038
+     },
+     "photo_astronaut": {
+      "q": 80,
+      "bytes": 31052,
+      "ssim_rgb": 0.94826,
+      "pct_of_jpeg80": 68.5,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 51448
+     },
+     "photo_chelsea": {
+      "q": 90,
+      "bytes": 29276,
+      "ssim_rgb": 0.97527,
+      "pct_of_jpeg80": 126.6,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 29276
+     },
+     "photo_coffee": {
+      "q": 80,
+      "bytes": 38638,
+      "ssim_rgb": 0.93016,
+      "pct_of_jpeg80": 81.7,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 64728
+     },
+     "photo_rocket": {
+      "q": 70,
+      "bytes": 19056,
+      "ssim_rgb": 0.92182,
+      "pct_of_jpeg80": 60.2,
+      "dssim_knee_q": 90,
+      "dssim_knee_bytes": 40972
+     }
+    },
+    "total_bytes": 207314,
+    "pct_of_jpeg80_total": 71.3,
+    "mean_q": 76.2,
+    "dssim_total_bytes": 327414,
+    "dssim_pct_of_jpeg80_total": 112.7,
+    "dssim_mean_q": 85,
+    "dssim_images_matched": 8
+   }
+  },
+  "squoosh-avif": {
+   "knee": {
+    "banner_text_astronaut": {
+     "q": 90,
+     "bytes": 59794,
+     "ssim_rgb": 0.97579,
+     "ssim_gray": 0.99141,
+     "dssim": 0.00036887,
+     "vs_jpeg80_pct": 132.8,
+     "vs_baseline_mix_pct": 132.8
+    },
+    "banner_text_chelsea": {
+     "q": 80,
+     "bytes": 20604,
+     "ssim_rgb": 0.97438,
+     "ssim_gray": 0.98596,
+     "dssim": 0.0008798,
+     "vs_jpeg80_pct": 84.5,
+     "vs_baseline_mix_pct": 84.5
+    },
+    "banner_text_coffee": {
+     "q": 90,
+     "bytes": 63970,
+     "ssim_rgb": 0.97184,
+     "ssim_gray": 0.99074,
+     "dssim": 0.00041627,
+     "vs_jpeg80_pct": 151.3,
+     "vs_baseline_mix_pct": 151.3
+    },
+    "flat_product_box": {
+     "q": 50,
+     "bytes": 7653,
+     "ssim_rgb": 0.99041,
+     "ssim_gray": 0.99739,
+     "dssim": 0.000567,
+     "vs_jpeg80_pct": 24.3,
+     "vs_baseline_mix_pct": 18.0
+    },
+    "photo_astronaut": {
+     "q": 90,
+     "bytes": 66986,
+     "ssim_rgb": 0.97186,
+     "ssim_gray": 0.9913,
+     "dssim": 0.00029707,
+     "vs_jpeg80_pct": 147.8,
+     "vs_baseline_mix_pct": 147.8
+    },
+    "photo_chelsea": {
+     "q": 80,
+     "bytes": 21005,
+     "ssim_rgb": 0.97378,
+     "ssim_gray": 0.98611,
+     "dssim": 0.00076518,
+     "vs_jpeg80_pct": 90.8,
+     "vs_baseline_mix_pct": 90.8
+    }
+   },
+   "cannot_reach_threshold": [
+    {
+     "image": "photo_coffee",
+     "best_ssim_rgb_at_q90": 0.96671,
+     "bytes_at_q90": 75711
+    },
+    {
+     "image": "photo_rocket",
+     "best_ssim_rgb_at_q90": 0.9556,
+     "bytes_at_q90": 44005
+    }
+   ],
+   "images_reached": 6,
+   "total_bytes_at_knee": 240012,
+   "baseline_jpeg80_bytes_same_images": 211680,
+   "knee_pct_of_jpeg80": 113.4,
+   "baseline_mix_bytes_same_images": 222675,
+   "knee_pct_of_baseline_mix": 107.8,
+   "mean_q_at_knee": 80,
+   "median_dssim_at_knee": 0.0005,
+   "mean_encode_ms_per_image": 555.2,
+   "total_bytes_at_q80": 242988,
+   "mean_ssim_rgb_at_q80": 0.9654,
+   "text_images_below_threshold_at_q90": [],
+   "knee_match_jpeg80": {
+    "per_image": {
+     "banner_text_astronaut": {
+      "q": 60,
+      "bytes": 22238,
+      "ssim_rgb": 0.95267,
+      "pct_of_jpeg80": 49.4,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 27685
+     },
+     "banner_text_chelsea": {
+      "q": 60,
+      "bytes": 12640,
+      "ssim_rgb": 0.95569,
+      "pct_of_jpeg80": 51.8,
+      "dssim_knee_q": 80,
+      "dssim_knee_bytes": 20604
+     },
+     "banner_text_coffee": {
+      "q": 60,
+      "bytes": 21516,
+      "ssim_rgb": 0.9339,
+      "pct_of_jpeg80": 50.9,
+      "dssim_knee_q": 80,
+      "dssim_knee_bytes": 37983
+     },
+     "flat_product_box": {
+      "q": 50,
+      "bytes": 7653,
+      "ssim_rgb": 0.99041,
+      "pct_of_jpeg80": 24.3,
+      "dssim_knee_q": 50,
+      "dssim_knee_bytes": 7653
+     },
+     "photo_astronaut": {
+      "q": 60,
+      "bytes": 22463,
+      "ssim_rgb": 0.94598,
+      "pct_of_jpeg80": 49.6,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 28967
+     },
+     "photo_chelsea": {
+      "q": 70,
+      "bytes": 15902,
+      "ssim_rgb": 0.96487,
+      "pct_of_jpeg80": 68.7,
+      "dssim_knee_q": 80,
+      "dssim_knee_bytes": 21005
+     },
+     "photo_coffee": {
+      "q": 60,
+      "bytes": 26931,
+      "ssim_rgb": 0.92969,
+      "pct_of_jpeg80": 57.0,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 35411
+     },
+     "photo_rocket": {
+      "q": 60,
+      "bytes": 17081,
+      "ssim_rgb": 0.93262,
+      "pct_of_jpeg80": 54.0,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 23032
+     }
+    },
+    "total_bytes": 146424,
+    "pct_of_jpeg80_total": 50.4,
+    "mean_q": 60,
+    "dssim_total_bytes": 202340,
+    "dssim_pct_of_jpeg80_total": 69.6,
+    "dssim_mean_q": 71.2,
+    "dssim_images_matched": 8
+   }
+  },
+  "squoosh-avif-tuned": {
+   "knee": {
+    "banner_text_astronaut": {
+     "q": 80,
+     "bytes": 40494,
+     "ssim_rgb": 0.97138,
+     "ssim_gray": 0.98384,
+     "dssim": 0.00061542,
+     "vs_jpeg80_pct": 90.0,
+     "vs_baseline_mix_pct": 90.0
+    },
+    "banner_text_chelsea": {
+     "q": 70,
+     "bytes": 17534,
+     "ssim_rgb": 0.97053,
+     "ssim_gray": 0.97839,
+     "dssim": 0.00128196,
+     "vs_jpeg80_pct": 71.9,
+     "vs_baseline_mix_pct": 71.9
+    },
+    "banner_text_coffee": {
+     "q": 90,
+     "bytes": 81870,
+     "ssim_rgb": 0.9818,
+     "ssim_gray": 0.99089,
+     "dssim": 0.00029531,
+     "vs_jpeg80_pct": 193.6,
+     "vs_baseline_mix_pct": 193.6
+    },
+    "flat_product_box": {
+     "q": 50,
+     "bytes": 8389,
+     "ssim_rgb": 0.99702,
+     "ssim_gray": 0.99796,
+     "dssim": 0.00035124,
+     "vs_jpeg80_pct": 26.6,
+     "vs_baseline_mix_pct": 19.7
+    },
+    "photo_astronaut": {
+     "q": 90,
+     "bytes": 66986,
+     "ssim_rgb": 0.97186,
+     "ssim_gray": 0.9913,
+     "dssim": 0.00029707,
+     "vs_jpeg80_pct": 147.8,
+     "vs_baseline_mix_pct": 147.8
+    },
+    "photo_chelsea": {
+     "q": 80,
+     "bytes": 21005,
+     "ssim_rgb": 0.97378,
+     "ssim_gray": 0.98611,
+     "dssim": 0.00076518,
+     "vs_jpeg80_pct": 90.8,
+     "vs_baseline_mix_pct": 90.8
+    }
+   },
+   "cannot_reach_threshold": [
+    {
+     "image": "photo_coffee",
+     "best_ssim_rgb_at_q90": 0.96671,
+     "bytes_at_q90": 75711
+    },
+    {
+     "image": "photo_rocket",
+     "best_ssim_rgb_at_q90": 0.9556,
+     "bytes_at_q90": 44005
+    }
+   ],
+   "images_reached": 6,
+   "total_bytes_at_knee": 236278,
+   "baseline_jpeg80_bytes_same_images": 211680,
+   "knee_pct_of_jpeg80": 111.6,
+   "baseline_mix_bytes_same_images": 222675,
+   "knee_pct_of_baseline_mix": 106.1,
+   "mean_q_at_knee": 76.7,
+   "median_dssim_at_knee": 0.0005,
+   "mean_encode_ms_per_image": 658.8,
+   "total_bytes_at_q80": 259388,
+   "mean_ssim_rgb_at_q80": 0.9688,
+   "text_images_below_threshold_at_q90": [],
+   "knee_match_jpeg80": {
+    "per_image": {
+     "banner_text_astronaut": {
+      "q": 60,
+      "bytes": 24991,
+      "ssim_rgb": 0.96002,
+      "pct_of_jpeg80": 55.5,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 31382
+     },
+     "banner_text_chelsea": {
+      "q": 60,
+      "bytes": 13600,
+      "ssim_rgb": 0.96081,
+      "pct_of_jpeg80": 55.8,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 17534
+     },
+     "banner_text_coffee": {
+      "q": 60,
+      "bytes": 24384,
+      "ssim_rgb": 0.94246,
+      "pct_of_jpeg80": 57.7,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 32629
+     },
+     "flat_product_box": {
+      "q": 50,
+      "bytes": 8389,
+      "ssim_rgb": 0.99702,
+      "pct_of_jpeg80": 26.6,
+      "dssim_knee_q": 50,
+      "dssim_knee_bytes": 8389
+     },
+     "photo_astronaut": {
+      "q": 60,
+      "bytes": 22463,
+      "ssim_rgb": 0.94598,
+      "pct_of_jpeg80": 49.6,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 28967
+     },
+     "photo_chelsea": {
+      "q": 70,
+      "bytes": 15902,
+      "ssim_rgb": 0.96487,
+      "pct_of_jpeg80": 68.7,
+      "dssim_knee_q": 80,
+      "dssim_knee_bytes": 21005
+     },
+     "photo_coffee": {
+      "q": 60,
+      "bytes": 26931,
+      "ssim_rgb": 0.92969,
+      "pct_of_jpeg80": 57.0,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 35411
+     },
+     "photo_rocket": {
+      "q": 60,
+      "bytes": 17081,
+      "ssim_rgb": 0.93262,
+      "pct_of_jpeg80": 54.0,
+      "dssim_knee_q": 70,
+      "dssim_knee_bytes": 23032
+     }
+    },
+    "total_bytes": 153741,
+    "pct_of_jpeg80_total": 52.9,
+    "mean_q": 60,
+    "dssim_total_bytes": 198349,
+    "dssim_pct_of_jpeg80_total": 68.3,
+    "dssim_mean_q": 68.8,
+    "dssim_images_matched": 8
+   }
+  }
+ }
+}

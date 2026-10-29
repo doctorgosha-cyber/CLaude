@@ -1,0 +1,126 @@
+{
+  "version": "2026-10-20",
+  "source": "supplier feed export",
+  "products": [
+    {
+      "id": "ck-chicken-dry",
+      "name": "Chicken & Rice Dry",
+      "species": "cat",
+      "energy": {
+        "value": 372,
+        "unit": "kcal/100g"
+      },
+      "added": "2025-03-01"
+    },
+    {
+      "id": "ck-tuna-dry",
+      "name": "Tuna Complete Dry",
+      "species": "cat",
+      "energy": {
+        "value": 358,
+        "unit": "kcal/100g"
+      },
+      "added": "2025-03-01"
+    },
+    {
+      "id": "ck-indoor-light",
+      "name": "Indoor Light",
+      "species": "cat",
+      "energy": {
+        "value": 318,
+        "unit": "kcal/100g"
+      },
+      "added": "2025-05-12"
+    },
+    {
+      "id": "ck-kitten-growth",
+      "name": "Kitten Growth",
+      "species": "cat",
+      "energy": {
+        "value": 4080,
+        "unit": "kcal/kg"
+      },
+      "added": "2025-05-12"
+    },
+    {
+      "id": "ck-senior-care",
+      "name": "Senior Care 7+",
+      "species": "cat",
+      "energy": {
+        "value": 341,
+        "unit": "kcal/100g"
+      },
+      "added": "2025-08-20"
+    },
+    {
+      "id": "dg-beef-dry",
+      "name": "Beef & Barley Dry",
+      "species": "dog",
+      "energy": {
+        "value": 365,
+        "unit": "kcal/100g"
+      },
+      "added": "2025-03-01"
+    },
+    {
+      "id": "dg-chicken-rice",
+      "name": "Chicken & Rice Adult",
+      "species": "dog",
+      "energy": {
+        "value": 352,
+        "unit": "kcal/100g"
+      },
+      "added": "2025-03-01"
+    },
+    {
+      "id": "dg-puppy-large",
+      "name": "Puppy Large Breed",
+      "species": "dog",
+      "energy": {
+        "value": 398,
+        "unit": "kcal/100g"
+      },
+      "added": "2025-05-12"
+    },
+    {
+      "id": "dg-weight-control",
+      "name": "Weight Control",
+      "species": "dog",
+      "energy": {
+        "value": 296,
+        "unit": "kcal/100g"
+      },
+      "added": "2025-08-20"
+    },
+    {
+      "id": "ck-salmon-soft-bites",
+      "name": "Salmon Soft Bites",
+      "species": "cat",
+      "energy": {
+        "value": 385,
+        "unit": "kcal/100g"
+      },
+      "added": "2026-10-20"
+    },
+    {
+      "id": "ck-ocean-fish-dry",
+      "name": "Ocean Fish Dry",
+      "species": "cat",
+      "energy": {
+        "value": 4120,
+        "unit": "kcal/kg "
+      },
+      "added": "2026-10-20"
+    },
+    {
+      "id": "dg-lamb-rice-dry",
+      "name": "Lamb & Rice Dry",
+      "species": "dog",
+      "energy": {
+        "value": 3560,
+        "unit": "kcal per kg"
+      },
+      "added": "2026-10-20"
+    }
+  ]
+}

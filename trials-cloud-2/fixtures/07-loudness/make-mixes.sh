@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Generates synthetic 9:16 loudness fixtures: voice stem (espeak-ng), music bed (ffmpeg synth),
 # per-mix gained stems (wav) and 5 mixes as 1080x1920 mp4 (testsrc2 video + AAC audio).
+# Per-mix stems are 32-bit float wav so that the hot L1 stems do not clip (the ratio is measured from them).
 # Usage: bash make-mixes.sh [outdir]   (default: this directory). Requires ffmpeg 6.x, espeak-ng.
 set -euo pipefail
 OUT="${1:-$(cd "$(dirname "$0")" && pwd)}"
@@ -32,19 +33,20 @@ build() {
   local gv gm
   gv=$(awk -v a="$vt" -v b="$V0" 'BEGIN{printf "%.2f", a-b}')
   gm=$(awk -v a="$mt" -v b="$M0" 'BEGIN{printf "%.2f", a-b}')
-  ffmpeg -y -hide_banner -loglevel error -i voice.wav -af "volume=${gv}dB" -c:a pcm_s16le "${name}_voice.wav"
-  ffmpeg -y -hide_banner -loglevel error -i music.wav -af "volume=${gm}dB" -c:a pcm_s16le "${name}_music.wav"
+  ffmpeg -y -hide_banner -loglevel error -i voice.wav -af "volume=${gv}dB" -c:a pcm_f32le "${name}_voice.wav"
+  ffmpeg -y -hide_banner -loglevel error -i music.wav -af "volume=${gm}dB" -c:a pcm_f32le "${name}_music.wav"
   local fc="[0][1]amix=inputs=2:normalize=0,alimiter=limit=${lim}:level=false:attack=3:release=40[a]"
   if [ "$burst" = yes ]; then
     # 4 ms 1 kHz bursts at 0.98 FS every 5 s: raises true peak to about -0.1 dBTP, negligible effect on integrated loudness
     ffmpeg -y -hide_banner -loglevel error -i "${name}_voice.wav" -i "${name}_music.wav" \
       -f lavfi -i "aevalsrc=exprs='0.98*lt(mod(t\,5)\,0.004)*sin(2*PI*1000*t)|0.98*lt(mod(t\,5)\,0.004)*sin(2*PI*1000*t)':s=48000:d=${DUR}" \
-      -filter_complex "${fc};[a][2]amix=inputs=2:normalize=0[b]" -map "[b]" -c:a pcm_s16le "${name}_mix.wav"
+      -filter_complex "${fc};[a][2]amix=inputs=2:normalize=0[b]" -map "[b]" -c:a pcm_f32le "${name}_mix.wav"
   else
-    ffmpeg -y -hide_banner -loglevel error -i "${name}_voice.wav" -i "${name}_music.wav" -filter_complex "$fc" -map "[a]" -c:a pcm_s16le "${name}_mix.wav"
+    ffmpeg -y -hide_banner -loglevel error -i "${name}_voice.wav" -i "${name}_music.wav" -filter_complex "$fc" -map "[a]" -c:a pcm_f32le "${name}_mix.wav"
   fi
   ffmpeg -y -hide_banner -loglevel error -i video.mp4 -i "${name}_mix.wav" -map 0:v -map 1:a \
     -c:v copy -c:a aac -b:a 192k -shortest -movflags +faststart "${name}.mp4"
+  rm -f "${name}_mix.wav"   # intermediate; the mp4 audio is the fixture, the gained stems stay
 }
 # iterate NAME TARGET_I VOICE_LUFS MUSIC_LUFS LIMIT [burst]: two linear correction passes on the measured mp4
 iterate() {

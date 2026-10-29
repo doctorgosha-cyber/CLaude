@@ -1,0 +1,6 @@
+{"file":"C1.mp4","integrated":-14,"lra":2.2,"truePeak":-1.5,"ratio":9.9,"findings":[],"voice":-12.3,"music":-22.2,"pass":true}
+C1 exit=0
+{"file":"L2.mp4","integrated":-14,"lra":7.4,"truePeak":-3,"ratio":-10,"findings":["voice only -10 dB over music (want >= +6)"],"voice":-23.6,"music":-13.6,"pass":false}
+L2 exit=1
+nostems exit=1
+missing exit=2

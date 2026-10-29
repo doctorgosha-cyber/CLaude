@@ -16,9 +16,9 @@ try { // package.json is not exported by cspell, so walk up from its main entry 
   while (!existsSync(join(d, 'package.json'))) d = dirname(d);
   bin = join(d, 'bin.mjs'); }
 catch (e) { console.log(JSON.stringify({ ok: false, error: 'cspell not installed: ' + e.message })); process.exit(2); }
-const args = [bin, 'lint', '--no-progress', '--no-color', '--quiet', '--root', root, '--config', config, ...globs];
+const args = [bin, 'lint', '--no-progress', '--no-color', '--root', root, '--config', config, ...globs];
 const r = spawnSync(process.execPath, args, { encoding: 'utf8', cwd: root, maxBuffer: 64 << 20 });
-const checked = +(r.stderr?.match(/Files checked: (\d+)/)?.[1] ?? -1); // summary goes to stderr
+const checked = +((r.stderr + r.stdout).match(/Files checked: (\d+)/)?.[1] ?? -1); // summary line (--quiet would hide it)
 if (r.error || ![0, 1].includes(r.status) || /Error/.test(r.stderr) || checked < 1) { // cspell exits 1 for config errors too
   console.log(JSON.stringify({ ok: false, exit: r.status, error: (r.error?.message || '') + (r.stderr || '') + (r.stdout || '') }));
   process.exit(2);

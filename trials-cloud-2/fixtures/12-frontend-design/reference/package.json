@@ -1,0 +1,6 @@
+{
+  "name": "kibble-compare-section",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node check.mjs" }
+}

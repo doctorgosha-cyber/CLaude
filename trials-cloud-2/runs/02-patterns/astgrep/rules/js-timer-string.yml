@@ -1,0 +1,16 @@
+id: js-timer-string
+language: javascript
+severity: error
+message: "setTimeout/setInterval with a string (or string-built) callback is an implicit eval"
+rule:
+  any:
+    - pattern: setTimeout($CB, $$$)
+    - pattern: setInterval($CB, $$$)
+    - pattern: window.setTimeout($CB, $$$)
+    - pattern: window.setInterval($CB, $$$)
+constraints:
+  CB:
+    any:
+      - kind: string
+      - kind: template_string
+      - kind: binary_expression

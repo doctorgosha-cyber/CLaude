@@ -1,0 +1,8 @@
+{
+  "rer": { "coefficient": 70, "exponent": 0.75 },
+  "stage": {
+    "cat": { "kitten": 2.5, "adult": 1.2, "senior": 1.1 },
+    "dog": { "puppy": 3.0, "adult": 1.6, "senior": 1.4 }
+  },
+  "activity": { "low": 0.85, "normal": 1.0, "high": 1.2 }
+}
