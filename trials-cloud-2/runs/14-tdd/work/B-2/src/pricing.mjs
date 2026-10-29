@@ -186,8 +186,18 @@ export function formatMoney(amount, currency, locale) {
   }).format(rounded);
 }
 
+const KJ_PER_KCAL = 4.184;
+const ENERGY_RE = new RegExp(`^${NUM}${SPS}(kcal|kj)${SPS}(?:/|per)${SPS}(100${SPS}g|kg)$`, 'i');
+
 export function kcalPer100g(spec) {
-  throw new Error('not implemented');
+  if (typeof spec !== 'string') fail(spec);
+  const m = ENERGY_RE.exec(spec.trim());
+  if (!m) fail(spec);
+  let value = num(m[1]);
+  if (m[2].toLowerCase() === 'kj') value /= KJ_PER_KCAL;
+  if (m[3].toLowerCase() === 'kg') value /= 10;
+  if (!Number.isFinite(value) || value < 50 || value > 900) fail(spec);
+  return value;
 }
 
 export function daysSupply(bagGrams, dailyGrams, startISO) {

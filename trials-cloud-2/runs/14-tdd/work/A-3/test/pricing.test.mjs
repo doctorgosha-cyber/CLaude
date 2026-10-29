@@ -93,7 +93,7 @@ test('daysSupply: inclusive counting, UTC, validation', () => {
   assert.equal(daysSupply(900, 300, '2026-01-30'), '2026-02-01');
   assert.equal(daysSupply(899, 300, '2026-01-30'), '2026-01-31');
   assert.equal(daysSupply(300, 300, '2026-12-31'), '2026-12-31');
-  assert.equal(daysSupply('2 kg', '8 oz', '2024-02-27'), '2024-03-04'); // 8 days, leap year
+  assert.equal(daysSupply('2 kg', '8 oz', '2024-02-27'), '2024-03-05'); // 8 days, leap year
   assert.equal(daysSupply('1 lb', '4 oz', '2026-01-01'), '2026-01-04');
   assert.equal(daysSupply(366, 1, '2024-01-01'), '2024-12-31');
   assert.equal(daysSupply(365, 1, '2025-01-01'), '2025-12-31');
@@ -113,7 +113,7 @@ test('compare: sort, rounding, invalid last, no mutation', () => {
     { id: 'a', price: '€10', mass: '500 g' },
     { id: 'b', price: '$9', mass: '1 kg' },
     { id: 'c', price: 'nope', mass: '1 kg' },
-    { id: 'd', price: '$9.004', mass: '1 kg' },
+    { id: 'd', price: '$9.0040', mass: '1 kg' },
     { id: 'e', price: '$1', mass: '0 g' },
     { id: 'f', price: '$8.995', mass: '1 kg' },
   ];

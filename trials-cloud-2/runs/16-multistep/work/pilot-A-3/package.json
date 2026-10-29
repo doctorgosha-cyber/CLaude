@@ -1,0 +1,11 @@
+{
+  "name": "portion-service",
+  "version": "1.4.0",
+  "private": true,
+  "type": "module",
+  "description": "Daily portion calculator backend for the pet-food catalogue",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": { "node": ">=22" }
+}

@@ -130,7 +130,7 @@ function decimalDigits(n) {
 }
 
 // Round half to even on the decimal digits; returns a decimal string.
-export function roundHalfEven(n, digits) {
+function roundHalfEven(n, digits) {
   const { int, frac } = decimalDigits(n);
   if (frac.length <= digits) return digits ? `${int}.${frac.padEnd(digits, '0')}` : int;
   const keep = frac.slice(0, digits);
@@ -161,8 +161,17 @@ export function formatMoney(amount, currency, locale) {
   return out.replace(/ /g, '\u00A0');
 }
 
+const KJ_PER_KCAL = 4.184;
+
 export function kcalPer100g(spec) {
-  throw new Error('not implemented');
+  if (typeof spec !== 'string') throw bad(spec);
+  const m = spec.trim().match(new RegExp(`^(${NUM})${SP}*(kcal|kJ)${SP}*(?:/|per)${SP}*(100${SP}*g|kg)$`, 'i'));
+  if (!m) throw bad(spec);
+  let v = num(m[1]);
+  if (m[2].toLowerCase() === 'kj') v /= KJ_PER_KCAL;
+  if (m[3].toLowerCase() === 'kg') v /= 10;
+  if (!(v >= 50 && v <= 900)) throw bad(spec);
+  return v;
 }
 
 export function daysSupply(bagGrams, dailyGrams, startISO) {
