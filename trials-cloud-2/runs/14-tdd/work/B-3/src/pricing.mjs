@@ -174,8 +174,30 @@ export function kcalPer100g(spec) {
   return v;
 }
 
+function massArg(v) {
+  if (typeof v === 'string') return toGrams(v);
+  if (typeof v !== 'number' || !Number.isFinite(v) || !(v > 0)) throw bad(v);
+  return v;
+}
+
+function parseISODate(text) {
+  if (typeof text !== 'string') throw bad(text);
+  const m = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) throw bad(text);
+  const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const ms = Date.UTC(y, mo - 1, d);
+  const dt = new Date(ms);
+  if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== mo - 1 || dt.getUTCDate() !== d) throw bad(text);
+  return ms;
+}
+
 export function daysSupply(bagGrams, dailyGrams, startISO) {
-  throw new Error('not implemented');
+  const bag = massArg(bagGrams);
+  const daily = massArg(dailyGrams);
+  const start = parseISODate(startISO);
+  const days = Math.floor(bag / daily);
+  if (days < 1) throw bad(`${bagGrams} / ${dailyGrams}`);
+  return new Date(start + (days - 1) * 86_400_000).toISOString().slice(0, 10);
 }
 
 export function compare(products) {

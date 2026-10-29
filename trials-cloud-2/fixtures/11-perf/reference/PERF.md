@@ -1,6 +1,6 @@
 # Performance notes
 
-Baseline (Lighthouse 13, mobile, simulated throttling, median of 3): score 21, LCP 49.7 s, CLS 0.18, TBT 1.6 s, 9.1 MB transferred.
+Baseline (Lighthouse 13, mobile, simulated throttling, median of 3): score 17, LCP 49.7 s, CLS 0.23, TBT 1.6 s, 9.1 MB transferred.
 
 Changes, each measured in isolation before being kept:
 
@@ -12,7 +12,7 @@ Changes, each measured in isolation before being kept:
 | Related/avatars: WebP, width/height, loading=lazy | 2.5 MB off the critical path, CLS 0 below the fold |
 | Fonts: system stack instead of 4 self-hosted TTFs (760 KB on the wire) | no FOIT, no font swap shift |
 | CSS: deleted the 400-rule legacy library, inlined the remaining 4 KB | no render-blocking stylesheet |
-| Promo banner rendered statically in HTML instead of inserted after paint | CLS 0.18 -> 0 |
+| Promo banner rendered statically in HTML instead of inserted after paint | CLS 0.23 -> 0 |
 | Comparison data: one merged catalogue.json instead of 1 + 24 sequential fetches | table renders ~3.5 s earlier on 4G |
 | app.js deferred | not render-blocking |
 

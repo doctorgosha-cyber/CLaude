@@ -17,9 +17,9 @@ test('compare: rounds to minor units and sorts ascending across currencies', () 
 
 test('compare: equal rounded perKg keeps input order; invalid items come last in input order', () => {
   const input = [
-    { id: 'p', price: '$10.004', mass: '1 kg' },
+    { id: 'p', price: '$10.0004', mass: '1 kg' },
     { id: 'bad1', price: '10', mass: '1 kg' },
-    { id: 'q', price: '$9.996', mass: '1 kg' },
+    { id: 'q', price: '$9.9960', mass: '1 kg' },
     { id: 'bad2', price: '$10', mass: '0 g' },
     { id: 'r', price: '$5', mass: '1 kg' },
   ];

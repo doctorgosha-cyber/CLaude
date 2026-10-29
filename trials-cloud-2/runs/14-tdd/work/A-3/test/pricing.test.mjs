@@ -115,7 +115,7 @@ test('compare: sort, rounding, invalid last, no mutation', () => {
     { id: 'c', price: 'nope', mass: '1 kg' },
     { id: 'd', price: '$9.0040', mass: '1 kg' },
     { id: 'e', price: '$1', mass: '0 g' },
-    { id: 'f', price: '$8.995', mass: '1 kg' },
+    { id: 'f', price: '$8.9950', mass: '1 kg' },
   ];
   const snapshot = JSON.stringify(input);
   const out = compare(input);

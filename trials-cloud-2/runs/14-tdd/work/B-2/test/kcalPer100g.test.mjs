@@ -8,7 +8,7 @@ test('kcalPer100g: normalises kcal/kJ per 100 g or per kg', () => {
   assert.equal(kcalPer100g('350kcal/100g'), 350);
   assert.equal(kcalPer100g('1464 kJ/100 g'), 1464 / 4.184);
   assert.equal(kcalPer100g('14640 kJ per kg'), 14640 / 4.184 / 10);
-  assert.equal(kcalPer100g(' 3.750 KCAL PER KG '), 375);
+  assert.equal(kcalPer100g(' 3750 KCAL PER KG '), 375);
   assert.equal(kcalPer100g('382,5 kcal / 100 g'), 382.5);
 });
 

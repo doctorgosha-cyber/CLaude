@@ -213,5 +213,19 @@ export function daysSupply(bagGrams, dailyGrams, startISO) {
 }
 
 export function compare(products) {
-  throw new Error('not implemented');
+  if (!Array.isArray(products)) fail(products);
+  const valid = [];
+  const invalid = [];
+  products.forEach((item, index) => {
+    const id = item == null ? undefined : item.id;
+    try {
+      const { currency, perKg } = pricePerKg(item.price, item.mass);
+      valid.push({ id, currency, perKg: Number(roundDecimal(perKg, MINOR_UNITS[currency])), index });
+    } catch (e) {
+      if (!(e instanceof TypeError)) throw e;
+      invalid.push({ id, currency: null, perKg: NaN });
+    }
+  });
+  valid.sort((a, b) => a.perKg - b.perKg || a.index - b.index);
+  return [...valid.map(({ id, currency, perKg }) => ({ id, currency, perKg })), ...invalid];
 }
