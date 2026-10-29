@@ -1,10 +1,10 @@
 // HTTP-less request handler for GET /portion. Takes the query (string, URLSearchParams
 // or plain object) and returns { status, body }. The server wrapper is out of scope here.
 import { loadCatalogue, findProduct } from './catalogue.mjs';
-import { SPECIES, ACTIVITIES } from './needs.mjs';
+import { SPECIES, ACTIVITIES, DEFAULT_STAGE, resolveStage, stagesFor } from './needs.mjs';
 import { portionFor } from './calculator.mjs';
 import { formatPortion } from './format.mjs';
-import { parseNumber } from './units.mjs';
+import { parseNumber, lbToKg } from './units.mjs';
 
 const UNITS = ['metric', 'imperial'];
 
@@ -49,7 +49,9 @@ export function handlePortion(input) {
   const weight = parseNumber(q.get('weight'));
   if (!(weight > 0)) return error(400, 'weight is required and must be a positive number');
 
-  const stage = q.get('stage') ?? 'adult'; // resolved against the factor table downstream
+  // Life stage: a current key or a legacy alias (spec §1). Anything else is a client bug → 400.
+  const stage = resolveStage(species, q.get('stage') ?? DEFAULT_STAGE);
+  if (stage === undefined) return error(400, `stage must be one of ${stagesFor(species).join(', ')}`);
 
   const activity = q.get('activity') ?? 'normal';
   if (!ACTIVITIES.includes(activity)) return error(400, `activity must be one of ${ACTIVITIES.join(', ')}`);
@@ -60,9 +62,11 @@ export function handlePortion(input) {
   if (!product) return error(404, `unknown product: ${productId}`);
   if (product.species !== species) return error(400, `product ${productId} is not a ${species} food`);
 
-  const { kcalPerDay, grams } = portionFor({ species, weightKg: weight, stage, activity }, product);
+  // Imperial locales send pounds; the energy need is always computed from kilograms (spec §1-2).
+  const weightKg = units === 'imperial' ? lbToKg(weight) : weight;
+  const { kcalPerDay, grams, capped, meals } = portionFor({ species, weightKg, stage, activity }, product);
   return {
     status: 200,
-    body: formatPortion({ grams, kcalPerDay, weight, units, product }),
+    body: formatPortion({ grams, kcalPerDay, weight, units, product, capped, meals }),
   };
 }

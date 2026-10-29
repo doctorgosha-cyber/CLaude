@@ -8,10 +8,28 @@ const FACTORS = JSON.parse(readFileSync(join(HERE, '..', 'data', 'factors.json')
 
 export const SPECIES = Object.keys(FACTORS.stage);
 export const ACTIVITIES = Object.keys(FACTORS.activity);
-const DEFAULT_STAGE = 'adult';
+export const DEFAULT_STAGE = 'adult';
+const GROWTH_STAGES = new Set(['kitten', 'puppy']);
 
 export function stagesFor(species) {
   return Object.keys(FACTORS.stage[species] ?? {});
+}
+
+/**
+ * Resolve a client stage label (current key or legacy alias) to the current key for
+ * `species`. Returns undefined for anything unknown: the service never guesses a stage.
+ */
+export function resolveStage(species, stage) {
+  const table = FACTORS.stage[species];
+  if (!table) return undefined;
+  const key = Object.hasOwn(table, stage) ? stage : (FACTORS.aliases ?? {})[stage];
+  return key !== undefined && Object.hasOwn(table, key) ? key : undefined;
+}
+
+/** True for growth stages (kitten, puppy and their aliases). */
+export function isGrowthStage(species, stage) {
+  const key = resolveStage(species, stage);
+  return key !== undefined && GROWTH_STAGES.has(key);
 }
 
 /** Resting energy requirement: 70 * kg^0.75 (kcal/day). */
@@ -22,8 +40,9 @@ export function restingEnergy(weightKg) {
 function stageFactorFor(species, stage) {
   const table = FACTORS.stage[species];
   if (!table) throw new RangeError(`unknown species: ${species}`);
-  // Clients send a variety of stage labels; anything we do not know is treated as an adult.
-  return table[stage] ?? table[DEFAULT_STAGE];
+  const key = resolveStage(species, stage);
+  if (key === undefined) throw new RangeError(`unknown stage for ${species}: ${stage}`);
+  return table[key];
 }
 
 /**

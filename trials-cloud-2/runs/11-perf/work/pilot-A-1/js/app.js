@@ -34,13 +34,11 @@
   async function loadCatalogue() {
     var res = await fetch('data/products.json');
     var list = await res.json();
-    var rows = [];
-    for (var i = 0; i < list.length; i++) {
-      var detailRes = await fetch('data/product-' + list[i].id + '.json');
-      var detail = await detailRes.json();
-      rows.push(Object.assign({}, list[i], detail));
-    }
-    return rows;
+    // Fetch every detail record in parallel instead of one after another (24 round trips).
+    var details = await Promise.all(list.map(function (p) {
+      return fetch('data/product-' + p.id + '.json').then(function (r) { return r.json(); });
+    }));
+    return list.map(function (p, i) { return Object.assign({}, p, details[i]); });
   }
 
   // ---------- sorting ----------
@@ -196,12 +194,19 @@
 
   // ---------- promo banner ----------
   // Shown on every page view once the page has settled; copy comes from marketing.
+  // The banner's markup ships in index.html with its space reserved (data-pending keeps it
+  // invisible), so revealing it here slides it in without shifting the rest of the page.
   function showPromoBanner() {
-    var banner = document.createElement('div');
-    banner.className = 'promo-banner';
-    banner.id = 'promo-banner';
-    banner.innerHTML = '<strong>Free shipping on orders over €50</strong> — this week only, on every model in the table. <span class="promo-terms">Applies to orders shipped within the EU; the discount is shown at checkout.</span>';
-    document.body.insertBefore(banner, document.body.firstChild);
+    var banner = document.getElementById('promo-banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.className = 'promo-banner';
+      banner.id = 'promo-banner';
+      banner.innerHTML = '<strong>Free shipping on orders over €50</strong> — this week only, on every model in the table. <span class="promo-terms">Applies to orders shipped within the EU; the discount is shown at checkout.</span>';
+      document.body.insertBefore(banner, document.body.firstChild);
+    }
+    banner.removeAttribute('data-pending');
+    banner.setAttribute('data-shown', '');
   }
 
   // ---------- boot ----------

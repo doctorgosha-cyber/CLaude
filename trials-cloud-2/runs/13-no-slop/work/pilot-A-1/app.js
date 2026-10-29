@@ -37,7 +37,6 @@ function buildCard(film) {
   img.alt = '';
   img.width = 320;
   img.height = 180;
-  img.loading = 'lazy';
   img.decoding = 'async';
 
   const body = document.createElement('div');

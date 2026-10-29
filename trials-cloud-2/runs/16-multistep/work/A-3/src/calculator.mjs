@@ -1,5 +1,8 @@
 // Turns a daily energy requirement and a product's energy density into grams per day.
-import { dailyKcal } from './needs.mjs';
+import { dailyKcal, isGrowthStage } from './needs.mjs';
+
+/** Safety cap (spec §5): share of body weight per day for dry / semi-moist food. */
+const CAP_SHARE = { cat: 0.025, dog: 0.03 };
 
 /** Grams of product per day that deliver `kcalPerDay` at `kcalPer100g`. */
 export function dailyGrams(kcalPerDay, kcalPer100g) {
@@ -10,10 +13,22 @@ export function dailyGrams(kcalPerDay, kcalPer100g) {
 
 /**
  * Full portion computation for one animal and one (normalised) product.
- * Returns unrounded numbers; see format.mjs for presentation.
+ * Returns unrounded numbers plus `capped` and `meals`; see format.mjs for presentation.
  */
 export function portionFor({ species, weightKg, stage, activity }, product) {
   const kcalPerDay = dailyKcal({ species, weightKg, stage, activity });
-  const grams = dailyGrams(kcalPerDay, product.kcalPer100g);
-  return { kcalPerDay, grams };
+  const uncapped = dailyGrams(kcalPerDay, product.kcalPer100g);
+  const growth = isGrowthStage(species, stage ?? 'adult');
+
+  let grams = uncapped;
+  let capped = false;
+  if (product.form !== 'wet' && !growth) {
+    const cap = weightKg * CAP_SHARE[species];
+    if (uncapped > cap) {
+      grams = cap;
+      capped = true;
+    }
+  }
+  const meals = growth ? 3 : 2;
+  return { kcalPerDay, grams, capped, meals };
 }
