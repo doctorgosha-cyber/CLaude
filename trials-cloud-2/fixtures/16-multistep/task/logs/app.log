@@ -1,0 +1,74 @@
+2026-10-27T06:58:12.404Z INFO  portion-service v1.4.0 starting pid=18422 node=v22.22.0
+2026-10-27T06:58:12.444Z INFO  config: port=8080 defaultUnits=metric localeUnits=on
+2026-10-27T06:58:12.556Z INFO  catalogue: loaded data/catalogue.json version=2026-10-20 products=12 (3 added since 2026-10-06)
+2026-10-27T06:58:12.564Z INFO  listening on :8080
+2026-10-27T06:59:54.580Z INFO  req=c97904 user=u_1428 GET /portion?species=cat&weight=5.3&stage=adult&activity=normal&product=ck-indoor-light -> 200 grams=92 kcal=293.4 21ms
+2026-10-27T07:03:17.802Z INFO  req=8eabbf user=u_1068 GET /portion?species=dog&weight=27.5&stage=adult&activity=normal&product=dg-beef-dry -> 200 grams=368 kcal=1345 22ms
+2026-10-27T07:04:04.018Z INFO  req=3f3617 user=u_0874 GET /portion?species=cat&weight=11.5&stage=senior&activity=low&units=imperial&product=ck-senior-care -> 200 grams=120 kcal=408.7 30ms
+2026-10-27T07:04:18.543Z INFO  req=b4b004 user=u_1372 GET /portion?species=cat&weight=5.1&stage=adult&activity=low&product=ck-senior-care -> 200 grams=71 kcal=242.3 30ms
+2026-10-27T07:04:21.213Z INFO  req=05585e user=u_3191 GET /portion?species=cat&weight=3.5&stage=adult&activity=high&product=ck-senior-care -> 200 grams=76 kcal=257.9 10ms
+2026-10-27T07:07:48.758Z INFO  req=fe98a1 user=u_3892 GET /portion?species=dog&weight=14.4&stage=puppy&activity=low&product=dg-puppy-large -> 200 grams=332 kcal=1319.5 16ms
+2026-10-27T07:08:02.564Z INFO  req=ed5cf7 user=u_1664 GET /portion?species=cat&weight=5.8&stage=adult&activity=low&product=ck-senior-care -> 200 grams=78 kcal=266.9 26ms
+2026-10-27T07:10:09.012Z WARN  req=b90b8a user=u_1777 GET /portion?species=dog&weight=abc&product=dg-beef-dry -> 400 "weight is required and must be a positive number" 24ms
+2026-10-27T07:12:42.521Z INFO  req=3b92c6 user=u_3568 GET /portion?species=cat&weight=4.1&stage=adult&activity=normal&product=ck-chicken-dry -> 200 grams=65 kcal=242 22ms
+2026-10-27T07:15:26.914Z INFO  req=01c271 user=u_0793 GET /portion?species=dog&weight=29.2&stage=adult&activity=normal&product=dg-beef-dry -> 200 grams=385 kcal=1406.9 30ms
+2026-10-27T07:15:38.055Z INFO  req=989d3b user=u_2307 GET /portion?species=cat&weight=3.8&stage=adult&activity=high&product=ck-chicken-dry -> 200 grams=74 kcal=274.3 15ms
+2026-10-27T07:17:06.148Z INFO  req=557a9d user=u_1084 GET /portion?species=dog&weight=17.7&stage=senior&activity=low&product=dg-beef-dry -> 200 grams=197 kcal=718.8 16ms
+2026-10-27T07:18:17.988Z INFO  req=edfcd1 user=u_0105 GET /portion?species=dog&weight=30.6&stage=adult&activity=normal&product=dg-beef-dry -> 200 grams=399 kcal=1457.2 29ms
+2026-10-27T07:18:24.078Z INFO  req=745393 user=u_2291 GET /portion?species=cat&weight=10&stage=adult&activity=normal&units=imperial&product=ck-chicken-dry -> 200 grams=127 kcal=472.4 8ms
+2026-10-27T07:21:20.763Z INFO  req=f2c1dd user=u_2266 GET /portion?species=dog&weight=10.2&stage=adult&activity=normal&product=dg-beef-dry -> 200 grams=175 kcal=639.2 30ms
+2026-10-27T07:21:48.429Z INFO  req=34dae9 user=u_3789 GET /portion?species=cat&weight=5.5&stage=adult&activity=normal&units=metric&product=ck-tuna-dry -> 200 grams=84 kcal=301.7 29ms
+2026-10-27T07:22:27.790Z INFO  req=7830f1 user=u_3752 GET /portion?species=cat&weight=3.2&stage=adult&activity=normal&product=ck-senior-care -> 200 grams=59 kcal=201 13ms
+2026-10-27T07:24:40.533Z INFO  req=acccb5 user=u_3368 GET /portion?species=cat&weight=3.0&stage=kitten&activity=low&product=ck-kitten-growth -> 200 grams=83 kcal=339.1 34ms
+2026-10-27T07:26:32.270Z INFO  req=756fc5 user=u_3926 GET /portion?species=cat&weight=4.2&stage=adult&activity=normal&product=ck-senior-care -> 200 grams=72 kcal=246.4 10ms
+2026-10-27T07:27:21.028Z INFO  req=28e781 user=u_1536 GET /portion?species=cat&weight=3.8&stage=adult&activity=normal&product=ck-ocean-fish-dry -> 200 grams=6 kcal=228.6 23ms
+2026-10-27T07:29:45.950Z INFO  req=bdd962 user=u_3222 GET /portion?species=dog&weight=18.1&stage=adult&activity=normal&product=dg-puppy-large -> 200 grams=247 kcal=982.8 19ms
+2026-10-27T07:31:59.555Z INFO  req=6af08a user=u_1981 GET /portion?species=dog&weight=48&stage=adult&activity=high&units=imperial&product=dg-lamb-rice-dry -> 200 grams=69 kcal=2450.9 17ms
+2026-10-27T07:32:06.988Z INFO  req=80babc user=u_1987 GET /portion?species=cat&weight=4.3&stage=adult&activity=low&product=ck-indoor-light -> 200 grams=67 kcal=213.2 4ms
+2026-10-27T07:34:02.237Z INFO  req=11efa8 user=u_2996 GET /portion?species=cat&weight=5.1&stage=adult&activity=normal&product=ck-chicken-dry -> 200 grams=77 kcal=285.1 11ms
+2026-10-27T07:35:53.940Z INFO  req=649515 user=u_0132 GET /portion?species=cat&weight=2.9&stage=senior&activity=normal&product=ck-tuna-dry -> 200 grams=48 kcal=171.1 6ms
+2026-10-27T07:38:14.284Z INFO  req=edf3b0 user=u_2310 GET /portion?species=dog&weight=27.5&stage=adult&activity=low&product=dg-puppy-large -> 200 grams=287 kcal=1143.2 30ms
+2026-10-27T07:40:27.742Z INFO  req=6c196f user=u_2705 GET /portion?species=cat&weight=4.7&stage=adult&activity=normal&product=ck-tuna-dry -> 200 grams=75 kcal=268.1 9ms
+2026-10-27T07:43:18.880Z INFO  req=d996fc user=u_1245 GET /portion?species=cat&weight=3.5&stage=adult&activity=low&product=ck-indoor-light -> 200 grams=57 kcal=182.7 25ms
+2026-10-27T07:43:19.180Z WARN  catalogue: refresh check skipped (feed endpoint timeout after 5000ms)
+2026-10-27T07:45:37.802Z INFO  req=cf9cb7 user=u_2177 GET /portion?species=cat&weight=3.4&stage=kitten&activity=normal&product=ck-tuna-dry -> 200 grams=122 kcal=438.2 26ms
+2026-10-27T07:48:17.463Z INFO  req=4f7480 user=u_1746 GET /portion?species=dog&weight=34.8&stage=puppy&activity=low&product=dg-weight-control -> 200 grams=864 kcal=2557.5 24ms
+2026-10-27T07:51:17.738Z INFO  req=ebc3da user=u_0240 GET /portion?species=dog&weight=35.4&stage=puppy&activity=normal&product=dg-puppy-large -> 200 grams=766 kcal=3047.7 20ms
+2026-10-27T07:52:48.979Z INFO  req=4044e0 user=u_3412 GET /portion?species=cat&weight=4.8&stage=kitten&activity=normal&product=ck-indoor-light -> 200 grams=178 kcal=567.5 16ms
+2026-10-27T07:55:23.482Z INFO  req=c82c64 user=u_0328 GET /portion?species=cat&weight=4.4&stage=adult&activity=low&units=metric&product=ck-chicken-dry -> 200 grams=58 kcal=216.9 23ms
+2026-10-27T07:56:53.680Z INFO  req=691be4 user=u_3307 GET /portion?species=cat&weight=3.9&stage=adult&activity=normal&product=ck-salmon-soft-bites -> 200 grams=6 kcal=233.1 14ms
+2026-10-27T07:59:21.787Z INFO  req=f2169b user=u_3936 GET /portion?species=dog&weight=30.3&stage=adult&activity=low&product=dg-beef-dry -> 200 grams=337 kcal=1229.5 11ms
+2026-10-27T08:00:31.261Z INFO  req=103cda user=u_2750 GET /portion?species=dog&weight=24.5&stage=adult&activity=normal&product=dg-lamb-rice-dry -> 200 grams=35 kcal=1233.4 16ms
+2026-10-27T08:01:11.498Z INFO  req=2455fb user=u_1915 GET /portion?species=dog&weight=24.5&stage=adult&activity=low&product=dg-weight-control -> 200 grams=354 kcal=1048.4 28ms
+2026-10-27T08:02:22.694Z INFO  req=fa2a13 user=u_2312 GET /portion?species=cat&weight=4.4&stage=adult&activity=normal&product=ck-chicken-dry -> 200 grams=69 kcal=255.2 19ms
+2026-10-27T08:05:24.269Z INFO  req=aebbbd user=u_2293 GET /portion?species=dog&weight=27.9&stage=adult&activity=high&product=dg-weight-control -> 200 grams=551 kcal=1631.6 21ms
+2026-10-27T08:05:33.038Z INFO  req=1f8514 user=u_0002 GET /portion?species=cat&weight=3.8&stage=adult&activity=high&product=ck-chicken-dry -> 200 grams=74 kcal=274.3 15ms
+2026-10-27T08:07:02.430Z INFO  req=b77e8b user=u_3486 GET /portion?species=cat&weight=3.6&stage=adult&activity=normal&product=ck-kitten-growth -> 200 grams=54 kcal=219.5 19ms
+2026-10-27T08:08:03.700Z INFO  req=433e7c user=u_0017 GET /portion?species=cat&weight=2.9&stage=adult&activity=normal&product=ck-chicken-dry -> 200 grams=50 kcal=186.7 9ms
+2026-10-27T08:11:53.231Z WARN  req=d506ca user=u_2104 GET /portion?species=cat&weight=4.1&product=dg-beef-dry -> 400 "product dg-beef-dry is not a cat food" 21ms
+2026-10-27T08:13:49.651Z INFO  req=ffb715 user=u_1079 GET /portion?species=dog&weight=6.5&stage=adult&activity=low&product=dg-chicken-rice -> 200 grams=110 kcal=387.5 12ms
+2026-10-27T08:15:19.246Z INFO  req=594c71 user=u_2075 GET /portion?species=cat&weight=3.9&stage=kitten&activity=normal&product=ck-chicken-dry -> 200 grams=131 kcal=485.7 30ms
+2026-10-27T08:18:04.448Z INFO  req=e603ff user=u_1990 GET /portion?species=cat&weight=3.9&stage=senior&activity=low&units=metric&product=ck-tuna-dry -> 200 grams=51 kcal=181.6 9ms
+2026-10-27T08:21:39.252Z INFO  req=af4e04 user=u_1449 GET /portion?species=dog&weight=13.0&stage=adult&activity=high&product=dg-weight-control -> 200 grams=311 kcal=920.1 17ms
+2026-10-27T08:23:52.640Z INFO  req=0e032d user=u_1811 GET /portion?species=cat&weight=3.6&stage=senior&activity=normal&product=ck-tuna-dry -> 200 grams=56 kcal=201.2 28ms
+2026-10-27T08:26:24.753Z INFO  req=a1c8a5 user=u_2116 GET /portion?species=dog&weight=10.2&stage=adult&activity=normal&product=dg-beef-dry -> 200 grams=175 kcal=639.2 7ms
+2026-10-27T08:29:03.419Z INFO  req=315366 user=u_0964 GET /portion?species=dog&weight=32.3&stage=adult&activity=normal&product=dg-chicken-rice -> 200 grams=431 kcal=1517.5 27ms
+2026-10-27T08:29:20.180Z INFO  req=080410 user=u_0846 GET /portion?species=dog&weight=17.4&stage=adult&activity=normal&product=dg-chicken-rice -> 200 grams=271 kcal=954.2 32ms
+2026-10-27T08:29:20.380Z INFO  health: ok heap=41MB uptime=7h12m
+2026-10-27T08:30:56.423Z INFO  req=e416e7 user=u_0434 GET /portion?species=dog&weight=18.2&stage=adult&activity=normal&product=dg-beef-dry -> 200 grams=270 kcal=986.9 16ms
+2026-10-27T08:31:14.111Z INFO  req=3296d0 user=u_0412 GET /portion?species=cat&weight=4.6&stage=adult&activity=low&product=ck-ocean-fish-dry -> 200 grams=5 kcal=224.3 21ms
+2026-10-27T08:32:10.194Z INFO  req=72bcb7 user=u_0146 GET /portion?species=cat&weight=3.8&stage=adult&activity=normal&product=ck-chicken-dry -> 200 grams=61 kcal=228.6 11ms
+2026-10-27T08:35:51.749Z INFO  req=e0dd5b user=u_0366 GET /portion?species=cat&weight=4.0&stage=kitten&activity=high&product=ck-chicken-dry -> 200 grams=160 kcal=594 7ms
+2026-10-27T08:37:30.686Z WARN  req=fcdb15 user=u_3390 GET /portion?species=cat&weight=4.4&units=lbs&product=ck-tuna-dry -> 400 "units must be one of metric, imperial" 12ms
+2026-10-27T08:40:02.821Z INFO  req=8cd853 user=u_2931 GET /portion?species=cat&weight=3.0&stage=adult&activity=normal&product=ck-tuna-dry -> 200 grams=53 kcal=191.5 21ms
+2026-10-27T08:42:59.137Z INFO  req=78f244 user=u_3245 GET /portion?species=cat&weight=3.2&stage=adult&activity=high&product=ck-tuna-dry -> 200 grams=67 kcal=241.2 11ms
+2026-10-27T08:44:07.312Z INFO  req=1cde51 user=u_0638 GET /portion?species=cat&weight=4.3&stage=adult&activity=normal&product=ck-tuna-dry -> 200 grams=70 kcal=250.8 20ms
+2026-10-27T08:46:46.003Z INFO  req=5aaeaa user=u_0984 GET /portion?species=cat&weight=3.0&stage=adult&activity=normal&units=metric&product=ck-chicken-dry -> 200 grams=51 kcal=191.5 7ms
+2026-10-27T08:49:40.870Z INFO  req=f42df7 user=u_3334 GET /portion?species=cat&weight=5.2&stage=adult&activity=normal&product=ck-kitten-growth -> 200 grams=71 kcal=289.3 10ms
+2026-10-27T08:49:43.451Z INFO  req=594178 user=u_1399 GET /portion?species=cat&weight=6.1&stage=senior&activity=high&product=ck-chicken-dry -> 200 grams=96 kcal=358.6 5ms
+2026-10-27T08:52:10.364Z INFO  req=ba646d user=u_3501 GET /portion?species=dog&weight=31.2&stage=adult&activity=normal&product=dg-beef-dry -> 200 grams=405 kcal=1478.5 13ms
+2026-10-27T08:54:25.657Z INFO  req=0dec4c user=u_3266 GET /portion?species=dog&weight=19.5&stage=adult&activity=low&product=dg-weight-control -> 200 grams=298 kcal=883.4 22ms
+2026-10-27T08:57:55.163Z INFO  req=81b78a user=u_2134 GET /portion?species=dog&weight=11.3&stage=adult&activity=low&product=dg-beef-dry -> 200 grams=161 kcal=586.7 4ms
+2026-10-27T08:58:32.601Z INFO  req=0b6cc5 user=u_0937 GET /portion?species=cat&weight=3.9&stage=adult&activity=low&product=ck-tuna-dry -> 200 grams=55 kcal=198.2 11ms
+2026-10-27T09:01:42.287Z WARN  req=56cadd user=u_0098 GET /portion?species=cat&stage=adult&product=ck-tuna-dry -> 400 "weight is required and must be a positive number" 10ms
+2026-10-27T09:10:02.287Z INFO  health: ok heap=43MB uptime=11h02m

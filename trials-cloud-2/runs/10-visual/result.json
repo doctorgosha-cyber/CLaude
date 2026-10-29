@@ -1,0 +1,89 @@
+{
+  "id": 10,
+  "tool": "Playwright screenshot diff: playwright-core + pixelmatch (and odiff-bin) as before/after visual regression",
+  "versions": {"playwright-core": "1.64.1", "pixelmatch": "8.0.0", "pngjs": "7.0.0", "odiff-bin": "4.5.0 (@odiff/linux-x64 4.5.0)", "chromium": "/opt/pw-browsers/chromium-1194 (Playwright build 1194)", "node": "22.22.0"},
+  "licences": {"playwright-core": "Apache-2.0", "pixelmatch": "ISC", "pngjs": "MIT", "odiff-bin": "MIT", "@odiff/linux-x64": "MIT", "copyleft_flags": "none"},
+  "install": {
+    "command": "npm i playwright-core@1.64.1 pixelmatch@8.0.0 pngjs@7.0.0 && npm i odiff-bin@4.5.0",
+    "seconds": 6.8,
+    "seconds_detail": {"playwright-core+pixelmatch+pngjs": 3.9, "odiff-bin": 2.9},
+    "size_mb": 18,
+    "size_detail_mb": {"playwright-core": 14, "pngjs": 0.7, "pixelmatch": 0.06, "odiff-bin+@odiff/linux-x64": 3.3, "chromium_not_counted": "browser binary is already on the box; a fresh machine needs `npx playwright install chromium` (~150 MB download from a CDN, blocked here, not measured)"},
+    "windows": "yes - playwright-core, pixelmatch, pngjs are pure Node (Playwright ships Windows Chromium builds); odiff-bin 4.5.0 lists optionalDependencies @odiff/win32-x64 and @odiff/win32-arm64 (4.5.0) in its package.json, so npm picks the Windows binary automatically"
+  },
+  "fixtures": "fixtures/10-visual/: generate.mjs writes shared/site.css (design tokens) + before/{U1..U4,C1,C2}.html and after/*.html (review-site page: header, hero, 3 product cards with badges, price table, footer). U1 2px margin shift, U2 --accent #0b4f9c->#0b4fa0, U3 card-2 badge display:none, U4 body font Inter->Arial (Liberation Sans; 'Segoe UI' is aliased to Inter by fontconfig here so the brief's suggested stack gave a 0-px diff - documented in KEY.json). Controls: C1 identical + JS timestamp/random visitors in [data-dynamic]; C2 identical + hero paragraph translateX(0 vs 0.4px) so only glyph anti-aliasing differs. Each pair at 390 and 1280 px. KEY.json lists all.",
+  "baseline": {
+    "what": "manual screenshots: baseline.mjs captures before/after full-page PNGs and a side-by-side PNG per pair/width; a human eyeballs them. Recall per the brief's premise is 0/4 (nobody can see a 4/255 colour change or a 2px shift by eye; U3/U4 might be noticed by a careful reviewer, not measured).",
+    "command": "node runs/10-visual/baseline.mjs",
+    "recall": "0/4",
+    "false_positives": 0,
+    "runtime_s": 21.5,
+    "runtime_note": "capture only, 12 screenshot pairs; human review time not measured"
+  },
+  "candidate_default": {
+    "config": "playwright-core page.screenshot({fullPage:true}) with viewport width 390/1280, default context (deviceScaleFactor 1, animations on, no font wait, no mask); pixelmatch(threshold 0.1, includeAA default=false). DOCS CHECK: pixelmatch README/JSDoc: 'includeAA — If true, disables detecting and ignoring anti-aliased pixels. false by default' => by default AA pixels ARE detected and ignored. Threshold in 8.0.0 is max OKLab HyAB distance (1 = black vs white). Images of different height (U1) are padded with white before comparing (pixelmatch itself throws on size mismatch).",
+    "commands": ["node runs/10-visual/run.mjs default 0.1", "node runs/10-visual/compare.mjs default"],
+    "found": {"U1": true, "U2": false, "U3": true, "U4": true},
+    "detail": {
+      "U1": "diff 13178 px (1.45%) @390, 20055 px (1.23%) @1280; bbox x0 y1558 390x742 / x0 y815 1280x423; size mismatch 2331->2333 / 1267->1269",
+      "U2": "0 px at threshold 0.1 (also 0 with includeAA:true and at 0.05, 0.02); 65 px at 0.01; 34985 px (3.9%) / 91357 px (5.6%) only at threshold 0.005",
+      "U3": "1527 px (0.168%) bbox x38 y843 76x26 @390; 1575 px (0.097%) bbox x483 y447 77x26 @1280",
+      "U4": "28909 px (3.18%) bbox 341x2274 @390; 34607 px (2.13%) bbox 1071x1212 @1280",
+      "C1": "FALSE POSITIVE: 371 px (0.04%) @390, 1030 px (0.06%) @1280 in the dynamic status bar (no mask)",
+      "C2": "FALSE POSITIVE: 2564 px (0.28%) @390, 2733 px (0.17%) @1280 - pixelmatch's AA detection does not absorb a 0.4px sub-pixel text shift (includeAA:true gives 3155/3119)"
+    },
+    "recall": "3/4",
+    "false_positives": 2,
+    "false_positives_note": "both controls, at both widths (4/4 control screenshots flagged)",
+    "extra_findings_on_seeded": 0,
+    "runtime_s": 12.5,
+    "runtime_per_pair_s": "0.6-1.4 per pair+width (both screenshots + compare), ~1.7 per pair at two widths; 12.5 s wall for 6 pairs x 2 widths incl. browser launch; pixelmatch compare alone 0.15-0.45 s per 1280x1267 (incl. PNG decode, 3 passes)"
+  },
+  "candidate_tuned": {
+    "config": "Capture: newContext({viewport:{width,height:800}, deviceScaleFactor:1, reducedMotion:'reduce'}), goto(load), await document.fonts.ready, inject caret-color:transparent, screenshot({fullPage:true, animations:'disabled', mask:[page.locator('[data-dynamic]')], maskColor:'#FF00FF'}). Compare, two rules: (A) pixelmatch threshold 0.3 (includeAA false), FAIL if diffPixels > 20 (max-pixels allowance for stray sub-pixel AA noise; C2 leaves 5-7 px); (B) 'solid block' rule: pixelmatch threshold 0.005 with windowSize 16, FAIL if the max window count == 256 (a fully changed 16x16 block = a solid fill changed colour, which scattered AA noise never produces: C2 max 134, U2 256). Why: a single threshold cannot do both - U2 needs <= 0.005 where C2 produces 4763 px, and C2 needs >= 0.3 where U2 is invisible. Rule B is admittedly tuned on these fixtures (it only catches changes to solid areas >= 16x16 px; a 4/255 change on thin text or 1px borders would still be missed).",
+    "commands": ["node runs/10-visual/run.mjs tuned 0.3", "node runs/10-visual/compare.mjs tuned", "node runs/10-visual/windowcheck.mjs", "node runs/10-visual/wrapper-sketch.mjs <before> <after> --chrome /opt/pw-browsers/chromium-1194/chrome-linux/chrome"],
+    "found": {"U1": true, "U2": true, "U3": true, "U4": true},
+    "detail": {
+      "U1": "rule A: 7159 px (0.79%) @390 bbox x24 y1558 337x742; 7149 px (0.44%) @1280 bbox x105 y815 1058x423",
+      "U2": "rule A: 0 px (threshold 0.3 blind to it); rule B: full 16x16 block at threshold 0.005 => flagged; drawn bbox 390x1216 / 1280x473 (header+hero+cards region)",
+      "U3": "rule A: 1498 px (0.165%) bbox x38 y843 76x26; 1534 px (0.095%) bbox x483 y447 77x26",
+      "U4": "rule A: 20884 px (2.30%) bbox 341x2274; 26500 px (1.63%) bbox 1071x1212",
+      "C1": "0 px at every threshold (mask covers the dynamic bar) => 0 reported",
+      "C2": "5 px @390 / 7 px @1280 at threshold 0.3 (<= 20 allowance), solid-block max 134/132 (< 256) => 0 reported"
+    },
+    "recall": "4/4",
+    "recall_single_threshold_only": "3/4 with rule A alone (U2 missed); U2 is a 4/255 blue-channel change, OKLab distance ~0.006, below any perceptual threshold",
+    "false_positives": 0,
+    "extra_findings_on_seeded": 0,
+    "runtime_s": 19.2,
+    "runtime_per_pair_s": "1.0-2.2 per pair+width (fonts wait + mask + 2 extra pixelmatch passes), ~2.9 per pair at two widths; 19.2 s wall for 12 pair-widths. Shared-CPU noise: other trials ran concurrently.",
+    "wrapper_exit_codes": {"C1": 0, "C2": 0, "U1": 1, "U2": 1, "U3": 1, "U4": 1, "missing_file": 2}
+  },
+  "odiff": {
+    "what": "odiff-bin 4.5.0 CLI run on the same PNGs (runs/10-visual/odiff-results.txt). Defaults: threshold 0.1 (YIQ), antialiasing NOT ignored unless --aa; exit 22 on any differing pixel; handles different image heights without --fail-on-layout.",
+    "defaults_on_default_shots": {"U1": "21014 px 2.31% @390", "U2": "0 (missed)", "U3": "1763 px 0.19%", "U4": "47881 px 5.27%", "C1": "554 px FP", "C2": "3123 px FP"},
+    "aa_flag_on_tuned_shots": {"U1": "11902 px 1.31%", "U2": "0 (missed)", "U3": "1528 px 0.17%", "U4": "25900 px 2.85%", "C1": "0", "C2": "2549 px 0.28% FP - --aa does not absorb the sub-pixel shift either"},
+    "t0.005": "U2 35152 px 3.87% / 91576 px 5.65% (caught) but C2 5806 px (FP) - same trade-off as pixelmatch",
+    "runtime_s_per_compare": "0.05-0.19 (vs pixelmatch ~0.15-0.45 incl. decode); no built-in pixel-count allowance, no windowSize, ignore regions only by pixel coordinates, so the 2-rule tuned config cannot be expressed; exit code is binary",
+    "recall_defaults": "3/4, false_positives 2 (both controls)",
+    "windows": "yes - @odiff/win32-x64 + @odiff/win32-arm64 optional deps"
+  },
+  "limits": [
+    "A 4/255 colour-token change (U2) is below the default perceptual threshold of both pixelmatch (0.1) and odiff (0.1); catching it needs threshold <= 0.005, at which sub-pixel text AA noise (C2) produces ~4800 px. The 'solid 16x16 block' rule separates them here but only for changes to solid areas >= 16 px; thin UI (borders, text in the accent colour) with the same change would still pass.",
+    "pixelmatch's built-in anti-aliasing detection does not neutralise a sub-pixel transform (C2 raw 2564-2733 px at 0.1); it takes threshold 0.3 + a 20-px allowance. Threshold 0.3 is lenient: it will also hide moderate colour drift elsewhere (U1/U3/U4 still show 7k/1.5k/21k px, so layout, hidden elements and font changes are safe).",
+    "Dynamic regions must be enumerated as selectors (Playwright mask); the mask box follows the element box, so a masked element whose size depends on the dynamic text needs a fixed size or its container masked (we mask the whole [data-dynamic] bar).",
+    "Full-page screenshots of different height (U1) make pixelmatch throw; the harness/wrapper pads with white. Fixed in-wrapper, but the reported bbox then covers everything below the shift, which is correct but not 'the 2px margin'.",
+    "'Segoe UI' resolves to Inter via fontconfig on this Linux box; cross-OS font metrics differ, so baselines must be captured on the same OS/browser build as the check (Windows vs Linux screenshots will never match).",
+    "Chromium download for a fresh machine (`npx playwright install chromium`) goes to a CDN that is blocked here; not measured.",
+    "Runtimes have shared-CPU noise (4 vCPU, concurrent trials)."
+  ],
+  "verdict": "ADOPT",
+  "reason": "Against today's eyeball comparison (0/4), pixelmatch defaults catch 3/4 seeded changes but flag both controls (dynamic text, sub-pixel AA); the tuned capture (mask [data-dynamic], animations off, fonts.ready, dSF 1) plus threshold 0.3 with a 20-px allowance and a 'fully changed 16x16 block at 0.005' rule gives 4/4 with 0 false positives at ~3 s per page pair (two widths). Cost is 18 MB of pure-Node packages (6.8 s install) on top of a Chromium the team already has; odiff is faster per compare (0.05-0.19 s) but cannot express the tuned rules and adds nothing here.",
+  "wrapper": "runs/10-visual/wrapper-sketch.mjs",
+  "do_not_adopt_notes": [
+    "odiff-bin: no gain over pixelmatch for this use (misses U2 at defaults, --aa still flags C2, no pixel allowance/windowed count, exit 22 on 1 px); keep as optional speed-up only if compare time ever matters.",
+    "pixelmatch defaults as-is: 2 false positives on realistic controls; do not use without the mask + threshold/allowance tuning.",
+    "Single-threshold tuned config (0.3, no rule B): 3/4 - misses subtle colour-token drift; acceptable if the team accepts that colour tokens are checked elsewhere (e.g. a CSS token diff).",
+    "Baseline PNGs (12 MB) and default-mode screenshots were deleted after measurement to keep the repo small; `node baseline.mjs` / `node run.mjs default 0.1` regenerate them in <30 s. diffs/{default,tuned}/*.png (diffMask PNGs, 384 KB) and shots/tuned are kept."
+  ]
+}
