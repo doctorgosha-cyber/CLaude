@@ -110,18 +110,54 @@ function minorUnits(currency) {
   return currency === 'JPY' ? 0 : 2;
 }
 
+// Plain decimal digits of the shortest round-trip form of n (no exponent).
+function decimalDigits(n) {
+  const str = String(n);
+  const m = str.match(/^(\d+)(?:\.(\d+))?(?:e([+-]\d+))?$/);
+  let int = m[1];
+  let frac = m[2] ?? '';
+  const exp = Number(m[3] ?? 0);
+  if (exp > 0) {
+    const all = int + frac.padEnd(exp, '0');
+    int = all.slice(0, int.length + exp);
+    frac = all.slice(int.length);
+  } else if (exp < 0) {
+    const all = int.padStart(-exp, '0') + frac;
+    frac = all.slice(all.length - frac.length + exp);
+    int = all.slice(0, all.length - frac.length) || '0';
+  }
+  return { int: int.replace(/^0+(?=\d)/, ''), frac };
+}
+
+// Round half to even on the decimal digits; returns a decimal string.
+export function roundHalfEven(n, digits) {
+  const { int, frac } = decimalDigits(n);
+  if (frac.length <= digits) return digits ? `${int}.${frac.padEnd(digits, '0')}` : int;
+  const keep = frac.slice(0, digits);
+  const rest = frac.slice(digits);
+  let up;
+  if (rest[0] > '5') up = true;
+  else if (rest[0] < '5') up = false;
+  else if (/[1-9]/.test(rest.slice(1))) up = true;
+  else up = Number((keep || int).at(-1)) % 2 === 1;
+  let scaled = BigInt(int + keep) + (up ? 1n : 0n);
+  let text = scaled.toString().padStart(digits + 1, '0');
+  return digits ? `${text.slice(0, -digits)}.${text.slice(-digits)}` : text;
+}
+
 export function formatMoney(amount, currency, locale) {
   if (typeof amount !== 'number' || !Number.isFinite(amount) || amount < 0) throw bad(amount);
   if (!CODES.includes(currency)) throw bad(currency);
   if (!LOCALES.includes(locale)) throw bad(locale);
   const digits = minorUnits(currency);
+  const rounded = roundHalfEven(amount, digits);
   const out = new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
     currencyDisplay: 'narrowSymbol',
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
-  }).format(amount);
+  }).format(rounded);
   return out.replace(/ /g, '\u00A0');
 }
 

@@ -54,9 +54,12 @@ unchanged since v1.
 ## Verified scores (v3)
 - untouched task/: 0.133 (8/60); npm test 5/5
 - reference/: 1.000 (60/60); npm test 5/5
-- only the five v2 causes (a-e) with the v2 form-blind 250-600 guard: 0.283 (17/60) - the guard
-  throws on the shipped wet pate; the agent's own npm test shows 2 failures
-- only the five v2 causes (a-e), no guard at all: 0.25 15 / 60 | failed: C1 C2 C3 C4 C6 C7 C9 I1 I2 I3 I4 I6 D1 D2 D6 F5 F6 M1 M2 M3 M4 M5 K1 K2 K3 K4 K5 K6 W1 W2 W3 W4 H1 H2 E1 E2 E3 E4 E5 E6 E7 E8 E9 R1 R3
+- only the five v2 causes (a-e), lenient normaliser (unknown units pass as per 100 g), no
+  guard: 0.600 (36/60); npm test green. This is the realistic "fixed everything the code shows"
+  state: every remaining failure comes from the spec (C-guard/per-can, M, K, W, H2, R1 shape).
+- same but with a strict normaliser or a form-blind 250-600 guard: 0.25-0.28 (15-17/60), because
+  the shipped catalogue (kcal/can row, 92 kcal wet pate) no longer loads; the agent's own npm
+  test shows 2 failures, forcing a read of the spec.
 - (a)+(b)+(c) only: 0.167 (10/60)
 - everything except the spec items (g)(h)(i): 0.733 (44/60)
 - everything plus the red-herring "fix" (product stage factor): 0.933 (56/60), fails H1 H2 K2 E3

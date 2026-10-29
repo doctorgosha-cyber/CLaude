@@ -126,8 +126,64 @@ export function pricePerKg(priceText, massSpec) {
   return { currency, perKg: amount / (grams / 1000) };
 }
 
+const MINOR_UNITS = { USD: 2, EUR: 2, GBP: 2, JPY: 0, CHF: 2, UAH: 2 };
+const LOCALES = new Set(['en-US', 'de-DE', 'fr-FR', 'uk-UA']);
+
+// Decimal digits of the shortest round-trip representation of x (x finite, >= 0),
+// as { int, frac } digit strings, with any exponent expanded.
+function decimalDigits(x) {
+  const str = String(x);
+  const m = /^(\d+)(?:\.(\d+))?(?:e([+-]\d+))?$/.exec(str);
+  if (!m) throw new TypeError(`invalid input: ${str}`);
+  let digits = m[1] + (m[2] ?? '');
+  let point = m[1].length + Number(m[3] ?? 0);
+  if (point <= 0) {
+    digits = '0'.repeat(1 - point) + digits;
+    point = 1;
+  } else if (point > digits.length) {
+    digits += '0'.repeat(point - digits.length);
+  }
+  return { int: digits.slice(0, point), frac: digits.slice(point) };
+}
+
+// Round half to even to `places` fraction digits; returns a decimal string.
+function roundHalfEven(x, places) {
+  const { int, frac } = decimalDigits(x);
+  const kept = (int + frac.slice(0, places).padEnd(places, '0'));
+  const rest = frac.slice(places);
+  const firstRest = rest[0] ?? '0';
+  const tailNonZero = /[1-9]/.test(rest.slice(1));
+  let up = false;
+  if (firstRest > '5' || (firstRest === '5' && tailNonZero)) up = true;
+  else if (firstRest === '5') up = Number(kept[kept.length - 1]) % 2 === 1;
+  let digits = kept;
+  if (up) {
+    const arr = digits.split('');
+    let i = arr.length - 1;
+    while (i >= 0) {
+      if (arr[i] === '9') { arr[i] = '0'; i--; }
+      else { arr[i] = String(Number(arr[i]) + 1); break; }
+    }
+    digits = (i < 0 ? '1' : '') + arr.join('');
+  }
+  const intLen = digits.length - places;
+  const intStr = digits.slice(0, intLen).replace(/^0+(?=\d)/, '');
+  return places ? `${intStr}.${digits.slice(intLen)}` : intStr;
+}
+
 export function formatMoney(amount, currency, locale) {
-  throw new Error('not implemented');
+  if (typeof amount !== 'number' || !Number.isFinite(amount) || amount < 0) fail(amount);
+  if (typeof currency !== 'string' || !(currency in MINOR_UNITS)) fail(currency);
+  if (typeof locale !== 'string' || !LOCALES.has(locale)) fail(locale);
+  const places = MINOR_UNITS[currency];
+  const rounded = roundHalfEven(amount, places);
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency,
+    currencyDisplay: 'narrowSymbol',
+    minimumFractionDigits: places,
+    maximumFractionDigits: places,
+  }).format(rounded);
 }
 
 export function kcalPer100g(spec) {

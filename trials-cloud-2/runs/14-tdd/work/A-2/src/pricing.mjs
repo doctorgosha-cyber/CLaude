@@ -13,7 +13,7 @@ const SYMBOLS = { $: 'USD', '€': 'EUR', '£': 'GBP', '¥': 'JPY', '₴': 'UAH'
 const LOCALES = new Set(['en-US', 'de-DE', 'fr-FR', 'uk-UA']);
 
 function show(value) {
-  if (typeof value === 'string') return value;
+  if (typeof value === 'string' || typeof value === 'number') return String(value);
   if (typeof value === 'symbol') return value.toString();
   if (typeof value === 'bigint') return `${value}n`;
   try {

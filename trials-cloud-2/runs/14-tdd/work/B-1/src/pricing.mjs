@@ -182,8 +182,34 @@ export function kcalPer100g(spec) {
   return value;
 }
 
+function massArg(value) {
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value) || value <= 0) fail(value);
+    return value;
+  }
+  return toGrams(value);
+}
+
+function parseISODate(startISO) {
+  if (typeof startISO !== 'string') fail(startISO);
+  const m = startISO.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) fail(startISO);
+  const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const utc = Date.UTC(y, mo - 1, d);
+  const dt = new Date(utc);
+  if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== mo - 1 || dt.getUTCDate() !== d) fail(startISO);
+  return utc;
+}
+
 export function daysSupply(bagGrams, dailyGrams, startISO) {
-  throw new Error('not implemented');
+  const bag = massArg(bagGrams);
+  const daily = massArg(dailyGrams);
+  const start = parseISODate(startISO);
+  const days = Math.floor(bag / daily);
+  if (!Number.isFinite(days) || days < 1) fail(`${String(bagGrams)} / ${String(dailyGrams)}`);
+  const last = new Date(start + (days - 1) * 86400000);
+  const pad = (n, w) => String(n).padStart(w, '0');
+  return `${pad(last.getUTCFullYear(), 4)}-${pad(last.getUTCMonth() + 1, 2)}-${pad(last.getUTCDate(), 2)}`;
 }
 
 export function compare(products) {
