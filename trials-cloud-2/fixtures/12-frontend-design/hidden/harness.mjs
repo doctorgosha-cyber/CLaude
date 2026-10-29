@@ -166,7 +166,7 @@ async function runLighthouse(url, gradeDir) {
   const profile = path.join(gradeDir, 'chrome-profile');
   await mkdir(profile, { recursive: true });
   const chrome = await launch({ chromePath: CHROME, userDataDir: profile,
-    chromeFlags: ['--headless=new', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'] });
+    chromeFlags: ['--headless=new', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage', '--disable-background-networking', '--disable-component-update', '--no-first-run', '--disable-sync'] });
   try {
     const res = await lighthouse(url, { port: chrome.port, output: 'json', logLevel: 'silent', onlyCategories: ['performance', 'accessibility'] });
     const cats = res.lhr.categories;
