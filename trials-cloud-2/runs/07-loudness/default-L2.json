@@ -1,1 +1,1 @@
-{"file":"L2.mp4","mode":"default","integrated":-14,"lra":7.4,"truePeak":-3,"voice":-23.6,"music":-13.6,"ratio":-10,"findings":[{"id":"ratio","msg":"voice-music ratio -10 dB (voice -23.6, music -13.6), want >= +6"}],"runtime_s":2.2,"pass":false}
+{"file":"L2.mp4","mode":"default","integrated":-14,"lra":7.4,"truePeak":-3,"voice":-23.6,"music":-13.6,"ratio":-10,"findings":[{"id":"ratio","msg":"voice-music ratio -10 dB (voice -23.6, music -13.6), want >= +6"}],"runtime_s":1.86,"pass":false}

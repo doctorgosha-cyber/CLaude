@@ -23,3 +23,12 @@ L3 pass 4: measured I=-14.2 (target -14, delta 0.20)
 L3 pass 5: measured I=-14.1 (target -14, delta 0.10)
 
 VERIFY (measured from the mp4, ffmpeg ebur128=peak=true):
+C1  I=-14.1 LUFS  LRA=2.2 LU  TP=-2.7 dBTP  voice=-12.0  music=-22.0
+C2  I=-14.1 LUFS  LRA=2.2 LU  TP=-2.7 dBTP  voice=-12.3  music=-20.3
+L1  I=-9.8 LUFS  LRA=1.3 LU  TP=-2.6 dBTP  voice=5.1  music=-4.9
+L2  I=-14.0 LUFS  LRA=7.4 LU  TP=-3.0 dBTP  voice=-23.6  music=-13.6
+L3  I=-14.1 LUFS  LRA=2.3 LU  TP=1.2 dBTP  voice=-12.1  music=-22.1
+
+real	1m44.017s
+user	2m8.909s
+sys	0m21.658s
