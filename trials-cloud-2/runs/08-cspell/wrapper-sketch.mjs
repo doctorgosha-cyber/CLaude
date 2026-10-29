@@ -16,9 +16,10 @@ try { // package.json is not exported by cspell, so walk up from its main entry 
   while (!existsSync(join(d, 'package.json'))) d = dirname(d);
   bin = join(d, 'bin.mjs'); }
 catch (e) { console.log(JSON.stringify({ ok: false, error: 'cspell not installed: ' + e.message })); process.exit(2); }
-const args = [bin, 'lint', '--no-progress', '--no-color', '--quiet', '--no-summary', '--root', root, '--config', config, ...globs];
+const args = [bin, 'lint', '--no-progress', '--no-color', '--quiet', '--root', root, '--config', config, ...globs];
 const r = spawnSync(process.execPath, args, { encoding: 'utf8', cwd: root, maxBuffer: 64 << 20 });
-if (r.error || ![0, 1].includes(r.status)) {
+const checked = +(r.stderr?.match(/Files checked: (\d+)/)?.[1] ?? -1); // summary goes to stderr
+if (r.error || ![0, 1].includes(r.status) || /Error/.test(r.stderr) || checked < 1) { // cspell exits 1 for config errors too
   console.log(JSON.stringify({ ok: false, exit: r.status, error: (r.error?.message || '') + (r.stderr || '') + (r.stdout || '') }));
   process.exit(2);
 }
@@ -27,5 +28,5 @@ for (const line of r.stdout.split('\n')) {
   const m = line.match(/^(.+?):(\d+):(\d+) - Unknown word \((.+?)\)(?: fix: \((.+?)\))?/);
   if (m) findings.push({ file: m[1], line: +m[2], col: +m[3], word: m[4], suggestion: m[5] ?? null });
 }
-console.log(JSON.stringify({ ok: true, tool: 'cspell', root, config, count: findings.length, findings }, null, 2));
+console.log(JSON.stringify({ ok: true, tool: 'cspell', root, config, files_checked: checked, count: findings.length, findings }, null, 2));
 process.exit(findings.length ? 1 : 0);

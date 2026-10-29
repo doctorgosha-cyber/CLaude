@@ -1,8 +1,0 @@
-{
-  "ok": true,
-  "tool": "cspell",
-  "root": "/home/user/CLaude/trials-cloud-2/fixtures/08-cspell",
-  "config": "/home/user/CLaude/trials-cloud-2/runs/08-cspell/config-tuned/cspell.json",
-  "count": 0,
-  "findings": []
-}
