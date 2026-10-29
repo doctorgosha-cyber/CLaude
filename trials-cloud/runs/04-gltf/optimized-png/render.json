@@ -1,0 +1,59 @@
+{
+  "total_ms": 2597,
+  "results": [
+    {
+      "file": "/home/user/CLaude/trials-cloud/runs/04-gltf/optimized/Box.default.glb",
+      "ms": 647,
+      "loaded": true,
+      "rendered": true,
+      "error": null,
+      "triangles": 12,
+      "bboxFinite": true,
+      "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "windowErrors": [],
+      "pngPath": "optimized-png/Box.default.png",
+      "consoleErrs": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud/runs/04-gltf/optimized/Box.tuned.glb",
+      "ms": 350,
+      "loaded": true,
+      "rendered": true,
+      "error": null,
+      "triangles": 12,
+      "bboxFinite": true,
+      "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "windowErrors": [],
+      "pngPath": "optimized-png/Box.tuned.png",
+      "consoleErrs": []
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud/runs/04-gltf/optimized/BoxTextured.default.glb",
+      "ms": 389,
+      "loaded": true,
+      "rendered": true,
+      "error": null,
+      "triangles": 12,
+      "bboxFinite": true,
+      "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "windowErrors": [],
+      "pngPath": "optimized-png/BoxTextured.default.png",
+      "consoleErrs": []
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud/runs/04-gltf/optimized/BoxTextured.tuned.glb",
+      "ms": 430,
+      "loaded": true,
+      "rendered": true,
+      "error": null,
+      "triangles": 12,
+      "bboxFinite": true,
+      "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "windowErrors": [],
+      "pngPath": "optimized-png/BoxTextured.tuned.png",
+      "consoleErrs": []
+    }
+  ]
+}

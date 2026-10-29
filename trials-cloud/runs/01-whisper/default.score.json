@@ -1,0 +1,59 @@
+{
+ "name": "default",
+ "mock": false,
+ "check_args": [
+  "--model",
+  "base.en"
+ ],
+ "found": {
+  "D1": false,
+  "D2": false,
+  "D3": false,
+  "D4": false,
+  "D5": false,
+  "D6": false,
+  "D7": false,
+  "D8": false
+ },
+ "recall": null,
+ "recall_frac": null,
+ "false_positives": null,
+ "false_positive_detail": [],
+ "extra_findings_on_seeded": [],
+ "runtime_s": 6.15,
+ "asr_runtime_s": 5.22,
+ "errors": [
+  {
+   "file": "keyboard.clean.srt",
+   "error": "ProxyError: 403 Forbidden"
+  },
+  {
+   "file": "keyboard.seeded.srt",
+   "error": "ProxyError: 403 Forbidden"
+  },
+  {
+   "file": "thermos.clean.srt",
+   "error": "ProxyError: 403 Forbidden"
+  },
+  {
+   "file": "thermos.seeded.srt",
+   "error": "ProxyError: 403 Forbidden"
+  },
+  {
+   "file": "kettle.clean.srt",
+   "error": "ProxyError: 403 Forbidden"
+  },
+  {
+   "file": "kettle.seeded.srt",
+   "error": "ProxyError: 403 Forbidden"
+  }
+ ],
+ "per_file_asr_info": {
+  "keyboard/clean_srt": null,
+  "keyboard/seeded_srt": null,
+  "thermos/clean_srt": null,
+  "thermos/seeded_srt": null,
+  "kettle/clean_srt": null,
+  "kettle/seeded_srt": null
+ }
+}

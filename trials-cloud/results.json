@@ -1,0 +1,1275 @@
+{
+  "generated": "2026-10-29",
+  "brief": "HANDOFF 10 tool and skill trials",
+  "sandbox": "claude.ai cloud container, Linux x86_64, 4 vCPU, Node 22.22.0, Python 3.13.16, PHP 8.3.6; network limited to package registries + raw.githubusercontent.com",
+  "trials": [
+    {
+      "id": 1,
+      "tool": "SYSTRAN/faster-whisper",
+      "versions": {
+        "faster-whisper": "1.2.1",
+        "ctranslate2": "4.8.4",
+        "onnxruntime": "1.31.1",
+        "av": "19.0.2",
+        "huggingface_hub": "2.3.0",
+        "tokenizers": "0.23.3",
+        "numpy": "2.5.4",
+        "python": "3.13.16",
+        "espeak-ng (fixtures only)": "1.51",
+        "ffmpeg (fixtures only)": "6.1.1",
+        "full list": "runs/01-whisper/pip-freeze.txt"
+      },
+      "licences": {
+        "faster-whisper": "MIT (pip metadata + PyPI)",
+        "ctranslate2": "MIT (pip metadata + PyPI)",
+        "onnxruntime": "MIT (pip metadata)",
+        "av (PyAV)": "BSD-3-Clause (License-Expression)",
+        "huggingface_hub": "Apache-2.0",
+        "tokenizers": "Apache-2.0 (classifier)",
+        "numpy": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0 (License-Expression)",
+        "model (Systran/faster-whisper-base.en, -small.en)": "MIT: CTranslate2 conversions of OpenAI Whisper (MIT), as stated in the faster-whisper README / model cards. Not re-verified from huggingface.co here (host blocked).",
+        "fixtures": "synthetic: espeak-ng TTS of text written for this trial; no third-party audio"
+      },
+      "install": {
+        "command": "python3 -m venv venv && venv/bin/pip install faster-whisper==1.2.1",
+        "seconds": 37,
+        "size_mb": 470,
+        "size_note": "venv on disk; models are extra and are downloaded on first use from huggingface.co: base.en ~145 MB, small.en ~480 MB (sizes from the Systran model cards, not measured here)",
+        "windows": "yes (verified from PyPI release files 2026-10-29): ctranslate2 4.8.4 ships cp39..cp315 win_amd64 wheels; onnxruntime 1.31.1 ships cp311..cp314 win_amd64 + win_arm64; faster-whisper 1.2.1 is a pure-Python py3-none-any wheel; av 19.0.2 and numpy carry the 'Operating System :: Microsoft :: Windows' classifier. CPU only is enough (compute_type int8); no CUDA needed."
+      },
+      "fixtures": "fixtures/01-whisper: 3 synthetic English product-explainer narrations (keyboard.wav 38.9 s / 6 cues, thermos.wav 30.2 s / 5 cues, kettle.wav 30.3 s / 5 cues; espeak-ng en-us -s 150, per-sentence synthesis, silence-trimmed, 16 kHz mono s16, 0.4 s gaps so cue times are exact; 3.2 MB total). Per file: <name>.clean.srt (control, correct) and <name>.seeded.srt. KEY.json: 8 defects = 5 text (D1 45->54, D3 dropped 'smooth', D4 'Polar'->'Arctic' Flask, D6 added 'under', D7 temperature->pressure) + 3 timing (D2 start +450 ms, D5 cue -600 ms, D8 cue +900 ms). check_srt.py (faster-whisper word_timestamps -> difflib alignment of normalised tokens to cues -> per-cue WER, missing number/name tokens, start/end error ms), score.py (recall vs KEY, FPs on controls, runtime), make-fixtures.sh + gen_fixtures.py + make-fixtures.log (every command).",
+      "baseline": {
+        "what": "no ASR check (subtitles are timed from the script and the voice pipeline; nothing compares audio to cues)",
+        "recall": "0/8",
+        "false_positives": 0
+      },
+      "logic_selftest": {
+        "what": "NOT an ASR measurement. score.py --mock feeds check_srt.py synthetic word timings derived from the clean SRTs (words spread evenly over each true cue) to verify the alignment, WER, number/name and timing logic end to end.",
+        "command": "venv/bin/python -I fixtures/01-whisper/score.py --name selftest --mock",
+        "found": {
+          "D1": true,
+          "D2": true,
+          "D3": true,
+          "D4": true,
+          "D5": true,
+          "D6": true,
+          "D7": true,
+          "D8": true
+        },
+        "recall": "8/8",
+        "false_positives": 0,
+        "extra_findings_on_seeded": 0,
+        "runtime_s": 0.26,
+        "output": "runs/01-whisper/selftest-mock.json",
+        "note": "With the first-draft threshold 0.05 < WER <= 0.08 the three single-word defects (1 word in 13-15 = WER 0.067-0.077) were missed, so the default threshold is 0.05. Real ASR errors on the TTS voice will therefore also land above the threshold; that is what the blocked run would have measured."
+      },
+      "candidate_default": {
+        "config": "base.en, int8 on CPU, beam_size 1, word_timestamps=True, no VAD, WER threshold 0.05 per cue, timing limit 300 ms (end +200 ms slack), numbers normalised to digits, number/name tokens must be heard",
+        "commands": [
+          "venv/bin/python -I fixtures/01-whisper/score.py --name default --out-dir runs/01-whisper --model base.en",
+          "venv/bin/python -I fixtures/01-whisper/check_srt.py fixtures/01-whisper/keyboard.wav fixtures/01-whisper/keyboard.seeded.srt --model base.en"
+        ],
+        "found": {
+          "D1": null,
+          "D2": null,
+          "D3": null,
+          "D4": null,
+          "D5": null,
+          "D6": null,
+          "D7": null,
+          "D8": null
+        },
+        "recall": null,
+        "false_positives": null,
+        "runtime_s": null,
+        "error": "httpx2.ProxyError: 403 Forbidden (huggingface_hub.snapshot_download of Systran/faster-whisper-base.en; agent proxy: 'gateway answered 403 to CONNECT (policy denial or upstream failure)', host huggingface.co:443; fails after 0.9 s on all 6 wav/srt pairs). Full traceback: runs/01-whisper/model-download.err; per-pair JSON: runs/01-whisper/default.*.json"
+      },
+      "candidate_tuned": {
+        "config": "small.en, int8 on CPU, beam_size 5, vad_filter=True (Silero VAD via onnxruntime), same thresholds",
+        "commands": [
+          "venv/bin/python -I fixtures/01-whisper/score.py --name tuned --out-dir runs/01-whisper --model small.en --beam-size 5 --vad-filter"
+        ],
+        "found": {
+          "D1": null,
+          "D2": null,
+          "D3": null,
+          "D4": null,
+          "D5": null,
+          "D6": null,
+          "D7": null,
+          "D8": null
+        },
+        "recall": null,
+        "false_positives": null,
+        "runtime_s": null,
+        "error": "same as default: httpx2.ProxyError: 403 Forbidden for huggingface.co (Systran/faster-whisper-small.en); runs/01-whisper/tuned.*.json"
+      },
+      "limits": [
+        "Model weights must come from huggingface.co on first run (or be copied into a folder and passed via --model-dir / WHISPER_MODEL_DIR); the sandbox denies that host, so no ASR ran here.",
+        "The checker is English-only as configured (base.en / small.en); the real task is 10 languages, which needs the multilingual 'base' / 'small' / 'medium' models (same API, --language xx), larger downloads and generally worse word timestamps for non-English.",
+        "Single-word defects force a per-cue WER threshold of 0.05 (one word in a <= 20-word cue); any ASR misrecognition of the TTS voice at that level is a false positive. The number/name rule is independent of the threshold and is the robust part.",
+        "Word end timestamps in Whisper are less precise than starts; the end check gets +200 ms slack. A start-only shift is still caught by the start check.",
+        "Fixture audio is espeak-ng (robotic). Real pipeline voices (neural TTS / human) usually transcribe better, so the sandbox numbers, once obtained, are a pessimistic bound for text and a fair test for timing.",
+        "CPU int8 runtime per 30-40 s clip was not measured; expect seconds for base.en and tens of seconds for small.en on a laptop CPU, plus a one-off model load."
+      ],
+      "verdict": "NOT RUN (blocked: huggingface.co denied by network policy)",
+      "reason": "Install, fixtures, checker, scorer and wrapper are complete and the detection logic passes an 8/8, 0-FP self-test on synthetic word timings, but the Whisper weights could not be fetched (proxy 403 to CONNECT huggingface.co:443), so recall/false positives/runtime of the real ASR are unmeasured. Owner can finish the trial locally with: bash runs/01-whisper/commands.sh (needs internet once, or a pre-downloaded model folder)."
+    },
+    {
+      "id": 2,
+      "tool": "dequelabs/axe-core via playwright-core (headless Chromium)",
+      "versions": {
+        "axe-core": "4.14.0",
+        "playwright-core": "1.64.1",
+        "chromium": "playwright build 1194 (pre-installed)"
+      },
+      "licences": {
+        "axe-core": "MPL-2.0 (axe.min.js loaded unmodified from node_modules; nothing bundled or edited)",
+        "playwright-core": "Apache-2.0"
+      },
+      "install": {
+        "command": "npm i axe-core@4.14.0 playwright-core@1.64.1  (+ a Chromium: npx playwright-core install chromium, ~150 MB, not counted here)",
+        "seconds": 4.7,
+        "size_mb": 17,
+        "windows": "yes: Node-only; Chromium/Edge binary on Windows is supported by Playwright"
+      },
+      "fixtures": "fixtures/02-axe (KEY.json): 6 seeded pages A1..A6, 6 clean pages (review, sign-up form, interactive figure, table, video page, FAQ)",
+      "baseline": {
+        "what": "our own three checks: unlabelled inputs, tap targets < 24 px (controls), outline:none rules; Playwright script runs/02-axe/baseline.mjs",
+        "command": "node runs/02-axe/baseline.mjs clean seeded",
+        "found": {
+          "A1": false,
+          "A2": false,
+          "A3": false,
+          "A4": true,
+          "A5": false,
+          "A6": false
+        },
+        "recall": "1/6",
+        "false_positives": 0,
+        "runtime_s": 0.77,
+        "note": "With inline text links included in the tap-target check (a literal reading of the rule) the baseline flags all 6 clean pages (nav links ~20 px tall); the number above excludes inline links, the fairer reading."
+      },
+      "candidate_default": {
+        "config": "axe.run(document) with defaults (all rules incl. best-practice)",
+        "commands": [
+          "node runs/02-axe/axe-run.mjs default clean seeded"
+        ],
+        "found": {
+          "A1": true,
+          "A2": true,
+          "A3": true,
+          "A4": true,
+          "A5": true,
+          "A6": false
+        },
+        "rules_hit": [
+          "image-alt",
+          "color-contrast",
+          "button-name",
+          "label",
+          "aria-allowed-attr",
+          "aria-roles"
+        ],
+        "recall": "5/6",
+        "false_positives": 0,
+        "runtime_s": 3.8
+      },
+      "candidate_tuned": {
+        "config": "runOnly tags wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa; resultTypes violations",
+        "commands": [
+          "node runs/02-axe/axe-run.mjs tuned clean seeded"
+        ],
+        "found": {
+          "A1": true,
+          "A2": true,
+          "A3": true,
+          "A4": true,
+          "A5": true,
+          "A6": false
+        },
+        "recall": "5/6",
+        "false_positives": 0,
+        "runtime_s": 3.7
+      },
+      "limits": [
+        "A6 (script keyboard trap) is not detectable by axe; it needs a keyboard-driving test (Tab/Escape loop). Keep that one in our own script.",
+        "axe checks the rendered DOM state only: dialogs that are hidden until a click are not analysed unless the test opens them.",
+        "Contrast on text over images/gradients comes back 'incomplete', not a violation; the wrapper reports incomplete separately.",
+        "Runtime ~0.3 s per page after the browser is up; the browser start is ~0.5 s."
+      ],
+      "verdict": "ADOPT",
+      "reason": "5/6 seeded defects vs 1/6 for our script, 0 false positives on 6 clean pages, 17 MB install, ~4 s for 12 pages. Keep our tap-target and keyboard checks alongside it."
+    },
+    {
+      "id": 3,
+      "tool": "phpstan/phpstan + PHP_CodeSniffer with WordPress-Coding-Standards (WPCS) + php-stubs/wordpress-stubs",
+      "versions": {
+        "phpstan": "2.3.4 (phar)",
+        "squizlabs/php_codesniffer": "3.13.6",
+        "wp-coding-standards/wpcs": "3.4.1",
+        "phpcsstandards/phpcsutils": "1.2.3",
+        "phpcsstandards/phpcsextra": "1.5.1",
+        "php-stubs/wordpress-stubs": "6.9.1",
+        "php": "8.3.6"
+      },
+      "licences": {
+        "phpstan": "MIT",
+        "php_codesniffer": "BSD-3-Clause",
+        "wpcs": "MIT",
+        "phpcsutils": "LGPL-3.0-or-later (used as a library only, unmodified)",
+        "phpcsextra": "LGPL-3.0-or-later (used as a library only, unmodified)",
+        "wordpress-stubs": "MIT (stubs generated from GPL-2.0-or-later WordPress; run-time tooling only, nothing is bundled into the theme)"
+      },
+      "install": {
+        "command": "composer require --no-plugins squizlabs/php_codesniffer:3.13.6 wp-coding-standards/wpcs:3.4.1 php-stubs/wordpress-stubs:6.9.1 phpcsstandards/phpcsutils:1.2.3 phpcsstandards/phpcsextra:1.5.1 && curl -sSLo phpstan.phar https://raw.githubusercontent.com/phpstan/phpstan/2.3.4/phpstan.phar && vendor/bin/phpcs --config-set installed_paths <abs>/vendor/wp-coding-standards/wpcs,<abs>/vendor/phpcsstandards/phpcsutils,<abs>/vendor/phpcsstandards/phpcsextra",
+        "seconds": 72,
+        "size_mb": 62,
+        "size_note": "vendor 32 MB (without composer .git caches) + phpstan.phar 30 MB. In this sandbox GitHub release/zipball downloads are blocked (HTTP 403), so composer fell back to git sources and the phar was fetched from the repository tree; on Windows the plain composer dist install works.",
+        "windows": "yes: pure PHP (phar + composer packages); needs PHP >= 7.4 on PATH"
+      },
+      "fixtures": "fixtures/03-php (KEY.json): 3 clean theme files, 3 seeded files with 5 defects D1..D5",
+      "baseline": {
+        "what": "php -l on every file",
+        "command": "php -l <file>",
+        "recall": "0/5",
+        "false_positives": 0,
+        "runtime_s": 0.1
+      },
+      "candidate_default": {
+        "config": "phpstan level 5 + wordpress-stubs via scanFiles; phpcs --standard=WordPress",
+        "commands": [
+          "php phpstan.phar analyse -c phpstan-default.neon --no-progress --error-format=json",
+          "vendor/bin/phpcs --standard=WordPress --report=json clean seeded"
+        ],
+        "found": {
+          "D1": false,
+          "D2": true,
+          "D3": true,
+          "D4": true,
+          "D5": true
+        },
+        "recall": "4/5",
+        "false_positives": 0,
+        "extra_findings_on_seeded": 4,
+        "runtime_s": {
+          "phpstan": 6.9,
+          "phpcs": 0.66
+        }
+      },
+      "candidate_tuned": {
+        "config": "phpstan level 7 (level 8 gives the same result); phpcs ruleset WordPress-Extra, errors only (-n), FileName and LineLength excluded",
+        "commands": [
+          "php phpstan.phar analyse -c phpstan-tuned.neon --no-progress --error-format=json",
+          "vendor/bin/phpcs --standard=phpcs-tuned.xml --report=json clean seeded"
+        ],
+        "found": {
+          "D1": true,
+          "D2": true,
+          "D3": true,
+          "D4": true,
+          "D5": true
+        },
+        "recall": "5/5",
+        "false_positives": 1,
+        "false_positive_detail": "clean/functions.php:58 'nexus_get_rating expects int, int|false given' because get_the_ID() may return false. Correct by the stubs, but noise for a theme (fixed with a cast or a check).",
+        "extra_findings_on_seeded": 1,
+        "runtime_s": {
+          "phpstan": 4.7,
+          "phpcs": 0.6
+        }
+      },
+      "limits": [
+        "phpstan level 5 (its 'sensible default') misses the null dereference D1; level >= 7 is needed, and that level starts to flag int|false returns from core functions on clean code.",
+        "First phpstan run ~7 s with a cold result cache; later runs ~4-5 s. phpcs < 1 s.",
+        "WPCS flags the missing nonce 4 times (once per $_POST access); the wrapper de-duplicates by sniff + file.",
+        "Line numbers: phpstan reports D2 one line before the seeded line (the return statement)."
+      ],
+      "verdict": "ADOPT",
+      "reason": "Baseline finds 0/5. Default configs find 4/5 with 0 false positives in < 8 s; the tuned pair finds 5/5 with 1 benign false positive. Pure PHP, runs on Windows, no network at run time."
+    },
+    {
+      "id": 4,
+      "tool": "gltf-validator (Khronos glTF-Validator, npm build) for validation + @gltf-transform/cli for optimisation",
+      "versions": {
+        "gltf-validator": "2.0.0-dev.3.10",
+        "@gltf-transform/cli": "4.5.1",
+        "@gltf-transform/core|functions|extensions": "4.5.1",
+        "sharp (cli dep)": "0.35.5",
+        "meshoptimizer (cli dep)": "1.2.0",
+        "draco3dgltf (cli dep)": "1.5.9",
+        "three (baseline+parity renderer)": "0.186.1",
+        "playwright-core": "1.64.1",
+        "chromium": "1194 (Playwright build, SwiftShader WebGL 2.0)",
+        "pngjs": "7.0.0",
+        "pixelmatch": "8.0.0",
+        "node": "22.22.0"
+      },
+      "licences": {
+        "gltf-validator": "Apache-2.0",
+        "@gltf-transform/*": "MIT",
+        "sharp": "Apache-2.0",
+        "meshoptimizer": "MIT",
+        "draco3dgltf": "Apache-2.0",
+        "three": "MIT",
+        "playwright-core": "Apache-2.0",
+        "pngjs": "MIT",
+        "pixelmatch": "ISC",
+        "fixtures": "Box.glb and BoxTextured.glb: CC-BY-4.0 (c) 2017 Cesium, Khronos glTF-Sample-Assets (attribution kept in fixtures/04-gltf/licences/)"
+      },
+      "install": {
+        "command": "npm i gltf-validator@2.0.0-dev.3.10 @gltf-transform/cli@4.5.1 (pre-installed: 16.1 s, 68 MB); trial extras: npm i three@0.186.1 pngjs@7.0.0 pixelmatch@8.0.0 (1.6 s, +41 MB, only needed for the render/diff harness, not for the check)",
+        "seconds": 16.1,
+        "size_mb": 68,
+        "size_note": "gltf-validator alone is a 308 KB Dart->JS file with no dependencies; the 68 MB is almost all @gltf-transform/cli (sharp + libvips prebuilt, draco/meshopt wasm).",
+        "windows": "gltf-validator: pure JS, Node-only, no native binary -> runs anywhere Node runs. @gltf-transform/cli: Node + sharp native prebuilt (@img/sharp-win32-x64/arm64/ia32 published as optional deps, so Windows works without a compiler); draco/meshopt are wasm. The render harness needs Playwright's Chromium download (blocked here from CDNs, pre-provisioned in this sandbox)."
+      },
+      "fixtures": "fixtures/04-gltf (KEY.json): clean/Box.glb (1664 B) + clean/BoxTextured.glb (5956 B) as controls; seeded/C1..C5 generated by make-corrupt.mjs: C1 accessor count > bufferView, C2 dangling bufferView ref, C3 out-of-range index in BIN, C4 NaN in POSITION, C5 image mimeType png->jpeg",
+      "baseline": {
+        "what": "runtime gate only: three.js 0.186.1 GLTFLoader (+MeshoptDecoder) loads the GLB and renders one frame in headless Chromium (SwiftShader WebGL2); pass = no exception",
+        "command": "node runs/04-gltf/render.mjs <outdir> <files...>",
+        "found": {
+          "C1": true,
+          "C2": true,
+          "C3": false,
+          "C4": false,
+          "C5": false
+        },
+        "found_how": {
+          "C1": "throws 'Invalid typed array length: 300'",
+          "C2": "throws \"Cannot read properties of undefined (reading 'extensions')\"",
+          "C3": "loads and renders 12 triangles, no console error (render differs 4.2% from the good Box: garbage vertex)",
+          "C4": "loads, renders, bbox reported finite (three uses accessor min/max), cube visibly broken (4.2% px differ)",
+          "C5": "loads and renders pixel-identical: the browser sniffs the PNG bytes and ignores the declared mimeType"
+        },
+        "recall": "2/5",
+        "false_positives": 0,
+        "runtime_s": 4.8,
+        "runtime_note": "4.8 s for 7 files including browser launch; 0.25-0.7 s per file"
+      },
+      "candidate_default": {
+        "config": "gltf-validator validateBytes() with library defaults (maxIssues 100, no overrides); a defect counts as found if the expected code from KEY.json appears at severity 0 (error)",
+        "commands": [
+          "node runs/04-gltf/validate.mjs default validator-default.json fixtures/04-gltf/clean/*.glb fixtures/04-gltf/seeded/*.glb"
+        ],
+        "found": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true,
+          "C5": true
+        },
+        "codes": {
+          "C1": "ACCESSOR_TOO_LONG + MESH_PRIMITIVE_UNEQUAL_ACCESSOR_COUNT",
+          "C2": "UNRESOLVED_REFERENCE (+ info UNUSED_OBJECT)",
+          "C3": "ACCESSOR_INDEX_OOB + ACCESSOR_MAX_MISMATCH + ACCESSOR_ELEMENT_OUT_OF_MAX_BOUND",
+          "C4": "ACCESSOR_INVALID_FLOAT",
+          "C5": "IMAGE_MIME_TYPE_INVALID"
+        },
+        "recall": "5/5",
+        "false_positives": 0,
+        "clean_control_findings": "0 errors, 0 warnings, 0 infos, 0 hints on both controls",
+        "runtime_s": 0.048,
+        "runtime_note": "47.5 ms for all 7 files in one Node process (first call 26 ms warm-up, then ~3 ms per file)"
+      },
+      "candidate_tuned": {
+        "config": "validateBytes() with maxIssues: 0 (unlimited) and severityOverrides promoting ACCESSOR_INDEX_TRIANGLE_DEGENERATE, UNUSED_OBJECT, ACCESSOR_NON_UNIT, NODE_EMPTY to errors",
+        "commands": [
+          "node runs/04-gltf/validate.mjs tuned validator-tuned.json fixtures/04-gltf/clean/*.glb fixtures/04-gltf/seeded/*.glb"
+        ],
+        "found": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true,
+          "C5": true
+        },
+        "recall": "5/5",
+        "false_positives": 0,
+        "runtime_s": 0.046,
+        "note": "No measurable gain over default on this set: the only change is UNUSED_OBJECT on C2 becoming a second error. The defaults already report every seeded defect as an error, so the tuned profile is not needed."
+      },
+      "transform": {
+        "before_bytes": 7620,
+        "after_bytes_default": 11096,
+        "after_bytes_tuned": 6756,
+        "pixel_diff_pct_default": 0,
+        "pixel_diff_pct_tuned": 0,
+        "runtime_s": 2.85,
+        "per_file": {
+          "Box.glb": {
+            "before": 1664,
+            "default": 1924,
+            "tuned": 1532,
+            "default_cmd_s": 0.9,
+            "tuned_cmd_s": 0.55,
+            "px_diff_default_pct": 0,
+            "px_diff_tuned_pct": 0
+          },
+          "BoxTextured.glb": {
+            "before": 5956,
+            "default": 9172,
+            "tuned": 5224,
+            "default_cmd_s": 0.73,
+            "tuned_cmd_s": 0.67,
+            "px_diff_default_pct": 0,
+            "px_diff_tuned_pct": 0
+          }
+        },
+        "default_pipeline": "gltf-transform optimize in out (meshopt compression, quantize, weld, simplify, prune, texture-compress auto)",
+        "tuned_pipeline": "gltf-transform optimize in out --compress quantize --texture-compress webp --simplify false",
+        "why_default_grows": "BIN shrinks (648 -> 208 B on Box) but the EXT_meshopt_compression JSON metadata adds ~700 B, and texture-compress 'auto' re-encodes the 3750 B PNG via sharp into a 6572 B PNG. On KB-sized assets the fixed overhead dominates. Tuned: quantization alone -8% on Box; webp texture 3750 -> 3124 B gives -12% on BoxTextured.",
+        "parity": "256x256 renders from the same fixed camera, pixelmatch threshold 0.1: 0 differing pixels for all four optimised files (the same diff reports 4.2% for the C3/C4 corruptions, so it is sensitive). Default output needs MeshoptDecoder wired into GLTFLoader; tuned output (KHR_mesh_quantization + EXT_texture_webp) loads in stock three.js.",
+        "optimised_outputs_validate": "all four pass gltf-validator with 0 errors (default outputs get 2 infos: UNSUPPORTED_EXTENSION for EXT_meshopt_compression, UNUSED_OBJECT buffer)"
+      },
+      "limits": [
+        "The npm gltf-validator package is a library only (validateBytes); there is no CLI binary in it, so a ~20-line Node wrapper (wrapper-sketch.mjs) or `gltf-transform validate` is needed. The wrapper only resolves external .bin/images relative to the .gltf file.",
+        "Fixtures are tiny (1.6 KB and 6 KB) Khronos samples, so the optimisation numbers are not representative of real figure assets: default optimize made both files larger; gains on larger meshes/textures are unmeasured here.",
+        "No CC0 sample exists in the Khronos core set; CC-BY-4.0 Cesium assets were used and attribution is kept in the fixtures. Duck (SCEA licence) was discarded.",
+        "Pixel parity was checked at 256x256 from one camera with SwiftShader; it cannot see differences hidden by that view or below pixelmatch's 0.1 threshold.",
+        "Seeded defects are all structural/data errors the validator is designed for; semantic problems (wrong scale, missing animation, bad materials) are not covered by either tool.",
+        "Baseline render harness needs a Chromium download at install time (~460 MB), which CDN blocking prevented here; it was pre-provisioned. The validator itself needs no browser.",
+        "gltf-validator version is a dev pre-release (2.0.0-dev.3.10, the only line published to npm)."
+      ],
+      "verdict": "ADOPT",
+      "verdict_detail": {
+        "validator": "ADOPT",
+        "transform": "WATCH"
+      },
+      "reason": "Validation: baseline catches 2/5 (only defects that throw in GLTFLoader); gltf-validator catches 5/5 by specific error code with 0 findings on both clean controls, in under 50 ms for 7 files, as a 308 KB pure-JS dependency that runs on Windows. Clear measured gain at negligible cost. Optimisation (gltf-transform): default `optimize` made both sample files larger (+16%, +54%) and adds a meshopt decoder requirement; the tuned quantize+webp pipeline gave -8%/-12% with 0 pixel difference, but on KB-sized samples this is unproven for real assets, so keep it as a per-asset, opt-in step until measured on an actual figure model."
+    },
+    {
+      "id": 5,
+      "tool": "lycheeverse/lychee",
+      "versions": {
+        "lychee": "0.22.0"
+      },
+      "licences": {
+        "lychee": "Apache-2.0 OR MIT"
+      },
+      "install": {
+        "command": "download lychee-x86_64-pc-windows-msvc.zip from the GitHub release (single binary); here: cargo install lychee --version 0.22.0 because release downloads are blocked",
+        "seconds": 241.5,
+        "size_mb": 26,
+        "size_note": "the release binary is ~15 MB; 241 s is the from-source build, not the normal install",
+        "windows": "yes: native single binary (windows-msvc release asset)"
+      },
+      "fixtures": "fixtures/05-lychee (KEY.json): site/index.html and docs/README.md with 50 links each: 12 valid internal (6 with #fragments), 4 missing files, 4 missing #fragments, 3 dead external on the reserved .invalid TLD, 27 valid external (public home/docs pages)",
+      "baseline": {
+        "what": "home-made offline Markdown link check (relative file exists; fragments and http ignored); nothing for HTML or external links",
+        "command": "node runs/05-lychee/baseline-mdlinks.mjs docs/README.md",
+        "recall": "4/22 (4 of 8 internal defects in the Markdown file; 0 of 8 in HTML; 0 of 6 dead external)",
+        "false_positives": 0,
+        "runtime_s": 0.05
+      },
+      "candidate_default": {
+        "config": "offline mode, default settings (fragments not checked)",
+        "commands": [
+          "lychee --offline --no-progress --format json site/index.html docs/README.md"
+        ],
+        "recall": "8/16 internal (all 8 missing files, 0 of 8 missing fragments); external links excluded in offline mode",
+        "false_positives": 0,
+        "runtime_s": 0.11
+      },
+      "candidate_tuned": {
+        "config": "offline + --include-fragments",
+        "commands": [
+          "lychee --offline --no-progress --format json --include-fragments site/index.html docs/README.md"
+        ],
+        "recall": "16/16 internal (8 missing files + 8 missing fragments, in both HTML and Markdown)",
+        "false_positives": 0,
+        "runtime_s": 0.1
+      },
+      "online_mode": {
+        "status": "NOT MEASURABLE in this sandbox",
+        "commands": [
+          "lychee --no-progress --format json --include-fragments site/index.html docs/README.md",
+          "lychee ... --max-retries 1 --timeout 15 --max-concurrency 8 --accept '200..=399,403,429' --user-agent '...'"
+        ],
+        "observed": "every one of the 54 valid external links fails with 'Network error: Connection failed' because the sandbox egress proxy refuses all hosts except package registries (github.com answers 400/403 through the proxy). The 6 .invalid links were not listed in any JSON map; lychee reported 8 'excludes' without naming them. Online recall and false-positive rate must be measured locally; the fixture is ready for it (KEY.json)."
+      },
+      "limits": [
+        "Online mode could not be exercised here; expect some false positives from bot-blocking sites (403/429) and set --accept and a browser-like user agent accordingly.",
+        "Offline mode does not check external links at all; it is the fast pre-commit check, online is the weekly one.",
+        "lychee 0.22 with raw URL arguments printed a Rust panic trace in this build (file inputs work); keep to file/dir inputs.",
+        "The JSON report nests results per input file; the wrapper flattens it."
+      ],
+      "verdict": "ADOPT (offline mode now; online mode after a local measurement)",
+      "reason": "Offline with --include-fragments finds 16/16 seeded internal defects in HTML and Markdown in 0.1 s with 0 false positives, against 4/16 for our own script. Single native binary with a Windows build."
+    },
+    {
+      "id": 6,
+      "tool": "svg/svgo",
+      "versions": {
+        "svgo": "4.1.0",
+        "node": "22.22.0",
+        "playwright-core": "1.64.1 (raster harness only)",
+        "chromium": "playwright build 1194 (raster harness only)",
+        "pixelmatch": "7.1.0 (harness only)",
+        "pngjs": "7.0.0 (harness only)",
+        "sax": "1.6.1 (svgo dependency, reused by check-key.mjs)"
+      },
+      "licences": {
+        "svgo": "MIT",
+        "csso": "MIT (dep)",
+        "css-tree": "MIT (dep)",
+        "sax": "BlueOak-1.0.0 (dep)",
+        "playwright-core": "Apache-2.0",
+        "pixelmatch": "ISC",
+        "pngjs": "MIT"
+      },
+      "install": {
+        "command": "npm i svgo@4.1.0",
+        "seconds": 4.8,
+        "size_mb": 12,
+        "packages": 19,
+        "extra_for_harness": "npm i pixelmatch@7.1.0 pngjs@7.0.0 (0.5 s, +1 MB; only for the parity measurement, not needed at build time)",
+        "windows": "yes: pure JavaScript, Node >= 16, no native modules; the CLI (svgo.cmd shim) and svgo.config.mjs work unchanged on Windows. The raster harness needs Playwright Chromium, also fine on Windows but not part of the build step."
+      },
+      "fixtures": "fixtures/06-svgo/in: 10 synthetic SVGs (3 icons 24x24; a11y logo with title/desc/role/aria-labelledby; badge with <style> #ids + <use href>; gradient url(#id); clipPath+mask; SMIL + CSS @keyframes spinner; text with font-family; Inkscape/Illustrator cruft). KEY.json seeds 58 preservation requirements (viewBox, ids, role/aria, title/desc, style/animation/text/font); the originals pass all of them (baseline-check.json).",
+      "seeded_requirements": 58,
+      "baseline": {
+        "what": "SVG as-is",
+        "bytes_total": 9408,
+        "gzip_bytes_total": 4910,
+        "breakages": 0
+      },
+      "candidate_default": {
+        "config": "svgo preset-default, no config file (`svgo -f in -o out`)",
+        "commands": [
+          "svgo -f fixtures/06-svgo/in -o runs/06-svgo/out-default",
+          "node check-key.mjs KEY.json out-default default",
+          "node raster.mjs fixtures/06-svgo/in out-default out-tuned png"
+        ],
+        "bytes_total": 5253,
+        "saved_pct": 44.2,
+        "gzip_bytes_total": 3146,
+        "gzip_saved_pct": 35.9,
+        "breakages": 12,
+        "files_broken": 4,
+        "breakage_detail": [
+          {
+            "file": "logo-anatomy-of-things.svg",
+            "broken": [
+              "root attr role: expected \"img\", got \"undefined\"",
+              "id \"logoTitle\" missing",
+              "id \"logoDesc\" missing",
+              "dangling reference #logoTitle",
+              "dangling reference #logoDesc"
+            ]
+          },
+          {
+            "file": "badge-style-use.svg",
+            "broken": [
+              "id \"accent\" missing",
+              "id \"ribbon-tail\" missing",
+              "id \"tail\" missing"
+            ]
+          },
+          {
+            "file": "logo-gradient.svg",
+            "broken": [
+              "id \"brandGradient\" missing"
+            ]
+          },
+          {
+            "file": "spinner-animated.svg",
+            "broken": [
+              "id \"pulse\" missing",
+              "<style> lacks \"#pulse\"",
+              "<style> lacks \"animation\""
+            ]
+          }
+        ],
+        "breakage_severity": "1 hard accessibility break (logo: role=img removed by removeUnknownsAndDefaults keepRoleAttr=false; cleanupIds renames the title/desc ids but does not rewrite aria-labelledby, which now points at nothing). 11 hook breaks: ids referenced only by <style>/url()/href are minified or removed after inlineStyles, so site CSS/JS that targets #accent, #pulse, #brandGradient stops working. Pixels unchanged in every case.",
+        "max_pixel_diff_pct": 0,
+        "runtime_s": 0.57
+      },
+      "candidate_tuned": {
+        "config": "fixtures/06-svgo/svgo.config.mjs: preset-default with multipass; removeDesc, cleanupIds, inlineStyles, minifyStyles, removeHiddenElems off; removeUnknownsAndDefaults {keepRoleAttr:true, keepAriaAttrs:true}. (removeViewBox/removeTitle are not in preset-default in svgo 4; overriding them there is an error.)",
+        "commands": [
+          "svgo --config fixtures/06-svgo/svgo.config.mjs -f fixtures/06-svgo/in -o runs/06-svgo/out-tuned",
+          "node check-key.mjs KEY.json out-tuned tuned",
+          "node raster.mjs fixtures/06-svgo/in out-default out-tuned png"
+        ],
+        "bytes_total": 5721,
+        "saved_pct": 39.2,
+        "gzip_bytes_total": 3371,
+        "gzip_saved_pct": 31.3,
+        "breakages": 0,
+        "files_broken": 0,
+        "breakage_detail": [],
+        "max_pixel_diff_pct": 0,
+        "runtime_s": 0.47
+      },
+      "parity_method": "Each SVG inlined in an HTML page, CSS width 512px (height from viewBox), headless Chromium screenshot, pixelmatch threshold 0.1. Animated spinner: SMIL paused + setCurrentTime and Web Animations paused + currentTime, compared at t=0 and t=400 ms. Harness controls: original t=0 vs t=400 ms differ by 20.08 % (seek works); a recoloured/shifted icon-play differs from the original by 51.07 % (diff detects change).",
+      "wrapper": {
+        "file": "runs/06-svgo/wrapper-sketch.mjs (32 lines)",
+        "tested": "tuned config: exit 0, 10/10 ok, output byte-identical to the CLI run; plain preset-default: exit 1, 5 files / 11 problems (same files the KEY check flags)"
+      },
+      "per_file": [
+        {
+          "file": "badge-style-use.svg",
+          "before": 841,
+          "default": 536,
+          "tuned": 650,
+          "gz_before": 522,
+          "gz_default": 357,
+          "gz_tuned": 426,
+          "saved_default_pct": 36.3,
+          "saved_tuned_pct": 22.7,
+          "diff_default_pct": 0,
+          "diff_tuned_pct": 0,
+          "broken_default": [
+            "id \"accent\" missing",
+            "id \"ribbon-tail\" missing",
+            "id \"tail\" missing"
+          ],
+          "broken_tuned": []
+        },
+        {
+          "file": "editor-cruft.svg",
+          "before": 3023,
+          "default": 623,
+          "tuned": 781,
+          "gz_before": 1222,
+          "gz_default": 308,
+          "gz_tuned": 377,
+          "saved_default_pct": 79.4,
+          "saved_tuned_pct": 74.2,
+          "diff_default_pct": 0,
+          "diff_tuned_pct": 0,
+          "broken_default": [],
+          "broken_tuned": []
+        },
+        {
+          "file": "icon-clip-mask.svg",
+          "before": 893,
+          "default": 573,
+          "tuned": 605,
+          "gz_before": 443,
+          "gz_default": 338,
+          "gz_tuned": 353,
+          "saved_default_pct": 35.8,
+          "saved_tuned_pct": 32.3,
+          "diff_default_pct": 0,
+          "diff_tuned_pct": 0,
+          "broken_default": [],
+          "broken_tuned": []
+        },
+        {
+          "file": "icon-play.svg",
+          "before": 479,
+          "default": 247,
+          "tuned": 262,
+          "gz_before": 320,
+          "gz_default": 193,
+          "gz_tuned": 206,
+          "saved_default_pct": 48.4,
+          "saved_tuned_pct": 45.3,
+          "diff_default_pct": 0,
+          "diff_tuned_pct": 0,
+          "broken_default": [],
+          "broken_tuned": []
+        },
+        {
+          "file": "icon-search.svg",
+          "before": 377,
+          "default": 246,
+          "tuned": 246,
+          "gz_before": 265,
+          "gz_default": 185,
+          "gz_tuned": 185,
+          "saved_default_pct": 34.7,
+          "saved_tuned_pct": 34.7,
+          "diff_default_pct": 0,
+          "diff_tuned_pct": 0,
+          "broken_default": [],
+          "broken_tuned": []
+        },
+        {
+          "file": "icon-star-rating.svg",
+          "before": 430,
+          "default": 331,
+          "tuned": 331,
+          "gz_before": 298,
+          "gz_default": 234,
+          "gz_tuned": 234,
+          "saved_default_pct": 23,
+          "saved_tuned_pct": 23,
+          "diff_default_pct": 0,
+          "diff_tuned_pct": 0,
+          "broken_default": [],
+          "broken_tuned": []
+        },
+        {
+          "file": "logo-anatomy-of-things.svg",
+          "before": 1132,
+          "default": 943,
+          "tuned": 1007,
+          "gz_before": 592,
+          "gz_default": 514,
+          "gz_tuned": 542,
+          "saved_default_pct": 16.7,
+          "saved_tuned_pct": 11,
+          "diff_default_pct": 0,
+          "diff_tuned_pct": 0,
+          "broken_default": [
+            "root attr role: expected \"img\", got \"undefined\"",
+            "id \"logoTitle\" missing",
+            "id \"logoDesc\" missing",
+            "dangling reference #logoTitle",
+            "dangling reference #logoDesc"
+          ],
+          "broken_tuned": []
+        },
+        {
+          "file": "logo-gradient.svg",
+          "before": 883,
+          "default": 714,
+          "tuned": 744,
+          "gz_before": 402,
+          "gz_default": 342,
+          "gz_tuned": 352,
+          "saved_default_pct": 19.1,
+          "saved_tuned_pct": 15.7,
+          "diff_default_pct": 0,
+          "diff_tuned_pct": 0,
+          "broken_default": [
+            "id \"brandGradient\" missing"
+          ],
+          "broken_tuned": []
+        },
+        {
+          "file": "spinner-animated.svg",
+          "before": 785,
+          "default": 589,
+          "tuned": 644,
+          "gz_before": 466,
+          "gz_default": 365,
+          "gz_tuned": 386,
+          "saved_default_pct": 25,
+          "saved_tuned_pct": 18,
+          "diff_default_pct": 0,
+          "diff_tuned_pct": 0,
+          "broken_default": [
+            "id \"pulse\" missing",
+            "<style> lacks \"#pulse\"",
+            "<style> lacks \"animation\""
+          ],
+          "broken_tuned": []
+        },
+        {
+          "file": "wordmark-text.svg",
+          "before": 565,
+          "default": 451,
+          "tuned": 451,
+          "gz_before": 380,
+          "gz_default": 310,
+          "gz_tuned": 310,
+          "saved_default_pct": 20.2,
+          "saved_tuned_pct": 20.2,
+          "diff_default_pct": 0,
+          "diff_tuned_pct": 0,
+          "broken_default": [],
+          "broken_tuned": []
+        }
+      ],
+      "limits": [
+        "Fixtures are synthetic (10 files, 9.4 KB total): written like the site's own icons, but not the site's real files; absolute savings on real logos will differ.",
+        "Pixel parity measured in Chromium only (one engine, one size, one font set); Firefox/Safari and <img>/CSS-background embedding not tested. 0 % diff at threshold 0.1 is strict but not proof of identical rendering everywhere.",
+        "Animation parity is two frames (t=0, t=400 ms) with paused/seeked SMIL + CSS animations, not a full timeline comparison.",
+        "The tuned config gives up 5 points of raw saving (39.2 % vs 44.2 %) to keep ids, <style> and role/aria. Per-file savings 11-74 %; smallest on the a11y logo and the gradient.",
+        "svgo 4 preset-default no longer touches viewBox or <title>, but still drops role=img, renames/removes ids and inlines <style>; every default-config breakage is a configuration matter, not a bug. svgo cleanupIds does not treat aria-labelledby as an id reference.",
+        "Structural checks use the sax parser (an svgo dependency), not a full SVG DOM; the wrapper sketch uses regexes and assumes well-formed SVG with double-quoted attributes.",
+        "The wrapper sketch was run from a directory where `svgo` resolves (scratchpad); in the site repo it needs svgo in devDependencies.",
+        "editor-cruft.svg: the tuned config keeps the display:none guide layer (removeHiddenElems off, about 60 B); re-enable the plugin if hidden layers are never scripted."
+      ],
+      "verdict": "ADOPT",
+      "reason": "Tuned config: -39.2 % bytes (-31.3 % gzipped) across 10 files, 0 of 58 seeded requirements broken, 0.000 % pixel diff on every file and both animation frames, 0.47 s for 10 files, pure-JS MIT tool that runs on Windows. svgo defaults are NOT safe for this site: 12 breakages in 4 files including a real accessibility break on the logo. Adopt only with the tuned config plus the post-check wrapper, which turned the default-config breakages into exit 1 in testing."
+    },
+    {
+      "id": 7,
+      "tool": "Breakthrough/PySceneDetect (scenedetect CLI)",
+      "versions": {
+        "scenedetect": "0.7.2",
+        "opencv-python-headless": "5.0.0.93",
+        "opencv-python": "5.0.0.93 (pulled in automatically: scenedetect 0.7.2 declares a hard dependency on opencv-python, so the headless wheel was redundant)",
+        "numpy": "2.5.4",
+        "click": "8.5.0",
+        "tqdm": "4.70.1",
+        "platformdirs": "4.14.0",
+        "python": "3.13.16",
+        "ffmpeg": "6.1.1 (used only to build the fixtures; scenedetect decodes via OpenCV)",
+        "node": "22.22.0 (wrapper sketch)"
+      },
+      "licences": {
+        "scenedetect": "BSD-3-Clause",
+        "opencv-python / opencv-python-headless": "Apache-2.0 (pip metadata 'Apache 2.0'; note the wheel bundles FFmpeg libs under LGPL)",
+        "numpy": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0",
+        "click": "BSD-3-Clause",
+        "tqdm": "MPL-2.0 AND MIT",
+        "platformdirs": "MIT"
+      },
+      "install": {
+        "command": "python3.13 -m venv venv && venv/bin/pip install scenedetect==0.7.2 opencv-python-headless==5.0.0.93",
+        "seconds": 22.9,
+        "size_mb": 354,
+        "size_note": "354 MB venv contains BOTH opencv-python (72 MB cv2 + 116 MB .libs) and opencv-python-headless (81 MB .libs) because scenedetect==0.7.2 requires opencv-python. PyPI also lists scenedetect-headless 0.7.2 (not installed/verified here); a headless-only install should be roughly 230 MB.",
+        "windows": "Pure-Python package; native deps only via opencv-python (prebuilt win_amd64 wheels, bundles FFmpeg DLLs) and numpy. No compiler, no system ffmpeg needed. Not tested on Windows in this trial (Linux x86_64 sandbox)."
+      },
+      "fixtures": "fixtures/07-scenedetect/: make-clip.sh (ffmpeg 6.1.1, lavfi-only sources, deterministic: two runs byte-identical), seeded.mp4 1080x1920 30fps 30.0 s 900 frames 4.11 MB md5 b3d985e986ed7fde23b32a007a7d499a (9 shots -> 8 transitions: 6 hard cuts + 2 x 0.5 s xfade=fade crossfades; sources color/testsrc/mandelbrot/smptebars/testsrc2/rgbtestsrc-panning-overlay; libx264 crf 28), control.mp4 10 s (299 frames) single shot, testsrc2 + panning mandelbrot overlay, no cuts, crf 30, 3.37 MB md5 1b223885c829277b8df8e2c8e44c6b00. KEY.json = ground-truth cut times (s + frames; crossfades start/mid/end). score.py = scorer (hard cut: |det-t|<=0.25 s; crossfade: within [start-0.25,end+0.25], error vs midpoint). Note: brief said '8 shots, 6 hard + 2 soft' - 8 cuts need 9 shots, so 9 were used. ffmpeg 'gradients' source was tried for one shot but is not deterministic even with seed=, so it was replaced.",
+      "machine": "4 vCPU Intel Xeon 2.80 GHz, Linux sandbox; runtimes are wall-clock for the 30 s 1080x1920 clip (control = 10 s clip)",
+      "baseline": {
+        "what": "fixtures/07-scenedetect/baseline.py: ~25 lines OpenCV; resize to 270x480 grey, mean |frame diff| > 20 (0-255), min gap 10 frames. Threshold chosen a priori; sanity pass: thresholds 10 and 15 also give 0 false positives and additionally catch cut 8 (6/8), but never the crossfades.",
+        "command": "venv/bin/python baseline.py seeded.mp4 ; venv/bin/python baseline.py control.mp4 ; venv/bin/python score.py KEY.json --detected runs/07-scenedetect/baseline-seeded.json --control runs/07-scenedetect/baseline-control.json",
+        "recall": "5/8",
+        "missed_ids": [
+          4,
+          7,
+          8
+        ],
+        "missed_why": "4,7 = the two crossfades (per-frame diff ~2-3 grey levels, never crosses threshold); 8 = purple->teal hard cut whose luma is almost identical (greyscale diff ~7)",
+        "false_positives": 0,
+        "timing_error_ms_mean": 0,
+        "timing_error_ms_max": 0,
+        "runtime_s": 5.81,
+        "runtime_control_s": 2.36
+      },
+      "candidate_default": {
+        "config": "scenedetect -i seeded.mp4 detect-content list-scenes (ContentDetector threshold 27, min-scene-len 0.6 s)",
+        "commands": [
+          "venv/bin/scenedetect -q -i seeded.mp4 -o runs/07-scenedetect detect-content list-scenes -f default-seeded.csv",
+          "venv/bin/scenedetect -q -i control.mp4 -o runs/07-scenedetect detect-content list-scenes -f default-control.csv",
+          "venv/bin/python score.py KEY.json --detected runs/07-scenedetect/default-seeded.csv --control runs/07-scenedetect/default-control.csv"
+        ],
+        "recall": "7/8",
+        "missed_ids": [
+          4
+        ],
+        "false_positives": 0,
+        "timing_error_ms_mean": 11.9,
+        "timing_error_ms_max": 83,
+        "timing_error_hard_cuts_only_ms_mean_max": [
+          0,
+          0
+        ],
+        "crossfade_detections_s": [
+          23.333
+        ],
+        "runtime_s": 3.61,
+        "runtime_control_s": 1.71
+      },
+      "candidate_tuned": {
+        "config": "scenedetect -i seeded.mp4 detect-adaptive list-scenes (AdaptiveDetector defaults: adaptive threshold 3.0, min-content-val 15, frame-window 2). Chosen as 'tuned' because it needs no clip-specific threshold.",
+        "commands": [
+          "venv/bin/scenedetect -q -i seeded.mp4 -o runs/07-scenedetect detect-adaptive list-scenes -f adaptive-seeded.csv",
+          "venv/bin/scenedetect -q -i control.mp4 -o runs/07-scenedetect detect-adaptive list-scenes -f adaptive-control.csv",
+          "venv/bin/python score.py KEY.json --detected runs/07-scenedetect/adaptive-seeded.csv --control runs/07-scenedetect/adaptive-control.csv"
+        ],
+        "recall": "8/8",
+        "missed_ids": [],
+        "false_positives": 0,
+        "timing_error_ms_mean": 41.6,
+        "timing_error_ms_max": 250,
+        "timing_error_hard_cuts_only_ms_mean_max": [
+          0,
+          0
+        ],
+        "crossfade_detections_s": [
+          14,
+          23.333
+        ],
+        "runtime_s": 3.66,
+        "runtime_control_s": 1.49
+      },
+      "other_variants": {
+        "content-t15": {
+          "config": "detect-content -t 15",
+          "recall": "8/8",
+          "false_positives": 0,
+          "timing_error_ms_mean": 41.6,
+          "timing_error_ms_max": 250,
+          "runtime_s": 3.59
+        },
+        "content-t15-m1s": {
+          "config": "detect-content -t 15 -m 1s",
+          "recall": "8/8",
+          "false_positives": 0,
+          "timing_error_ms_mean": 41.6,
+          "timing_error_ms_max": 250,
+          "runtime_s": 3.58
+        },
+        "adaptive-c10": {
+          "config": "detect-adaptive -c 10",
+          "recall": "8/8",
+          "false_positives": 0,
+          "timing_error_ms_mean": 41.6,
+          "timing_error_ms_max": 250,
+          "runtime_s": 4.42
+        },
+        "hist": {
+          "config": "detect-hist (default 0.05)",
+          "recall": "8/8",
+          "false_positives": 0,
+          "timing_error_ms_mean": 41.8,
+          "timing_error_ms_max": 217,
+          "runtime_s": 4.7
+        },
+        "threshold": {
+          "config": "detect-threshold (fade-to-black detector; 0/8 as expected, crossfades do not pass through black)",
+          "recall": "0/8",
+          "false_positives": 0,
+          "timing_error_ms_mean": null,
+          "timing_error_ms_max": null,
+          "runtime_s": 4.33
+        },
+        "content-plus-adaptive": {
+          "config": "detect-content detect-adaptive chained",
+          "recall": "8/8",
+          "false_positives": 0,
+          "timing_error_ms_mean": 41.6,
+          "timing_error_ms_max": 250,
+          "runtime_s": 4.1
+        }
+      },
+      "notes": [
+        "All hard cuts are frame-exact (0 ms error) for baseline and every scenedetect variant; the mean/max timing errors above come only from crossfades, scored against the fade midpoint (detections land at the fade end, 14.0 s, or mid-fade, 23.333 s).",
+        "Crossfade 7 (purple overlay -> teal, 23.0-23.5 s) is detected by detect-content/adaptive via a single-frame delta_hue spike of 154 at 23.333 s (hue wrap-around on near-grey blended pixels; see runs/07-scenedetect/stats-seeded.csv). That is an artefact, not genuine fade detection; detect-hist detects both fades without it (13.867 s, 23.033 s).",
+        "Crossfade 4 (mandelbrot -> smptebars) has content_val ~5-11 during the fade and 21 at the last fade frame; the default threshold 27 misses it, 15 catches it, detect-adaptive catches it via the ratio to neighbouring frames.",
+        "The 'threshold 15' tuning was picked after looking at the stats file, so it is tuned on the answer key; detect-adaptive (pure defaults) is reported as the tuned candidate for that reason.",
+        "scenedetect CSV 'Start Frame' is 1-based; the scorer uses 'Start Time (seconds)'. Control clip is 299 frames (overlay shortest=1 drops one), harmless."
+      ],
+      "limits": [
+        "Synthetic fixture only (flat colours, test patterns, panning overlays). Real explainer footage with fast camera moves, flashes or animated text was not tested, so the 0-false-positive result is a lower bound of risk, not proof.",
+        "Soft transitions: PySceneDetect has no dedicated crossfade/dissolve detector (detect-threshold is fade-to-black only). 0.5 s crossfades were found only by lowered thresholds / adaptive ratio, and one of the two via a hue-wrap artefact.",
+        "Install footprint 354 MB (both opencv wheels) - ~230 MB with headless only; adds a Python 3 runtime requirement to a Node project. scenedetect 0.7.2 hard-depends on opencv-python, so a headless CI box should use scenedetect-headless instead (exists on PyPI, not verified here).",
+        "Runtime ~3.6 s per 30 s 1080x1920 clip on 4 vCPU (~8x realtime, decode-bound); scales linearly with film length. -d/--downscale and -fs/--frame-skip exist but were not needed.",
+        "Default detect-content misses a 0.5 s crossfade (7/8); the check must run detect-adaptive (or -t 15) and the script-beat tolerance must accept 'anywhere inside the fade window', as the wrapper sketch does.",
+        "Minimum scene length default 0.6 s: two true cuts closer than that would be merged; explainer films rarely cut faster, but the limit exists."
+      ],
+      "verdict": "ADOPT",
+      "reason": "With detect-adaptive (pure defaults, no per-clip threshold) scenedetect found 8/8 cuts incl. both 0.5 s crossfades with 0 false positives on the seeded clip and on the 10 s motion-only control, frame-exact on hard cuts, in 3.6 s; the 10-minute home-made detector tops out at 5/8 (6/8 with a lower threshold) and structurally cannot see crossfades. Cost is low (BSD-3, pip-only, prebuilt wheels incl. Windows, ~230-354 MB). Caveat: validate false-positive rate on 2-3 real films before trusting it as a gate; one crossfade was caught via a hue-wrap artefact rather than true fade detection."
+    },
+    {
+      "id": 8,
+      "tool": "GoogleChrome/lighthouse (CLI)",
+      "versions": {
+        "lighthouse": "13.6.0",
+        "chromium": "playwright build 1194 (pre-installed), --headless=new"
+      },
+      "licences": {
+        "lighthouse": "Apache-2.0"
+      },
+      "install": {
+        "command": "npm i lighthouse@13.6.0",
+        "seconds": 21.7,
+        "size_mb": 187,
+        "windows": "yes: Node-only; uses an installed Chrome/Edge (CHROME_PATH) on Windows"
+      },
+      "fixtures": "fixtures/08-lighthouse (KEY.json): 'fast' (1.8 KB sized hero, deferred JS) and 'slow' (3.0 MB unsized noise PNG hero, render-blocking 900 ms busy-wait script, banners inserted above content after 1.2 s), served with python3 -m http.server on 127.0.0.1:8765",
+      "baseline": {
+        "what": "live HTTP check only: status + total time via curl",
+        "command": "curl -s -o /dev/null -w '%{http_code} %{time_total}' http://127.0.0.1:8765/<page>/",
+        "result": "fast: 200 in 5 ms; slow: 200 in 1 ms -> the baseline ranks the slow page as the faster one (HTML only, no assets, no rendering)",
+        "ranks_correctly": false
+      },
+      "candidate_default": {
+        "config": "lighthouse --only-categories=performance (mobile emulation, simulated 4G throttling), 3 runs per page",
+        "commands": [
+          "CHROME_PATH=<chrome> lighthouse http://127.0.0.1:8765/<page>/ --only-categories=performance --output=json --output-path=<out>.json --chrome-flags=\"--headless=new --no-sandbox\" --quiet"
+        ],
+        "fast": {
+          "score": [
+            100,
+            100,
+            100
+          ],
+          "lcp_ms": [
+            649,
+            658,
+            638
+          ],
+          "cls": [
+            0,
+            0,
+            0
+          ],
+          "tbt_ms": [
+            36,
+            0,
+            0
+          ]
+        },
+        "slow": {
+          "score": [
+            67,
+            69,
+            69
+          ],
+          "lcp_ms": [
+            4413,
+            4354,
+            4355
+          ],
+          "cls": [
+            0.143,
+            0.143,
+            0.143
+          ],
+          "tbt_ms": [
+            100,
+            0,
+            0
+          ]
+        },
+        "ranks_correctly": "3/3 runs on score, LCP and CLS; TBT does not separate them",
+        "variance": "score sd 0.9, LCP sd 28 ms (slow) / 8 ms (fast), CLS sd 0",
+        "runtime_s_per_run": {
+          "fast": 11.1,
+          "slow": 12.7
+        }
+      },
+      "candidate_tuned": {
+        "config": "same + --budget-path=budget.json (LCP 2500, CLS 0.1, TBT 300, FCP 1800, image 500 KB, script 150 KB)",
+        "commands": [
+          "lighthouse ... --budget-path=fixtures/08-lighthouse/budget.json"
+        ],
+        "fast": {
+          "score": [
+            100,
+            100,
+            100
+          ],
+          "lcp_ms": [
+            636,
+            630,
+            644
+          ],
+          "cls": [
+            0,
+            0,
+            0
+          ]
+        },
+        "slow": {
+          "score": [
+            69,
+            68,
+            68
+          ],
+          "lcp_ms": [
+            4356,
+            4398,
+            4395
+          ],
+          "cls": [
+            0.143,
+            0.143,
+            0.143
+          ]
+        },
+        "ranks_correctly": "3/3",
+        "finding": "Lighthouse 13 no longer ships the performance-budget / timing-budget audits (the JSON has no 'budget' audit): --budget-path is accepted but produces nothing. Budgets must be enforced by our wrapper on the metric values.",
+        "runtime_s_per_run": {
+          "fast": 10.9,
+          "slow": 12.2
+        }
+      },
+      "limits": [
+        "Budget audits are gone in Lighthouse 12+: enforce thresholds in the wrapper (checks/perf-budget.mjs does this).",
+        "The 900 ms blocking script shows up in FCP/LCP (both 4.4 s on slow), not in TBT, because it runs before first paint; TBT only counts long tasks after FCP.",
+        "~11-13 s per run and 187 MB install; run 3 times and take the median for anything near a threshold.",
+        "Lab numbers under simulated throttling; they rank pages, they are not field numbers."
+      ],
+      "verdict": "ADOPT",
+      "reason": "Stable ranking (3/3 runs, score sd < 1, LCP sd < 30 ms) where the HTTP baseline ranks the pages the wrong way round; 0 configuration beyond CHROME_PATH. Cost: 187 MB and ~12 s per page."
+    },
+    {
+      "id": 9,
+      "tool": "gitleaks/gitleaks",
+      "versions": {
+        "gitleaks": "8.30.0"
+      },
+      "licences": {
+        "gitleaks": "MIT"
+      },
+      "install": {
+        "command": "download gitleaks_8.30.0_windows_x64.zip from the GitHub release (or: go install github.com/zricethezav/gitleaks/v8@v8.30.0)",
+        "seconds": 74.6,
+        "size_mb": 23,
+        "size_note": "built from source with go install here because GitHub release downloads are blocked in this sandbox; the release binary is a single ~20 MB file and needs no install",
+        "windows": "yes: native single binary (windows_x64 release asset)"
+      },
+      "fixtures": "fixtures/09-gitleaks (KEY.json): 10 FAKE secrets K1..K10 in .env, config.json, REPORT.md, notify.js, deploy.log, a .pem; 10 clean files with look-alikes (sha256/sha1 hashes, UUIDs, base64 blob, integrity hash, a Stripe publishable key). The seeded files are NOT stored in git (GitHub push protection rejects even fake tokens): run `node fixtures/09-gitleaks/make-seeded.mjs` first; it writes them from ROT13-encoded text.",
+      "baseline": {
+        "what": "none (our key-lint checks test answer keys, not credentials)",
+        "recall": "0/10",
+        "false_positives": 0,
+        "note": "A naive keyword grep (password|secret|api_key|token) flags 4 of the 6 seeded files and 1 clean file; it finds files, not secrets."
+      },
+      "candidate_default": {
+        "config": "built-in rules",
+        "commands": [
+          "gitleaks dir <folder> --redact --no-banner --report-format json --report-path report.json --exit-code 1"
+        ],
+        "found": {
+          "K1": true,
+          "K2": true,
+          "K3": true,
+          "K4": true,
+          "K5": true,
+          "K6": true,
+          "K7": true,
+          "K8": true,
+          "K9": true,
+          "K10": true
+        },
+        "recall": "10/10",
+        "false_positives": 0,
+        "extra_findings_on_seeded": 1,
+        "extra_detail": "the Stripe publishable key pk_test_... in seeded/config.json is reported as generic-api-key (publishable keys are public by design); the same key in clean/README.md is not flagged",
+        "runtime_s": 0.12,
+        "runtime_whole_repo_s": 2.1
+      },
+      "candidate_tuned": {
+        "config": "fixtures/09-gitleaks/gitleaks-tuned.toml: extend default + rule for AWS_SECRET_ACCESS_KEY assignments + allowlist for pk_test_/pk_live_",
+        "commands": [
+          "gitleaks dir <folder> --redact --no-banner --config gitleaks-tuned.toml --report-format json --report-path report.json --exit-code 1"
+        ],
+        "found": {
+          "K1": true,
+          "K2": true,
+          "K3": true,
+          "K4": true,
+          "K5": true,
+          "K6": true,
+          "K7": true,
+          "K8": true,
+          "K9": true,
+          "K10": true
+        },
+        "recall": "10/10",
+        "false_positives": 0,
+        "extra_findings_on_seeded": 1,
+        "extra_detail": "the AWS secret access key next to K1 (not counted in the key) is now also reported",
+        "runtime_s": 0.08
+      },
+      "limits": [
+        "Pattern rules need the real token format: during fixture building two fake keys with the wrong length (Google 36 instead of 35 chars, SendGrid 20 instead of 22) were missed or only caught by the generic rule. Real tokens have the right length; hand-typed fakes may not.",
+        "generic-api-key fires on publishable keys near the word 'key'; allowlist them in the config.",
+        "`dir` mode scans the working tree only; `git` mode is needed to catch secrets in history.",
+        "--redact replaces the secret in the report; the report still names file and line."
+      ],
+      "verdict": "ADOPT",
+      "reason": "10/10 fake secrets found in 0.1 s with 0 false positives on 10 look-alike files; single native binary, Windows build available, MIT."
+    },
+    {
+      "id": 10,
+      "tool": "mattpocock/skills -> skills/engineering/diagnosing-bugs/SKILL.md (agent process skill)",
+      "versions": {
+        "skill": "main branch, fetched 2026-10-29 from raw.githubusercontent.com (138 lines, sha256 in fixtures/10-skill/SKILL.md)",
+        "agent": "Claude Code subagent (general-purpose), same session model for both arms"
+      },
+      "licences": {
+        "skill": "MIT (repository LICENSE, (c) 2026 Matt Pocock; copy in fixtures/10-skill/SKILL-LICENSE.txt)"
+      },
+      "install": {
+        "command": "claude plugin install mattpocock-skills@claude-plugins-official  (or copy SKILL.md into .claude/skills/diagnosing-bugs/)",
+        "seconds": 0,
+        "size_mb": 0.01,
+        "windows": "n/a (prompt text)"
+      },
+      "fixtures": "fixtures/10-skill: 3 small Node modules with one seeded bug each and a README bug report (t1 off-by-one in a date range, t2 async race in a price feed, t3 unit-conversion constants), hidden tests (20 total: 7 + 5 + 8) in hidden-tests/, grade.mjs. Hidden tests fail 6/5/4 on the buggy code and pass 20/20 on reference fixes.",
+      "design": "Arm A = plain subagent with the bug report. Arm B = identical prompt preceded by the full SKILL.md and 'follow this skill exactly'. 2 reps per arm per task = 12 runs, launched concurrently, each in a fresh copy of the task folder. Graded only by scripts (grade.mjs runs the hidden tests after the run). Tokens, tool calls and wall time come from the harness usage report of each subagent (runs/10-skill/usage.jsonl); the token figure includes each subagent's fixed context, so compare the difference, not the absolute.",
+      "baseline": {
+        "what": "arm A, plain subagent",
+        "runs": 6,
+        "runs_all_hidden_pass": 6,
+        "hidden_tests": "40/40",
+        "mean_tokens": 58240,
+        "mean_tool_uses": 4.33,
+        "mean_seconds": 27.9
+      },
+      "candidate_default": {
+        "config": "arm B, SKILL.md inline",
+        "runs": 6,
+        "runs_all_hidden_pass": 6,
+        "hidden_tests": "40/40",
+        "mean_tokens": 64159,
+        "mean_tool_uses": 6,
+        "mean_seconds": 54.7,
+        "delta_vs_A": {
+          "tokens_pct": 10.2,
+          "tool_uses_pct": 38.6,
+          "seconds_pct": 96.1
+        }
+      },
+      "candidate_tuned": {
+        "config": "none: a second config (e.g. the skill as a /slash command instead of inline) was not run; the inline form is the one the Owner would use in a subagent",
+        "note": "not run"
+      },
+      "per_task": [
+        {
+          "task": "t1-date-range",
+          "A": {
+            "hidden": "14/14",
+            "tokens": 57121,
+            "tools": 3,
+            "seconds": 18.2
+          },
+          "B": {
+            "hidden": "14/14",
+            "tokens": 63290,
+            "tools": 5,
+            "seconds": 44.8
+          }
+        },
+        {
+          "task": "t2-price-feed",
+          "A": {
+            "hidden": "10/10",
+            "tokens": 58601,
+            "tools": 4,
+            "seconds": 32
+          },
+          "B": {
+            "hidden": "10/10",
+            "tokens": 64408,
+            "tools": 6,
+            "seconds": 61
+          }
+        },
+        {
+          "task": "t3-units",
+          "A": {
+            "hidden": "16/16",
+            "tokens": 58998,
+            "tools": 6,
+            "seconds": 33.4
+          },
+          "B": {
+            "hidden": "16/16",
+            "tokens": 64779,
+            "tools": 7,
+            "seconds": 58.2
+          }
+        }
+      ],
+      "observations": [
+        "Both arms fixed all three bugs in every rep; the hidden tests cannot separate them.",
+        "Arm B visibly followed the skill: red test before the fix in 6/6 runs, falsified alternative hypotheses named in the reply, one run added a 1000-iteration stress loop for the race. Arm A wrote tests after the fix in 6/6 runs and still passed.",
+        "The skill text is ~2.4 K tokens per run and the extra phases cost ~1.7 more tool calls and ~27 s per bug; on this task size that is pure overhead.",
+        "Bugs were small and well described (a README with exact numbers). The skill targets hard, badly described bugs; this trial does not measure that case."
+      ],
+      "limits": [
+        "n = 2 reps per cell; the effect on tokens/time is consistent across all 3 tasks but the sample is small.",
+        "Tasks are synthetic and easy for a plain agent (ceiling effect: 40/40 in arm A). A harder task set (hidden, multi-file, flaky) is needed to see any quality gain.",
+        "Token counts include the subagent's fixed system context, so only the A-B difference is meaningful.",
+        "Runs were concurrent (12 at once); wall time has shared-CPU noise, the direction (B ~2x) is far outside it."
+      ],
+      "verdict": "REJECT (for small, well-described bugs); WATCH for hard bugs, untested",
+      "reason": "No measurable quality gain (40/40 vs 40/40 hidden tests) at +10 % tokens, +39 % tool calls and +96 % wall time. Our rule is 'measured gain over the baseline': there is none here. Re-test only on a set of hard, poorly specified bugs where the plain agent actually fails."
+    }
+  ]
+}

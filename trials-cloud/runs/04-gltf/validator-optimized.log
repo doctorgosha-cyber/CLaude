@@ -1,0 +1,5 @@
+Box.default.glb              err=0 warn=0 info=2 hint=0 25.3ms [2]UNSUPPORTED_EXTENSION@/extensionsUsed/0 [2]UNUSED_OBJECT@/buffers/0
+Box.tuned.glb                err=0 warn=0 info=0 hint=0 5.2ms 
+BoxTextured.default.glb      err=0 warn=0 info=1 hint=0 6.4ms [2]UNSUPPORTED_EXTENSION@/extensionsUsed/0
+BoxTextured.tuned.glb        err=0 warn=0 info=0 hint=0 4.3ms 
+total_ms 41.5

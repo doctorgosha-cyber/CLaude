@@ -1,0 +1,19 @@
+{
+  "id": 8,
+  "tool": "GoogleChrome/lighthouse (CLI)",
+  "versions": {"lighthouse": "13.6.0", "chromium": "playwright build 1194 (pre-installed), --headless=new"},
+  "licences": {"lighthouse": "Apache-2.0"},
+  "install": {"command": "npm i lighthouse@13.6.0", "seconds": 21.7, "size_mb": 187, "windows": "yes: Node-only; uses an installed Chrome/Edge (CHROME_PATH) on Windows"},
+  "fixtures": "fixtures/08-lighthouse (KEY.json): 'fast' (1.8 KB sized hero, deferred JS) and 'slow' (3.0 MB unsized noise PNG hero, render-blocking 900 ms busy-wait script, banners inserted above content after 1.2 s), served with python3 -m http.server on 127.0.0.1:8765",
+  "baseline": {"what": "live HTTP check only: status + total time via curl", "command": "curl -s -o /dev/null -w '%{http_code} %{time_total}' http://127.0.0.1:8765/<page>/", "result": "fast: 200 in 5 ms; slow: 200 in 1 ms -> the baseline ranks the slow page as the faster one (HTML only, no assets, no rendering)", "ranks_correctly": false},
+  "candidate_default": {"config": "lighthouse --only-categories=performance (mobile emulation, simulated 4G throttling), 3 runs per page", "commands": ["CHROME_PATH=<chrome> lighthouse http://127.0.0.1:8765/<page>/ --only-categories=performance --output=json --output-path=<out>.json --chrome-flags=\"--headless=new --no-sandbox\" --quiet"],
+    "fast": {"score": [100, 100, 100], "lcp_ms": [649, 658, 638], "cls": [0, 0, 0], "tbt_ms": [36, 0, 0]},
+    "slow": {"score": [67, 69, 69], "lcp_ms": [4413, 4354, 4355], "cls": [0.143, 0.143, 0.143], "tbt_ms": [100, 0, 0]},
+    "ranks_correctly": "3/3 runs on score, LCP and CLS; TBT does not separate them", "variance": "score sd 0.9, LCP sd 28 ms (slow) / 8 ms (fast), CLS sd 0", "runtime_s_per_run": {"fast": 11.1, "slow": 12.7}},
+  "candidate_tuned": {"config": "same + --budget-path=budget.json (LCP 2500, CLS 0.1, TBT 300, FCP 1800, image 500 KB, script 150 KB)", "commands": ["lighthouse ... --budget-path=fixtures/08-lighthouse/budget.json"],
+    "fast": {"score": [100, 100, 100], "lcp_ms": [636, 630, 644], "cls": [0, 0, 0]}, "slow": {"score": [69, 68, 68], "lcp_ms": [4356, 4398, 4395], "cls": [0.143, 0.143, 0.143]},
+    "ranks_correctly": "3/3", "finding": "Lighthouse 13 no longer ships the performance-budget / timing-budget audits (the JSON has no 'budget' audit): --budget-path is accepted but produces nothing. Budgets must be enforced by our wrapper on the metric values.", "runtime_s_per_run": {"fast": 10.9, "slow": 12.2}},
+  "limits": ["Budget audits are gone in Lighthouse 12+: enforce thresholds in the wrapper (checks/perf-budget.mjs does this).", "The 900 ms blocking script shows up in FCP/LCP (both 4.4 s on slow), not in TBT, because it runs before first paint; TBT only counts long tasks after FCP.", "~11-13 s per run and 187 MB install; run 3 times and take the median for anything near a threshold.", "Lab numbers under simulated throttling; they rank pages, they are not field numbers."],
+  "verdict": "ADOPT",
+  "reason": "Stable ranking (3/3 runs, score sd < 1, LCP sd < 30 ms) where the HTTP baseline ranks the pages the wrong way round; 0 configuration beyond CHROME_PATH. Cost: 187 MB and ~12 s per page."
+}

@@ -1,0 +1,16 @@
+{"name":"default","clip":"seeded","runtime_s":3.614479636}
+{"name":"default","clip":"control","runtime_s":1.713635983}
+{"name":"content-t15","clip":"seeded","runtime_s":3.586273822}
+{"name":"content-t15","clip":"control","runtime_s":1.503043426}
+{"name":"content-t15-m1s","clip":"seeded","runtime_s":3.578796734}
+{"name":"content-t15-m1s","clip":"control","runtime_s":1.696647053}
+{"name":"adaptive","clip":"seeded","runtime_s":3.660929302}
+{"name":"adaptive","clip":"control","runtime_s":1.485816030}
+{"name":"adaptive-c10","clip":"seeded","runtime_s":4.419199176}
+{"name":"adaptive-c10","clip":"control","runtime_s":1.784569932}
+{"name":"hist","clip":"seeded","runtime_s":4.695909909}
+{"name":"hist","clip":"control","runtime_s":1.820222793}
+{"name":"threshold","clip":"seeded","runtime_s":4.325390211}
+{"name":"threshold","clip":"control","runtime_s":2.069861172}
+{"name":"content-plus-adaptive","clip":"seeded","runtime_s":4.096137661}
+{"name":"content-plus-adaptive","clip":"control","runtime_s":1.645375584}

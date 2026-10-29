@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="#f5a623" stroke-width="1.5" fill="none" stroke-linejoin="round">
+  <!-- half-filled star, used for the 4.5/5 product score -->
+  <polygon points="12,2.5 14.9,8.6 21.5,9.3 16.6,13.9 18,20.5 12,17.2 6,20.5 7.4,13.9 2.5,9.3 9.1,8.6" />
+  <path d="M12 2.5 L9.1 8.6 L2.5 9.3 L7.4 13.9 L6 20.5 L12 17.2 Z" fill="#f5a623" stroke="none" />
+</svg>

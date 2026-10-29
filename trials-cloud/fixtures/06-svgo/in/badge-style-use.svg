@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 120 40" width="120" height="40">
+  <!-- "Editor's Choice" badge; #accent is restyled by the site theme (dark mode) via the same id -->
+  <style>
+    #accent { fill: #0EA5E9; }
+    .label { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: bold; fill: #FFFFFF; }
+    #ribbon-tail { fill: #0369A1; }
+  </style>
+  <defs>
+    <path id="tail" d="M0 0 L8 0 L8 12 L0 6 Z" />
+  </defs>
+  <rect id="accent" x="8" y="6" width="104" height="28" rx="4" />
+  <use id="ribbon-tail" href="#tail" x="0" y="8" />
+  <use xlink:href="#tail" x="120" y="8" transform="scale(-1,1) translate(-240,0)" fill="#0369A1" />
+  <text class="label" x="60" y="24" text-anchor="middle">EDITOR'S CHOICE</text>
+</svg>

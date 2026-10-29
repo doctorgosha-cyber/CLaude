@@ -1,0 +1,13 @@
+{
+  "fixture": "02-axe",
+  "seeded": [
+    {"id": "A1", "file": "seeded/s1-missing-alt.html", "defect": "img without alt", "axe_rule_expected": "image-alt", "baseline_expected": false},
+    {"id": "A2", "file": "seeded/s2-low-contrast.html", "defect": "body text #a9a9a9 on #fff (2.5:1)", "axe_rule_expected": "color-contrast", "baseline_expected": false},
+    {"id": "A3", "file": "seeded/s3-button-no-name.html", "defect": "icon-only button with no accessible name", "axe_rule_expected": "button-name", "baseline_expected": false},
+    {"id": "A4", "file": "seeded/s4-missing-label.html", "defect": "email input with no label", "axe_rule_expected": "label", "baseline_expected": true},
+    {"id": "A5", "file": "seeded/s5-aria-misuse.html", "defect": "aria-checked on role=button; invalid role value", "axe_rule_expected": "aria-allowed-attr or aria-roles", "baseline_expected": false},
+    {"id": "A6", "file": "seeded/s6-keyboard-trap.html", "defect": "focus trapped in dialog by script, Escape ignored (WCAG 2.1.2)", "axe_rule_expected": "none (axe cannot detect script keyboard traps); detectable only by a keyboard-driving test", "baseline_expected": false}
+  ],
+  "clean": ["clean/review-thermos.html", "clean/newsletter.html", "clean/figure-keyboard.html", "clean/comparison-table.html", "clean/video-page.html", "clean/faq.html"],
+  "note": "A finding on any clean page counts as a false positive. A6 is seeded on purpose to show the tool's limit; it counts in recall."
+}

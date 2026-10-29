@@ -1,0 +1,78 @@
+{
+ "fixture": "09-gitleaks",
+ "seeded": [
+  {
+   "id": "K1",
+   "file": "seeded/.env",
+   "secret_type": "AWS access key id (AKIA...)",
+   "gitleaks_rule_expected": "aws-access-token"
+  },
+  {
+   "id": "K2",
+   "file": "seeded/config.json",
+   "secret_type": "Stripe live secret key (sk_live_...)",
+   "gitleaks_rule_expected": "stripe-access-token"
+  },
+  {
+   "id": "K3",
+   "file": "seeded/config.json",
+   "secret_type": "Google API key (AIza...)",
+   "gitleaks_rule_expected": "gcp-api-key"
+  },
+  {
+   "id": "K4",
+   "file": "seeded/config.json",
+   "secret_type": "SendGrid API key (SG....)",
+   "gitleaks_rule_expected": "sendgrid-api-token"
+  },
+  {
+   "id": "K5",
+   "file": "seeded/REPORT.md",
+   "secret_type": "GitHub PAT (ghp_...)",
+   "gitleaks_rule_expected": "github-pat"
+  },
+  {
+   "id": "K6",
+   "file": "seeded/REPORT.md",
+   "secret_type": "Google OAuth access token (ya29....)",
+   "gitleaks_rule_expected": "generic-api-key or gcp-oauth"
+  },
+  {
+   "id": "K7",
+   "file": "seeded/notify.js",
+   "secret_type": "Slack bot token (xoxb-...)",
+   "gitleaks_rule_expected": "slack-bot-token"
+  },
+  {
+   "id": "K8",
+   "file": "seeded/notify.js",
+   "secret_type": "Twilio API key (SK + 32 hex)",
+   "gitleaks_rule_expected": "twilio-api-key"
+  },
+  {
+   "id": "K9",
+   "file": "seeded/deploy.log",
+   "secret_type": "JWT in a log line",
+   "gitleaks_rule_expected": "jwt"
+  },
+  {
+   "id": "K10",
+   "file": "seeded/id_rsa_fixture.pem",
+   "secret_type": "RSA private key block",
+   "gitleaks_rule_expected": "private-key"
+  }
+ ],
+ "clean": [
+  "clean/checksums.txt",
+  "clean/ids.json",
+  "clean/git-log.txt",
+  "clean/image.b64",
+  "clean/figure-config.js",
+  "clean/README.md",
+  "clean/analytics.csv",
+  "clean/theme.css",
+  "clean/package-lock.snippet.json",
+  "clean/subtitles.srt"
+ ],
+ "note": "All seeded tokens are FAKE strings in realistic formats. seeded/.env also holds an AWS secret-looking value that is not counted (gitleaks has no standalone rule for it). clean/README.md holds a Stripe publishable key on purpose: flagging it is a false positive."
+}

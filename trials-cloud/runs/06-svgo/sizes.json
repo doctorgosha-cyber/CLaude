@@ -1,0 +1,122 @@
+{
+ "rows": [
+  {
+   "file": "badge-style-use.svg",
+   "before": 841,
+   "default": 536,
+   "tuned": 650,
+   "gz_before": 522,
+   "gz_default": 357,
+   "gz_tuned": 426,
+   "saved_default_pct": 36.3,
+   "saved_tuned_pct": 22.7
+  },
+  {
+   "file": "editor-cruft.svg",
+   "before": 3023,
+   "default": 623,
+   "tuned": 781,
+   "gz_before": 1222,
+   "gz_default": 308,
+   "gz_tuned": 377,
+   "saved_default_pct": 79.4,
+   "saved_tuned_pct": 74.2
+  },
+  {
+   "file": "icon-clip-mask.svg",
+   "before": 893,
+   "default": 573,
+   "tuned": 605,
+   "gz_before": 443,
+   "gz_default": 338,
+   "gz_tuned": 353,
+   "saved_default_pct": 35.8,
+   "saved_tuned_pct": 32.3
+  },
+  {
+   "file": "icon-play.svg",
+   "before": 479,
+   "default": 247,
+   "tuned": 262,
+   "gz_before": 320,
+   "gz_default": 193,
+   "gz_tuned": 206,
+   "saved_default_pct": 48.4,
+   "saved_tuned_pct": 45.3
+  },
+  {
+   "file": "icon-search.svg",
+   "before": 377,
+   "default": 246,
+   "tuned": 246,
+   "gz_before": 265,
+   "gz_default": 185,
+   "gz_tuned": 185,
+   "saved_default_pct": 34.7,
+   "saved_tuned_pct": 34.7
+  },
+  {
+   "file": "icon-star-rating.svg",
+   "before": 430,
+   "default": 331,
+   "tuned": 331,
+   "gz_before": 298,
+   "gz_default": 234,
+   "gz_tuned": 234,
+   "saved_default_pct": 23,
+   "saved_tuned_pct": 23
+  },
+  {
+   "file": "logo-anatomy-of-things.svg",
+   "before": 1132,
+   "default": 943,
+   "tuned": 1007,
+   "gz_before": 592,
+   "gz_default": 514,
+   "gz_tuned": 542,
+   "saved_default_pct": 16.7,
+   "saved_tuned_pct": 11
+  },
+  {
+   "file": "logo-gradient.svg",
+   "before": 883,
+   "default": 714,
+   "tuned": 744,
+   "gz_before": 402,
+   "gz_default": 342,
+   "gz_tuned": 352,
+   "saved_default_pct": 19.1,
+   "saved_tuned_pct": 15.7
+  },
+  {
+   "file": "spinner-animated.svg",
+   "before": 785,
+   "default": 589,
+   "tuned": 644,
+   "gz_before": 466,
+   "gz_default": 365,
+   "gz_tuned": 386,
+   "saved_default_pct": 25,
+   "saved_tuned_pct": 18
+  },
+  {
+   "file": "wordmark-text.svg",
+   "before": 565,
+   "default": 451,
+   "tuned": 451,
+   "gz_before": 380,
+   "gz_default": 310,
+   "gz_tuned": 310,
+   "saved_default_pct": 20.2,
+   "saved_tuned_pct": 20.2
+  }
+ ],
+ "totals": {
+  "before": 9408,
+  "def": 5253,
+  "tun": 5721,
+  "gbefore": 4910,
+  "gdef": 3146,
+  "gtun": 3371
+ }
+}

@@ -1,0 +1,72 @@
+{
+  "mode": "default",
+  "validatorVersion": "2.0.0-dev.3.10",
+  "options": {},
+  "total_ms": 41.5,
+  "results": [
+    {
+      "file": "/home/user/CLaude/trials-cloud/runs/04-gltf/optimized/Box.default.glb",
+      "ms": 25.3,
+      "error": null,
+      "version": "2.0.0-dev.3.10",
+      "numErrors": 0,
+      "numWarnings": 0,
+      "numInfos": 2,
+      "numHints": 0,
+      "messages": [
+        {
+          "code": "UNSUPPORTED_EXTENSION",
+          "severity": 2,
+          "pointer": "/extensionsUsed/0",
+          "message": "Cannot validate an extension as it is not supported by the validator: 'EXT_meshopt_compression'."
+        },
+        {
+          "code": "UNUSED_OBJECT",
+          "severity": 2,
+          "pointer": "/buffers/0",
+          "message": "This object may be unused."
+        }
+      ]
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud/runs/04-gltf/optimized/Box.tuned.glb",
+      "ms": 5.2,
+      "error": null,
+      "version": "2.0.0-dev.3.10",
+      "numErrors": 0,
+      "numWarnings": 0,
+      "numInfos": 0,
+      "numHints": 0,
+      "messages": []
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud/runs/04-gltf/optimized/BoxTextured.default.glb",
+      "ms": 6.4,
+      "error": null,
+      "version": "2.0.0-dev.3.10",
+      "numErrors": 0,
+      "numWarnings": 0,
+      "numInfos": 1,
+      "numHints": 0,
+      "messages": [
+        {
+          "code": "UNSUPPORTED_EXTENSION",
+          "severity": 2,
+          "pointer": "/extensionsUsed/0",
+          "message": "Cannot validate an extension as it is not supported by the validator: 'EXT_meshopt_compression'."
+        }
+      ]
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud/runs/04-gltf/optimized/BoxTextured.tuned.glb",
+      "ms": 4.3,
+      "error": null,
+      "version": "2.0.0-dev.3.10",
+      "numErrors": 0,
+      "numWarnings": 0,
+      "numInfos": 0,
+      "numHints": 0,
+      "messages": []
+    }
+  ]
+}

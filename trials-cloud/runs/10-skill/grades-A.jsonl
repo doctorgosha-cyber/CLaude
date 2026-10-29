@@ -1,0 +1,6 @@
+{"task":"t1-date-range","run":"runs/10-skill/work/t1-date-range-A-1","passed":7,"failed":0,"total":7,"crashed":false,"stderr":""}
+{"task":"t1-date-range","run":"runs/10-skill/work/t1-date-range-A-2","passed":7,"failed":0,"total":7,"crashed":false,"stderr":""}
+{"task":"t2-price-feed","run":"runs/10-skill/work/t2-price-feed-A-1","passed":5,"failed":0,"total":5,"crashed":false,"stderr":""}
+{"task":"t2-price-feed","run":"runs/10-skill/work/t2-price-feed-A-2","passed":5,"failed":0,"total":5,"crashed":false,"stderr":""}
+{"task":"t3-units","run":"runs/10-skill/work/t3-units-A-1","passed":8,"failed":0,"total":8,"crashed":false,"stderr":""}
+{"task":"t3-units","run":"runs/10-skill/work/t3-units-A-2","passed":8,"failed":0,"total":8,"crashed":false,"stderr":""}

@@ -1,0 +1,21 @@
+{
+  "id": 10,
+  "tool": "mattpocock/skills -> skills/engineering/diagnosing-bugs/SKILL.md (agent process skill)",
+  "versions": {"skill": "main branch, fetched 2026-10-29 from raw.githubusercontent.com (138 lines, sha256 in fixtures/10-skill/SKILL.md)", "agent": "Claude Code subagent (general-purpose), same session model for both arms"},
+  "licences": {"skill": "MIT (repository LICENSE, (c) 2026 Matt Pocock; copy in fixtures/10-skill/SKILL-LICENSE.txt)"},
+  "install": {"command": "claude plugin install mattpocock-skills@claude-plugins-official  (or copy SKILL.md into .claude/skills/diagnosing-bugs/)", "seconds": 0, "size_mb": 0.01, "windows": "n/a (prompt text)"},
+  "fixtures": "fixtures/10-skill: 3 small Node modules with one seeded bug each and a README bug report (t1 off-by-one in a date range, t2 async race in a price feed, t3 unit-conversion constants), hidden tests (20 total: 7 + 5 + 8) in hidden-tests/, grade.mjs. Hidden tests fail 6/5/4 on the buggy code and pass 20/20 on reference fixes.",
+  "design": "Arm A = plain subagent with the bug report. Arm B = identical prompt preceded by the full SKILL.md and 'follow this skill exactly'. 2 reps per arm per task = 12 runs, launched concurrently, each in a fresh copy of the task folder. Graded only by scripts (grade.mjs runs the hidden tests after the run). Tokens, tool calls and wall time come from the harness usage report of each subagent (runs/10-skill/usage.jsonl); the token figure includes each subagent's fixed context, so compare the difference, not the absolute.",
+  "baseline": {"what": "arm A, plain subagent", "runs": 6, "runs_all_hidden_pass": 6, "hidden_tests": "40/40", "mean_tokens": 58240, "mean_tool_uses": 4.33, "mean_seconds": 27.9},
+  "candidate_default": {"config": "arm B, SKILL.md inline", "runs": 6, "runs_all_hidden_pass": 6, "hidden_tests": "40/40", "mean_tokens": 64159, "mean_tool_uses": 6.0, "mean_seconds": 54.7, "delta_vs_A": {"tokens_pct": 10.2, "tool_uses_pct": 38.6, "seconds_pct": 96.1}},
+  "candidate_tuned": {"config": "none: a second config (e.g. the skill as a /slash command instead of inline) was not run; the inline form is the one the Owner would use in a subagent", "note": "not run"},
+  "per_task": [
+    {"task": "t1-date-range", "A": {"hidden": "14/14", "tokens": 57121, "tools": 3, "seconds": 18.2}, "B": {"hidden": "14/14", "tokens": 63290, "tools": 5, "seconds": 44.8}},
+    {"task": "t2-price-feed", "A": {"hidden": "10/10", "tokens": 58601, "tools": 4, "seconds": 32.0}, "B": {"hidden": "10/10", "tokens": 64408, "tools": 6, "seconds": 61.0}},
+    {"task": "t3-units", "A": {"hidden": "16/16", "tokens": 58998, "tools": 6, "seconds": 33.4}, "B": {"hidden": "16/16", "tokens": 64779, "tools": 7, "seconds": 58.2}}
+  ],
+  "observations": ["Both arms fixed all three bugs in every rep; the hidden tests cannot separate them.", "Arm B visibly followed the skill: red test before the fix in 6/6 runs, falsified alternative hypotheses named in the reply, one run added a 1000-iteration stress loop for the race. Arm A wrote tests after the fix in 6/6 runs and still passed.", "The skill text is ~2.4 K tokens per run and the extra phases cost ~1.7 more tool calls and ~27 s per bug; on this task size that is pure overhead.", "Bugs were small and well described (a README with exact numbers). The skill targets hard, badly described bugs; this trial does not measure that case."],
+  "limits": ["n = 2 reps per cell; the effect on tokens/time is consistent across all 3 tasks but the sample is small.", "Tasks are synthetic and easy for a plain agent (ceiling effect: 40/40 in arm A). A harder task set (hidden, multi-file, flaky) is needed to see any quality gain.", "Token counts include the subagent's fixed system context, so only the A-B difference is meaningful.", "Runs were concurrent (12 at once); wall time has shared-CPU noise, the direction (B ~2x) is far outside it."],
+  "verdict": "REJECT (for small, well-described bugs); WATCH for hard bugs, untested",
+  "reason": "No measurable quality gain (40/40 vs 40/40 hidden tests) at +10 % tokens, +39 % tool calls and +96 % wall time. Our rule is 'measured gain over the baseline': there is none here. Re-test only on a set of hard, poorly specified bugs where the plain agent actually fails."
+}

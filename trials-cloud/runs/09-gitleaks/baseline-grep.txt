@@ -1,0 +1,6 @@
+./KEY.json
+./clean/README.md
+./seeded/.env
+./seeded/REPORT.md
+./seeded/config.json
+./seeded/notify.js

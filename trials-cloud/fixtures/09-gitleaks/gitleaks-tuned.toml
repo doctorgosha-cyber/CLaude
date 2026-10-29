@@ -1,0 +1,14 @@
+# Tuned config: default rules + one extra rule for AWS secret access keys in KEY=VALUE files, + an allowlist for publishable keys.
+[extend]
+useDefault = true
+
+[[rules]]
+id = "aws-secret-access-key-assignment"
+description = "AWS secret access key assigned in config/env"
+regex = '''(?i)aws_secret_access_key\s*[=:]\s*["']?([A-Za-z0-9/+=]{40})["']?'''
+secretGroup = 1
+entropy = 3.5
+
+[allowlist]
+description = "publishable keys are public by design"
+regexes = ['''pk_(test|live)_[A-Za-z0-9]{24,}''']

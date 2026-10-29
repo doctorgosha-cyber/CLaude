@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- loading spinner: SMIL rotation + CSS keyframes on #pulse -->
+  <style>
+    @keyframes pulse { 0% { opacity: 0.2; } 50% { opacity: 1; } 100% { opacity: 0.2; } }
+    #pulse { animation: pulse 1.2s ease-in-out infinite; }
+  </style>
+  <circle cx="24" cy="24" r="18" fill="none" stroke="#E5E7EB" stroke-width="6" />
+  <path id="arc" d="M24 6 A18 18 0 0 1 42 24" fill="none" stroke="#2563EB" stroke-width="6" stroke-linecap="round">
+    <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 24 24" to="360 24 24" dur="1s" repeatCount="indefinite" />
+  </path>
+  <circle id="pulse" cx="24" cy="24" r="5" fill="#2563EB" />
+</svg>

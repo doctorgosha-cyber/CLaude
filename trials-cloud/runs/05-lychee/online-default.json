@@ -1,0 +1,457 @@
+{
+  "total": 100,
+  "successful": 30,
+  "unknown": 0,
+  "unsupported": 0,
+  "timeouts": 0,
+  "redirects": 0,
+  "excludes": 8,
+  "errors": 62,
+  "cached": 0,
+  "success_map": {},
+  "error_map": {
+    "site/index.html": [
+      {
+        "url": "https://github.com/",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 400
+        }
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://developer.mozilla.org/en-US/docs/Web/HTML))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.rfc-editor.org/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/assets/fonts/inter.woff2",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      },
+      {
+        "url": "https://opensource.org/license/mit",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://opensource.org/license/mit))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/reviews/thermos.html#price-history",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/reviews/kettle.html#safety",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "https://www.python.org/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.python.org/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://github.com/lycheeverse/lychee",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 403
+        }
+      },
+      {
+        "url": "https://www.w3.org/WAI/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.w3.org/WAI/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.youtube.com/@anatomyofthings",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.youtube.com/@anatomyofthings))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/images/hero-2026.png",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://developer.mozilla.org/en-US/docs/Web/JavaScript))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.w3.org/TR/WCAG22/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.w3.org/TR/WCAG22/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.wikipedia.org/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.wikipedia.org/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Thermos",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://en.wikipedia.org/wiki/Thermos))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.mozilla.org/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.mozilla.org/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/about.html#careers",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/figures/switch.html#legend",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "https://www.iana.org/domains/reserved",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.iana.org/domains/reserved))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://docs.python.org/3/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://docs.python.org/3/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.gnu.org/licenses/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.gnu.org/licenses/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/figures/kettle-exploded.html",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      },
+      {
+        "url": "https://www.w3.org/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.w3.org/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc2606",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.rfc-editor.org/rfc/rfc2606))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://developer.mozilla.org/en-US/docs/Web/CSS))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/reviews/toaster.html",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      },
+      {
+        "url": "https://www.youtube.com/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.youtube.com/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.mozilla.org/en-US/firefox/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.mozilla.org/en-US/firefox/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Keyboard",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://en.wikipedia.org/wiki/Keyboard))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.iana.org/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.iana.org/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      }
+    ],
+    "docs/README.md": [
+      {
+        "url": "https://www.w3.org/WAI/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.w3.org/WAI/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.gnu.org/licenses/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.gnu.org/licenses/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://github.com/lycheeverse/lychee",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 403
+        }
+      },
+      {
+        "url": "https://docs.python.org/3/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://docs.python.org/3/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc2606",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.rfc-editor.org/rfc/rfc2606))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://developer.mozilla.org/en-US/docs/Web/CSS))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/docs/scripts/build.mjs",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://developer.mozilla.org/en-US/docs/Web/HTML))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://opensource.org/license/mit",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://opensource.org/license/mit))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/docs/CHANGELOG.md",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      },
+      {
+        "url": "https://www.iana.org/domains/reserved",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.iana.org/domains/reserved))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.wikipedia.org/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.wikipedia.org/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/about.html#careers",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/reviews/kettle.html#safety",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://developer.mozilla.org/en-US/docs/Web/JavaScript))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Thermos",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://en.wikipedia.org/wiki/Thermos))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.iana.org/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.iana.org/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.mozilla.org/en-US/firefox/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.mozilla.org/en-US/firefox/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.rfc-editor.org/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.youtube.com/@anatomyofthings",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.youtube.com/@anatomyofthings))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.python.org/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.python.org/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.w3.org/TR/WCAG22/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.w3.org/TR/WCAG22/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/docs/CONTRIBUTING.md#code-of-conduct",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/reviews/toaster.html",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      },
+      {
+        "url": "https://www.w3.org/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.w3.org/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/docs/README.md#deploy",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Keyboard",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://en.wikipedia.org/wiki/Keyboard))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.youtube.com/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.youtube.com/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://www.mozilla.org/",
+        "status": {
+          "text": "Network error: Connection failed. Check network connectivity and firewall settings (error sending request for url (https://www.mozilla.org/))",
+          "details": "Connection failed. Check network connectivity and firewall settings"
+        }
+      },
+      {
+        "url": "https://github.com/",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 400
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/images/hero-2026.png",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      }
+    ]
+  },
+  "suggestion_map": {},
+  "redirect_map": {},
+  "excluded_map": {},
+  "duration_secs": 0,
+  "detailed_stats": false
+}

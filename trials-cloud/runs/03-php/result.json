@@ -1,0 +1,31 @@
+{
+  "id": 3,
+  "tool": "phpstan/phpstan + PHP_CodeSniffer with WordPress-Coding-Standards (WPCS) + php-stubs/wordpress-stubs",
+  "versions": {"phpstan": "2.3.4 (phar)", "squizlabs/php_codesniffer": "3.13.6", "wp-coding-standards/wpcs": "3.4.1", "phpcsstandards/phpcsutils": "1.2.3", "phpcsstandards/phpcsextra": "1.5.1", "php-stubs/wordpress-stubs": "6.9.1", "php": "8.3.6"},
+  "licences": {"phpstan": "MIT", "php_codesniffer": "BSD-3-Clause", "wpcs": "MIT", "phpcsutils": "LGPL-3.0-or-later (used as a library only, unmodified)", "phpcsextra": "LGPL-3.0-or-later (used as a library only, unmodified)", "wordpress-stubs": "MIT (stubs generated from GPL-2.0-or-later WordPress; run-time tooling only, nothing is bundled into the theme)"},
+  "install": {
+    "command": "composer require --no-plugins squizlabs/php_codesniffer:3.13.6 wp-coding-standards/wpcs:3.4.1 php-stubs/wordpress-stubs:6.9.1 phpcsstandards/phpcsutils:1.2.3 phpcsstandards/phpcsextra:1.5.1 && curl -sSLo phpstan.phar https://raw.githubusercontent.com/phpstan/phpstan/2.3.4/phpstan.phar && vendor/bin/phpcs --config-set installed_paths <abs>/vendor/wp-coding-standards/wpcs,<abs>/vendor/phpcsstandards/phpcsutils,<abs>/vendor/phpcsstandards/phpcsextra",
+    "seconds": 72,
+    "size_mb": 62,
+    "size_note": "vendor 32 MB (without composer .git caches) + phpstan.phar 30 MB. In this sandbox GitHub release/zipball downloads are blocked (HTTP 403), so composer fell back to git sources and the phar was fetched from the repository tree; on Windows the plain composer dist install works.",
+    "windows": "yes: pure PHP (phar + composer packages); needs PHP >= 7.4 on PATH"
+  },
+  "fixtures": "fixtures/03-php (KEY.json): 3 clean theme files, 3 seeded files with 5 defects D1..D5",
+  "baseline": {"what": "php -l on every file", "command": "php -l <file>", "recall": "0/5", "false_positives": 0, "runtime_s": 0.1},
+  "candidate_default": {
+    "config": "phpstan level 5 + wordpress-stubs via scanFiles; phpcs --standard=WordPress",
+    "commands": ["php phpstan.phar analyse -c phpstan-default.neon --no-progress --error-format=json", "vendor/bin/phpcs --standard=WordPress --report=json clean seeded"],
+    "found": {"D1": false, "D2": true, "D3": true, "D4": true, "D5": true},
+    "recall": "4/5", "false_positives": 0, "extra_findings_on_seeded": 4, "runtime_s": {"phpstan": 6.9, "phpcs": 0.66}
+  },
+  "candidate_tuned": {
+    "config": "phpstan level 7 (level 8 gives the same result); phpcs ruleset WordPress-Extra, errors only (-n), FileName and LineLength excluded",
+    "commands": ["php phpstan.phar analyse -c phpstan-tuned.neon --no-progress --error-format=json", "vendor/bin/phpcs --standard=phpcs-tuned.xml --report=json clean seeded"],
+    "found": {"D1": true, "D2": true, "D3": true, "D4": true, "D5": true},
+    "recall": "5/5", "false_positives": 1, "false_positive_detail": "clean/functions.php:58 'nexus_get_rating expects int, int|false given' because get_the_ID() may return false. Correct by the stubs, but noise for a theme (fixed with a cast or a check).",
+    "extra_findings_on_seeded": 1, "runtime_s": {"phpstan": 4.7, "phpcs": 0.60}
+  },
+  "limits": ["phpstan level 5 (its 'sensible default') misses the null dereference D1; level >= 7 is needed, and that level starts to flag int|false returns from core functions on clean code.", "First phpstan run ~7 s with a cold result cache; later runs ~4-5 s. phpcs < 1 s.", "WPCS flags the missing nonce 4 times (once per $_POST access); the wrapper de-duplicates by sniff + file.", "Line numbers: phpstan reports D2 one line before the seeded line (the return statement)."],
+  "verdict": "ADOPT",
+  "reason": "Baseline finds 0/5. Default configs find 4/5 with 0 false positives in < 8 s; the tuned pair finds 5/5 with 1 benign false positive. Pure PHP, runs on Windows, no network at run time."
+}

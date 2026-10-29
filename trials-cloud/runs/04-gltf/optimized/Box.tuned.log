@@ -1,0 +1,24 @@
+❯ dedup
+✔ dedup                3ms
+❯ instance
+✔ instance             1ms
+❯ palette
+✔ palette              1ms
+❯ flatten
+✔ flatten              1ms
+❯ join
+✔ join                 2ms
+❯ weld
+✔ weld                 1ms
+❯ resample
+✔ resample             0ms
+❯ prune
+✔ prune                1ms
+❯ sparse
+✔ sparse               0ms
+❯ textureCompress
+✔ textureCompress      0ms
+❯ quantize
+✔ quantize             3ms
+
+info: Box.glb (1.66 KB) → Box.tuned.glb (1.53 KB)

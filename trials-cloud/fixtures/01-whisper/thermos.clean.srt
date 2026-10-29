@@ -1,0 +1,20 @@
+1
+00:00:00,500 --> 00:00:06,699
+The Polar Flask 500 is a vacuum insulated bottle that keeps drinks hot for 12 hours.
+
+2
+00:00:07,099 --> 00:00:11,778
+Two stainless steel walls are welded together with a vacuum gap between them.
+
+3
+00:00:12,178 --> 00:00:18,006
+Because there is almost no air in the gap, heat cannot travel by conduction or convection.
+
+4
+00:00:18,406 --> 00:00:22,894
+A copper coating on the inner wall reflects radiant heat back into the drink.
+
+5
+00:00:23,294 --> 00:00:29,728
+The Polar Flask 500 holds half a litre and weighs just 310 grams when empty.
+

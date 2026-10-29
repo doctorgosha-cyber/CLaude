@@ -1,0 +1,88 @@
+EXCEPTION after 0.9s: ProxyError: 403 Forbidden
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/httpx2/_transports/default.py", line 98, in map_httpcore_exceptions
+    yield
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/httpx2/_transports/default.py", line 245, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/httpcore2/_sync/connection_pool.py", line 242, in handle_request
+    raise exc from None
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/httpcore2/_sync/connection_pool.py", line 224, in handle_request
+    response = connection.handle_request(pool_request.request)
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/httpcore2/_sync/http_proxy.py", line 290, in handle_request
+    raise ProxyError(msg)
+httpcore2.ProxyError: 403 Forbidden
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    m = WhisperModel('base.en', device='cpu', compute_type='int8')
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/faster_whisper/transcribe.py", line 681, in __init__
+    model_path = download_model(
+        model_size_or_path,
+    ...<3 lines>...
+        use_auth_token=use_auth_token,
+    )
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/faster_whisper/utils.py", line 116, in download_model
+    return huggingface_hub.snapshot_download(repo_id, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/huggingface_hub/utils/_http.py", line 276, in _inner
+    return fn(*args, **kwargs)
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/huggingface_hub/_snapshot_download.py", line 279, in snapshot_download
+    repo_info = api.repo_info(repo_id=repo_id, repo_type=repo_type, revision=revision)
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/huggingface_hub/hf_api.py", line 3535, in repo_info
+    return method(
+        repo_id,
+    ...<4 lines>...
+        files_metadata=files_metadata,
+    )
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/huggingface_hub/hf_api.py", line 3214, in model_info
+    r = get_session().get(path, headers=headers, timeout=timeout, params=params)
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/httpx2/_client.py", line 1112, in get
+    return self.request(
+           ~~~~~~~~~~~~^
+        "GET",
+        ^^^^^^
+    ...<7 lines>...
+        extensions=extensions,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/httpx2/_client.py", line 796, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/httpx2/_client.py", line 979, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/httpx2/_client.py", line 1007, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/httpx2/_client.py", line 1042, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/httpx2/_client.py", line 1075, in _send_single_request
+    response = transport.handle_request(request)
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/httpx2/_transports/default.py", line 244, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/whisper/venv/lib/python3.13/site-packages/httpx2/_transports/default.py", line 115, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx2.ProxyError: 403 Forbidden
+
+=== agent-proxy status entry (curl $HTTPS_PROXY/__agentproxy/status) ===
+{"kind":"connect_rejected","detail":"gateway answered 403 to CONNECT (policy denial or upstream failure)","host":"huggingface.co:443"}
+curl https://huggingface.co/Systran/faster-whisper-base.en/resolve/main/config.json -> curl: (56) CONNECT tunnel failed, response 403

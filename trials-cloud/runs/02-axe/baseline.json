@@ -1,0 +1,22 @@
+{
+ "runtime_s": 0.77,
+ "files": {
+  "clean/comparison-table.html": [],
+  "clean/faq.html": [],
+  "clean/figure-keyboard.html": [],
+  "clean/newsletter.html": [],
+  "clean/review-thermos.html": [],
+  "clean/video-page.html": [],
+  "seeded/s1-missing-alt.html": [],
+  "seeded/s2-low-contrast.html": [],
+  "seeded/s3-button-no-name.html": [],
+  "seeded/s4-missing-label.html": [
+   {
+    "check": "unlabelled-input",
+    "target": "<input name=\"email\" type=\"email\" placeholder=\"\" required=\"\">"
+   }
+  ],
+  "seeded/s5-aria-misuse.html": [],
+  "seeded/s6-keyboard-trap.html": []
+ }
+}

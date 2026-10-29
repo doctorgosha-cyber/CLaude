@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80" role="img" aria-labelledby="logoTitle logoDesc">
+  <title id="logoTitle">Anatomy of Things</title>
+  <desc id="logoDesc">Logo: a magnifier over a circuit board, next to the channel name.</desc>
+  <g id="mark" transform="translate(8, 8)">
+    <rect x="0" y="0" width="64" height="64" rx="12" ry="12" fill="#1F2937" />
+    <path d="M14 20 h18 v6 h-6 v12 h14" fill="none" stroke="#9CA3AF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="14" cy="20" r="2.5" fill="#9CA3AF" />
+    <circle cx="40" cy="38" r="2.5" fill="#9CA3AF" />
+    <circle cx="38" cy="30" r="11" fill="none" stroke="#FACC15" stroke-width="4" />
+    <path d="M46 38 L56 48" stroke="#FACC15" stroke-width="5" stroke-linecap="round" />
+  </g>
+  <g id="wordmark" fill="#111827" font-family="Inter, Helvetica, Arial, sans-serif">
+    <text x="88" y="38" font-size="24" font-weight="700" letter-spacing="0.5">ANATOMY</text>
+    <text x="88" y="62" font-size="18" font-weight="400">of Things</text>
+  </g>
+</svg>

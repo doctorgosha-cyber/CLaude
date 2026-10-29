@@ -1,0 +1,6 @@
+b6589fc6ab0dc82cf12099d1c2d40ab994e8410c fix: typo in caption 0
+356a192b7913b04c54574d18c28d46e6395428ab fix: typo in caption 1
+da4b9237bacccdf19c0760cab7aec4a8359010b0 fix: typo in caption 2
+77de68daecd823babbb58edb1c8e14d7106e83bb fix: typo in caption 3
+1b6453892473a467d07372d45eb05abc2031647a fix: typo in caption 4
+ac3478d69a3c81fa62e60f5c3696165a4e5e6ac4 fix: typo in caption 5

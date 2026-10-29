@@ -1,0 +1,37 @@
+{
+ "label": "tuned",
+ "breakages": 0,
+ "files": {
+  "icon-search.svg": {
+   "broken": []
+  },
+  "icon-play.svg": {
+   "broken": []
+  },
+  "icon-star-rating.svg": {
+   "broken": []
+  },
+  "logo-anatomy-of-things.svg": {
+   "broken": []
+  },
+  "badge-style-use.svg": {
+   "broken": []
+  },
+  "logo-gradient.svg": {
+   "broken": []
+  },
+  "icon-clip-mask.svg": {
+   "broken": []
+  },
+  "spinner-animated.svg": {
+   "broken": []
+  },
+  "wordmark-text.svg": {
+   "broken": []
+  },
+  "editor-cruft.svg": {
+   "broken": [],
+   "cruft_left": []
+  }
+ }
+}

@@ -1,0 +1,65 @@
+{
+ "recall": "5/8",
+ "matched_ids": [
+  1,
+  2,
+  3,
+  5,
+  6
+ ],
+ "missed_ids": [
+  4,
+  7,
+  8
+ ],
+ "false_positives": 0,
+ "false_positives_seeded_s": [],
+ "false_positives_control_s": [],
+ "timing_error_ms_mean": 0.0,
+ "timing_error_ms_max": 0.0,
+ "tolerance_s": 0.25,
+ "matches": [
+  {
+   "id": 1,
+   "type": "hard",
+   "true_s": 3.0,
+   "det_s": 3.0,
+   "err_ms": 0.0
+  },
+  {
+   "id": 2,
+   "type": "hard",
+   "true_s": 7.0,
+   "det_s": 7.0,
+   "err_ms": 0.0
+  },
+  {
+   "id": 3,
+   "type": "hard",
+   "true_s": 10.0,
+   "det_s": 10.0,
+   "err_ms": 0.0
+  },
+  {
+   "id": 5,
+   "type": "hard",
+   "true_s": 16.5,
+   "det_s": 16.5,
+   "err_ms": 0.0
+  },
+  {
+   "id": 6,
+   "type": "hard",
+   "true_s": 20.5,
+   "det_s": 20.5,
+   "err_ms": 0.0
+  }
+ ],
+ "detected_seeded_s": [
+  3.0,
+  7.0,
+  10.0,
+  16.5,
+  20.5
+ ]
+}

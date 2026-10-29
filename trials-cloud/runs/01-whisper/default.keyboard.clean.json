@@ -1,0 +1,20 @@
+{
+ "audio": "/home/user/CLaude/trials-cloud/fixtures/01-whisper/keyboard.wav",
+ "srt": "/home/user/CLaude/trials-cloud/fixtures/01-whisper/keyboard.clean.srt",
+ "config": {
+  "model": "base.en",
+  "beam_size": 1,
+  "vad_filter": false,
+  "language": "en",
+  "compute_type": "int8",
+  "device": "cpu",
+  "model_dir": null,
+  "wer_threshold": 0.05,
+  "timing_ms": 300,
+  "end_slack_ms": 200,
+  "asr_words_json": null
+ },
+ "error": "ProxyError: 403 Forbidden",
+ "findings": [],
+ "runtime_s": 1.04
+}

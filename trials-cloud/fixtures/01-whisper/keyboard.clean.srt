@@ -1,0 +1,24 @@
+1
+00:00:00,500 --> 00:00:06,620
+The Kestrel T45 is a tactile mechanical keyboard switch built for long typing sessions.
+
+2
+00:00:07,020 --> 00:00:13,007
+Each switch is rated for 80 million key presses and actuates at 45 grams of force.
+
+3
+00:00:13,407 --> 00:00:18,870
+Inside the housing, a copper leaf makes contact when the stem travels 2 millimetres.
+
+4
+00:00:19,270 --> 00:00:25,024
+A small bump in the stem gives your finger feedback before the key bottoms out at 4 millimetres.
+
+5
+00:00:25,424 --> 00:00:31,331
+Factory lubrication keeps the stroke smooth and reduces the sound by about 6 decibels.
+
+6
+00:00:31,731 --> 00:00:38,357
+The Kestrel T45 fits any standard hot swap board, so you can install it without soldering.
+

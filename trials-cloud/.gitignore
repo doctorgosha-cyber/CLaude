@@ -1,0 +1,5 @@
+runs/*/node_modules
+runs/10-skill/work/*/__hidden__
+runs/10-skill/work/*/node_modules
+checks/node_modules
+fixtures/09-gitleaks/seeded/

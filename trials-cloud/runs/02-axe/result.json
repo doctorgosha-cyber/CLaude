@@ -1,0 +1,14 @@
+{
+  "id": 2,
+  "tool": "dequelabs/axe-core via playwright-core (headless Chromium)",
+  "versions": {"axe-core": "4.14.0", "playwright-core": "1.64.1", "chromium": "playwright build 1194 (pre-installed)"},
+  "licences": {"axe-core": "MPL-2.0 (axe.min.js loaded unmodified from node_modules; nothing bundled or edited)", "playwright-core": "Apache-2.0"},
+  "install": {"command": "npm i axe-core@4.14.0 playwright-core@1.64.1  (+ a Chromium: npx playwright-core install chromium, ~150 MB, not counted here)", "seconds": 4.7, "size_mb": 17, "windows": "yes: Node-only; Chromium/Edge binary on Windows is supported by Playwright"},
+  "fixtures": "fixtures/02-axe (KEY.json): 6 seeded pages A1..A6, 6 clean pages (review, sign-up form, interactive figure, table, video page, FAQ)",
+  "baseline": {"what": "our own three checks: unlabelled inputs, tap targets < 24 px (controls), outline:none rules; Playwright script runs/02-axe/baseline.mjs", "command": "node runs/02-axe/baseline.mjs clean seeded", "found": {"A1": false, "A2": false, "A3": false, "A4": true, "A5": false, "A6": false}, "recall": "1/6", "false_positives": 0, "runtime_s": 0.77, "note": "With inline text links included in the tap-target check (a literal reading of the rule) the baseline flags all 6 clean pages (nav links ~20 px tall); the number above excludes inline links, the fairer reading."},
+  "candidate_default": {"config": "axe.run(document) with defaults (all rules incl. best-practice)", "commands": ["node runs/02-axe/axe-run.mjs default clean seeded"], "found": {"A1": true, "A2": true, "A3": true, "A4": true, "A5": true, "A6": false}, "rules_hit": ["image-alt", "color-contrast", "button-name", "label", "aria-allowed-attr", "aria-roles"], "recall": "5/6", "false_positives": 0, "runtime_s": 3.8},
+  "candidate_tuned": {"config": "runOnly tags wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa; resultTypes violations", "commands": ["node runs/02-axe/axe-run.mjs tuned clean seeded"], "found": {"A1": true, "A2": true, "A3": true, "A4": true, "A5": true, "A6": false}, "recall": "5/6", "false_positives": 0, "runtime_s": 3.7},
+  "limits": ["A6 (script keyboard trap) is not detectable by axe; it needs a keyboard-driving test (Tab/Escape loop). Keep that one in our own script.", "axe checks the rendered DOM state only: dialogs that are hidden until a click are not analysed unless the test opens them.", "Contrast on text over images/gradients comes back 'incomplete', not a violation; the wrapper reports incomplete separately.", "Runtime ~0.3 s per page after the browser is up; the browser start is ~0.5 s."],
+  "verdict": "ADOPT",
+  "reason": "5/6 seeded defects vs 1/6 for our script, 0 false positives on 6 clean pages, 17 MB install, ~4 s for 12 pages. Keep our tap-target and keyboard checks alongside it."
+}

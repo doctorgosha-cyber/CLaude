@@ -1,0 +1,5 @@
+parameters:
+  level: 6
+  paths: [/home/user/CLaude/trials-cloud/fixtures/03-php/clean, /home/user/CLaude/trials-cloud/fixtures/03-php/seeded]
+  scanFiles:
+    - /tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools/phpstan/vendor/php-stubs/wordpress-stubs/wordpress-stubs.php

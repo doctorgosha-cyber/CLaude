@@ -1,0 +1,54 @@
+{
+  "id": 1,
+  "tool": "SYSTRAN/faster-whisper",
+  "versions": {"faster-whisper": "1.2.1", "ctranslate2": "4.8.4", "onnxruntime": "1.31.1", "av": "19.0.2", "huggingface_hub": "2.3.0", "tokenizers": "0.23.3", "numpy": "2.5.4", "python": "3.13.16", "espeak-ng (fixtures only)": "1.51", "ffmpeg (fixtures only)": "6.1.1", "full list": "runs/01-whisper/pip-freeze.txt"},
+  "licences": {
+    "faster-whisper": "MIT (pip metadata + PyPI)",
+    "ctranslate2": "MIT (pip metadata + PyPI)",
+    "onnxruntime": "MIT (pip metadata)",
+    "av (PyAV)": "BSD-3-Clause (License-Expression)",
+    "huggingface_hub": "Apache-2.0", "tokenizers": "Apache-2.0 (classifier)",
+    "numpy": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0 (License-Expression)",
+    "model (Systran/faster-whisper-base.en, -small.en)": "MIT: CTranslate2 conversions of OpenAI Whisper (MIT), as stated in the faster-whisper README / model cards. Not re-verified from huggingface.co here (host blocked).",
+    "fixtures": "synthetic: espeak-ng TTS of text written for this trial; no third-party audio"
+  },
+  "install": {
+    "command": "python3 -m venv venv && venv/bin/pip install faster-whisper==1.2.1",
+    "seconds": 37.0, "size_mb": 470,
+    "size_note": "venv on disk; models are extra and are downloaded on first use from huggingface.co: base.en ~145 MB, small.en ~480 MB (sizes from the Systran model cards, not measured here)",
+    "windows": "yes (verified from PyPI release files 2026-10-29): ctranslate2 4.8.4 ships cp39..cp315 win_amd64 wheels; onnxruntime 1.31.1 ships cp311..cp314 win_amd64 + win_arm64; faster-whisper 1.2.1 is a pure-Python py3-none-any wheel; av 19.0.2 and numpy carry the 'Operating System :: Microsoft :: Windows' classifier. CPU only is enough (compute_type int8); no CUDA needed."
+  },
+  "fixtures": "fixtures/01-whisper: 3 synthetic English product-explainer narrations (keyboard.wav 38.9 s / 6 cues, thermos.wav 30.2 s / 5 cues, kettle.wav 30.3 s / 5 cues; espeak-ng en-us -s 150, per-sentence synthesis, silence-trimmed, 16 kHz mono s16, 0.4 s gaps so cue times are exact; 3.2 MB total). Per file: <name>.clean.srt (control, correct) and <name>.seeded.srt. KEY.json: 8 defects = 5 text (D1 45->54, D3 dropped 'smooth', D4 'Polar'->'Arctic' Flask, D6 added 'under', D7 temperature->pressure) + 3 timing (D2 start +450 ms, D5 cue -600 ms, D8 cue +900 ms). check_srt.py (faster-whisper word_timestamps -> difflib alignment of normalised tokens to cues -> per-cue WER, missing number/name tokens, start/end error ms), score.py (recall vs KEY, FPs on controls, runtime), make-fixtures.sh + gen_fixtures.py + make-fixtures.log (every command).",
+  "baseline": {"what": "no ASR check (subtitles are timed from the script and the voice pipeline; nothing compares audio to cues)", "recall": "0/8", "false_positives": 0},
+  "logic_selftest": {
+    "what": "NOT an ASR measurement. score.py --mock feeds check_srt.py synthetic word timings derived from the clean SRTs (words spread evenly over each true cue) to verify the alignment, WER, number/name and timing logic end to end.",
+    "command": "venv/bin/python -I fixtures/01-whisper/score.py --name selftest --mock",
+    "found": {"D1": true, "D2": true, "D3": true, "D4": true, "D5": true, "D6": true, "D7": true, "D8": true},
+    "recall": "8/8", "false_positives": 0, "extra_findings_on_seeded": 0, "runtime_s": 0.26, "output": "runs/01-whisper/selftest-mock.json",
+    "note": "With the first-draft threshold 0.05 < WER <= 0.08 the three single-word defects (1 word in 13-15 = WER 0.067-0.077) were missed, so the default threshold is 0.05. Real ASR errors on the TTS voice will therefore also land above the threshold; that is what the blocked run would have measured."
+  },
+  "candidate_default": {
+    "config": "base.en, int8 on CPU, beam_size 1, word_timestamps=True, no VAD, WER threshold 0.05 per cue, timing limit 300 ms (end +200 ms slack), numbers normalised to digits, number/name tokens must be heard",
+    "commands": ["venv/bin/python -I fixtures/01-whisper/score.py --name default --out-dir runs/01-whisper --model base.en", "venv/bin/python -I fixtures/01-whisper/check_srt.py fixtures/01-whisper/keyboard.wav fixtures/01-whisper/keyboard.seeded.srt --model base.en"],
+    "found": {"D1": null, "D2": null, "D3": null, "D4": null, "D5": null, "D6": null, "D7": null, "D8": null},
+    "recall": null, "false_positives": null, "runtime_s": null,
+    "error": "httpx2.ProxyError: 403 Forbidden (huggingface_hub.snapshot_download of Systran/faster-whisper-base.en; agent proxy: 'gateway answered 403 to CONNECT (policy denial or upstream failure)', host huggingface.co:443; fails after 0.9 s on all 6 wav/srt pairs). Full traceback: runs/01-whisper/model-download.err; per-pair JSON: runs/01-whisper/default.*.json"
+  },
+  "candidate_tuned": {
+    "config": "small.en, int8 on CPU, beam_size 5, vad_filter=True (Silero VAD via onnxruntime), same thresholds",
+    "commands": ["venv/bin/python -I fixtures/01-whisper/score.py --name tuned --out-dir runs/01-whisper --model small.en --beam-size 5 --vad-filter"],
+    "found": {"D1": null, "D2": null, "D3": null, "D4": null, "D5": null, "D6": null, "D7": null, "D8": null},
+    "recall": null, "false_positives": null, "runtime_s": null,
+    "error": "same as default: httpx2.ProxyError: 403 Forbidden for huggingface.co (Systran/faster-whisper-small.en); runs/01-whisper/tuned.*.json"
+  },
+  "limits": [
+    "Model weights must come from huggingface.co on first run (or be copied into a folder and passed via --model-dir / WHISPER_MODEL_DIR); the sandbox denies that host, so no ASR ran here.",
+    "The checker is English-only as configured (base.en / small.en); the real task is 10 languages, which needs the multilingual 'base' / 'small' / 'medium' models (same API, --language xx), larger downloads and generally worse word timestamps for non-English.",
+    "Single-word defects force a per-cue WER threshold of 0.05 (one word in a <= 20-word cue); any ASR misrecognition of the TTS voice at that level is a false positive. The number/name rule is independent of the threshold and is the robust part.",
+    "Word end timestamps in Whisper are less precise than starts; the end check gets +200 ms slack. A start-only shift is still caught by the start check.",
+    "Fixture audio is espeak-ng (robotic). Real pipeline voices (neural TTS / human) usually transcribe better, so the sandbox numbers, once obtained, are a pessimistic bound for text and a fair test for timing.",
+    "CPU int8 runtime per 30-40 s clip was not measured; expect seconds for base.en and tens of seconds for small.en on a laptop CPU, plus a one-off model load."
+  ],
+  "verdict": "NOT RUN (blocked: huggingface.co denied by network policy)",
+  "reason": "Install, fixtures, checker, scorer and wrapper are complete and the detection logic passes an 8/8, 0-FP self-test on synthetic word timings, but the Whisper weights could not be fetched (proxy 403 to CONNECT huggingface.co:443), so recall/false positives/runtime of the real ASR are unmeasured. Owner can finish the trial locally with: bash runs/01-whisper/commands.sh (needs internet once, or a pre-downloaded model folder)."
+}

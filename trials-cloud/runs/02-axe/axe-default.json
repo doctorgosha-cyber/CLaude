@@ -1,0 +1,60 @@
+{
+ "config": "default",
+ "axe_version": "4.14.0",
+ "runtime_s": 3.807,
+ "files": {
+  "clean/comparison-table.html": [],
+  "clean/faq.html": [],
+  "clean/figure-keyboard.html": [],
+  "clean/newsletter.html": [],
+  "clean/review-thermos.html": [],
+  "clean/video-page.html": [],
+  "seeded/s1-missing-alt.html": [
+   {
+    "id": "image-alt",
+    "impact": "critical",
+    "nodes": 1,
+    "target": "img"
+   }
+  ],
+  "seeded/s2-low-contrast.html": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 1,
+    "target": ".faint"
+   }
+  ],
+  "seeded/s3-button-no-name.html": [
+   {
+    "id": "button-name",
+    "impact": "critical",
+    "nodes": 1,
+    "target": "#explode"
+   }
+  ],
+  "seeded/s4-missing-label.html": [
+   {
+    "id": "label",
+    "impact": "critical",
+    "nodes": 1,
+    "target": "input"
+   }
+  ],
+  "seeded/s5-aria-misuse.html": [
+   {
+    "id": "aria-allowed-attr",
+    "impact": "critical",
+    "nodes": 1,
+    "target": "div"
+   },
+   {
+    "id": "aria-roles",
+    "impact": "critical",
+    "nodes": 1,
+    "target": "p[role=\"banner-x\"]"
+   }
+  ],
+  "seeded/s6-keyboard-trap.html": []
+ }
+}

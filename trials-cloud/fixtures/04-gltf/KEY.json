@@ -1,0 +1,19 @@
+{
+  "source": {
+    "repo": "https://github.com/KhronosGroup/glTF-Sample-Assets (fetched from raw.githubusercontent.com, branch main, 2026-10-29)",
+    "files": {
+      "clean/Box.glb": {"path": "Models/Box/glTF-Binary/Box.glb", "licence": "CC-BY-4.0, (c) 2017 Cesium (see licences/Box.README.md, licences/Box.metadata.json)", "sha256": "ed52f7192b8311d700ac0ce80644e3852cd01537e4d62241b9acba023da3d54e", "bytes": 1664},
+      "clean/BoxTextured.glb": {"path": "Models/BoxTextured/glTF-Binary/BoxTextured.glb", "licence": "CC-BY-4.0, (c) 2017 Cesium; embedded texture is the Cesium logo (LicenseRef-LegalMark-Cesium, non-copyrightable mark) (see licences/BoxTextured.README.md)", "sha256": "b510eca2e2ef33f62f9ed57d6e7ce2d10ebb2bdebc4a8e59d347719ba81abdf4", "bytes": 5956}
+    },
+    "note": "Duck.glb was also fetched but discarded: it is SCEA Shared Source 1.0, not CC. No CC0 sample exists in the Khronos core set; CC-BY-4.0 with attribution is used instead."
+  },
+  "generator": "node make-corrupt.mjs (deterministic: parse GLB JSON+BIN chunks, mutate, rewrite with 4-byte padding; JSON is re-serialised without whitespace so seeded files are a few bytes smaller than the originals)",
+  "controls": ["clean/Box.glb", "clean/BoxTextured.glb"],
+  "seeded": {
+    "C1": {"file": "seeded/C1-accessor-count.glb", "from": "Box.glb", "defect": "accessors[2] (POSITION).count 24 -> 100; bufferView 1 holds only 24 strided VEC3 elements after byteOffset 288", "expect_validator": "ACCESSOR_TOO_LONG (error)", "expect_codes": ["ACCESSOR_TOO_LONG"]},
+    "C2": {"file": "seeded/C2-missing-bufferview.glb", "from": "Box.glb", "defect": "accessors[0] (indices).bufferView 0 -> 7; only bufferViews 0..1 exist", "expect_validator": "UNRESOLVED_REFERENCE (error) at /accessors/0/bufferView", "expect_codes": ["UNRESOLVED_REFERENCE"]},
+    "C3": {"file": "seeded/C3-index-oob.glb", "from": "Box.glb", "defect": "BIN: 6th uint16 index (bufferView 0, byte 586) set to 999; POSITION has 24 vertices; accessor max stays [23]", "expect_validator": "ACCESSOR_INDEX_OOB (error); ACCESSOR_MAX_MISMATCH is a secondary symptom", "expect_codes": ["ACCESSOR_INDEX_OOB"]},
+    "C4": {"file": "seeded/C4-nan-position.glb", "from": "Box.glb", "defect": "BIN: POSITION vertex 3 x-component (bufferView 1, byte 288+36) set to NaN; min/max unchanged", "expect_validator": "ACCESSOR_INVALID_FLOAT (error); ACCESSOR_MIN/MAX_MISMATCH secondary", "expect_codes": ["ACCESSOR_INVALID_FLOAT"]},
+    "C5": {"file": "seeded/C5-wrong-mimetype.glb", "from": "BoxTextured.glb", "defect": "images[0].mimeType 'image/png' -> 'image/jpeg' while the embedded bytes are a PNG", "expect_validator": "IMAGE_MIME_TYPE_INVALID (error)", "expect_codes": ["IMAGE_MIME_TYPE_INVALID"]}
+  }
+}

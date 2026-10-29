@@ -1,0 +1,96 @@
+{
+  "total_ms": 4833,
+  "results": [
+    {
+      "file": "/home/user/CLaude/trials-cloud/fixtures/04-gltf/clean/Box.glb",
+      "ms": 712,
+      "loaded": true,
+      "rendered": true,
+      "error": null,
+      "triangles": 12,
+      "bboxFinite": true,
+      "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "windowErrors": [],
+      "pngPath": "baseline-png/Box.png",
+      "consoleErrs": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud/fixtures/04-gltf/clean/BoxTextured.glb",
+      "ms": 390,
+      "loaded": true,
+      "rendered": true,
+      "error": null,
+      "triangles": 12,
+      "bboxFinite": true,
+      "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "windowErrors": [],
+      "pngPath": "baseline-png/BoxTextured.png",
+      "consoleErrs": []
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud/fixtures/04-gltf/seeded/C1-accessor-count.glb",
+      "ms": 281,
+      "loaded": false,
+      "rendered": false,
+      "error": "Invalid typed array length: 300",
+      "triangles": 0,
+      "bboxFinite": null,
+      "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "windowErrors": [],
+      "consoleErrs": []
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud/fixtures/04-gltf/seeded/C2-missing-bufferview.glb",
+      "ms": 244,
+      "loaded": false,
+      "rendered": false,
+      "error": "Cannot read properties of undefined (reading 'extensions')",
+      "triangles": 0,
+      "bboxFinite": null,
+      "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "windowErrors": [],
+      "consoleErrs": []
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud/fixtures/04-gltf/seeded/C3-index-oob.glb",
+      "ms": 382,
+      "loaded": true,
+      "rendered": true,
+      "error": null,
+      "triangles": 12,
+      "bboxFinite": true,
+      "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "windowErrors": [],
+      "pngPath": "baseline-png/C3-index-oob.png",
+      "consoleErrs": []
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud/fixtures/04-gltf/seeded/C4-nan-position.glb",
+      "ms": 403,
+      "loaded": true,
+      "rendered": true,
+      "error": null,
+      "triangles": 12,
+      "bboxFinite": true,
+      "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "windowErrors": [],
+      "pngPath": "baseline-png/C4-nan-position.png",
+      "consoleErrs": []
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud/fixtures/04-gltf/seeded/C5-wrong-mimetype.glb",
+      "ms": 351,
+      "loaded": true,
+      "rendered": true,
+      "error": null,
+      "triangles": 12,
+      "bboxFinite": true,
+      "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "windowErrors": [],
+      "pngPath": "baseline-png/C5-wrong-mimetype.png",
+      "consoleErrs": []
+    }
+  ]
+}

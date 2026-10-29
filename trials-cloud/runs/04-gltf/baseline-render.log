@@ -1,0 +1,8 @@
+Box.glb                      loaded=true rendered=true tris=12 bboxFinite=true 712ms  | console: Failed to load resource: the server responded with a status of 404 (Not Found)
+BoxTextured.glb              loaded=true rendered=true tris=12 bboxFinite=true 390ms  
+C1-accessor-count.glb        loaded=false rendered=false tris=0 bboxFinite=null 281ms ERROR: Invalid typed array length: 300 
+C2-missing-bufferview.glb    loaded=false rendered=false tris=0 bboxFinite=null 244ms ERROR: Cannot read properties of undefined (reading 'extensions') 
+C3-index-oob.glb             loaded=true rendered=true tris=12 bboxFinite=true 382ms  
+C4-nan-position.glb          loaded=true rendered=true tris=12 bboxFinite=true 403ms  
+C5-wrong-mimetype.glb        loaded=true rendered=true tris=12 bboxFinite=true 351ms  
+total_ms 4833 webgl WebGL 2.0 (OpenGL ES 3.0 Chromium)

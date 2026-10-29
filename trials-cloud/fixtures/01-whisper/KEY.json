@@ -1,0 +1,193 @@
+{
+  "task": "subtitle text + timing QA against narration audio (HANDOFF item 1)",
+  "tts": "espeak-ng 1.51, voice en-us, -s 150, per-sentence WAV -> ffmpeg 16 kHz mono s16, silence trimmed at -50 dB, concatenated with 0.4 s gaps and 0.5 s lead-in/out",
+  "timing_tolerance_ms": 300,
+  "files": [
+    {
+      "name": "keyboard",
+      "wav": "keyboard.wav",
+      "duration_s": 38.857,
+      "cues": 6,
+      "clean_srt": "keyboard.clean.srt",
+      "seeded_srt": "keyboard.seeded.srt",
+      "cue_times": [
+        [
+          0.5,
+          6.62
+        ],
+        [
+          7.02,
+          13.007
+        ],
+        [
+          13.407,
+          18.87
+        ],
+        [
+          19.27,
+          25.024
+        ],
+        [
+          25.424,
+          31.331
+        ],
+        [
+          31.731,
+          38.357
+        ]
+      ]
+    },
+    {
+      "name": "thermos",
+      "wav": "thermos.wav",
+      "duration_s": 30.228,
+      "cues": 5,
+      "clean_srt": "thermos.clean.srt",
+      "seeded_srt": "thermos.seeded.srt",
+      "cue_times": [
+        [
+          0.5,
+          6.699
+        ],
+        [
+          7.099,
+          11.778
+        ],
+        [
+          12.178,
+          18.006
+        ],
+        [
+          18.406,
+          22.894
+        ],
+        [
+          23.294,
+          29.728
+        ]
+      ]
+    },
+    {
+      "name": "kettle",
+      "wav": "kettle.wav",
+      "duration_s": 30.257,
+      "cues": 5,
+      "clean_srt": "kettle.clean.srt",
+      "seeded_srt": "kettle.seeded.srt",
+      "cue_times": [
+        [
+          0.5,
+          5.045
+        ],
+        [
+          5.445,
+          11.228
+        ],
+        [
+          11.628,
+          18.304
+        ],
+        [
+          18.704,
+          24.152
+        ],
+        [
+          24.552,
+          29.757
+        ]
+      ]
+    }
+  ],
+  "defects": [
+    {
+      "id": "D1",
+      "file": "keyboard",
+      "cue": 2,
+      "type": "text",
+      "subtype": "number_swap",
+      "original": "45 grams",
+      "seeded": "54 grams",
+      "srt": "keyboard.seeded.srt",
+      "expected_detection": "text finding on this cue (cue WER above threshold and/or a number/name token that the ASR did not say)"
+    },
+    {
+      "id": "D2",
+      "file": "keyboard",
+      "cue": 4,
+      "type": "timing",
+      "subtype": "start_shift_ms",
+      "shift_ms": 450,
+      "which": "start",
+      "srt": "keyboard.seeded.srt",
+      "expected_detection": "timing finding on this cue (|asr_start - srt_start| = 450 ms > 300 ms)"
+    },
+    {
+      "id": "D3",
+      "file": "keyboard",
+      "cue": 5,
+      "type": "text",
+      "subtype": "dropped_word",
+      "original": "the stroke smooth and",
+      "seeded": "the stroke and",
+      "srt": "keyboard.seeded.srt",
+      "expected_detection": "text finding on this cue (cue WER above threshold and/or a number/name token that the ASR did not say)"
+    },
+    {
+      "id": "D4",
+      "file": "thermos",
+      "cue": 1,
+      "type": "text",
+      "subtype": "wrong_product_name",
+      "original": "Polar Flask 500",
+      "seeded": "Arctic Flask 500",
+      "srt": "thermos.seeded.srt",
+      "expected_detection": "text finding on this cue (cue WER above threshold and/or a number/name token that the ASR did not say)"
+    },
+    {
+      "id": "D5",
+      "file": "thermos",
+      "cue": 3,
+      "type": "timing",
+      "subtype": "cue_shift_ms",
+      "shift_ms": -600,
+      "which": "both",
+      "srt": "thermos.seeded.srt",
+      "expected_detection": "timing finding on this cue (|asr_start - srt_start| = 600 ms > 300 ms)"
+    },
+    {
+      "id": "D6",
+      "file": "thermos",
+      "cue": 5,
+      "type": "text",
+      "subtype": "added_word",
+      "original": "weighs just 310 grams",
+      "seeded": "weighs just under 310 grams",
+      "srt": "thermos.seeded.srt",
+      "expected_detection": "text finding on this cue (cue WER above threshold and/or a number/name token that the ASR did not say)"
+    },
+    {
+      "id": "D7",
+      "file": "kettle",
+      "cue": 2,
+      "type": "text",
+      "subtype": "changed_word",
+      "original": "water temperature",
+      "seeded": "water pressure",
+      "srt": "kettle.seeded.srt",
+      "expected_detection": "text finding on this cue (cue WER above threshold and/or a number/name token that the ASR did not say)"
+    },
+    {
+      "id": "D8",
+      "file": "kettle",
+      "cue": 4,
+      "type": "timing",
+      "subtype": "cue_shift_ms",
+      "shift_ms": 900,
+      "which": "both",
+      "srt": "kettle.seeded.srt",
+      "expected_detection": "timing finding on this cue (|asr_start - srt_start| = 900 ms > 300 ms)"
+    }
+  ],
+  "expected_total": 8,
+  "controls_expected_findings": 0
+}

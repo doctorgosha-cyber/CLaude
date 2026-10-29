@@ -1,0 +1,20 @@
+1
+00:00:00,500 --> 00:00:05,045
+The Nimbus Kettle is an electric gooseneck kettle designed for pour over coffee.
+
+2
+00:00:05,445 --> 00:00:11,228
+A dial on the base sets the water temperature anywhere from 40 to 100 degrees Celsius.
+
+3
+00:00:11,628 --> 00:00:18,304
+The 1200 watt element brings 600 millilitres of water to the boil in about 3 minutes.
+
+4
+00:00:18,704 --> 00:00:24,152
+The narrow spout gives you a slow, steady stream, so the coffee grounds bloom evenly.
+
+5
+00:00:24,552 --> 00:00:29,757
+After boiling, the Nimbus Kettle holds the chosen temperature for 60 minutes.
+

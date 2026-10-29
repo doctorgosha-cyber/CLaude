@@ -1,0 +1,12 @@
+{"run":"t1-date-range-A-1","arm":"A","tokens":57184,"tool_uses":3,"duration_ms":18466}
+{"run":"t1-date-range-A-2","arm":"A","tokens":57058,"tool_uses":3,"duration_ms":18048}
+{"run":"t2-price-feed-A-1","arm":"A","tokens":58750,"tool_uses":4,"duration_ms":34042}
+{"run":"t2-price-feed-A-2","arm":"A","tokens":58452,"tool_uses":4,"duration_ms":29958}
+{"run":"t3-units-A-1","arm":"A","tokens":58960,"tool_uses":6,"duration_ms":29516}
+{"run":"t3-units-A-2","arm":"A","tokens":59036,"tool_uses":6,"duration_ms":37278}
+{"run":"t1-date-range-B-2","arm":"B","tokens":62840,"tool_uses":5,"duration_ms":42754}
+{"run":"t1-date-range-B-1","arm":"B","tokens":63739,"tool_uses":5,"duration_ms":46874}
+{"run":"t2-price-feed-B-1","arm":"B","tokens":63902,"tool_uses":6,"duration_ms":52859}
+{"run":"t3-units-B-1","arm":"B","tokens":64720,"tool_uses":6,"duration_ms":53932}
+{"run":"t3-units-B-2","arm":"B","tokens":64838,"tool_uses":8,"duration_ms":62575}
+{"run":"t2-price-feed-B-2","arm":"B","tokens":64913,"tool_uses":6,"duration_ms":69182}

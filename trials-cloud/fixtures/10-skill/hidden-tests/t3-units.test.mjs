@@ -1,0 +1,11 @@
+import { test } from 'node:test'; import assert from 'node:assert/strict';
+import { toGrams, toMillilitres, cToF, fToC } from '../src/units.mjs';
+const near = (a, b, eps = 0.1) => assert.ok(Math.abs(a - b) <= eps, `${a} != ${b} ±${eps}`);
+test('1 lb = 453.592 g', () => near(toGrams('1 lb'), 453.59));
+test('1 oz = 28.3495 g', () => near(toGrams('1 oz'), 28.35));
+test('1 lb 4 oz = 566.99 g', () => near(toGrams('1 lb 4 oz'), 566.99));
+test('2.2 lb = 997.9 g', () => near(toGrams('2.2 lb'), 997.9));
+test('metric untouched', () => { assert.equal(toGrams('1.2 kg'), 1200); assert.equal(toGrams('250 g'), 250); });
+test('volume untouched', () => { assert.equal(toMillilitres('0.75 l'), 750); near(toMillilitres('16 fl oz'), 473.2, 0.1); });
+test('temperature untouched', () => { assert.equal(cToF(100), 212); near(fToC(212), 100, 1e-9); });
+test('unparseable throws', () => assert.throws(() => toGrams('heavy'), TypeError));

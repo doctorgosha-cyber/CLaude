@@ -1,0 +1,75 @@
+{
+ "files": [
+  {
+   "file": "badge-style-use.svg",
+   "before": 841,
+   "after": 650,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "file": "editor-cruft.svg",
+   "before": 3023,
+   "after": 781,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "file": "icon-clip-mask.svg",
+   "before": 893,
+   "after": 605,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "file": "icon-play.svg",
+   "before": 479,
+   "after": 262,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "file": "icon-search.svg",
+   "before": 377,
+   "after": 246,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "file": "icon-star-rating.svg",
+   "before": 430,
+   "after": 331,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "file": "logo-anatomy-of-things.svg",
+   "before": 1132,
+   "after": 1007,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "file": "logo-gradient.svg",
+   "before": 883,
+   "after": 744,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "file": "spinner-animated.svg",
+   "before": 785,
+   "after": 644,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "file": "wordmark-text.svg",
+   "before": 565,
+   "after": 451,
+   "ok": true,
+   "problems": []
+  }
+ ],
+ "failed": 0
+}

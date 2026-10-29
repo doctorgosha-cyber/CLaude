@@ -1,0 +1,53 @@
+{
+ "label": "default",
+ "breakages": 12,
+ "files": {
+  "icon-search.svg": {
+   "broken": []
+  },
+  "icon-play.svg": {
+   "broken": []
+  },
+  "icon-star-rating.svg": {
+   "broken": []
+  },
+  "logo-anatomy-of-things.svg": {
+   "broken": [
+    "root attr role: expected \"img\", got \"undefined\"",
+    "id \"logoTitle\" missing",
+    "id \"logoDesc\" missing",
+    "dangling reference #logoTitle",
+    "dangling reference #logoDesc"
+   ]
+  },
+  "badge-style-use.svg": {
+   "broken": [
+    "id \"accent\" missing",
+    "id \"ribbon-tail\" missing",
+    "id \"tail\" missing"
+   ]
+  },
+  "logo-gradient.svg": {
+   "broken": [
+    "id \"brandGradient\" missing"
+   ]
+  },
+  "icon-clip-mask.svg": {
+   "broken": []
+  },
+  "spinner-animated.svg": {
+   "broken": [
+    "id \"pulse\" missing",
+    "<style> lacks \"#pulse\"",
+    "<style> lacks \"animation\""
+   ]
+  },
+  "wordmark-text.svg": {
+   "broken": []
+  },
+  "editor-cruft.svg": {
+   "broken": [],
+   "cruft_left": []
+  }
+ }
+}

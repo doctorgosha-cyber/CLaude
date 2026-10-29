@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<ruleset name="Nexus tuned">
+  <description>WordPress-Extra, errors only, without docs/formatting noise.</description>
+  <arg name="extensions" value="php"/>
+  <arg value="n"/>
+  <rule ref="WordPress-Extra">
+    <exclude name="WordPress.Files.FileName"/>
+    <exclude name="Generic.Files.LineLength"/>
+  </rule>
+</ruleset>

@@ -1,0 +1,291 @@
+{
+ "id": 6,
+ "tool": "svg/svgo",
+ "versions": {
+  "svgo": "4.1.0",
+  "node": "22.22.0",
+  "playwright-core": "1.64.1 (raster harness only)",
+  "chromium": "playwright build 1194 (raster harness only)",
+  "pixelmatch": "7.1.0 (harness only)",
+  "pngjs": "7.0.0 (harness only)",
+  "sax": "1.6.1 (svgo dependency, reused by check-key.mjs)"
+ },
+ "licences": {
+  "svgo": "MIT",
+  "csso": "MIT (dep)",
+  "css-tree": "MIT (dep)",
+  "sax": "BlueOak-1.0.0 (dep)",
+  "playwright-core": "Apache-2.0",
+  "pixelmatch": "ISC",
+  "pngjs": "MIT"
+ },
+ "install": {
+  "command": "npm i svgo@4.1.0",
+  "seconds": 4.8,
+  "size_mb": 12,
+  "packages": 19,
+  "extra_for_harness": "npm i pixelmatch@7.1.0 pngjs@7.0.0 (0.5 s, +1 MB; only for the parity measurement, not needed at build time)",
+  "windows": "yes: pure JavaScript, Node >= 16, no native modules; the CLI (svgo.cmd shim) and svgo.config.mjs work unchanged on Windows. The raster harness needs Playwright Chromium, also fine on Windows but not part of the build step."
+ },
+ "fixtures": "fixtures/06-svgo/in: 10 synthetic SVGs (3 icons 24x24; a11y logo with title/desc/role/aria-labelledby; badge with <style> #ids + <use href>; gradient url(#id); clipPath+mask; SMIL + CSS @keyframes spinner; text with font-family; Inkscape/Illustrator cruft). KEY.json seeds 58 preservation requirements (viewBox, ids, role/aria, title/desc, style/animation/text/font); the originals pass all of them (baseline-check.json).",
+ "seeded_requirements": 58,
+ "baseline": {
+  "what": "SVG as-is",
+  "bytes_total": 9408,
+  "gzip_bytes_total": 4910,
+  "breakages": 0
+ },
+ "candidate_default": {
+  "config": "svgo preset-default, no config file (`svgo -f in -o out`)",
+  "commands": [
+   "svgo -f fixtures/06-svgo/in -o runs/06-svgo/out-default",
+   "node check-key.mjs KEY.json out-default default",
+   "node raster.mjs fixtures/06-svgo/in out-default out-tuned png"
+  ],
+  "bytes_total": 5253,
+  "saved_pct": 44.2,
+  "gzip_bytes_total": 3146,
+  "gzip_saved_pct": 35.9,
+  "breakages": 12,
+  "files_broken": 4,
+  "breakage_detail": [
+   {
+    "file": "logo-anatomy-of-things.svg",
+    "broken": [
+     "root attr role: expected \"img\", got \"undefined\"",
+     "id \"logoTitle\" missing",
+     "id \"logoDesc\" missing",
+     "dangling reference #logoTitle",
+     "dangling reference #logoDesc"
+    ]
+   },
+   {
+    "file": "badge-style-use.svg",
+    "broken": [
+     "id \"accent\" missing",
+     "id \"ribbon-tail\" missing",
+     "id \"tail\" missing"
+    ]
+   },
+   {
+    "file": "logo-gradient.svg",
+    "broken": [
+     "id \"brandGradient\" missing"
+    ]
+   },
+   {
+    "file": "spinner-animated.svg",
+    "broken": [
+     "id \"pulse\" missing",
+     "<style> lacks \"#pulse\"",
+     "<style> lacks \"animation\""
+    ]
+   }
+  ],
+  "breakage_severity": "1 hard accessibility break (logo: role=img removed by removeUnknownsAndDefaults keepRoleAttr=false; cleanupIds renames the title/desc ids but does not rewrite aria-labelledby, which now points at nothing). 11 hook breaks: ids referenced only by <style>/url()/href are minified or removed after inlineStyles, so site CSS/JS that targets #accent, #pulse, #brandGradient stops working. Pixels unchanged in every case.",
+  "max_pixel_diff_pct": 0,
+  "runtime_s": 0.57
+ },
+ "candidate_tuned": {
+  "config": "fixtures/06-svgo/svgo.config.mjs: preset-default with multipass; removeDesc, cleanupIds, inlineStyles, minifyStyles, removeHiddenElems off; removeUnknownsAndDefaults {keepRoleAttr:true, keepAriaAttrs:true}. (removeViewBox/removeTitle are not in preset-default in svgo 4; overriding them there is an error.)",
+  "commands": [
+   "svgo --config fixtures/06-svgo/svgo.config.mjs -f fixtures/06-svgo/in -o runs/06-svgo/out-tuned",
+   "node check-key.mjs KEY.json out-tuned tuned",
+   "node raster.mjs fixtures/06-svgo/in out-default out-tuned png"
+  ],
+  "bytes_total": 5721,
+  "saved_pct": 39.2,
+  "gzip_bytes_total": 3371,
+  "gzip_saved_pct": 31.3,
+  "breakages": 0,
+  "files_broken": 0,
+  "breakage_detail": [],
+  "max_pixel_diff_pct": 0,
+  "runtime_s": 0.47
+ },
+ "parity_method": "Each SVG inlined in an HTML page, CSS width 512px (height from viewBox), headless Chromium screenshot, pixelmatch threshold 0.1. Animated spinner: SMIL paused + setCurrentTime and Web Animations paused + currentTime, compared at t=0 and t=400 ms. Harness controls: original t=0 vs t=400 ms differ by 20.08 % (seek works); a recoloured/shifted icon-play differs from the original by 51.07 % (diff detects change).",
+ "wrapper": {
+  "file": "runs/06-svgo/wrapper-sketch.mjs (32 lines)",
+  "tested": "tuned config: exit 0, 10/10 ok, output byte-identical to the CLI run; plain preset-default: exit 1, 5 files / 11 problems (same files the KEY check flags)"
+ },
+ "per_file": [
+  {
+   "file": "badge-style-use.svg",
+   "before": 841,
+   "default": 536,
+   "tuned": 650,
+   "gz_before": 522,
+   "gz_default": 357,
+   "gz_tuned": 426,
+   "saved_default_pct": 36.3,
+   "saved_tuned_pct": 22.7,
+   "diff_default_pct": 0,
+   "diff_tuned_pct": 0,
+   "broken_default": [
+    "id \"accent\" missing",
+    "id \"ribbon-tail\" missing",
+    "id \"tail\" missing"
+   ],
+   "broken_tuned": []
+  },
+  {
+   "file": "editor-cruft.svg",
+   "before": 3023,
+   "default": 623,
+   "tuned": 781,
+   "gz_before": 1222,
+   "gz_default": 308,
+   "gz_tuned": 377,
+   "saved_default_pct": 79.4,
+   "saved_tuned_pct": 74.2,
+   "diff_default_pct": 0,
+   "diff_tuned_pct": 0,
+   "broken_default": [],
+   "broken_tuned": []
+  },
+  {
+   "file": "icon-clip-mask.svg",
+   "before": 893,
+   "default": 573,
+   "tuned": 605,
+   "gz_before": 443,
+   "gz_default": 338,
+   "gz_tuned": 353,
+   "saved_default_pct": 35.8,
+   "saved_tuned_pct": 32.3,
+   "diff_default_pct": 0,
+   "diff_tuned_pct": 0,
+   "broken_default": [],
+   "broken_tuned": []
+  },
+  {
+   "file": "icon-play.svg",
+   "before": 479,
+   "default": 247,
+   "tuned": 262,
+   "gz_before": 320,
+   "gz_default": 193,
+   "gz_tuned": 206,
+   "saved_default_pct": 48.4,
+   "saved_tuned_pct": 45.3,
+   "diff_default_pct": 0,
+   "diff_tuned_pct": 0,
+   "broken_default": [],
+   "broken_tuned": []
+  },
+  {
+   "file": "icon-search.svg",
+   "before": 377,
+   "default": 246,
+   "tuned": 246,
+   "gz_before": 265,
+   "gz_default": 185,
+   "gz_tuned": 185,
+   "saved_default_pct": 34.7,
+   "saved_tuned_pct": 34.7,
+   "diff_default_pct": 0,
+   "diff_tuned_pct": 0,
+   "broken_default": [],
+   "broken_tuned": []
+  },
+  {
+   "file": "icon-star-rating.svg",
+   "before": 430,
+   "default": 331,
+   "tuned": 331,
+   "gz_before": 298,
+   "gz_default": 234,
+   "gz_tuned": 234,
+   "saved_default_pct": 23,
+   "saved_tuned_pct": 23,
+   "diff_default_pct": 0,
+   "diff_tuned_pct": 0,
+   "broken_default": [],
+   "broken_tuned": []
+  },
+  {
+   "file": "logo-anatomy-of-things.svg",
+   "before": 1132,
+   "default": 943,
+   "tuned": 1007,
+   "gz_before": 592,
+   "gz_default": 514,
+   "gz_tuned": 542,
+   "saved_default_pct": 16.7,
+   "saved_tuned_pct": 11,
+   "diff_default_pct": 0,
+   "diff_tuned_pct": 0,
+   "broken_default": [
+    "root attr role: expected \"img\", got \"undefined\"",
+    "id \"logoTitle\" missing",
+    "id \"logoDesc\" missing",
+    "dangling reference #logoTitle",
+    "dangling reference #logoDesc"
+   ],
+   "broken_tuned": []
+  },
+  {
+   "file": "logo-gradient.svg",
+   "before": 883,
+   "default": 714,
+   "tuned": 744,
+   "gz_before": 402,
+   "gz_default": 342,
+   "gz_tuned": 352,
+   "saved_default_pct": 19.1,
+   "saved_tuned_pct": 15.7,
+   "diff_default_pct": 0,
+   "diff_tuned_pct": 0,
+   "broken_default": [
+    "id \"brandGradient\" missing"
+   ],
+   "broken_tuned": []
+  },
+  {
+   "file": "spinner-animated.svg",
+   "before": 785,
+   "default": 589,
+   "tuned": 644,
+   "gz_before": 466,
+   "gz_default": 365,
+   "gz_tuned": 386,
+   "saved_default_pct": 25,
+   "saved_tuned_pct": 18,
+   "diff_default_pct": 0,
+   "diff_tuned_pct": 0,
+   "broken_default": [
+    "id \"pulse\" missing",
+    "<style> lacks \"#pulse\"",
+    "<style> lacks \"animation\""
+   ],
+   "broken_tuned": []
+  },
+  {
+   "file": "wordmark-text.svg",
+   "before": 565,
+   "default": 451,
+   "tuned": 451,
+   "gz_before": 380,
+   "gz_default": 310,
+   "gz_tuned": 310,
+   "saved_default_pct": 20.2,
+   "saved_tuned_pct": 20.2,
+   "diff_default_pct": 0,
+   "diff_tuned_pct": 0,
+   "broken_default": [],
+   "broken_tuned": []
+  }
+ ],
+ "limits": [
+  "Fixtures are synthetic (10 files, 9.4 KB total): written like the site's own icons, but not the site's real files; absolute savings on real logos will differ.",
+  "Pixel parity measured in Chromium only (one engine, one size, one font set); Firefox/Safari and <img>/CSS-background embedding not tested. 0 % diff at threshold 0.1 is strict but not proof of identical rendering everywhere.",
+  "Animation parity is two frames (t=0, t=400 ms) with paused/seeked SMIL + CSS animations, not a full timeline comparison.",
+  "The tuned config gives up 5 points of raw saving (39.2 % vs 44.2 %) to keep ids, <style> and role/aria. Per-file savings 11-74 %; smallest on the a11y logo and the gradient.",
+  "svgo 4 preset-default no longer touches viewBox or <title>, but still drops role=img, renames/removes ids and inlines <style>; every default-config breakage is a configuration matter, not a bug. svgo cleanupIds does not treat aria-labelledby as an id reference.",
+  "Structural checks use the sax parser (an svgo dependency), not a full SVG DOM; the wrapper sketch uses regexes and assumes well-formed SVG with double-quoted attributes.",
+  "The wrapper sketch was run from a directory where `svgo` resolves (scratchpad); in the site repo it needs svgo in devDependencies.",
+  "editor-cruft.svg: the tuned config keeps the display:none guide layer (removeHiddenElems off, about 60 B); re-enable the plugin if hidden layers are never scripted."
+ ],
+ "verdict": "ADOPT",
+ "reason": "Tuned config: -39.2 % bytes (-31.3 % gzipped) across 10 files, 0 of 58 seeded requirements broken, 0.000 % pixel diff on every file and both animation frames, 0.47 s for 10 files, pure-JS MIT tool that runs on Windows. svgo defaults are NOT safe for this site: 12 breakages in 4 files including a real accessibility break on the logo. Adopt only with the tuned config plus the post-check wrapper, which turned the default-config breakages into exit 1 in testing."
+}

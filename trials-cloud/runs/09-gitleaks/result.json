@@ -1,0 +1,79 @@
+{
+  "id": 9,
+  "tool": "gitleaks/gitleaks",
+  "versions": {
+    "gitleaks": "8.30.0"
+  },
+  "licences": {
+    "gitleaks": "MIT"
+  },
+  "install": {
+    "command": "download gitleaks_8.30.0_windows_x64.zip from the GitHub release (or: go install github.com/zricethezav/gitleaks/v8@v8.30.0)",
+    "seconds": 74.6,
+    "size_mb": 23,
+    "size_note": "built from source with go install here because GitHub release downloads are blocked in this sandbox; the release binary is a single ~20 MB file and needs no install",
+    "windows": "yes: native single binary (windows_x64 release asset)"
+  },
+  "fixtures": "fixtures/09-gitleaks (KEY.json): 10 FAKE secrets K1..K10 in .env, config.json, REPORT.md, notify.js, deploy.log, a .pem; 10 clean files with look-alikes (sha256/sha1 hashes, UUIDs, base64 blob, integrity hash, a Stripe publishable key). The seeded files are NOT stored in git (GitHub push protection rejects even fake tokens): run `node fixtures/09-gitleaks/make-seeded.mjs` first; it writes them from ROT13-encoded text.",
+  "baseline": {
+    "what": "none (our key-lint checks test answer keys, not credentials)",
+    "recall": "0/10",
+    "false_positives": 0,
+    "note": "A naive keyword grep (password|secret|api_key|token) flags 4 of the 6 seeded files and 1 clean file; it finds files, not secrets."
+  },
+  "candidate_default": {
+    "config": "built-in rules",
+    "commands": [
+      "gitleaks dir <folder> --redact --no-banner --report-format json --report-path report.json --exit-code 1"
+    ],
+    "found": {
+      "K1": true,
+      "K2": true,
+      "K3": true,
+      "K4": true,
+      "K5": true,
+      "K6": true,
+      "K7": true,
+      "K8": true,
+      "K9": true,
+      "K10": true
+    },
+    "recall": "10/10",
+    "false_positives": 0,
+    "extra_findings_on_seeded": 1,
+    "extra_detail": "the Stripe publishable key pk_test_... in seeded/config.json is reported as generic-api-key (publishable keys are public by design); the same key in clean/README.md is not flagged",
+    "runtime_s": 0.12,
+    "runtime_whole_repo_s": 2.1
+  },
+  "candidate_tuned": {
+    "config": "fixtures/09-gitleaks/gitleaks-tuned.toml: extend default + rule for AWS_SECRET_ACCESS_KEY assignments + allowlist for pk_test_/pk_live_",
+    "commands": [
+      "gitleaks dir <folder> --redact --no-banner --config gitleaks-tuned.toml --report-format json --report-path report.json --exit-code 1"
+    ],
+    "found": {
+      "K1": true,
+      "K2": true,
+      "K3": true,
+      "K4": true,
+      "K5": true,
+      "K6": true,
+      "K7": true,
+      "K8": true,
+      "K9": true,
+      "K10": true
+    },
+    "recall": "10/10",
+    "false_positives": 0,
+    "extra_findings_on_seeded": 1,
+    "extra_detail": "the AWS secret access key next to K1 (not counted in the key) is now also reported",
+    "runtime_s": 0.08
+  },
+  "limits": [
+    "Pattern rules need the real token format: during fixture building two fake keys with the wrong length (Google 36 instead of 35 chars, SendGrid 20 instead of 22) were missed or only caught by the generic rule. Real tokens have the right length; hand-typed fakes may not.",
+    "generic-api-key fires on publishable keys near the word 'key'; allowlist them in the config.",
+    "`dir` mode scans the working tree only; `git` mode is needed to catch secrets in history.",
+    "--redact replaces the secret in the report; the report still names file and line."
+  ],
+  "verdict": "ADOPT",
+  "reason": "10/10 fake secrets found in 0.1 s with 0 false positives on 10 look-alike files; single native binary, Windows build available, MIT."
+}

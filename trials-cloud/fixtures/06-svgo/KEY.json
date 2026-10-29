@@ -1,0 +1,13 @@
+{
+  "_doc": "Seeded preservation requirements per fixture. Checked structurally by runs/06-svgo/check-key.mjs. Keys: viewBox (root attr must equal), rootAttrs (root attrs with exact value), ids (element ids that must exist literally, e.g. because site CSS / aria / external code targets them), elements (tag names that must still exist), refsResolve (every url(#x)/href=#x in the file must point at an existing id), styleContains (substrings that must remain in a <style> block), textContains (visible text that must remain), fontFamilyContains (a text/tspan or ancestor must keep a font-family containing this), title (root <title> text), desc (root <desc> present). shouldRemove is informational (expected cruft removal), not a breakage.",
+  "icon-search.svg":            {"viewBox": "0 0 24 24", "rootAttrs": {"stroke": "currentColor"}, "elements": ["path"], "refsResolve": true},
+  "icon-play.svg":              {"viewBox": "0 0 24 24", "elements": ["path"], "refsResolve": true},
+  "icon-star-rating.svg":       {"viewBox": "0 0 24 24", "elements": ["path"], "refsResolve": true},
+  "logo-anatomy-of-things.svg": {"viewBox": "0 0 320 80", "rootAttrs": {"role": "img", "aria-labelledby": "logoTitle logoDesc"}, "title": "Anatomy of Things", "desc": true, "ids": ["logoTitle", "logoDesc"], "textContains": ["ANATOMY", "of Things"], "fontFamilyContains": "Inter", "refsResolve": true},
+  "badge-style-use.svg":        {"viewBox": "0 0 120 40", "ids": ["accent", "ribbon-tail", "tail"], "elements": ["use", "text"], "textContains": ["EDITOR'S CHOICE"], "refsResolve": true},
+  "logo-gradient.svg":          {"viewBox": "0 0 96 96", "ids": ["brandGradient"], "elements": ["linearGradient", "radialGradient", "stop"], "refsResolve": true},
+  "icon-clip-mask.svg":         {"viewBox": "0 0 64 64", "elements": ["clipPath", "mask"], "refsResolve": true},
+  "spinner-animated.svg":       {"viewBox": "0 0 48 48", "ids": ["pulse"], "elements": ["animateTransform", "style"], "styleContains": ["@keyframes", "#pulse", "animation"], "refsResolve": true},
+  "wordmark-text.svg":          {"viewBox": "0 0 240 48", "elements": ["text", "tspan"], "textContains": ["ANATOMY", "THINGS", "v2"], "fontFamilyContains": "Space Grotesk", "refsResolve": true},
+  "editor-cruft.svg":           {"viewBox": "0 0 32 32", "elements": ["path"], "refsResolve": true, "shouldRemove": ["inkscape:", "sodipodi:", "<metadata", "<!DOCTYPE", "<!--", "i:pgfRef", "enable-background"]}
+}

@@ -1,0 +1,88 @@
+{
+ "recall": "8/8",
+ "matched_ids": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8
+ ],
+ "missed_ids": [],
+ "false_positives": 0,
+ "false_positives_seeded_s": [],
+ "false_positives_control_s": [],
+ "timing_error_ms_mean": 41.8,
+ "timing_error_ms_max": 217.0,
+ "tolerance_s": 0.25,
+ "matches": [
+  {
+   "id": 1,
+   "type": "hard",
+   "true_s": 3.0,
+   "det_s": 3.0,
+   "err_ms": 0.0
+  },
+  {
+   "id": 2,
+   "type": "hard",
+   "true_s": 7.0,
+   "det_s": 7.0,
+   "err_ms": 0.0
+  },
+  {
+   "id": 3,
+   "type": "hard",
+   "true_s": 10.0,
+   "det_s": 10.0,
+   "err_ms": 0.0
+  },
+  {
+   "id": 4,
+   "type": "crossfade",
+   "true_s": 13.75,
+   "det_s": 13.867,
+   "err_ms": 117.0
+  },
+  {
+   "id": 5,
+   "type": "hard",
+   "true_s": 16.5,
+   "det_s": 16.5,
+   "err_ms": 0.0
+  },
+  {
+   "id": 6,
+   "type": "hard",
+   "true_s": 20.5,
+   "det_s": 20.5,
+   "err_ms": 0.0
+  },
+  {
+   "id": 7,
+   "type": "crossfade",
+   "true_s": 23.25,
+   "det_s": 23.033,
+   "err_ms": 217.0
+  },
+  {
+   "id": 8,
+   "type": "hard",
+   "true_s": 27.0,
+   "det_s": 27.0,
+   "err_ms": 0.0
+  }
+ ],
+ "detected_seeded_s": [
+  3.0,
+  7.0,
+  10.0,
+  13.867,
+  16.5,
+  20.5,
+  23.033,
+  27.0
+ ]
+}

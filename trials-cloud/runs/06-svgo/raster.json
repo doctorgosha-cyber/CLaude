@@ -1,0 +1,132 @@
+{
+ "badge-style-use.svg": {
+  "default": {
+   "pct": 0,
+   "differing": 0,
+   "total": 87552
+  },
+  "tuned": {
+   "pct": 0,
+   "differing": 0,
+   "total": 87552
+  }
+ },
+ "editor-cruft.svg": {
+  "default": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  },
+  "tuned": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  }
+ },
+ "icon-clip-mask.svg": {
+  "default": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  },
+  "tuned": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  }
+ },
+ "icon-play.svg": {
+  "default": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  },
+  "tuned": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  }
+ },
+ "icon-search.svg": {
+  "default": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  },
+  "tuned": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  }
+ },
+ "icon-star-rating.svg": {
+  "default": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  },
+  "tuned": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  }
+ },
+ "logo-anatomy-of-things.svg": {
+  "default": {
+   "pct": 0,
+   "differing": 0,
+   "total": 65536
+  },
+  "tuned": {
+   "pct": 0,
+   "differing": 0,
+   "total": 65536
+  }
+ },
+ "logo-gradient.svg": {
+  "default": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  },
+  "tuned": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  }
+ },
+ "spinner-animated.svg": {
+  "default-t0": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  },
+  "tuned-t0": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  },
+  "default-t400": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  },
+  "tuned-t400": {
+   "pct": 0,
+   "differing": 0,
+   "total": 262144
+  }
+ },
+ "wordmark-text.svg": {
+  "default": {
+   "pct": 0,
+   "differing": 0,
+   "total": 52224
+  },
+  "tuned": {
+   "pct": 0,
+   "differing": 0,
+   "total": 52224
+  }
+ }
+}

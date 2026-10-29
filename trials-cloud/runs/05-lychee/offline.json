@@ -1,0 +1,135 @@
+{
+  "total": 100,
+  "successful": 24,
+  "unknown": 0,
+  "unsupported": 0,
+  "timeouts": 0,
+  "redirects": 0,
+  "excludes": 60,
+  "errors": 16,
+  "cached": 0,
+  "success_map": {},
+  "error_map": {
+    "site/index.html": [
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/reviews/kettle.html#safety",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/assets/fonts/inter.woff2",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/figures/kettle-exploded.html",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/about.html#careers",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/reviews/toaster.html",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/reviews/thermos.html#price-history",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/images/hero-2026.png",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/figures/switch.html#legend",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      }
+    ],
+    "docs/README.md": [
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/reviews/toaster.html",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/images/hero-2026.png",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/about.html#careers",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/docs/CHANGELOG.md",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/site/reviews/kettle.html#safety",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/docs/README.md#deploy",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/docs/CONTRIBUTING.md#code-of-conduct",
+        "status": {
+          "text": "Cannot find fragment",
+          "details": "Fragment not found in document. Check if fragment exists or page structure"
+        }
+      },
+      {
+        "url": "file:///home/user/CLaude/trials-cloud/fixtures/05-lychee/docs/scripts/build.mjs",
+        "status": {
+          "text": "Cannot find file",
+          "details": "File not found. Check if file exists and path is correct"
+        }
+      }
+    ]
+  },
+  "suggestion_map": {},
+  "redirect_map": {},
+  "excluded_map": {},
+  "duration_secs": 0,
+  "detailed_stats": false
+}

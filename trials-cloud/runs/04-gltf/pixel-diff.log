@@ -1,0 +1,4 @@
+{"a":"baseline-png/Box.png","b":"optimized-png/Box.default.png","differing":0,"total":65536,"pct":0}
+{"a":"baseline-png/Box.png","b":"optimized-png/Box.tuned.png","differing":0,"total":65536,"pct":0}
+{"a":"baseline-png/BoxTextured.png","b":"optimized-png/BoxTextured.default.png","differing":0,"total":65536,"pct":0}
+{"a":"baseline-png/BoxTextured.png","b":"optimized-png/BoxTextured.tuned.png","differing":0,"total":65536,"pct":0}

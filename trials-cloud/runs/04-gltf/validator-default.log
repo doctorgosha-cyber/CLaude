@@ -1,0 +1,8 @@
+Box.glb                      err=0 warn=0 info=0 hint=0 26.4ms 
+BoxTextured.glb              err=0 warn=0 info=0 hint=0 5.3ms 
+C1-accessor-count.glb        err=2 warn=0 info=0 hint=0 3.4ms [0]ACCESSOR_TOO_LONG@/accessors/2 [0]MESH_PRIMITIVE_UNEQUAL_ACCESSOR_COUNT@/meshes/0/primitives/0/attributes/POSITION
+C2-missing-bufferview.glb    err=1 warn=0 info=1 hint=0 3.2ms [0]UNRESOLVED_REFERENCE@/accessors/0/bufferView [2]UNUSED_OBJECT@/bufferViews/0
+C3-index-oob.glb             err=3 warn=0 info=0 hint=0 2.9ms [0]ACCESSOR_INDEX_OOB@/meshes/0/primitives/0/indices [0]ACCESSOR_MAX_MISMATCH@/accessors/0/max/0 [0]ACCESSOR_ELEMENT_OUT_OF_MAX_BOUND@/accessors/0/max/0
+C4-nan-position.glb          err=1 warn=0 info=0 hint=0 3.2ms [0]ACCESSOR_INVALID_FLOAT@/accessors/2
+C5-wrong-mimetype.glb        err=1 warn=0 info=0 hint=0 2.9ms [0]IMAGE_MIME_TYPE_INVALID@/images/0/bufferView
+total_ms 47.5

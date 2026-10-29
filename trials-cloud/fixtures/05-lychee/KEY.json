@@ -1,0 +1,49 @@
+{
+ "fixture": "05-lychee",
+ "files": {
+  "site/index.html": {
+   "total": 50,
+   "ok": 39,
+   "missing_file": [
+    "reviews/toaster.html",
+    "figures/kettle-exploded.html",
+    "assets/fonts/inter.woff2",
+    "images/hero-2026.png"
+   ],
+   "missing_fragment": [
+    "reviews/thermos.html#price-history",
+    "reviews/kettle.html#safety",
+    "figures/switch.html#legend",
+    "about.html#careers"
+   ],
+   "dead_external": [
+    "https://shop.thermos-deals.invalid/offer/42",
+    "https://cdn.anatomyofthings.invalid/figures/switch.glb",
+    "https://api.pricefeed.invalid/v1/latest"
+   ]
+  },
+  "docs/README.md": {
+   "total": 50,
+   "ok": 39,
+   "missing_file": [
+    "CHANGELOG.md",
+    "../site/reviews/toaster.html",
+    "scripts/build.mjs",
+    "../site/images/hero-2026.png"
+   ],
+   "missing_fragment": [
+    "CONTRIBUTING.md#code-of-conduct",
+    "README.md#deploy",
+    "../site/about.html#careers",
+    "../site/reviews/kettle.html#safety"
+   ],
+   "dead_external": [
+    "https://shop.thermos-deals.invalid/offer/42",
+    "https://cdn.anatomyofthings.invalid/figures/switch.glb",
+    "https://api.pricefeed.invalid/v1/latest"
+   ]
+  }
+ },
+ "seeded_total_per_file": 11,
+ "note": "Dead external links use the reserved .invalid TLD (RFC 2606), so no real host is contacted. External 'ok' links are public home/docs pages; a transient failure on one of them is a false positive of the online mode, record it as such."
+}

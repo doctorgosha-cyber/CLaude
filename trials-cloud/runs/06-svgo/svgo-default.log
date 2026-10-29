@@ -1,0 +1,42 @@
+Processing directory '/home/user/CLaude/trials-cloud/fixtures/06-svgo/in':
+
+
+badge-style-use.svg:
+Done in 48 ms!
+0.821 KiB - 36.3% = 0.523 KiB
+
+logo-anatomy-of-things.svg:
+Done in 5 ms!
+1.105 KiB - 16.7% = 0.921 KiB
+
+icon-play.svg:
+Done in 2 ms!
+0.468 KiB - 48.4% = 0.241 KiB
+
+editor-cruft.svg:
+Done in 7 ms!
+2.952 KiB - 79.4% = 0.608 KiB
+
+icon-clip-mask.svg:
+Done in 5 ms!
+0.872 KiB - 35.8% = 0.56 KiB
+
+logo-gradient.svg:
+Done in 2 ms!
+0.862 KiB - 19.1% = 0.697 KiB
+
+spinner-animated.svg:
+Done in 10 ms!
+0.767 KiB - 25% = 0.575 KiB
+
+icon-search.svg:
+Done in 3 ms!
+0.368 KiB - 34.7% = 0.24 KiB
+
+icon-star-rating.svg:
+Done in 1 ms!
+0.42 KiB - 23% = 0.323 KiB
+
+wordmark-text.svg:
+Done in 1 ms!
+0.552 KiB - 20.2% = 0.44 KiB

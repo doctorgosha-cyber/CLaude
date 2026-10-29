@@ -1,0 +1,33 @@
+{
+  "clip": "seeded.mp4",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "duration_s": 30.0,
+  "frames": 900,
+  "made_by": "make-clip.sh (ffmpeg 6.1.1 lavfi sources only: color/testsrc/mandelbrot/smptebars/testsrc2/gradients; concat + xfade=fade 0.5 s; shot 8 is a panning overlay; libx264 crf 28)",
+  "shots": [
+    {"n": 1, "src": "color navy",              "motion": false, "start_s": 0.0},
+    {"n": 2, "src": "testsrc",                 "motion": true,  "start_s": 3.0},
+    {"n": 3, "src": "color red",               "motion": false, "start_s": 7.0},
+    {"n": 4, "src": "mandelbrot (zoom)",       "motion": true,  "start_s": 10.0},
+    {"n": 5, "src": "smptebars",               "motion": false, "start_s": 13.5, "note": "fades in 13.5-14.0"},
+    {"n": 6, "src": "testsrc2",                "motion": true,  "start_s": 16.5},
+    {"n": 7, "src": "color yellow",            "motion": false, "start_s": 20.5},
+    {"n": 8, "src": "purple + panning rgbtestsrc", "motion": true,  "start_s": 23.0, "note": "fades in 23.0-23.5"},
+    {"n": 9, "src": "color teal",              "motion": false, "start_s": 27.0}
+  ],
+  "cuts": [
+    {"id": 1, "type": "hard",      "time_s": 3.0,   "frame": 90},
+    {"id": 2, "type": "hard",      "time_s": 7.0,   "frame": 210},
+    {"id": 3, "type": "hard",      "time_s": 10.0,  "frame": 300},
+    {"id": 4, "type": "crossfade", "start_s": 13.5, "mid_s": 13.75, "end_s": 14.0, "start_frame": 405, "mid_frame": 412, "end_frame": 420},
+    {"id": 5, "type": "hard",      "time_s": 16.5,  "frame": 495},
+    {"id": 6, "type": "hard",      "time_s": 20.5,  "frame": 615},
+    {"id": 7, "type": "crossfade", "start_s": 23.0, "mid_s": 23.25, "end_s": 23.5, "start_frame": 690, "mid_frame": 697, "end_frame": 705},
+    {"id": 8, "type": "hard",      "time_s": 27.0,  "frame": 810}
+  ],
+  "frame_convention": "0-based index of the first frame of the new shot (time_s * fps)",
+  "control": {"clip": "control.mp4", "duration_s": 9.967, "frames": 299, "cuts": [], "note": "testsrc2 background + panning 540x540 mandelbrot overlay; continuous motion, no cuts; crf 30"},
+  "tolerance_s": 0.25
+}

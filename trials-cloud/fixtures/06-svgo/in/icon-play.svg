@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+  <!-- play button for video embeds -->
+  <g id="play-icon" fill="#FF0000" fill-rule="evenodd">
+    <path d="M12,2 C6.4771525,2 2,6.4771525 2,12 C2,17.5228475 6.4771525,22 12,22 C17.5228475,22 22,17.5228475 22,12 C22,6.4771525 17.5228475,2 12,2 Z" />
+    <polygon points="10,8 16,12 10,16" fill="#FFFFFF" stroke="none" />
+  </g>
+</svg>

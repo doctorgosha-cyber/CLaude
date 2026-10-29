@@ -1,0 +1,12 @@
+{
+  "fixture": "03-php",
+  "seeded": [
+    {"id": "D1", "file": "seeded/functions-faulty.php", "line": 21, "defect": "null dereference: get_post() may return null, ->post_parent accessed", "expected_tool": "phpstan"},
+    {"id": "D2", "file": "seeded/functions-faulty.php", "line": 39, "defect": "undefined variable $label on the else path", "expected_tool": "phpstan"},
+    {"id": "D3", "file": "seeded/template-faulty.php", "line": 13, "defect": "wrong argument type: wp_trim_words() num_words given a string", "expected_tool": "phpstan"},
+    {"id": "D4", "file": "seeded/template-faulty.php", "line": 21, "defect": "unescaped output of $_GET['q'] (XSS)", "expected_tool": "phpcs WordPress.Security.EscapeOutput"},
+    {"id": "D5", "file": "seeded/class-nexus-vote-form.php", "line": 29, "defect": "missing nonce check before processing $_POST", "expected_tool": "phpcs WordPress.Security.NonceVerification"}
+  ],
+  "clean": ["clean/functions.php", "clean/template-card.php", "clean/class-nexus-contact-form.php"],
+  "note": "Line numbers are the first line a detector should flag; a finding within ±2 lines with a matching message counts."
+}

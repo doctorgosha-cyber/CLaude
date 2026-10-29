@@ -1,0 +1,184 @@
+{
+ "rows": [
+  {
+   "run": "t1-date-range-A-1",
+   "arm": "A",
+   "task": "t1-date-range",
+   "hidden_passed": 7,
+   "hidden_total": 7,
+   "tokens": 57184,
+   "tool_uses": 3,
+   "seconds": 18.5
+  },
+  {
+   "run": "t1-date-range-A-2",
+   "arm": "A",
+   "task": "t1-date-range",
+   "hidden_passed": 7,
+   "hidden_total": 7,
+   "tokens": 57058,
+   "tool_uses": 3,
+   "seconds": 18.0
+  },
+  {
+   "run": "t1-date-range-B-1",
+   "arm": "B",
+   "task": "t1-date-range",
+   "hidden_passed": 7,
+   "hidden_total": 7,
+   "tokens": 63739,
+   "tool_uses": 5,
+   "seconds": 46.9
+  },
+  {
+   "run": "t1-date-range-B-2",
+   "arm": "B",
+   "task": "t1-date-range",
+   "hidden_passed": 7,
+   "hidden_total": 7,
+   "tokens": 62840,
+   "tool_uses": 5,
+   "seconds": 42.8
+  },
+  {
+   "run": "t2-price-feed-A-1",
+   "arm": "A",
+   "task": "t2-price-feed",
+   "hidden_passed": 5,
+   "hidden_total": 5,
+   "tokens": 58750,
+   "tool_uses": 4,
+   "seconds": 34.0
+  },
+  {
+   "run": "t2-price-feed-A-2",
+   "arm": "A",
+   "task": "t2-price-feed",
+   "hidden_passed": 5,
+   "hidden_total": 5,
+   "tokens": 58452,
+   "tool_uses": 4,
+   "seconds": 30.0
+  },
+  {
+   "run": "t2-price-feed-B-1",
+   "arm": "B",
+   "task": "t2-price-feed",
+   "hidden_passed": 5,
+   "hidden_total": 5,
+   "tokens": 63902,
+   "tool_uses": 6,
+   "seconds": 52.9
+  },
+  {
+   "run": "t2-price-feed-B-2",
+   "arm": "B",
+   "task": "t2-price-feed",
+   "hidden_passed": 5,
+   "hidden_total": 5,
+   "tokens": 64913,
+   "tool_uses": 6,
+   "seconds": 69.2
+  },
+  {
+   "run": "t3-units-A-1",
+   "arm": "A",
+   "task": "t3-units",
+   "hidden_passed": 8,
+   "hidden_total": 8,
+   "tokens": 58960,
+   "tool_uses": 6,
+   "seconds": 29.5
+  },
+  {
+   "run": "t3-units-A-2",
+   "arm": "A",
+   "task": "t3-units",
+   "hidden_passed": 8,
+   "hidden_total": 8,
+   "tokens": 59036,
+   "tool_uses": 6,
+   "seconds": 37.3
+  },
+  {
+   "run": "t3-units-B-1",
+   "arm": "B",
+   "task": "t3-units",
+   "hidden_passed": 8,
+   "hidden_total": 8,
+   "tokens": 64720,
+   "tool_uses": 6,
+   "seconds": 53.9
+  },
+  {
+   "run": "t3-units-B-2",
+   "arm": "B",
+   "task": "t3-units",
+   "hidden_passed": 8,
+   "hidden_total": 8,
+   "tokens": 64838,
+   "tool_uses": 8,
+   "seconds": 62.6
+  }
+ ],
+ "summary": {
+  "A": {
+   "runs": 6,
+   "runs_all_hidden_pass": 6,
+   "hidden_passed": 40,
+   "hidden_total": 40,
+   "mean_tokens": 58240,
+   "mean_tool_uses": 4.33,
+   "mean_seconds": 27.9
+  },
+  "B": {
+   "runs": 6,
+   "runs_all_hidden_pass": 6,
+   "hidden_passed": 40,
+   "hidden_total": 40,
+   "mean_tokens": 64159,
+   "mean_tool_uses": 6,
+   "mean_seconds": 54.7
+  }
+ },
+ "delta_B_vs_A": {
+  "tokens_pct": 10.2,
+  "tool_uses_pct": 38.6,
+  "seconds_pct": 96.1
+ },
+ "paired_by_task": [
+  {
+   "task": "t1-date-range",
+   "A_tokens": 57121,
+   "B_tokens": 63290,
+   "A_tools": 3,
+   "B_tools": 5,
+   "A_s": 18.2,
+   "B_s": 44.8,
+   "A_pass": "14/14",
+   "B_pass": "14/14"
+  },
+  {
+   "task": "t2-price-feed",
+   "A_tokens": 58601,
+   "B_tokens": 64408,
+   "A_tools": 4,
+   "B_tools": 6,
+   "A_s": 32.0,
+   "B_s": 61.0,
+   "A_pass": "10/10",
+   "B_pass": "10/10"
+  },
+  {
+   "task": "t3-units",
+   "A_tokens": 58998,
+   "B_tokens": 64779,
+   "A_tools": 6,
+   "B_tools": 7,
+   "A_s": 33.4,
+   "B_s": 58.2,
+   "A_pass": "16/16",
+   "B_pass": "16/16"
+  }
+ ]
+}

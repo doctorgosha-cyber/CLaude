@@ -1,0 +1,163 @@
+{
+ "id": 7,
+ "tool": "Breakthrough/PySceneDetect (scenedetect CLI)",
+ "versions": {
+  "scenedetect": "0.7.2",
+  "opencv-python-headless": "5.0.0.93",
+  "opencv-python": "5.0.0.93 (pulled in automatically: scenedetect 0.7.2 declares a hard dependency on opencv-python, so the headless wheel was redundant)",
+  "numpy": "2.5.4",
+  "click": "8.5.0",
+  "tqdm": "4.70.1",
+  "platformdirs": "4.14.0",
+  "python": "3.13.16",
+  "ffmpeg": "6.1.1 (used only to build the fixtures; scenedetect decodes via OpenCV)",
+  "node": "22.22.0 (wrapper sketch)"
+ },
+ "licences": {
+  "scenedetect": "BSD-3-Clause",
+  "opencv-python / opencv-python-headless": "Apache-2.0 (pip metadata 'Apache 2.0'; note the wheel bundles FFmpeg libs under LGPL)",
+  "numpy": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0",
+  "click": "BSD-3-Clause",
+  "tqdm": "MPL-2.0 AND MIT",
+  "platformdirs": "MIT"
+ },
+ "install": {
+  "command": "python3.13 -m venv venv && venv/bin/pip install scenedetect==0.7.2 opencv-python-headless==5.0.0.93",
+  "seconds": 22.9,
+  "size_mb": 354,
+  "size_note": "354 MB venv contains BOTH opencv-python (72 MB cv2 + 116 MB .libs) and opencv-python-headless (81 MB .libs) because scenedetect==0.7.2 requires opencv-python. PyPI also lists scenedetect-headless 0.7.2 (not installed/verified here); a headless-only install should be roughly 230 MB.",
+  "windows": "Pure-Python package; native deps only via opencv-python (prebuilt win_amd64 wheels, bundles FFmpeg DLLs) and numpy. No compiler, no system ffmpeg needed. Not tested on Windows in this trial (Linux x86_64 sandbox)."
+ },
+ "fixtures": "fixtures/07-scenedetect/: make-clip.sh (ffmpeg 6.1.1, lavfi-only sources, deterministic: two runs byte-identical), seeded.mp4 1080x1920 30fps 30.0 s 900 frames 4.11 MB md5 b3d985e986ed7fde23b32a007a7d499a (9 shots -> 8 transitions: 6 hard cuts + 2 x 0.5 s xfade=fade crossfades; sources color/testsrc/mandelbrot/smptebars/testsrc2/rgbtestsrc-panning-overlay; libx264 crf 28), control.mp4 10 s (299 frames) single shot, testsrc2 + panning mandelbrot overlay, no cuts, crf 30, 3.37 MB md5 1b223885c829277b8df8e2c8e44c6b00. KEY.json = ground-truth cut times (s + frames; crossfades start/mid/end). score.py = scorer (hard cut: |det-t|<=0.25 s; crossfade: within [start-0.25,end+0.25], error vs midpoint). Note: brief said '8 shots, 6 hard + 2 soft' - 8 cuts need 9 shots, so 9 were used. ffmpeg 'gradients' source was tried for one shot but is not deterministic even with seed=, so it was replaced.",
+ "machine": "4 vCPU Intel Xeon 2.80 GHz, Linux sandbox; runtimes are wall-clock for the 30 s 1080x1920 clip (control = 10 s clip)",
+ "baseline": {
+  "what": "fixtures/07-scenedetect/baseline.py: ~25 lines OpenCV; resize to 270x480 grey, mean |frame diff| > 20 (0-255), min gap 10 frames. Threshold chosen a priori; sanity pass: thresholds 10 and 15 also give 0 false positives and additionally catch cut 8 (6/8), but never the crossfades.",
+  "command": "venv/bin/python baseline.py seeded.mp4 ; venv/bin/python baseline.py control.mp4 ; venv/bin/python score.py KEY.json --detected runs/07-scenedetect/baseline-seeded.json --control runs/07-scenedetect/baseline-control.json",
+  "recall": "5/8",
+  "missed_ids": [
+   4,
+   7,
+   8
+  ],
+  "missed_why": "4,7 = the two crossfades (per-frame diff ~2-3 grey levels, never crosses threshold); 8 = purple->teal hard cut whose luma is almost identical (greyscale diff ~7)",
+  "false_positives": 0,
+  "timing_error_ms_mean": 0.0,
+  "timing_error_ms_max": 0.0,
+  "runtime_s": 5.81,
+  "runtime_control_s": 2.36
+ },
+ "candidate_default": {
+  "config": "scenedetect -i seeded.mp4 detect-content list-scenes (ContentDetector threshold 27, min-scene-len 0.6 s)",
+  "commands": [
+   "venv/bin/scenedetect -q -i seeded.mp4 -o runs/07-scenedetect detect-content list-scenes -f default-seeded.csv",
+   "venv/bin/scenedetect -q -i control.mp4 -o runs/07-scenedetect detect-content list-scenes -f default-control.csv",
+   "venv/bin/python score.py KEY.json --detected runs/07-scenedetect/default-seeded.csv --control runs/07-scenedetect/default-control.csv"
+  ],
+  "recall": "7/8",
+  "missed_ids": [
+   4
+  ],
+  "false_positives": 0,
+  "timing_error_ms_mean": 11.9,
+  "timing_error_ms_max": 83.0,
+  "timing_error_hard_cuts_only_ms_mean_max": [
+   0.0,
+   0.0
+  ],
+  "crossfade_detections_s": [
+   23.333
+  ],
+  "runtime_s": 3.61,
+  "runtime_control_s": 1.71
+ },
+ "candidate_tuned": {
+  "config": "scenedetect -i seeded.mp4 detect-adaptive list-scenes (AdaptiveDetector defaults: adaptive threshold 3.0, min-content-val 15, frame-window 2). Chosen as 'tuned' because it needs no clip-specific threshold.",
+  "commands": [
+   "venv/bin/scenedetect -q -i seeded.mp4 -o runs/07-scenedetect detect-adaptive list-scenes -f adaptive-seeded.csv",
+   "venv/bin/scenedetect -q -i control.mp4 -o runs/07-scenedetect detect-adaptive list-scenes -f adaptive-control.csv",
+   "venv/bin/python score.py KEY.json --detected runs/07-scenedetect/adaptive-seeded.csv --control runs/07-scenedetect/adaptive-control.csv"
+  ],
+  "recall": "8/8",
+  "missed_ids": [],
+  "false_positives": 0,
+  "timing_error_ms_mean": 41.6,
+  "timing_error_ms_max": 250.0,
+  "timing_error_hard_cuts_only_ms_mean_max": [
+   0.0,
+   0.0
+  ],
+  "crossfade_detections_s": [
+   14.0,
+   23.333
+  ],
+  "runtime_s": 3.66,
+  "runtime_control_s": 1.49
+ },
+ "other_variants": {
+  "content-t15": {
+   "config": "detect-content -t 15",
+   "recall": "8/8",
+   "false_positives": 0,
+   "timing_error_ms_mean": 41.6,
+   "timing_error_ms_max": 250.0,
+   "runtime_s": 3.59
+  },
+  "content-t15-m1s": {
+   "config": "detect-content -t 15 -m 1s",
+   "recall": "8/8",
+   "false_positives": 0,
+   "timing_error_ms_mean": 41.6,
+   "timing_error_ms_max": 250.0,
+   "runtime_s": 3.58
+  },
+  "adaptive-c10": {
+   "config": "detect-adaptive -c 10",
+   "recall": "8/8",
+   "false_positives": 0,
+   "timing_error_ms_mean": 41.6,
+   "timing_error_ms_max": 250.0,
+   "runtime_s": 4.42
+  },
+  "hist": {
+   "config": "detect-hist (default 0.05)",
+   "recall": "8/8",
+   "false_positives": 0,
+   "timing_error_ms_mean": 41.8,
+   "timing_error_ms_max": 217.0,
+   "runtime_s": 4.7
+  },
+  "threshold": {
+   "config": "detect-threshold (fade-to-black detector; 0/8 as expected, crossfades do not pass through black)",
+   "recall": "0/8",
+   "false_positives": 0,
+   "timing_error_ms_mean": null,
+   "timing_error_ms_max": null,
+   "runtime_s": 4.33
+  },
+  "content-plus-adaptive": {
+   "config": "detect-content detect-adaptive chained",
+   "recall": "8/8",
+   "false_positives": 0,
+   "timing_error_ms_mean": 41.6,
+   "timing_error_ms_max": 250.0,
+   "runtime_s": 4.1
+  }
+ },
+ "notes": [
+  "All hard cuts are frame-exact (0 ms error) for baseline and every scenedetect variant; the mean/max timing errors above come only from crossfades, scored against the fade midpoint (detections land at the fade end, 14.0 s, or mid-fade, 23.333 s).",
+  "Crossfade 7 (purple overlay -> teal, 23.0-23.5 s) is detected by detect-content/adaptive via a single-frame delta_hue spike of 154 at 23.333 s (hue wrap-around on near-grey blended pixels; see runs/07-scenedetect/stats-seeded.csv). That is an artefact, not genuine fade detection; detect-hist detects both fades without it (13.867 s, 23.033 s).",
+  "Crossfade 4 (mandelbrot -> smptebars) has content_val ~5-11 during the fade and 21 at the last fade frame; the default threshold 27 misses it, 15 catches it, detect-adaptive catches it via the ratio to neighbouring frames.",
+  "The 'threshold 15' tuning was picked after looking at the stats file, so it is tuned on the answer key; detect-adaptive (pure defaults) is reported as the tuned candidate for that reason.",
+  "scenedetect CSV 'Start Frame' is 1-based; the scorer uses 'Start Time (seconds)'. Control clip is 299 frames (overlay shortest=1 drops one), harmless."
+ ],
+ "limits": [
+  "Synthetic fixture only (flat colours, test patterns, panning overlays). Real explainer footage with fast camera moves, flashes or animated text was not tested, so the 0-false-positive result is a lower bound of risk, not proof.",
+  "Soft transitions: PySceneDetect has no dedicated crossfade/dissolve detector (detect-threshold is fade-to-black only). 0.5 s crossfades were found only by lowered thresholds / adaptive ratio, and one of the two via a hue-wrap artefact.",
+  "Install footprint 354 MB (both opencv wheels) - ~230 MB with headless only; adds a Python 3 runtime requirement to a Node project. scenedetect 0.7.2 hard-depends on opencv-python, so a headless CI box should use scenedetect-headless instead (exists on PyPI, not verified here).",
+  "Runtime ~3.6 s per 30 s 1080x1920 clip on 4 vCPU (~8x realtime, decode-bound); scales linearly with film length. -d/--downscale and -fs/--frame-skip exist but were not needed.",
+  "Default detect-content misses a 0.5 s crossfade (7/8); the check must run detect-adaptive (or -t 15) and the script-beat tolerance must accept 'anywhere inside the fade window', as the wrapper sketch does.",
+  "Minimum scene length default 0.6 s: two true cuts closer than that would be merged; explainer films rarely cut faster, but the limit exists."
+ ],
+ "verdict": "ADOPT",
+ "reason": "With detect-adaptive (pure defaults, no per-clip threshold) scenedetect found 8/8 cuts incl. both 0.5 s crossfades with 0 false positives on the seeded clip and on the 10 s motion-only control, frame-exact on hard cuts, in 3.6 s; the 10-minute home-made detector tops out at 5/8 (6/8 with a lower threshold) and structurally cannot see crossfades. Cost is low (BSD-3, pip-only, prebuilt wheels incl. Windows, ~230-354 MB). Caveat: validate false-positive rate on 2-3 real films before trusting it as a gate; one crossfade was caught via a hue-wrap artefact rather than true fade detection."
+}

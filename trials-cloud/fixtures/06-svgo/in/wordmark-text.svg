@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 48" width="240" height="48">
+  <!-- channel wordmark used in the end screen -->
+  <rect x="0" y="0" width="240" height="48" rx="8" fill="#0B0F19" />
+  <text x="16" y="31" font-family="'Space Grotesk', 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="600" fill="#F9FAFB" letter-spacing="1.5">ANATOMY<tspan fill="#FACC15"> of </tspan>THINGS</text>
+  <text x="224" y="31" font-family="monospace" font-size="10" fill="#6B7280" text-anchor="end">v2</text>
+</svg>

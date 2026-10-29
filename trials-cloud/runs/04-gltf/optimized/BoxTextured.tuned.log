@@ -1,0 +1,25 @@
+❯ dedup
+✔ dedup                3ms
+❯ instance
+✔ instance             1ms
+❯ palette
+✔ palette              1ms
+❯ flatten
+✔ flatten              1ms
+❯ join
+✔ join                 2ms
+❯ weld
+✔ weld                 1ms
+❯ resample
+✔ resample             0ms
+❯ prune
+✔ prune                14ms
+❯ sparse
+✔ sparse               1ms
+❯ textureCompress
+✔ textureCompress      21ms
+❯ quantize
+warn: quantize: Skipping TEXCOORD_0; out of [0,1] range.
+✔ quantize             5ms
+
+info: BoxTextured.glb (5.96 KB) → BoxTextured.tuned.glb (5.22 KB)

@@ -1,0 +1,31 @@
+{
+ "name": "selftest",
+ "mock": true,
+ "check_args": [],
+ "found": {
+  "D1": true,
+  "D2": true,
+  "D3": true,
+  "D4": true,
+  "D5": true,
+  "D6": true,
+  "D7": true,
+  "D8": true
+ },
+ "recall": "8/8",
+ "recall_frac": 1.0,
+ "false_positives": 0,
+ "false_positive_detail": [],
+ "extra_findings_on_seeded": [],
+ "runtime_s": 0.31,
+ "asr_runtime_s": 0.0,
+ "errors": [],
+ "per_file_asr_info": {
+  "keyboard/clean_srt": {},
+  "keyboard/seeded_srt": {},
+  "thermos/clean_srt": {},
+  "thermos/seeded_srt": {},
+  "kettle/clean_srt": {},
+  "kettle/seeded_srt": {}
+ }
+}
