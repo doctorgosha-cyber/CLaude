@@ -1,0 +1,3034 @@
+[
+ {
+  "encoder": "png-source",
+  "image": "banner_text_astronaut",
+  "q": null,
+  "bytes": 603248,
+  "ms": 0,
+  "file": "/home/user/CLaude/trials-cloud-2/fixtures/06-images/src/banner_text_astronaut.png",
+  "width": 512,
+  "height": 512
+ },
+ {
+  "encoder": "jpeg-sharp",
+  "image": "banner_text_astronaut",
+  "q": 80,
+  "bytes": 45016,
+  "ms": 32.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/jpeg-sharp/banner_text_astronaut_q80.jpg",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/jpeg-sharp__banner_text_astronaut_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_astronaut",
+  "q": 50,
+  "bytes": 18634,
+  "ms": 76.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_astronaut_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_astronaut_q50.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_astronaut",
+  "q": 60,
+  "bytes": 20922,
+  "ms": 42.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_astronaut_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_astronaut_q60.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_astronaut",
+  "q": 70,
+  "bytes": 23338,
+  "ms": 101.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_astronaut_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_astronaut_q70.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_astronaut",
+  "q": 80,
+  "bytes": 29614,
+  "ms": 52.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_astronaut_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_astronaut_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_astronaut",
+  "q": 90,
+  "bytes": 48584,
+  "ms": 73.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_astronaut_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_astronaut_q90.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_astronaut",
+  "q": 50,
+  "bytes": 18402,
+  "ms": 162,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_astronaut_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_astronaut_q50.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_astronaut",
+  "q": 60,
+  "bytes": 20432,
+  "ms": 165.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_astronaut_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_astronaut_q60.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_astronaut",
+  "q": 70,
+  "bytes": 23014,
+  "ms": 123.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_astronaut_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_astronaut_q70.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_astronaut",
+  "q": 80,
+  "bytes": 29630,
+  "ms": 116.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_astronaut_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_astronaut_q80.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_astronaut",
+  "q": 90,
+  "bytes": 48488,
+  "ms": 134.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_astronaut_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_astronaut_q90.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_astronaut",
+  "q": 50,
+  "bytes": 16630,
+  "ms": 1215.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_astronaut_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_astronaut_q50.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_astronaut",
+  "q": 60,
+  "bytes": 22411,
+  "ms": 1146,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_astronaut_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_astronaut_q60.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_astronaut",
+  "q": 70,
+  "bytes": 29851,
+  "ms": 1387.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_astronaut_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_astronaut_q70.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_astronaut",
+  "q": 80,
+  "bytes": 39971,
+  "ms": 1434.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_astronaut_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_astronaut_q80.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_astronaut",
+  "q": 90,
+  "bytes": 64686,
+  "ms": 2067.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_astronaut_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_astronaut_q90.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_astronaut",
+  "q": 50,
+  "bytes": 16630,
+  "ms": 1146.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_astronaut_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_astronaut_q50.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_astronaut",
+  "q": 60,
+  "bytes": 22411,
+  "ms": 1492,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_astronaut_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_astronaut_q60.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_astronaut",
+  "q": 70,
+  "bytes": 29851,
+  "ms": 1971.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_astronaut_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_astronaut_q70.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_astronaut",
+  "q": 80,
+  "bytes": 39971,
+  "ms": 1953.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_astronaut_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_astronaut_q80.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_astronaut",
+  "q": 90,
+  "bytes": 64686,
+  "ms": 2997.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_astronaut_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_astronaut_q90.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_astronaut",
+  "q": 50,
+  "bytes": 18634,
+  "ms": 143.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_astronaut_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_astronaut_q50.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_astronaut",
+  "q": 60,
+  "bytes": 20922,
+  "ms": 121.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_astronaut_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_astronaut_q60.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_astronaut",
+  "q": 70,
+  "bytes": 23338,
+  "ms": 142.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_astronaut_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_astronaut_q70.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_astronaut",
+  "q": 80,
+  "bytes": 29614,
+  "ms": 83.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_astronaut_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_astronaut_q80.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_astronaut",
+  "q": 90,
+  "bytes": 48584,
+  "ms": 93.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_astronaut_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_astronaut_q90.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_astronaut",
+  "q": 50,
+  "bytes": 18402,
+  "ms": 199.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_astronaut_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_astronaut_q50.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_astronaut",
+  "q": 60,
+  "bytes": 20432,
+  "ms": 235.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_astronaut_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_astronaut_q60.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_astronaut",
+  "q": 70,
+  "bytes": 23014,
+  "ms": 349.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_astronaut_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_astronaut_q70.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_astronaut",
+  "q": 80,
+  "bytes": 29630,
+  "ms": 222.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_astronaut_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_astronaut_q80.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_astronaut",
+  "q": 90,
+  "bytes": 48488,
+  "ms": 214.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_astronaut_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_astronaut_q90.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_astronaut",
+  "q": 50,
+  "bytes": 18420,
+  "ms": 322.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_astronaut_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_astronaut_q50.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_astronaut",
+  "q": 60,
+  "bytes": 26030,
+  "ms": 263.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_astronaut_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_astronaut_q60.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_astronaut",
+  "q": 70,
+  "bytes": 32612,
+  "ms": 295,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_astronaut_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_astronaut_q70.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_astronaut",
+  "q": 80,
+  "bytes": 42624,
+  "ms": 356.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_astronaut_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_astronaut_q80.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_astronaut",
+  "q": 90,
+  "bytes": 81325,
+  "ms": 638.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_astronaut_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_astronaut_q90.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_astronaut",
+  "q": 50,
+  "bytes": 18420,
+  "ms": 487.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_astronaut_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_astronaut_q50.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_astronaut",
+  "q": 60,
+  "bytes": 26030,
+  "ms": 527.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_astronaut_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_astronaut_q60.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_astronaut",
+  "q": 70,
+  "bytes": 32612,
+  "ms": 315.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_astronaut_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_astronaut_q70.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_astronaut",
+  "q": 80,
+  "bytes": 42624,
+  "ms": 528.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_astronaut_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_astronaut_q80.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_astronaut",
+  "q": 90,
+  "bytes": 81325,
+  "ms": 378.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_astronaut_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_astronaut_q90.png"
+ },
+ {
+  "encoder": "png-source",
+  "image": "banner_text_chelsea",
+  "q": null,
+  "bytes": 292366,
+  "ms": 0,
+  "file": "/home/user/CLaude/trials-cloud-2/fixtures/06-images/src/banner_text_chelsea.png",
+  "width": 451,
+  "height": 300
+ },
+ {
+  "encoder": "jpeg-sharp",
+  "image": "banner_text_chelsea",
+  "q": 80,
+  "bytes": 24384,
+  "ms": 74,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/jpeg-sharp/banner_text_chelsea_q80.jpg",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/jpeg-sharp__banner_text_chelsea_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_chelsea",
+  "q": 50,
+  "bytes": 10342,
+  "ms": 49.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_chelsea_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_chelsea_q50.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_chelsea",
+  "q": 60,
+  "bytes": 11628,
+  "ms": 97,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_chelsea_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_chelsea_q60.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_chelsea",
+  "q": 70,
+  "bytes": 13354,
+  "ms": 47.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_chelsea_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_chelsea_q70.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_chelsea",
+  "q": 80,
+  "bytes": 17184,
+  "ms": 67.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_chelsea_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_chelsea_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_chelsea",
+  "q": 90,
+  "bytes": 28054,
+  "ms": 51.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_chelsea_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_chelsea_q90.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_chelsea",
+  "q": 50,
+  "bytes": 9968,
+  "ms": 143.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_chelsea_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_chelsea_q50.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_chelsea",
+  "q": 60,
+  "bytes": 11266,
+  "ms": 418.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_chelsea_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_chelsea_q60.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_chelsea",
+  "q": 70,
+  "bytes": 12714,
+  "ms": 179.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_chelsea_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_chelsea_q70.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_chelsea",
+  "q": 80,
+  "bytes": 16662,
+  "ms": 86.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_chelsea_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_chelsea_q80.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_chelsea",
+  "q": 90,
+  "bytes": 28136,
+  "ms": 103.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_chelsea_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_chelsea_q90.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_chelsea",
+  "q": 50,
+  "bytes": 9401,
+  "ms": 1117.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_chelsea_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_chelsea_q50.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_chelsea",
+  "q": 60,
+  "bytes": 13429,
+  "ms": 1324.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_chelsea_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_chelsea_q60.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_chelsea",
+  "q": 70,
+  "bytes": 17588,
+  "ms": 916.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_chelsea_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_chelsea_q70.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_chelsea",
+  "q": 80,
+  "bytes": 23066,
+  "ms": 1229.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_chelsea_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_chelsea_q80.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_chelsea",
+  "q": 90,
+  "bytes": 34688,
+  "ms": 2353.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_chelsea_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_chelsea_q90.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_chelsea",
+  "q": 50,
+  "bytes": 9401,
+  "ms": 780.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_chelsea_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_chelsea_q50.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_chelsea",
+  "q": 60,
+  "bytes": 13429,
+  "ms": 1290.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_chelsea_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_chelsea_q60.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_chelsea",
+  "q": 70,
+  "bytes": 17588,
+  "ms": 1432.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_chelsea_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_chelsea_q70.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_chelsea",
+  "q": 80,
+  "bytes": 23066,
+  "ms": 1886,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_chelsea_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_chelsea_q80.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_chelsea",
+  "q": 90,
+  "bytes": 34688,
+  "ms": 1646.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_chelsea_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_chelsea_q90.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_chelsea",
+  "q": 50,
+  "bytes": 10342,
+  "ms": 154,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_chelsea_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_chelsea_q50.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_chelsea",
+  "q": 60,
+  "bytes": 11628,
+  "ms": 33.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_chelsea_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_chelsea_q60.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_chelsea",
+  "q": 70,
+  "bytes": 13354,
+  "ms": 38.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_chelsea_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_chelsea_q70.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_chelsea",
+  "q": 80,
+  "bytes": 17184,
+  "ms": 48,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_chelsea_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_chelsea_q80.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_chelsea",
+  "q": 90,
+  "bytes": 28054,
+  "ms": 84.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_chelsea_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_chelsea_q90.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_chelsea",
+  "q": 50,
+  "bytes": 9968,
+  "ms": 60.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_chelsea_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_chelsea_q50.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_chelsea",
+  "q": 60,
+  "bytes": 11266,
+  "ms": 89.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_chelsea_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_chelsea_q60.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_chelsea",
+  "q": 70,
+  "bytes": 12714,
+  "ms": 58.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_chelsea_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_chelsea_q70.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_chelsea",
+  "q": 80,
+  "bytes": 16662,
+  "ms": 60.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_chelsea_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_chelsea_q80.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_chelsea",
+  "q": 90,
+  "bytes": 28136,
+  "ms": 161.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_chelsea_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_chelsea_q90.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_chelsea",
+  "q": 50,
+  "bytes": 9514,
+  "ms": 133.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_chelsea_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_chelsea_q50.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_chelsea",
+  "q": 60,
+  "bytes": 13967,
+  "ms": 146.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_chelsea_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_chelsea_q60.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_chelsea",
+  "q": 70,
+  "bytes": 17993,
+  "ms": 125.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_chelsea_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_chelsea_q70.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_chelsea",
+  "q": 80,
+  "bytes": 23807,
+  "ms": 163.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_chelsea_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_chelsea_q80.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_chelsea",
+  "q": 90,
+  "bytes": 40594,
+  "ms": 239.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_chelsea_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_chelsea_q90.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_chelsea",
+  "q": 50,
+  "bytes": 9514,
+  "ms": 245.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_chelsea_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_chelsea_q50.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_chelsea",
+  "q": 60,
+  "bytes": 13967,
+  "ms": 161.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_chelsea_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_chelsea_q60.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_chelsea",
+  "q": 70,
+  "bytes": 17993,
+  "ms": 201.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_chelsea_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_chelsea_q70.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_chelsea",
+  "q": 80,
+  "bytes": 23807,
+  "ms": 213.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_chelsea_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_chelsea_q80.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_chelsea",
+  "q": 90,
+  "bytes": 40594,
+  "ms": 151.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_chelsea_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_chelsea_q90.png"
+ },
+ {
+  "encoder": "png-source",
+  "image": "banner_text_coffee",
+  "q": null,
+  "bytes": 573009,
+  "ms": 0,
+  "file": "/home/user/CLaude/trials-cloud-2/fixtures/06-images/src/banner_text_coffee.png",
+  "width": 600,
+  "height": 400
+ },
+ {
+  "encoder": "jpeg-sharp",
+  "image": "banner_text_coffee",
+  "q": 80,
+  "bytes": 42280,
+  "ms": 42,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/jpeg-sharp/banner_text_coffee_q80.jpg",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/jpeg-sharp__banner_text_coffee_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_coffee",
+  "q": 50,
+  "bytes": 19118,
+  "ms": 38.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_coffee_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_coffee_q50.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_coffee",
+  "q": 60,
+  "bytes": 21420,
+  "ms": 28.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_coffee_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_coffee_q60.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_coffee",
+  "q": 70,
+  "bytes": 24584,
+  "ms": 31,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_coffee_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_coffee_q70.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_coffee",
+  "q": 80,
+  "bytes": 32282,
+  "ms": 43.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_coffee_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_coffee_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "banner_text_coffee",
+  "q": 90,
+  "bytes": 52564,
+  "ms": 69,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/banner_text_coffee_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__banner_text_coffee_q90.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_coffee",
+  "q": 50,
+  "bytes": 18476,
+  "ms": 133.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_coffee_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_coffee_q50.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_coffee",
+  "q": 60,
+  "bytes": 21106,
+  "ms": 111,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_coffee_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_coffee_q60.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_coffee",
+  "q": 70,
+  "bytes": 24148,
+  "ms": 176.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_coffee_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_coffee_q70.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_coffee",
+  "q": 80,
+  "bytes": 31672,
+  "ms": 248.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_coffee_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_coffee_q80.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "banner_text_coffee",
+  "q": 90,
+  "bytes": 53236,
+  "ms": 178.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/banner_text_coffee_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__banner_text_coffee_q90.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_coffee",
+  "q": 50,
+  "bytes": 17134,
+  "ms": 2736.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_coffee_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_coffee_q50.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_coffee",
+  "q": 60,
+  "bytes": 24486,
+  "ms": 2190,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_coffee_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_coffee_q60.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_coffee",
+  "q": 70,
+  "bytes": 33080,
+  "ms": 2041,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_coffee_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_coffee_q70.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_coffee",
+  "q": 80,
+  "bytes": 45144,
+  "ms": 2104.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_coffee_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_coffee_q80.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "banner_text_coffee",
+  "q": 90,
+  "bytes": 70045,
+  "ms": 2513.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/banner_text_coffee_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__banner_text_coffee_q90.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_coffee",
+  "q": 50,
+  "bytes": 17134,
+  "ms": 1127,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_coffee_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_coffee_q50.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_coffee",
+  "q": 60,
+  "bytes": 24486,
+  "ms": 1182.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_coffee_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_coffee_q60.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_coffee",
+  "q": 70,
+  "bytes": 33080,
+  "ms": 1737.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_coffee_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_coffee_q70.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_coffee",
+  "q": 80,
+  "bytes": 45144,
+  "ms": 1958.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_coffee_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_coffee_q80.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "banner_text_coffee",
+  "q": 90,
+  "bytes": 70045,
+  "ms": 2459.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/banner_text_coffee_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__banner_text_coffee_q90.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_coffee",
+  "q": 50,
+  "bytes": 19118,
+  "ms": 75.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_coffee_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_coffee_q50.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_coffee",
+  "q": 60,
+  "bytes": 21420,
+  "ms": 53.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_coffee_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_coffee_q60.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_coffee",
+  "q": 70,
+  "bytes": 24584,
+  "ms": 40.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_coffee_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_coffee_q70.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_coffee",
+  "q": 80,
+  "bytes": 32282,
+  "ms": 49.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_coffee_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_coffee_q80.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "banner_text_coffee",
+  "q": 90,
+  "bytes": 52564,
+  "ms": 48.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/banner_text_coffee_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__banner_text_coffee_q90.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_coffee",
+  "q": 50,
+  "bytes": 18476,
+  "ms": 70.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_coffee_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_coffee_q50.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_coffee",
+  "q": 60,
+  "bytes": 21106,
+  "ms": 89.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_coffee_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_coffee_q60.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_coffee",
+  "q": 70,
+  "bytes": 24148,
+  "ms": 142.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_coffee_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_coffee_q70.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_coffee",
+  "q": 80,
+  "bytes": 31672,
+  "ms": 155.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_coffee_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_coffee_q80.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "banner_text_coffee",
+  "q": 90,
+  "bytes": 53236,
+  "ms": 204.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/banner_text_coffee_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__banner_text_coffee_q90.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_coffee",
+  "q": 50,
+  "bytes": 16845,
+  "ms": 216.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_coffee_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_coffee_q50.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_coffee",
+  "q": 60,
+  "bytes": 25712,
+  "ms": 152.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_coffee_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_coffee_q60.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_coffee",
+  "q": 70,
+  "bytes": 34342,
+  "ms": 165.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_coffee_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_coffee_q70.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_coffee",
+  "q": 80,
+  "bytes": 46934,
+  "ms": 416.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_coffee_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_coffee_q80.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "banner_text_coffee",
+  "q": 90,
+  "bytes": 85605,
+  "ms": 645.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/banner_text_coffee_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__banner_text_coffee_q90.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_coffee",
+  "q": 50,
+  "bytes": 16845,
+  "ms": 299.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_coffee_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_coffee_q50.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_coffee",
+  "q": 60,
+  "bytes": 25712,
+  "ms": 525.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_coffee_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_coffee_q60.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_coffee",
+  "q": 70,
+  "bytes": 34342,
+  "ms": 264.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_coffee_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_coffee_q70.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_coffee",
+  "q": 80,
+  "bytes": 46934,
+  "ms": 257.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_coffee_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_coffee_q80.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "banner_text_coffee",
+  "q": 90,
+  "bytes": 85605,
+  "ms": 385.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/banner_text_coffee_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__banner_text_coffee_q90.png"
+ },
+ {
+  "encoder": "png-source",
+  "image": "flat_product_box",
+  "q": null,
+  "bytes": 42541,
+  "ms": 0,
+  "file": "/home/user/CLaude/trials-cloud-2/fixtures/06-images/src/flat_product_box.png",
+  "width": 1067,
+  "height": 800
+ },
+ {
+  "encoder": "jpeg-sharp",
+  "image": "flat_product_box",
+  "q": 80,
+  "bytes": 31546,
+  "ms": 15.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/jpeg-sharp/flat_product_box_q80.jpg",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/jpeg-sharp__flat_product_box_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "flat_product_box",
+  "q": 50,
+  "bytes": 10748,
+  "ms": 98.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/flat_product_box_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__flat_product_box_q50.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "flat_product_box",
+  "q": 60,
+  "bytes": 11374,
+  "ms": 66.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/flat_product_box_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__flat_product_box_q60.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "flat_product_box",
+  "q": 70,
+  "bytes": 12194,
+  "ms": 70.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/flat_product_box_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__flat_product_box_q70.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "flat_product_box",
+  "q": 80,
+  "bytes": 14236,
+  "ms": 113.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/flat_product_box_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__flat_product_box_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "flat_product_box",
+  "q": 90,
+  "bytes": 18546,
+  "ms": 219.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/flat_product_box_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__flat_product_box_q90.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "flat_product_box",
+  "q": 50,
+  "bytes": 10924,
+  "ms": 1595,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/flat_product_box_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__flat_product_box_q50.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "flat_product_box",
+  "q": 60,
+  "bytes": 11620,
+  "ms": 1513.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/flat_product_box_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__flat_product_box_q60.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "flat_product_box",
+  "q": 70,
+  "bytes": 12632,
+  "ms": 1348.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/flat_product_box_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__flat_product_box_q70.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "flat_product_box",
+  "q": 80,
+  "bytes": 14720,
+  "ms": 909.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/flat_product_box_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__flat_product_box_q80.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "flat_product_box",
+  "q": 90,
+  "bytes": 19920,
+  "ms": 1119.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/flat_product_box_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__flat_product_box_q90.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "flat_product_box",
+  "q": 50,
+  "bytes": 7511,
+  "ms": 1353.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/flat_product_box_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__flat_product_box_q50.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "flat_product_box",
+  "q": 60,
+  "bytes": 8452,
+  "ms": 1341.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/flat_product_box_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__flat_product_box_q60.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "flat_product_box",
+  "q": 70,
+  "bytes": 9616,
+  "ms": 1271.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/flat_product_box_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__flat_product_box_q70.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "flat_product_box",
+  "q": 80,
+  "bytes": 11510,
+  "ms": 1304.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/flat_product_box_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__flat_product_box_q80.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "flat_product_box",
+  "q": 90,
+  "bytes": 14556,
+  "ms": 1425.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/flat_product_box_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__flat_product_box_q90.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "flat_product_box",
+  "q": 50,
+  "bytes": 7511,
+  "ms": 1526.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/flat_product_box_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__flat_product_box_q50.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "flat_product_box",
+  "q": 60,
+  "bytes": 8452,
+  "ms": 1493.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/flat_product_box_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__flat_product_box_q60.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "flat_product_box",
+  "q": 70,
+  "bytes": 9616,
+  "ms": 1305,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/flat_product_box_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__flat_product_box_q70.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "flat_product_box",
+  "q": 80,
+  "bytes": 11510,
+  "ms": 1810.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/flat_product_box_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__flat_product_box_q80.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "flat_product_box",
+  "q": 90,
+  "bytes": 14556,
+  "ms": 1523.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/flat_product_box_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__flat_product_box_q90.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "flat_product_box",
+  "q": 50,
+  "bytes": 10748,
+  "ms": 88.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/flat_product_box_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__flat_product_box_q50.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "flat_product_box",
+  "q": 60,
+  "bytes": 11374,
+  "ms": 94.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/flat_product_box_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__flat_product_box_q60.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "flat_product_box",
+  "q": 70,
+  "bytes": 12194,
+  "ms": 64.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/flat_product_box_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__flat_product_box_q70.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "flat_product_box",
+  "q": 80,
+  "bytes": 14236,
+  "ms": 78.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/flat_product_box_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__flat_product_box_q80.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "flat_product_box",
+  "q": 90,
+  "bytes": 18546,
+  "ms": 91.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/flat_product_box_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__flat_product_box_q90.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "flat_product_box",
+  "q": 50,
+  "bytes": 10924,
+  "ms": 418.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/flat_product_box_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__flat_product_box_q50.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "flat_product_box",
+  "q": 60,
+  "bytes": 11620,
+  "ms": 339.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/flat_product_box_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__flat_product_box_q60.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "flat_product_box",
+  "q": 70,
+  "bytes": 12632,
+  "ms": 390.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/flat_product_box_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__flat_product_box_q70.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "flat_product_box",
+  "q": 80,
+  "bytes": 14720,
+  "ms": 377.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/flat_product_box_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__flat_product_box_q80.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "flat_product_box",
+  "q": 90,
+  "bytes": 19920,
+  "ms": 382,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/flat_product_box_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__flat_product_box_q90.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "flat_product_box",
+  "q": 50,
+  "bytes": 7782,
+  "ms": 286.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/flat_product_box_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__flat_product_box_q50.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "flat_product_box",
+  "q": 60,
+  "bytes": 9733,
+  "ms": 332.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/flat_product_box_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__flat_product_box_q60.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "flat_product_box",
+  "q": 70,
+  "bytes": 11521,
+  "ms": 302.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/flat_product_box_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__flat_product_box_q70.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "flat_product_box",
+  "q": 80,
+  "bytes": 13702,
+  "ms": 283,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/flat_product_box_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__flat_product_box_q80.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "flat_product_box",
+  "q": 90,
+  "bytes": 18838,
+  "ms": 250.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/flat_product_box_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__flat_product_box_q90.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "flat_product_box",
+  "q": 50,
+  "bytes": 7782,
+  "ms": 292.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/flat_product_box_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__flat_product_box_q50.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "flat_product_box",
+  "q": 60,
+  "bytes": 9733,
+  "ms": 282.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/flat_product_box_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__flat_product_box_q60.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "flat_product_box",
+  "q": 70,
+  "bytes": 11521,
+  "ms": 255.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/flat_product_box_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__flat_product_box_q70.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "flat_product_box",
+  "q": 80,
+  "bytes": 13702,
+  "ms": 317.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/flat_product_box_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__flat_product_box_q80.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "flat_product_box",
+  "q": 90,
+  "bytes": 18838,
+  "ms": 342.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/flat_product_box_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__flat_product_box_q90.png"
+ },
+ {
+  "encoder": "png-source",
+  "image": "photo_astronaut",
+  "q": null,
+  "bytes": 424520,
+  "ms": 0,
+  "file": "/home/user/CLaude/trials-cloud-2/fixtures/06-images/src/photo_astronaut.png",
+  "width": 512,
+  "height": 512
+ },
+ {
+  "encoder": "jpeg-sharp",
+  "image": "photo_astronaut",
+  "q": 80,
+  "bytes": 45321,
+  "ms": 9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/jpeg-sharp/photo_astronaut_q80.jpg",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/jpeg-sharp__photo_astronaut_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_astronaut",
+  "q": 50,
+  "bytes": 19290,
+  "ms": 28,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_astronaut_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_astronaut_q50.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_astronaut",
+  "q": 60,
+  "bytes": 21610,
+  "ms": 32.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_astronaut_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_astronaut_q60.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_astronaut",
+  "q": 70,
+  "bytes": 24506,
+  "ms": 28.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_astronaut_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_astronaut_q70.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_astronaut",
+  "q": 80,
+  "bytes": 31724,
+  "ms": 48.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_astronaut_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_astronaut_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_astronaut",
+  "q": 90,
+  "bytes": 52912,
+  "ms": 41,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_astronaut_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_astronaut_q90.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_astronaut",
+  "q": 50,
+  "bytes": 18978,
+  "ms": 103.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_astronaut_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_astronaut_q50.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_astronaut",
+  "q": 60,
+  "bytes": 21266,
+  "ms": 100.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_astronaut_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_astronaut_q60.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_astronaut",
+  "q": 70,
+  "bytes": 24044,
+  "ms": 108.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_astronaut_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_astronaut_q70.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_astronaut",
+  "q": 80,
+  "bytes": 31000,
+  "ms": 287.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_astronaut_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_astronaut_q80.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_astronaut",
+  "q": 90,
+  "bytes": 51364,
+  "ms": 109.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_astronaut_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_astronaut_q90.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_astronaut",
+  "q": 50,
+  "bytes": 16423,
+  "ms": 1364.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_astronaut_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_astronaut_q50.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_astronaut",
+  "q": 60,
+  "bytes": 23002,
+  "ms": 1285.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_astronaut_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_astronaut_q60.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_astronaut",
+  "q": 70,
+  "bytes": 31841,
+  "ms": 1686.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_astronaut_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_astronaut_q70.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_astronaut",
+  "q": 80,
+  "bytes": 43775,
+  "ms": 1870,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_astronaut_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_astronaut_q80.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_astronaut",
+  "q": 90,
+  "bytes": 72547,
+  "ms": 2579.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_astronaut_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_astronaut_q90.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_astronaut",
+  "q": 50,
+  "bytes": 15520,
+  "ms": 1471.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_astronaut_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_astronaut_q50.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_astronaut",
+  "q": 60,
+  "bytes": 21701,
+  "ms": 1680,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_astronaut_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_astronaut_q60.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_astronaut",
+  "q": 70,
+  "bytes": 29811,
+  "ms": 1951,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_astronaut_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_astronaut_q70.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_astronaut",
+  "q": 80,
+  "bytes": 41098,
+  "ms": 1783.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_astronaut_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_astronaut_q80.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_astronaut",
+  "q": 90,
+  "bytes": 65591,
+  "ms": 2024,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_astronaut_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_astronaut_q90.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_astronaut",
+  "q": 50,
+  "bytes": 19290,
+  "ms": 47.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_astronaut_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_astronaut_q50.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_astronaut",
+  "q": 60,
+  "bytes": 21610,
+  "ms": 43.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_astronaut_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_astronaut_q60.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_astronaut",
+  "q": 70,
+  "bytes": 24506,
+  "ms": 61.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_astronaut_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_astronaut_q70.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_astronaut",
+  "q": 80,
+  "bytes": 31724,
+  "ms": 56.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_astronaut_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_astronaut_q80.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_astronaut",
+  "q": 90,
+  "bytes": 52912,
+  "ms": 88.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_astronaut_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_astronaut_q90.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_astronaut",
+  "q": 50,
+  "bytes": 18978,
+  "ms": 139.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_astronaut_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_astronaut_q50.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_astronaut",
+  "q": 60,
+  "bytes": 21266,
+  "ms": 115.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_astronaut_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_astronaut_q60.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_astronaut",
+  "q": 70,
+  "bytes": 24044,
+  "ms": 97.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_astronaut_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_astronaut_q70.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_astronaut",
+  "q": 80,
+  "bytes": 31000,
+  "ms": 100.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_astronaut_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_astronaut_q80.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_astronaut",
+  "q": 90,
+  "bytes": 51364,
+  "ms": 186.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_astronaut_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_astronaut_q90.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_astronaut",
+  "q": 50,
+  "bytes": 19354,
+  "ms": 278.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_astronaut_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_astronaut_q50.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_astronaut",
+  "q": 60,
+  "bytes": 28328,
+  "ms": 381.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_astronaut_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_astronaut_q60.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_astronaut",
+  "q": 70,
+  "bytes": 36726,
+  "ms": 215.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_astronaut_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_astronaut_q70.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_astronaut",
+  "q": 80,
+  "bytes": 48776,
+  "ms": 279.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_astronaut_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_astronaut_q80.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_astronaut",
+  "q": 90,
+  "bytes": 96801,
+  "ms": 338.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_astronaut_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_astronaut_q90.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_astronaut",
+  "q": 50,
+  "bytes": 16951,
+  "ms": 264.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_astronaut_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_astronaut_q50.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_astronaut",
+  "q": 60,
+  "bytes": 24252,
+  "ms": 244.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_astronaut_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_astronaut_q60.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_astronaut",
+  "q": 70,
+  "bytes": 31120,
+  "ms": 219.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_astronaut_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_astronaut_q70.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_astronaut",
+  "q": 80,
+  "bytes": 40275,
+  "ms": 188.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_astronaut_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_astronaut_q80.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_astronaut",
+  "q": 90,
+  "bytes": 71082,
+  "ms": 222,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_astronaut_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_astronaut_q90.png"
+ },
+ {
+  "encoder": "png-source",
+  "image": "photo_chelsea",
+  "q": null,
+  "bytes": 220782,
+  "ms": 0,
+  "file": "/home/user/CLaude/trials-cloud-2/fixtures/06-images/src/photo_chelsea.png",
+  "width": 451,
+  "height": 300
+ },
+ {
+  "encoder": "jpeg-sharp",
+  "image": "photo_chelsea",
+  "q": 80,
+  "bytes": 23133,
+  "ms": 9.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/jpeg-sharp/photo_chelsea_q80.jpg",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/jpeg-sharp__photo_chelsea_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_chelsea",
+  "q": 50,
+  "bytes": 9786,
+  "ms": 20.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_chelsea_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_chelsea_q50.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_chelsea",
+  "q": 60,
+  "bytes": 11134,
+  "ms": 19.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_chelsea_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_chelsea_q60.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_chelsea",
+  "q": 70,
+  "bytes": 12844,
+  "ms": 18.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_chelsea_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_chelsea_q70.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_chelsea",
+  "q": 80,
+  "bytes": 16974,
+  "ms": 19.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_chelsea_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_chelsea_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_chelsea",
+  "q": 90,
+  "bytes": 29230,
+  "ms": 22.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_chelsea_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_chelsea_q90.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_chelsea",
+  "q": 50,
+  "bytes": 9124,
+  "ms": 48.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_chelsea_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_chelsea_q50.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_chelsea",
+  "q": 60,
+  "bytes": 10400,
+  "ms": 53.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_chelsea_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_chelsea_q60.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_chelsea",
+  "q": 70,
+  "bytes": 12112,
+  "ms": 53.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_chelsea_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_chelsea_q70.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_chelsea",
+  "q": 80,
+  "bytes": 16314,
+  "ms": 59.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_chelsea_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_chelsea_q80.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_chelsea",
+  "q": 90,
+  "bytes": 29186,
+  "ms": 84.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_chelsea_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_chelsea_q90.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_chelsea",
+  "q": 50,
+  "bytes": 9009,
+  "ms": 850.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_chelsea_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_chelsea_q50.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_chelsea",
+  "q": 60,
+  "bytes": 13512,
+  "ms": 1107.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_chelsea_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_chelsea_q60.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_chelsea",
+  "q": 70,
+  "bytes": 18361,
+  "ms": 1187.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_chelsea_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_chelsea_q70.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_chelsea",
+  "q": 80,
+  "bytes": 24528,
+  "ms": 1306.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_chelsea_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_chelsea_q80.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_chelsea",
+  "q": 90,
+  "bytes": 37767,
+  "ms": 2176.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_chelsea_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_chelsea_q90.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_chelsea",
+  "q": 50,
+  "bytes": 8734,
+  "ms": 507.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_chelsea_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_chelsea_q50.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_chelsea",
+  "q": 60,
+  "bytes": 13041,
+  "ms": 1057.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_chelsea_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_chelsea_q60.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_chelsea",
+  "q": 70,
+  "bytes": 17609,
+  "ms": 1044.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_chelsea_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_chelsea_q70.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_chelsea",
+  "q": 80,
+  "bytes": 23726,
+  "ms": 1268,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_chelsea_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_chelsea_q80.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_chelsea",
+  "q": 90,
+  "bytes": 35245,
+  "ms": 1788.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_chelsea_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_chelsea_q90.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_chelsea",
+  "q": 50,
+  "bytes": 9786,
+  "ms": 32.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_chelsea_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_chelsea_q50.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_chelsea",
+  "q": 60,
+  "bytes": 11134,
+  "ms": 64.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_chelsea_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_chelsea_q60.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_chelsea",
+  "q": 70,
+  "bytes": 12844,
+  "ms": 199.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_chelsea_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_chelsea_q70.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_chelsea",
+  "q": 80,
+  "bytes": 16974,
+  "ms": 92.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_chelsea_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_chelsea_q80.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_chelsea",
+  "q": 90,
+  "bytes": 29230,
+  "ms": 53.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_chelsea_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_chelsea_q90.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_chelsea",
+  "q": 50,
+  "bytes": 9124,
+  "ms": 58.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_chelsea_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_chelsea_q50.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_chelsea",
+  "q": 60,
+  "bytes": 10400,
+  "ms": 141.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_chelsea_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_chelsea_q60.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_chelsea",
+  "q": 70,
+  "bytes": 12112,
+  "ms": 81,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_chelsea_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_chelsea_q70.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_chelsea",
+  "q": 80,
+  "bytes": 16314,
+  "ms": 71.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_chelsea_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_chelsea_q80.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_chelsea",
+  "q": 90,
+  "bytes": 29186,
+  "ms": 64.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_chelsea_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_chelsea_q90.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_chelsea",
+  "q": 50,
+  "bytes": 8865,
+  "ms": 83.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_chelsea_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_chelsea_q50.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_chelsea",
+  "q": 60,
+  "bytes": 13850,
+  "ms": 94.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_chelsea_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_chelsea_q60.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_chelsea",
+  "q": 70,
+  "bytes": 18523,
+  "ms": 95.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_chelsea_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_chelsea_q70.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_chelsea",
+  "q": 80,
+  "bytes": 25159,
+  "ms": 113.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_chelsea_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_chelsea_q80.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_chelsea",
+  "q": 90,
+  "bytes": 45017,
+  "ms": 136.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_chelsea_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_chelsea_q90.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_chelsea",
+  "q": 50,
+  "bytes": 8187,
+  "ms": 102.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_chelsea_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_chelsea_q50.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_chelsea",
+  "q": 60,
+  "bytes": 12722,
+  "ms": 144.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_chelsea_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_chelsea_q60.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_chelsea",
+  "q": 70,
+  "bytes": 16737,
+  "ms": 111.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_chelsea_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_chelsea_q70.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_chelsea",
+  "q": 80,
+  "bytes": 22011,
+  "ms": 111.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_chelsea_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_chelsea_q80.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_chelsea",
+  "q": 90,
+  "bytes": 35948,
+  "ms": 109.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_chelsea_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_chelsea_q90.png"
+ },
+ {
+  "encoder": "png-source",
+  "image": "photo_coffee",
+  "q": null,
+  "bytes": 449225,
+  "ms": 0,
+  "file": "/home/user/CLaude/trials-cloud-2/fixtures/06-images/src/photo_coffee.png",
+  "width": 600,
+  "height": 400
+ },
+ {
+  "encoder": "jpeg-sharp",
+  "image": "photo_coffee",
+  "q": 80,
+  "bytes": 47265,
+  "ms": 9.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/jpeg-sharp/photo_coffee_q80.jpg",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/jpeg-sharp__photo_coffee_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_coffee",
+  "q": 50,
+  "bytes": 22876,
+  "ms": 59.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_coffee_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_coffee_q50.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_coffee",
+  "q": 60,
+  "bytes": 26040,
+  "ms": 47.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_coffee_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_coffee_q60.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_coffee",
+  "q": 70,
+  "bytes": 29234,
+  "ms": 51.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_coffee_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_coffee_q70.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_coffee",
+  "q": 80,
+  "bytes": 37994,
+  "ms": 46.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_coffee_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_coffee_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_coffee",
+  "q": 90,
+  "bytes": 62814,
+  "ms": 52.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_coffee_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_coffee_q90.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_coffee",
+  "q": 50,
+  "bytes": 21812,
+  "ms": 103.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_coffee_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_coffee_q50.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_coffee",
+  "q": 60,
+  "bytes": 25146,
+  "ms": 129.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_coffee_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_coffee_q60.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_coffee",
+  "q": 70,
+  "bytes": 28754,
+  "ms": 247.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_coffee_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_coffee_q70.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_coffee",
+  "q": 80,
+  "bytes": 38704,
+  "ms": 246.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_coffee_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_coffee_q80.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_coffee",
+  "q": 90,
+  "bytes": 64902,
+  "ms": 290.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_coffee_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_coffee_q90.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_coffee",
+  "q": 50,
+  "bytes": 18532,
+  "ms": 1756.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_coffee_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_coffee_q50.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_coffee",
+  "q": 60,
+  "bytes": 28237,
+  "ms": 1805.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_coffee_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_coffee_q60.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_coffee",
+  "q": 70,
+  "bytes": 39847,
+  "ms": 1916.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_coffee_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_coffee_q70.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_coffee",
+  "q": 80,
+  "bytes": 53567,
+  "ms": 2410.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_coffee_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_coffee_q80.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_coffee",
+  "q": 90,
+  "bytes": 83269,
+  "ms": 2635.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_coffee_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_coffee_q90.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_coffee",
+  "q": 50,
+  "bytes": 17498,
+  "ms": 1017.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_coffee_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_coffee_q50.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_coffee",
+  "q": 60,
+  "bytes": 26421,
+  "ms": 1295.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_coffee_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_coffee_q60.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_coffee",
+  "q": 70,
+  "bytes": 37260,
+  "ms": 1496.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_coffee_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_coffee_q70.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_coffee",
+  "q": 80,
+  "bytes": 51209,
+  "ms": 1708.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_coffee_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_coffee_q80.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_coffee",
+  "q": 90,
+  "bytes": 75018,
+  "ms": 2095.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_coffee_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_coffee_q90.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_coffee",
+  "q": 50,
+  "bytes": 22876,
+  "ms": 67.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_coffee_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_coffee_q50.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_coffee",
+  "q": 60,
+  "bytes": 26040,
+  "ms": 68.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_coffee_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_coffee_q60.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_coffee",
+  "q": 70,
+  "bytes": 29234,
+  "ms": 45.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_coffee_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_coffee_q70.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_coffee",
+  "q": 80,
+  "bytes": 37994,
+  "ms": 52.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_coffee_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_coffee_q80.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_coffee",
+  "q": 90,
+  "bytes": 62814,
+  "ms": 53,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_coffee_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_coffee_q90.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_coffee",
+  "q": 50,
+  "bytes": 21812,
+  "ms": 86.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_coffee_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_coffee_q50.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_coffee",
+  "q": 60,
+  "bytes": 25146,
+  "ms": 99.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_coffee_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_coffee_q60.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_coffee",
+  "q": 70,
+  "bytes": 28754,
+  "ms": 104,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_coffee_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_coffee_q70.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_coffee",
+  "q": 80,
+  "bytes": 38704,
+  "ms": 102.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_coffee_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_coffee_q80.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_coffee",
+  "q": 90,
+  "bytes": 64902,
+  "ms": 111.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_coffee_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_coffee_q90.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_coffee",
+  "q": 50,
+  "bytes": 20541,
+  "ms": 210.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_coffee_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_coffee_q50.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_coffee",
+  "q": 60,
+  "bytes": 32844,
+  "ms": 226.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_coffee_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_coffee_q60.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_coffee",
+  "q": 70,
+  "bytes": 43861,
+  "ms": 167.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_coffee_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_coffee_q70.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_coffee",
+  "q": 80,
+  "bytes": 59863,
+  "ms": 211.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_coffee_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_coffee_q80.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_coffee",
+  "q": 90,
+  "bytes": 109614,
+  "ms": 277.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_coffee_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_coffee_q90.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_coffee",
+  "q": 50,
+  "bytes": 18196,
+  "ms": 179.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_coffee_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_coffee_q50.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_coffee",
+  "q": 60,
+  "bytes": 28436,
+  "ms": 194.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_coffee_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_coffee_q60.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_coffee",
+  "q": 70,
+  "bytes": 36727,
+  "ms": 195.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_coffee_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_coffee_q70.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_coffee",
+  "q": 80,
+  "bytes": 48001,
+  "ms": 173.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_coffee_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_coffee_q80.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_coffee",
+  "q": 90,
+  "bytes": 77674,
+  "ms": 203.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_coffee_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_coffee_q90.png"
+ },
+ {
+  "encoder": "png-source",
+  "image": "photo_rocket",
+  "q": null,
+  "bytes": 312541,
+  "ms": 0,
+  "file": "/home/user/CLaude/trials-cloud-2/fixtures/06-images/src/photo_rocket.png",
+  "width": 640,
+  "height": 427
+ },
+ {
+  "encoder": "jpeg-sharp",
+  "image": "photo_rocket",
+  "q": 80,
+  "bytes": 31639,
+  "ms": 15.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/jpeg-sharp/photo_rocket_q80.jpg",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/jpeg-sharp__photo_rocket_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_rocket",
+  "q": 50,
+  "bytes": 13488,
+  "ms": 38,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_rocket_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_rocket_q50.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_rocket",
+  "q": 60,
+  "bytes": 15426,
+  "ms": 33.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_rocket_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_rocket_q60.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_rocket",
+  "q": 70,
+  "bytes": 17852,
+  "ms": 30.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_rocket_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_rocket_q70.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_rocket",
+  "q": 80,
+  "bytes": 23634,
+  "ms": 40.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_rocket_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_rocket_q80.png"
+ },
+ {
+  "encoder": "sharp-webp",
+  "image": "photo_rocket",
+  "q": 90,
+  "bytes": 39398,
+  "ms": 48.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp/photo_rocket_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp__photo_rocket_q90.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_rocket",
+  "q": 50,
+  "bytes": 14490,
+  "ms": 81.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_rocket_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_rocket_q50.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_rocket",
+  "q": 60,
+  "bytes": 16454,
+  "ms": 111.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_rocket_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_rocket_q60.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_rocket",
+  "q": 70,
+  "bytes": 18980,
+  "ms": 109.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_rocket_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_rocket_q70.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_rocket",
+  "q": 80,
+  "bytes": 25270,
+  "ms": 101.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_rocket_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_rocket_q80.png"
+ },
+ {
+  "encoder": "sharp-webp-tuned",
+  "image": "photo_rocket",
+  "q": 90,
+  "bytes": 41018,
+  "ms": 197.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-webp-tuned/photo_rocket_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-webp-tuned__photo_rocket_q90.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_rocket",
+  "q": 50,
+  "bytes": 15624,
+  "ms": 1005.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_rocket_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_rocket_q50.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_rocket",
+  "q": 60,
+  "bytes": 21788,
+  "ms": 1298.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_rocket_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_rocket_q60.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_rocket",
+  "q": 70,
+  "bytes": 28995,
+  "ms": 1347.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_rocket_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_rocket_q70.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_rocket",
+  "q": 80,
+  "bytes": 38374,
+  "ms": 1485.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_rocket_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_rocket_q80.png"
+ },
+ {
+  "encoder": "sharp-avif",
+  "image": "photo_rocket",
+  "q": 90,
+  "bytes": 63555,
+  "ms": 1553.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif/photo_rocket_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif__photo_rocket_q90.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_rocket",
+  "q": 50,
+  "bytes": 14106,
+  "ms": 1130.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_rocket_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_rocket_q50.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_rocket",
+  "q": 60,
+  "bytes": 19300,
+  "ms": 1390.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_rocket_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_rocket_q60.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_rocket",
+  "q": 70,
+  "bytes": 25618,
+  "ms": 1206.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_rocket_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_rocket_q70.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_rocket",
+  "q": 80,
+  "bytes": 34182,
+  "ms": 1308.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_rocket_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_rocket_q80.png"
+ },
+ {
+  "encoder": "sharp-avif-tuned",
+  "image": "photo_rocket",
+  "q": 90,
+  "bytes": 47782,
+  "ms": 1100.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/sharp-avif-tuned/photo_rocket_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/sharp-avif-tuned__photo_rocket_q90.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_rocket",
+  "q": 50,
+  "bytes": 13488,
+  "ms": 54.1,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_rocket_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_rocket_q50.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_rocket",
+  "q": 60,
+  "bytes": 15426,
+  "ms": 62.2,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_rocket_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_rocket_q60.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_rocket",
+  "q": 70,
+  "bytes": 17852,
+  "ms": 53.7,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_rocket_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_rocket_q70.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_rocket",
+  "q": 80,
+  "bytes": 23634,
+  "ms": 58.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_rocket_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_rocket_q80.png"
+ },
+ {
+  "encoder": "cwebp",
+  "image": "photo_rocket",
+  "q": 90,
+  "bytes": 39398,
+  "ms": 59.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp/photo_rocket_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp__photo_rocket_q90.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_rocket",
+  "q": 50,
+  "bytes": 14490,
+  "ms": 75.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_rocket_q50.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_rocket_q50.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_rocket",
+  "q": 60,
+  "bytes": 16454,
+  "ms": 96.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_rocket_q60.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_rocket_q60.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_rocket",
+  "q": 70,
+  "bytes": 18980,
+  "ms": 82,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_rocket_q70.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_rocket_q70.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_rocket",
+  "q": 80,
+  "bytes": 25270,
+  "ms": 81.5,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_rocket_q80.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_rocket_q80.png"
+ },
+ {
+  "encoder": "cwebp-tuned",
+  "image": "photo_rocket",
+  "q": 90,
+  "bytes": 41018,
+  "ms": 90.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/cwebp-tuned/photo_rocket_q90.webp",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/cwebp-tuned__photo_rocket_q90.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_rocket",
+  "q": 50,
+  "bytes": 16216,
+  "ms": 171,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_rocket_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_rocket_q50.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_rocket",
+  "q": 60,
+  "bytes": 27251,
+  "ms": 180.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_rocket_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_rocket_q60.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_rocket",
+  "q": 70,
+  "bytes": 41182,
+  "ms": 153.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_rocket_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_rocket_q70.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_rocket",
+  "q": 80,
+  "bytes": 53551,
+  "ms": 192.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_rocket_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_rocket_q80.png"
+ },
+ {
+  "encoder": "avifenc",
+  "image": "photo_rocket",
+  "q": 90,
+  "bytes": 76726,
+  "ms": 187.9,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc/photo_rocket_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc__photo_rocket_q90.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_rocket",
+  "q": 50,
+  "bytes": 12227,
+  "ms": 111,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_rocket_q50.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_rocket_q50.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_rocket",
+  "q": 60,
+  "bytes": 18640,
+  "ms": 154.8,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_rocket_q60.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_rocket_q60.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_rocket",
+  "q": 70,
+  "bytes": 24153,
+  "ms": 126.4,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_rocket_q70.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_rocket_q70.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_rocket",
+  "q": 80,
+  "bytes": 30395,
+  "ms": 128.3,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_rocket_q80.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_rocket_q80.png"
+ },
+ {
+  "encoder": "avifenc-tuned",
+  "image": "photo_rocket",
+  "q": 90,
+  "bytes": 45601,
+  "ms": 148.6,
+  "file": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/avifenc-tuned/photo_rocket_q90.avif",
+  "decoded": "/home/user/CLaude/trials-cloud-2/runs/06-images/out/decoded/avifenc-tuned__photo_rocket_q90.png"
+ }
+]

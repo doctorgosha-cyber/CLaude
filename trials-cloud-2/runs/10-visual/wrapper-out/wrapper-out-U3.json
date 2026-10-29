@@ -1,0 +1,50 @@
+{
+ "before": "/home/user/CLaude/trials-cloud-2/fixtures/10-visual/before/U3.html",
+ "after": "/home/user/CLaude/trials-cloud-2/fixtures/10-visual/after/U3.html",
+ "threshold": 0.3,
+ "maxPixels": 20,
+ "masks": [
+  "[data-dynamic]"
+ ],
+ "changed": true,
+ "results": [
+  {
+   "width": 390,
+   "size": [
+    390,
+    2331
+   ],
+   "sizeMismatch": false,
+   "diffPixels": 1498,
+   "pctDiff": 0.1648,
+   "bbox": {
+    "x": 38,
+    "y": 843,
+    "w": 76,
+    "h": 26
+   },
+   "solidBlock16": 229,
+   "changed": true,
+   "diff": "wrapper-out/U3/diff-390.png"
+  },
+  {
+   "width": 1280,
+   "size": [
+    1280,
+    1267
+   ],
+   "sizeMismatch": false,
+   "diffPixels": 1534,
+   "pctDiff": 0.0946,
+   "bbox": {
+    "x": 483,
+    "y": 447,
+    "w": 77,
+    "h": 26
+   },
+   "solidBlock16": 240,
+   "changed": true,
+   "diff": "wrapper-out/U3/diff-1280.png"
+  }
+ ]
+}

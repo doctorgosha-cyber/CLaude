@@ -1,0 +1,16 @@
+{
+  "trial": "10-visual",
+  "generator": "generate.mjs (node generate.mjs regenerates shared/site.css, before/*.html, after/*.html)",
+  "layout": "before/<id>.html and after/<id>.html share shared/site.css (design tokens in :root). Each pair is rendered at viewport widths 390 and 1280, full page, deviceScaleFactor 1, headless Chromium 1194 (playwright-core 1.64.1).",
+  "seeded": [
+    {"id": "U1", "file": "after/U1.html", "location": "<style>.pricing{margin-top:50px}</style> (shared value is 48px)", "what": "2 px vertical shift of the price-table section and everything below it; page height grows by 2 px (2331->2333 at 390, 1267->1269 at 1280)", "should_catch": "any pixel diff; image sizes differ so the comparer must pad, not abort"},
+    {"id": "U2", "file": "after/U2.html", "location": "<style>:root{--accent:#0b4fa0}</style> (shared token is #0b4f9c)", "what": "accent colour token changed by 4/255 in the blue channel only; affects header bar, buttons, badges, links (~3.9% / 5.6% of page pixels at 390 / 1280)", "should_catch": "colour threshold; pixelmatch default 0.1 (OKLab HyAB distance) does NOT see it, needs threshold <= 0.005"},
+    {"id": "U3", "file": "after/U3.html", "location": "<style>#card-2 .badge{display:none}</style>", "what": "the 'Editor pick' badge on product card 2 is hidden (76x26 px block)", "should_catch": "any pixel diff; bounding box should be ~76x26 at the card's top-left"},
+    {"id": "U4", "file": "after/U4.html", "location": "<style>body{font-family:Arial,Helvetica,sans-serif}</style> (shared token --font is Inter,\"Segoe UI\",Arial,sans-serif)", "what": "font fallback: body text renders in Liberation Sans (Arial alias) instead of Inter. NOTE: the brief suggested changing to a \"Segoe UI\" stack, but fontconfig on this box aliases \"Segoe UI\" to Inter (fc-match \"Segoe UI\" -> Inter-Regular.otf; canvas measureText identical), which produced a 0-pixel diff, so the stack was changed to Arial,Helvetica,sans-serif (-> Liberation Sans, a different installed font).", "should_catch": "any pixel diff over the whole text area"}
+  ],
+  "controls": [
+    {"id": "C1", "files": ["before/C1.html", "after/C1.html"], "what": "identical HTML; a .live-status bar ([data-dynamic]) renders a timestamp (new Date()) and a random visitors-online number via JS, so raw screenshots always differ in that bar", "expected": "0 reported changes after masking [data-dynamic]"},
+    {"id": "C2", "files": ["before/C2.html", "after/C2.html"], "what": "identical content; the hero paragraph gets transform:translateX(0px) (before) vs translateX(0.4px) (after): no pixel of layout moves, only glyph anti-aliasing changes (raw pixelmatch 0.1 diff ~2500-2700 px)", "expected": "0 reported changes with the tuned config"}
+  ],
+  "notes": "Pages have no external resources (no images/fonts fetched) so they render fully offline. Header nav hides two links below 700 px so the 390 px page does not overflow horizontally."
+}
