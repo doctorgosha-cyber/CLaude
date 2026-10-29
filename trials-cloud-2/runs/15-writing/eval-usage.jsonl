@@ -33,3 +33,4 @@
 {"card":"A-3","task":"t3","tokens":62477,"tool_uses":6,"duration_ms":23555}
 {"card":"A-3","task":"t6","tokens":64844,"tool_uses":5,"duration_ms":24740}
 {"card":"A-3","task":"t5","tokens":63419,"tool_uses":6,"duration_ms":35897}
+{"card":"A-3","task":"t4","tokens":65039,"tool_uses":7,"duration_ms":43248}

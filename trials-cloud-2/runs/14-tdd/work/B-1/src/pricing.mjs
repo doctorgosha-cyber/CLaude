@@ -20,16 +20,47 @@ function num(text, orig) {
 const MASS_UNITS = {
   g: 1, gram: 1, grams: 1,
   kg: 1000, kilogram: 1000, kilograms: 1000,
+  oz: 28.349523125, ounce: 28.349523125, ounces: 28.349523125,
+  lb: 453.59237, lbs: 453.59237, pound: 453.59237, pounds: 453.59237,
 };
+const MASS_UNIT_RE = Object.keys(MASS_UNITS).join('|');
+const LB_RE = 'lb|lbs|pound|pounds';
+const OZ_RE = 'oz|ounce|ounces';
+const COUNT_RE = '(\\d+)';
+const INT_RE = /^\d+$/;
+
+function parseCount(text, orig) {
+  if (!INT_RE.test(text)) fail(orig);
+  const n = Number(text);
+  if (!(n > 0)) fail(orig);
+  return n;
+}
 
 export function toGrams(spec) {
   if (typeof spec !== 'string') fail(spec);
-  const s = trim(spec);
-  const unit = Object.keys(MASS_UNITS).join('|');
-  const m = s.match(new RegExp(`^${NUM}${SP}*(${unit})$`, 'i'));
-  if (!m) fail(spec);
-  const grams = num(m[1], spec) * MASS_UNITS[m[2].toLowerCase()];
-  if (!(grams > 0)) fail(spec);
+  let s = trim(spec);
+  let count = 1;
+  const lead = s.match(new RegExp(`^${COUNT_RE}${SP}*[\u00D7xX]${SP}*(.+)$`));
+  const tail = s.match(new RegExp(`^(.+?)${SP}*\\(${SP}*${COUNT_RE}${SP}+[^\\s()]+${SP}*\\)$`));
+  if (lead) {
+    count = parseCount(lead[1], spec);
+    s = lead[2];
+  } else if (tail) {
+    count = parseCount(tail[2], spec);
+    s = tail[1];
+  }
+  let grams;
+  const compound = s.match(new RegExp(`^${NUM}${SP}*(${LB_RE})${SP}+${NUM}${SP}*(${OZ_RE})$`, 'i'));
+  const single = s.match(new RegExp(`^${NUM}${SP}*(${MASS_UNIT_RE})$`, 'i'));
+  if (compound) {
+    grams = num(compound[1], spec) * MASS_UNITS.lb + num(compound[3], spec) * MASS_UNITS.oz;
+  } else if (single) {
+    grams = num(single[1], spec) * MASS_UNITS[single[2].toLowerCase()];
+  } else {
+    fail(spec);
+  }
+  grams *= count;
+  if (!Number.isFinite(grams) || !(grams > 0)) fail(spec);
   return grams;
 }
 

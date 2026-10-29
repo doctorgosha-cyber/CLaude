@@ -27,7 +27,18 @@ function unitFactor(word) {
 
 export function toGrams(spec) {
   if (typeof spec !== 'string') throw bad(spec);
-  const s = spec.trim();
+  let s = spec.trim();
+  let count = 1;
+  const lead = s.match(new RegExp(`^(\\d+)${SP}*[x\u00D7]${SP}*(.*)$`, 'i'));
+  const trail = s.match(new RegExp(`^(.*?)${SP}*\\((\\d+)${SP}+[a-z]+\\)$`, 'i'));
+  if (lead) {
+    count = Number(lead[1]);
+    s = lead[2];
+  } else if (trail) {
+    count = Number(trail[2]);
+    s = trail[1];
+  }
+  if (!(count > 0)) throw bad(spec);
   const m = s.match(new RegExp(`^(${NUM})${SP}*([a-z]+)(?:${SP}+(${NUM})${SP}*([a-z]+))?$`, 'i'));
   if (!m) throw bad(spec);
   const f = unitFactor(m[2]);
@@ -37,6 +48,7 @@ export function toGrams(spec) {
     if (f !== LB || !/^(?:oz|ounces?)$/i.test(m[4])) throw bad(spec);
     g += num(m[3]) * OZ;
   }
+  g *= count;
   if (!(g > 0) || !Number.isFinite(g)) throw bad(spec);
   return g;
 }

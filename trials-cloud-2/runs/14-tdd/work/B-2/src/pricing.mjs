@@ -34,9 +34,22 @@ function simpleMass(s, orig) {
   return num(m[1]) * factor;
 }
 
+const LEAD_PACK_RE = new RegExp(`^(\\d+)${SPS}[\u00D7xX]${SPS}(.+)$`);
+const TRAIL_PACK_RE = new RegExp(`^(.+?)${SPS}\\((\\d+)${SP}+[a-z]+\\)$`, 'i');
+
 export function toGrams(spec) {
   if (typeof spec !== 'string') fail(spec);
-  const g = simpleMass(spec.trim(), spec);
+  let s = spec.trim();
+  let count = 1;
+  let m;
+  if ((m = LEAD_PACK_RE.exec(s))) {
+    count = Number(m[1]);
+    s = m[2].trim();
+  } else if ((m = TRAIL_PACK_RE.exec(s))) {
+    count = Number(m[2]);
+    s = m[1].trim();
+  }
+  const g = count * simpleMass(s, spec);
   if (!(g > 0) || !Number.isFinite(g)) fail(spec);
   return g;
 }

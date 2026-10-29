@@ -8,7 +8,7 @@ import { createRequire } from 'node:module';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const TOOLS = process.env.PERF_TOOLS || '/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools2/11-perf';
 const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
-const BASELINE_SCORE = 21;   // Lighthouse performance score of the untouched task (median of 3 on the grading box: 21,21,21)
+const BASELINE_SCORE = 17;   // Lighthouse performance score of the untouched task (median of 3 on the grading box: 17,17,17)
 const TARGET_SCORE = 95;
 const LH_RUNS = Number(process.env.LH_RUNS || 3);
 
