@@ -28,6 +28,9 @@ are what will be checked — **without breaking anything**:
 - No CDN or external resources (the page must work offline on the host).
 - Do not install packages and do not use the network. ImageMagick (`convert`), `cwebp`
   and Python 3 with Pillow are available on this machine if you need to re-encode images.
+- A Lighthouse CLI is installed on this machine (not in this folder) if you want numbers:
+  `CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome /tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools2/11-perf/node_modules/.bin/lighthouse http://127.0.0.1:8080/ --only-categories=performance --chrome-flags="--headless=new --no-sandbox" --output=json --output-path=./lh.json --quiet`
+  (mobile preset, simulated throttling: the same setup the release check uses).
 - Keep it to this folder.
 
 ## Working

@@ -1,12 +1,10 @@
 # data/
 
 ## catalogue.json
-Supplier feed export, hand-edited by the catalogue team before each release. Each product
-declares `energy: { value, unit }` where the unit is the feed's own spelling of either
-"kcal per 100 g" or "kcal per kg"; the loader normalises everything to `kcalPer100g`.
-Realistic dry/semi-moist foods are 250–600 kcal per 100 g. Anything outside that range after
-normalisation is a feed error: the service must refuse to load such a catalogue (ops request
-PS-402) rather than quote a portion from it.
+Supplier feed export, hand-edited by the catalogue team before each release. Fields:
+`id`, `name`, `species`, `form` (dry | semi-moist | wet), `energy: { value, unit }` in the
+feed's own spelling, `pack_g` (net weight of one can or pouch, wet products), `suitable_for`
+(shop filter labels), `added`. What the loader must do with these is in docs/PORTION-SPEC.md.
 
 ## factors.json
 `rer` — resting energy requirement coefficients (kcal = c × kg^e).

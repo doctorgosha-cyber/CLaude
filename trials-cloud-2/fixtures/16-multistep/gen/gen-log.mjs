@@ -7,8 +7,8 @@ const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed
 const pick = (a) => a[Math.floor(rnd() * a.length)];
 const hex = (n) => { let s = ''; for (let i = 0; i < n; i++) s += '0123456789abcdef'[Math.floor(rnd() * 16)]; return s; };
 
-const cats = ['ck-chicken-dry', 'ck-tuna-dry', 'ck-indoor-light', 'ck-kitten-growth', 'ck-senior-care', 'ck-chicken-dry', 'ck-tuna-dry'];
-const dogs = ['dg-beef-dry', 'dg-chicken-rice', 'dg-puppy-large', 'dg-weight-control', 'dg-beef-dry'];
+const cats = ['ck-chicken-dry', 'ck-tuna-dry', 'ck-indoor-light', 'ck-kitten-growth', 'ck-senior-care', 'ck-chicken-dry', 'ck-tuna-dry', 'ck-chicken-pate-wet'];
+const dogs = ['dg-beef-dry', 'dg-chicken-rice', 'dg-puppy-large', 'dg-senior-light', 'dg-beef-dry'];
 const newCat = ['ck-salmon-soft-bites', 'ck-ocean-fish-dry'];
 const newDog = ['dg-lamb-rice-dry'];
 
@@ -19,7 +19,7 @@ function log(level, msg, ms = 1000 + rnd() * 240000) { lines.push(`${stamp(ms)} 
 
 log('INFO', 'portion-service v1.4.0 starting pid=18422 node=v22.22.0', 0);
 log('INFO', 'config: port=8080 defaultUnits=metric localeUnits=on factors=2026-10-20', 40);
-log('INFO', 'catalogue: loaded data/catalogue.json version=2026-10-20 products=12 (3 added since 2026-10-06)', 112);
+log('INFO', 'catalogue: loaded data/catalogue.json version=2026-10-20 products=14 (4 added since 2026-10-06)', 112);
 log('INFO', 'listening on :8080', 8);
 
 function req(q, user, ms) {
@@ -31,7 +31,7 @@ function req(q, user, ms) {
 
 const plan = [];
 // 64 ordinary requests + 3 complaining accounts + a few stragglers, in shuffled order
-for (let i = 0; i < 38; i++) {
+for (let i = 0; i < 36; i++) {
   const w = (2.8 + rnd() * 3.4).toFixed(1);
   const stage = pick(['adult', 'adult', 'neutered_adult', 'neutered_adult', 'senior', 'kitten', 'neutered']);
   const act = pick(['normal', 'normal', 'low', 'high']);
@@ -51,7 +51,11 @@ plan.push(['species=cat&weight=4.6&stage=adult&activity=low&product=ck-ocean-fis
 plan.push(['species=dog&weight=24.5&stage=adult&activity=normal&product=dg-lamb-rice-dry', 'u_2750']);
 // one non-complaining imperial user on a new product (errors partly cancel)
 plan.push(['species=dog&weight=48&stage=adult&activity=high&units=imperial&product=dg-lamb-rice-dry', 'u_1981']);
-// the three support tickets
+// new wet product with kcal/can (nobody complained; the number is merely 4x too low)
+plan.push(['species=dog&weight=21&stage=adult&activity=normal&product=dg-beef-stew-wet', 'u_0655']);
+// red herring: adult dog on senior food, served correctly
+plan.push(['species=dog&weight=24&stage=adult&activity=normal&product=dg-senior-light', 'u_3078']);
+// the support tickets
 plan.push(['species=cat&weight=10&stage=adult&activity=normal&units=imperial&product=ck-chicken-dry', 'u_2291']);
 plan.push(['species=cat&weight=11.5&stage=neutered_adult&activity=low&units=imperial&product=ck-senior-care', 'u_0874']);
 plan.push(['species=cat&weight=3.8&stage=adult&activity=normal&product=ck-ocean-fish-dry', 'u_1536']);

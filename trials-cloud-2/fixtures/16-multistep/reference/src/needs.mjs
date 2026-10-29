@@ -1,4 +1,4 @@
-// Daily energy requirement (kcal/day) from species, body weight and life stage.
+// Daily energy requirement (kcal/day) from species, body weight and life stage (spec §1-2).
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -9,14 +9,10 @@ const FACTORS = JSON.parse(readFileSync(join(HERE, '..', 'data', 'factors.json')
 export const SPECIES = Object.keys(FACTORS.stage);
 export const ACTIVITIES = Object.keys(FACTORS.activity);
 const DEFAULT_STAGE = 'adult';
+const GROWTH_STAGES = new Set(['kitten', 'puppy']);
 
 export function stagesFor(species) {
   return Object.keys(FACTORS.stage[species] ?? {});
-}
-
-/** Resting energy requirement: 70 * kg^0.75 (kcal/day). */
-export function restingEnergy(weightKg) {
-  return FACTORS.rer.coefficient * Math.pow(weightKg, FACTORS.rer.exponent);
 }
 
 /**
@@ -28,6 +24,16 @@ export function resolveStage(species, stage) {
   if (!table) return undefined;
   const key = FACTORS.aliases?.[stage] ?? stage;
   return Object.hasOwn(table, key) ? key : undefined;
+}
+
+/** True for kitten / puppy (and their aliases). */
+export function isGrowthStage(species, stage) {
+  return GROWTH_STAGES.has(resolveStage(species, stage));
+}
+
+/** Resting energy requirement: 70 * kg^0.75 (kcal/day). */
+export function restingEnergy(weightKg) {
+  return FACTORS.rer.coefficient * Math.pow(weightKg, FACTORS.rer.exponent);
 }
 
 function stageFactorFor(species, stage) {

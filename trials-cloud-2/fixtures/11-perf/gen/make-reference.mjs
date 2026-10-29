@@ -57,7 +57,7 @@ html = html.replace('<img id="hero-image" src="img/hero.png" alt="Six of the tes
   '<img id="hero-image" src="img/hero-800.webp" srcset="img/hero-480.webp 480w, img/hero-800.webp 800w, img/hero-1200.webp 1200w" sizes="(max-width: 64rem) 100vw, 62rem" width="1800" height="1000" fetchpriority="high" decoding="async" alt="Six of the tested wireless headphones laid out on a wooden desk">');
 for (let i = 1; i <= 4; i++) html = html.replace(`<img src="img/related-${i}.png"`, `<img src="img/related-${i}.webp" width="480" height="360" loading="lazy" decoding="async"`);
 for (let i = 1; i <= 5; i++) html = html.replace(`<img src="img/avatar-${i}.png"`, `<img src="img/avatar-${i}.webp" width="56" height="56" loading="lazy" decoding="async"`);
-html = html.replace('<body>\n', '<body>\n<div class="promo-banner" id="promo-banner"><strong>Free shipping on orders over €50</strong> — this week only, on every model in the table.</div>\n');
+html = html.replace('<body>\n', '<body>\n<div class="promo-banner" id="promo-banner"><strong>Free shipping on orders over €50</strong> — this week only, on every model in the table. <span class="promo-terms">Applies to orders shipped within the EU; the discount is shown at checkout.</span></div>\n');
 html = html.replace('<script src="js/app.js"></script>\n', '<script>window.__tqQueue=[];window.tq=function(){window.__tqQueue.push(Array.prototype.slice.call(arguments));};</script>\n');
 fs.writeFileSync(path.join(REF, 'index.html'), html);
 

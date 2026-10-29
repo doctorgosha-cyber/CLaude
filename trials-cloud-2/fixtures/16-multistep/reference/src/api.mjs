@@ -61,11 +61,11 @@ export function handlePortion(input) {
   if (!product) return error(404, `unknown product: ${productId}`);
   if (product.species !== species) return error(400, `product ${productId} is not a ${species} food`);
 
-  // Imperial locales send the weight in pounds; everything downstream works in kg.
+  // Imperial locales send the weight in pounds; everything downstream works in kg (spec §1).
   const weightKg = units === 'imperial' ? lbToKg(weight) : weight;
-  const { kcalPerDay, grams } = portionFor({ species, weightKg, stage, activity }, product);
+  const { kcalPerDay, grams, capped, meals } = portionFor({ species, weightKg, stage, activity }, product);
   return {
     status: 200,
-    body: formatPortion({ grams, kcalPerDay, weight, units, product }),
+    body: formatPortion({ grams, kcalPerDay, weight, units, product, capped, meals }),
   };
 }

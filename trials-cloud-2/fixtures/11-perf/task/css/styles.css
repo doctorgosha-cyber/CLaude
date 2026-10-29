@@ -66,6 +66,7 @@ section { margin: 2rem 0; }
   border-bottom: 1px solid #f0d77a; font-size: 1.0625rem; line-height: 1.6;
 }
 .promo-banner strong { display: block; font-size: 1.25rem; }
+.promo-banner .promo-terms { display: block; font-size: 0.875rem; opacity: 0.85; }
 
 .hero img { width: 100%; display: block; border-radius: 8px; }
 .hero-copy { padding-top: 1rem; }

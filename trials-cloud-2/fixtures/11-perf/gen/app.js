@@ -200,7 +200,7 @@
     var banner = document.createElement('div');
     banner.className = 'promo-banner';
     banner.id = 'promo-banner';
-    banner.innerHTML = '<strong>Free shipping on orders over €50</strong> — this week only, on every model in the table.';
+    banner.innerHTML = '<strong>Free shipping on orders over €50</strong> — this week only, on every model in the table. <span class="promo-terms">Applies to orders shipped within the EU; the discount is shown at checkout.</span>';
     document.body.insertBefore(banner, document.body.firstChild);
   }
 
