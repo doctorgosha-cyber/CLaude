@@ -49,6 +49,7 @@ export const cases = [
     near(m.toGrams('3x350g'), 1050);
     near(m.toGrams('2 X 400 g'), 800);
     near(m.toGrams('4 × 0.5 kg'), 2000);
+    near(m.toGrams('2 × 1 lb 4 oz'), 2 * (LB + 4 * OZ));   // count applies to a compound mass too
   } },
   { id: 'T04', name: 'toGrams: trailing parenthetical pack count "(2 bags)"', run: (m) => {
     near(m.toGrams('0.75 kg (2 bags)'), 1500);

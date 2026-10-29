@@ -1,0 +1,1 @@
+{"file":"L3.mp4","mode":"default","integrated":-14.1,"lra":2.3,"truePeak":1.2,"voice":-12.1,"music":-22.1,"ratio":10,"findings":[{"id":"true_peak","msg":"true peak 1.2 dBTP, want <= -1.0"}],"runtime_s":2.13,"pass":false}

@@ -83,7 +83,7 @@ Total mass in grams.
 Energy density normalised to kcal per 100 g.
 
 - Accepted: `<number> kcal|kJ per|/ 100 g|100g|kg` (case-insensitive units,
-  e.g. `350 kcal/100 g`, `3500 kcal/kg`, `1464 kJ/100 g`, `14.6 kJ per kg`).
+  e.g. `350 kcal/100 g`, `3500 kcal/kg`, `1464 kJ/100 g`, `14640 kJ per kg`).
 - `1 kcal = 4.184 kJ`.
 - Sanity range: the **normalised result** must be within 50 … 900 kcal/100 g
   inclusive; otherwise TypeError.

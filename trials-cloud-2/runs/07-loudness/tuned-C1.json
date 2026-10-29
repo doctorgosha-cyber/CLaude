@@ -1,1 +1,1 @@
-{"file":"C1.mp4","mode":"tuned","integrated":-14,"lra":2.2,"truePeak":-1.5,"voice":-12.3,"music":-22.2,"ratio":9.9,"findings":[],"tuned":{"speechFrames":224,"voiceDuringSpeech":-12.4,"musicDuringSpeech":-23.2,"ratioDuringSpeech":10.9},"runtime_s":2.63,"pass":true}
+{"file":"C1.mp4","mode":"tuned","integrated":-14.1,"lra":2.2,"truePeak":-2.7,"voice":-12,"music":-22,"ratio":10,"findings":[],"tuned":{"speechFrames":224,"voiceDuringSpeech":-12,"musicDuringSpeech":-23,"ratioDuringSpeech":11},"runtime_s":2.63,"pass":true}
