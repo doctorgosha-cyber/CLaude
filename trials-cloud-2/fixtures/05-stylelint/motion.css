@@ -1,0 +1,111 @@
+/* Control: view transitions, entry animations, dialogs and popovers */
+@view-transition {
+  navigation: auto;
+}
+
+.hero-image {
+  view-transition-name: hero;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    translate: 0 0.5rem;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+dialog {
+  border: 0;
+  border-radius: var(--radius);
+  padding: var(--space-l);
+  max-inline-size: min(90vw, 40rem);
+  opacity: 1;
+  scale: 1;
+  transition: opacity 200ms, scale 200ms, display 200ms allow-discrete, overlay 200ms allow-discrete;
+
+  &::backdrop {
+    background: rgb(0 0 0 / 40%);
+    backdrop-filter: blur(4px);
+  }
+
+  &:not([open]) {
+    opacity: 0;
+    scale: 0.95;
+  }
+
+  @starting-style {
+    &[open] {
+      opacity: 0;
+      scale: 0.95;
+    }
+  }
+}
+
+[popover] {
+  inset: unset;
+  inset-block-start: anchor(bottom);
+  position-anchor: --menu-button;
+  margin: 0.25rem 0 0;
+  border: 1px solid color-mix(in srgb, currentcolor 20%, transparent);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  box-shadow: var(--shadow);
+
+  &:popover-open {
+    display: block;
+  }
+}
+
+.menu-button {
+  anchor-name: --menu-button;
+}
+
+details {
+  interpolate-size: allow-keywords;
+
+  &::details-content {
+    block-size: 0;
+    overflow-y: clip;
+    transition: block-size 250ms ease, content-visibility 250ms allow-discrete;
+  }
+
+  &[open]::details-content {
+    block-size: auto;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    animation: fade-up 400ms ease-out both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 250ms;
+  }
+}
+
+@media (width >= 48rem) and (height > 30rem) {
+  .hero {
+    min-block-size: 70svh;
+  }
+}
+
+@media (400px <= width <= 700px) {
+  .hero {
+    padding-inline: var(--space-m);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    translate: 0 -2px;
+  }
+}

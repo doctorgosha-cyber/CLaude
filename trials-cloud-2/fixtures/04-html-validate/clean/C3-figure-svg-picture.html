@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Figure 1 – Dry food protein by brand</title>
+<link rel="stylesheet" href="/assets/figure.css">
+</head>
+<body>
+<main>
+<h1>Figure 1: Protein content of 10 dry dog foods</h1>
+<figure>
+<svg viewBox="0 0 640 320" width="640" height="320" role="img" aria-labelledby="fig1-title fig1-desc">
+<title id="fig1-title">Bar chart of crude protein percentage for ten dry dog foods</title>
+<desc id="fig1-desc">Orijen Original is highest at 38 percent; Josera Optiness is lowest at 22 percent.</desc>
+<g class="bars" fill="#2a6fdb">
+<rect x="40" y="20" width="24" height="228" data-product="Orijen Original" data-value="38"></rect>
+<rect x="100" y="50" width="24" height="198" data-product="Acana Wild Prairie" data-value="33"></rect>
+<rect x="160" y="92" width="24" height="156" data-product="Wolfsblut Wild Duck" data-value="26"></rect>
+<rect x="220" y="116" width="24" height="132" data-product="Josera Optiness" data-value="22"></rect>
+</g>
+<g class="axis" stroke="#444">
+<line x1="30" y1="248" x2="620" y2="248"></line>
+<line x1="30" y1="10" x2="30" y2="248"></line>
+</g>
+<text x="52" y="270" text-anchor="middle" font-size="11">Orijen</text>
+<text x="112" y="270" text-anchor="middle" font-size="11">Acana</text>
+<text x="172" y="270" text-anchor="middle" font-size="11">Wolfsblut</text>
+<text x="232" y="270" text-anchor="middle" font-size="11">Josera</text>
+</svg>
+<figcaption>Crude protein, minimum guaranteed, as declared on packaging (October 2026).</figcaption>
+</figure>
+<figure>
+<picture>
+<source srcset="/img/lab-photo.avif" type="image/avif">
+<source srcset="/img/lab-photo.webp" type="image/webp">
+<img src="/img/lab-photo.jpg" alt="Four kibble samples on a white tray next to a kitchen scale" width="800" height="450" loading="lazy" decoding="async">
+</picture>
+<figcaption>Samples weighed before the protein test.</figcaption>
+</figure>
+<p><a href="/data/figure-1.csv" download>Download the data (CSV, 2 KB)</a></p>
+</main>
+</body>
+</html>

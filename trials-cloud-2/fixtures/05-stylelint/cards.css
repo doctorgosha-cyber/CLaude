@@ -1,0 +1,29 @@
+/* Seeded: review cards (C1 invalid value, C3 !important creep) */
+@layer components {
+  .review-card {
+    display: flx;
+    gap: var(--space-s);
+    padding: var(--space-m);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    container-type: inline-size;
+
+    & .review-score {
+      font-size: clamp(1.5rem, 1rem + 3cqi, 2.5rem);
+      font-weight: 700;
+      color: var(--color-accent);
+    }
+  }
+
+  .review-card-sponsored {
+    border: 2px solid gold !important;
+    background: color-mix(in oklch, gold 15%, var(--color-surface)) !important;
+    order: -1 !important;
+  }
+
+  @container (width >= 40rem) {
+    .review-card {
+      grid-template-columns: 1fr 2fr;
+    }
+  }
+}

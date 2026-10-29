@@ -1,0 +1,19 @@
+{
+  "trial": "04-html-validate",
+  "fixtures_dir": "trials-cloud-2/fixtures/04-html-validate",
+  "note": "All pages hand-written (no generator). Seeded pages contain exactly one intended markup defect each; clean pages are valid, modern HTML and must produce no findings.",
+  "seeded": [
+    {"id": "H1", "file": "seeded/H1-review-dup-id.html", "location": "line 33 <section id=\"verdict\"> and line 53 <aside id=\"verdict\">", "what": "duplicate id=\"verdict\" on two elements (breaks in-page #verdict link)", "expected_rule": "no-dup-id"},
+    {"id": "H2", "file": "seeded/H2-cards-nested-anchor.html", "location": "line 19 <a href=\"/go/sheba/\"> inside <a class=\"card-link\"> (lines 15-20)", "what": "invalid nesting: interactive <a> inside <a> (browsers split the outer link; affiliate link unreliable)", "expected_rule": "element-permitted-content"},
+    {"id": "H3", "file": "seeded/H3-figure-hidden-img-noalt.html", "location": "line 35 <img src=\"/img/figure-3-static.png\"> inside <div id=\"fallback\" hidden>", "what": "img without alt inside a hidden container (axe skips it because it is not rendered; becomes visible when JS is off)", "expected_rule": "wcag/h37"},
+    {"id": "H4", "file": "seeded/H4-faq-stray-end-tag.html", "location": "line 21 stray </div> inside second <details>", "what": "stray end tag </div> with no matching open tag", "expected_rule": "close-order"},
+    {"id": "H5", "file": "seeded/H5-form-label-missing-id.html", "location": "line 25 <label for=\"comments\"> vs line 26 <textarea id=\"comment\">", "what": "label for= points to a non-existent id (textarea unlabelled for screen readers; clicking label does nothing)", "expected_rule": "valid-for (or no-missing-references)"},
+    {"id": "H6", "file": "seeded/H6-table-deprecated-attr.html", "location": "line 13 <table cellpadding=\"4\">", "what": "deprecated presentational attribute cellpadding on <table>", "expected_rule": "no-deprecated-attr"}
+  ],
+  "clean": [
+    {"id": "C1", "file": "clean/C1-video-page.html", "features": "<video> with <source>/<track>, figure/figcaption, JSON-LD, &amp; in href"},
+    {"id": "C2", "file": "clean/C2-calculator-custom-elements.html", "features": "custom element <pet-calculator>, data-* attributes, <datalist>, <output for>, <template> with <tr>, <dialog> with method=dialog form, module script"},
+    {"id": "C3", "file": "clean/C3-figure-svg-picture.html", "features": "inline SVG with role=img + aria-labelledby title/desc, data-* on SVG, <picture>/<source>, img decoding/loading, download link"},
+    {"id": "C4", "file": "clean/C4-faq-details-data-attrs.html", "features": "<details name=> exclusive accordion, <summary>, data-* attrs, aria-pressed buttons, <time>"}
+  ]
+}

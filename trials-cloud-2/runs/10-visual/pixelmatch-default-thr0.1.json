@@ -1,0 +1,278 @@
+{
+ "mode": "default",
+ "threshold": 0.1,
+ "results": {
+  "U1-390": {
+   "id": "U1",
+   "width": 390,
+   "size": [
+    390,
+    2333
+   ],
+   "diffPixels": 13178,
+   "diffPixelsInclAA": 20199,
+   "maxWindow16": 116,
+   "pct": 1.4483,
+   "bbox": {
+    "x": 0,
+    "y": 1558,
+    "w": 390,
+    "h": 742
+   },
+   "sizeMismatch": {
+    "before": [
+     390,
+     2331
+    ],
+    "after": [
+     390,
+     2333
+    ]
+   },
+   "shot_s": 0.63,
+   "compare_s": 0.27,
+   "total_s": 0.9
+  },
+  "U1-1280": {
+   "id": "U1",
+   "width": 1280,
+   "size": [
+    1280,
+    1269
+   ],
+   "diffPixels": 20055,
+   "diffPixelsInclAA": 27073,
+   "maxWindow16": 116,
+   "pct": 1.2347,
+   "bbox": {
+    "x": 0,
+    "y": 815,
+    "w": 1280,
+    "h": 423
+   },
+   "sizeMismatch": {
+    "before": [
+     1280,
+     1267
+    ],
+    "after": [
+     1280,
+     1269
+    ]
+   },
+   "shot_s": 0.61,
+   "compare_s": 0.34,
+   "total_s": 0.95
+  },
+  "U2-390": {
+   "id": "U2",
+   "width": 390,
+   "size": [
+    390,
+    2331
+   ],
+   "diffPixels": 0,
+   "diffPixelsInclAA": 0,
+   "maxWindow16": 0,
+   "pct": 0,
+   "bbox": null,
+   "sizeMismatch": null,
+   "shot_s": 0.57,
+   "compare_s": 0.17,
+   "total_s": 0.75
+  },
+  "U2-1280": {
+   "id": "U2",
+   "width": 1280,
+   "size": [
+    1280,
+    1267
+   ],
+   "diffPixels": 0,
+   "diffPixelsInclAA": 0,
+   "maxWindow16": 0,
+   "pct": 0,
+   "bbox": null,
+   "sizeMismatch": null,
+   "shot_s": 0.74,
+   "compare_s": 0.28,
+   "total_s": 1.02
+  },
+  "U3-390": {
+   "id": "U3",
+   "width": 390,
+   "size": [
+    390,
+    2331
+   ],
+   "diffPixels": 1527,
+   "diffPixelsInclAA": 1770,
+   "maxWindow16": 212,
+   "pct": 0.168,
+   "bbox": {
+    "x": 38,
+    "y": 843,
+    "w": 76,
+    "h": 26
+   },
+   "sizeMismatch": null,
+   "shot_s": 0.71,
+   "compare_s": 0.34,
+   "total_s": 1.05
+  },
+  "U3-1280": {
+   "id": "U3",
+   "width": 1280,
+   "size": [
+    1280,
+    1267
+   ],
+   "diffPixels": 1575,
+   "diffPixelsInclAA": 1794,
+   "maxWindow16": 217,
+   "pct": 0.0971,
+   "bbox": {
+    "x": 483,
+    "y": 447,
+    "w": 77,
+    "h": 26
+   },
+   "sizeMismatch": null,
+   "shot_s": 0.93,
+   "compare_s": 0.46,
+   "total_s": 1.4
+  },
+  "U4-390": {
+   "id": "U4",
+   "width": 390,
+   "size": [
+    390,
+    2331
+   ],
+   "diffPixels": 28909,
+   "diffPixelsInclAA": 47995,
+   "maxWindow16": 166,
+   "pct": 3.18,
+   "bbox": {
+    "x": 24,
+    "y": 24,
+    "w": 341,
+    "h": 2274
+   },
+   "sizeMismatch": null,
+   "shot_s": 0.76,
+   "compare_s": 0.22,
+   "total_s": 0.98
+  },
+  "U4-1280": {
+   "id": "U4",
+   "width": 1280,
+   "size": [
+    1280,
+    1267
+   ],
+   "diffPixels": 34607,
+   "diffPixelsInclAA": 56711,
+   "maxWindow16": 200,
+   "pct": 2.1339,
+   "bbox": {
+    "x": 105,
+    "y": 24,
+    "w": 1071,
+    "h": 1212
+   },
+   "sizeMismatch": null,
+   "shot_s": 0.94,
+   "compare_s": 0.26,
+   "total_s": 1.2
+  },
+  "C1-390": {
+   "id": "C1",
+   "width": 390,
+   "size": [
+    390,
+    2367
+   ],
+   "diffPixels": 371,
+   "diffPixelsInclAA": 547,
+   "maxWindow16": 90,
+   "pct": 0.0402,
+   "bbox": {
+    "x": 268,
+    "y": 67,
+    "w": 62,
+    "h": 29
+   },
+   "sizeMismatch": null,
+   "shot_s": 0.69,
+   "compare_s": 0.13,
+   "total_s": 0.82
+  },
+  "C1-1280": {
+   "id": "C1",
+   "width": 1280,
+   "size": [
+    1280,
+    1303
+   ],
+   "diffPixels": 1030,
+   "diffPixelsInclAA": 1690,
+   "maxWindow16": 83,
+   "pct": 0.0618,
+   "bbox": {
+    "x": 463,
+    "y": 76,
+    "w": 355,
+    "h": 12
+   },
+   "sizeMismatch": null,
+   "shot_s": 0.77,
+   "compare_s": 0.26,
+   "total_s": 1.03
+  },
+  "C2-390": {
+   "id": "C2",
+   "width": 390,
+   "size": [
+    390,
+    2331
+   ],
+   "diffPixels": 2564,
+   "diffPixelsInclAA": 3155,
+   "maxWindow16": 95,
+   "pct": 0.282,
+   "bbox": {
+    "x": 25,
+    "y": 242,
+    "w": 334,
+    "h": 72
+   },
+   "sizeMismatch": null,
+   "shot_s": 0.48,
+   "compare_s": 0.16,
+   "total_s": 0.64
+  },
+  "C2-1280": {
+   "id": "C2",
+   "width": 1280,
+   "size": [
+    1280,
+    1267
+   ],
+   "diffPixels": 2733,
+   "diffPixelsInclAA": 3119,
+   "maxWindow16": 93,
+   "pct": 0.1685,
+   "bbox": {
+    "x": 105,
+    "y": 231,
+    "w": 604,
+    "h": 44
+   },
+   "sizeMismatch": null,
+   "shot_s": 0.62,
+   "compare_s": 0.2,
+   "total_s": 0.82
+  }
+ }
+}

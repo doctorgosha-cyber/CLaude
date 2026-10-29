@@ -1,0 +1,15 @@
+{
+  "name": "nexus-vuln-fixture",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Synthetic fixture: 4 seeded vulnerable pins (V1-V4) + 3 clean controls (C1-C3)",
+  "dependencies": {
+    "lodash": "4.17.20",
+    "minimist": "1.2.5",
+    "node-fetch": "2.6.6",
+    "semver": "7.3.7",
+    "picocolors": "1.1.1",
+    "nanoid": "6.0.2",
+    "fast-glob": "3.3.3"
+  }
+}

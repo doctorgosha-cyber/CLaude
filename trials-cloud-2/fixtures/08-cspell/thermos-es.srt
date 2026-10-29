@@ -1,0 +1,47 @@
+1
+00:00:00,000 --> 00:00:04,000
+Este es el Thermoflask, una botella que mantiene el café caliente durante doce horas.
+
+2
+00:00:05,000 --> 00:00:09,000
+Todo empieza con dos paredes de acero inoxidable, una dentro de la otra.
+
+3
+00:00:10,000 --> 00:00:14,000
+Entre ellas no hay casi nada: un vacío.
+
+4
+00:00:15,000 --> 00:00:19,000
+El calor viaja de tres maneras: conducción, convección y radiación.
+
+5
+00:00:20,000 --> 00:00:24,000
+Sin aire en el hueco, la conducción y la convección no tienen camino.
+
+6
+00:00:25,000 --> 00:00:29,000
+Queda la radiación, que una fina capa de cobre refleja hacia dentro.
+
+7
+00:00:30,000 --> 00:00:34,000
+El único puente entre las paredes es el cuello estrecho de arriba.
+
+8
+00:00:35,000 --> 00:00:39,000
+La tecnica consiste en hacerlo lo más fino posible para frenar la fuga de calor.
+
+9
+00:00:40,000 --> 00:00:44,000
+La tapa añade una última capa de aislami ento con una junta de silicona.
+
+10
+00:00:45,000 --> 00:00:49,000
+Llénala con agua hirviendo y el exterior sigue frío al tacto.
+
+11
+00:00:50,000 --> 00:00:54,000
+Doce horas después, el café sigue por encima de los sesenta grados.
+
+12
+00:00:55,000 --> 00:00:59,000
+Esta película forma parte de la serie Anatomy of Things.

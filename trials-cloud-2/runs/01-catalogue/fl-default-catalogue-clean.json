@@ -1,0 +1,47 @@
+{
+  "valid": true,
+  "stats": {
+    "tasks": 1,
+    "errors": 0,
+    "warnings": 0,
+    "seconds": 0.113
+  },
+  "warnings": [],
+  "errors": [],
+  "tasks": [
+    {
+      "name": "catalogue-clean",
+      "type": "table",
+      "valid": true,
+      "place": "/home/user/CLaude/trials-cloud-2/fixtures/01-catalogue/catalogue-clean.csv",
+      "labels": [
+        "id",
+        "brand",
+        "product",
+        "species",
+        "life_stage",
+        "form",
+        "kcal_per_100g",
+        "protein_pct",
+        "fat_pct",
+        "moisture_pct",
+        "fibre_pct",
+        "source_url",
+        "source_date",
+        "label_year"
+      ],
+      "stats": {
+        "errors": 0,
+        "warnings": 0,
+        "seconds": 0.113,
+        "md5": "1bc1b478af9a739d3e739db7f6df5909",
+        "sha256": "9ab4103fb198fbde57adcf286b060da190a8b24b111b537fd6654ae27720677b",
+        "bytes": 5208,
+        "fields": 14,
+        "rows": 40
+      },
+      "warnings": [],
+      "errors": []
+    }
+  ]
+}

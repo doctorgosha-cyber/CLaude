@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suggest a product</title>
+</head>
+<body>
+<main>
+<h1>Suggest a product for testing</h1>
+<form action="/suggest/" method="post">
+<div class="field">
+<label for="product">Product name</label>
+<input type="text" id="product" name="product" required autocomplete="off">
+</div>
+<div class="field">
+<label for="brand">Brand</label>
+<input type="text" id="brand" name="brand" autocomplete="organization">
+</div>
+<div class="field">
+<label for="email">Your e-mail (optional)</label>
+<input type="email" id="email" name="email" autocomplete="email">
+</div>
+<div class="field">
+<label for="comments">Why should we test it?</label>
+<textarea id="comment" name="comments" rows="4"></textarea>
+</div>
+<div class="field">
+<label for="species">Species</label>
+<select id="species" name="species">
+<option value="dog">Dog</option>
+<option value="cat">Cat</option>
+</select>
+</div>
+<button type="submit">Send suggestion</button>
+</form>
+</main>
+</body>
+</html>

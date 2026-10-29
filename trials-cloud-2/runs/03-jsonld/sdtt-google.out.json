@@ -1,0 +1,101 @@
+{
+  "runtime_ms": 68,
+  "files": {
+    "c1-product-offers.html": {
+      "passed": 1,
+      "failed": [],
+      "warnings": [],
+      "schemas": [
+        "Product"
+      ]
+    },
+    "c2-product-rating-reviews.html": {
+      "passed": 1,
+      "failed": [],
+      "warnings": [],
+      "schemas": [
+        "Product"
+      ]
+    },
+    "c3-faq.html": {
+      "passed": 1,
+      "failed": [],
+      "warnings": [],
+      "schemas": [
+        "FAQPage"
+      ]
+    },
+    "c4-review.html": {
+      "passed": 1,
+      "failed": [],
+      "warnings": [],
+      "schemas": [
+        "Review"
+      ]
+    },
+    "c5-article.html": {
+      "passed": 13,
+      "failed": [],
+      "warnings": [],
+      "schemas": [
+        "Article"
+      ]
+    },
+    "c6-breadcrumb.html": {
+      "passed": 1,
+      "failed": [],
+      "warnings": [],
+      "schemas": [
+        "BreadcrumbList"
+      ]
+    },
+    "j1-rating-no-reviews.html": {
+      "passed": 1,
+      "failed": [],
+      "warnings": [],
+      "schemas": [
+        "Product"
+      ]
+    },
+    "j2-product-no-name.html": {
+      "passed": 1,
+      "failed": [],
+      "warnings": [],
+      "schemas": [
+        "Product"
+      ]
+    },
+    "j3-price-symbol.html": {
+      "passed": 1,
+      "failed": [],
+      "warnings": [],
+      "schemas": [
+        "Product"
+      ]
+    },
+    "j4-availability-text.html": {
+      "passed": 1,
+      "failed": [],
+      "warnings": [],
+      "schemas": [
+        "Product"
+      ]
+    },
+    "j5-faq-answer-missing.html": {
+      "passed": 1,
+      "failed": [],
+      "warnings": [],
+      "schemas": [
+        "FAQPage"
+      ]
+    },
+    "j6-review-no-itemreviewed.html": {
+      "passed": 1,
+      "failed": [],
+      "warnings": [],
+      "schemas": [
+        "Review"
+      ]
+    }
+  }
+}

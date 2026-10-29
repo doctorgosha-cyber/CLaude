@@ -1,0 +1,75 @@
+{
+  "trial": "05-stylelint",
+  "description": "8 CSS files in a modern theme style (custom properties on :root, @layer, @property, clamp(), container queries, nesting, :is/:where/:has, logical properties, color-mix(), oklch(), light-dark(), @supports, media range syntax, view transitions, @starting-style, @scope, anchor positioning). 4 files carry 8 seeded defects C1..C8; 4 files are clean controls.",
+  "generator": "hand-written (see fixtures/05-stylelint/*.css); no generator script",
+  "seeded": [
+    {
+      "id": "C1",
+      "file": "cards.css",
+      "location": "line 4 `.review-card { display: flx; }`",
+      "what": "invalid value: display: flx",
+      "expected_rule": "declaration-property-value-no-unknown"
+    },
+    {
+      "id": "C2",
+      "file": "tokens.css",
+      "location": "`.site-header` top-level rule at line 9 and again at line 32 (same file, same context)",
+      "what": "duplicate selector within one file",
+      "expected_rule": "no-duplicate-selectors"
+    },
+    {
+      "id": "C3",
+      "file": "cards.css",
+      "location": "lines 19-21 `.review-card-sponsored` block, three declarations with !important",
+      "what": "!important creep (3 in one block)",
+      "expected_rule": "declaration-no-important"
+    },
+    {
+      "id": "C4",
+      "file": "typography.css",
+      "location": "line 5 `font-weigth: 500`",
+      "what": "unknown property (typo)",
+      "expected_rule": "property-no-unknown"
+    },
+    {
+      "id": "C5",
+      "file": "typography.css",
+      "location": "line 11 `font-size: 12pxx`",
+      "what": "unknown unit pxx",
+      "expected_rule": "unit-no-unknown"
+    },
+    {
+      "id": "C6",
+      "file": "tokens.css",
+      "location": "line 3 `--brand-blue: #12345g`",
+      "what": "invalid hex colour (g is not hex)",
+      "expected_rule": "color-no-invalid-hex"
+    },
+    {
+      "id": "C7",
+      "file": "tokens.css",
+      "location": "`.site-header` block: padding-block at line 13 and again at line 16 (non-consecutive, same syntax)",
+      "what": "duplicate property in one block",
+      "expected_rule": "declaration-block-no-duplicate-properties"
+    },
+    {
+      "id": "C8",
+      "file": "calculator.css",
+      "location": "line 23: stray `}` after the .calculator block",
+      "what": "stray closing brace (parse error)",
+      "expected_rule": "CssSyntaxError (parse error)"
+    }
+  ],
+  "controls": [
+    "base.css",
+    "components.css",
+    "motion.css",
+    "figures.css"
+  ],
+  "seeded_files": [
+    "cards.css",
+    "typography.css",
+    "tokens.css",
+    "calculator.css"
+  ]
+}

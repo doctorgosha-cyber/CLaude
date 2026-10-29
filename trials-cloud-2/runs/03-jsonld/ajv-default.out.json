@@ -1,0 +1,66 @@
+{
+  "runtime_ms": 6,
+  "files": {
+    "c1-product-offers.html": [],
+    "c2-product-rating-reviews.html": [],
+    "c3-faq.html": [],
+    "c4-review.html": [],
+    "c5-article.html": [],
+    "c6-breadcrumb.html": [],
+    "j1-rating-no-reviews.html": [],
+    "j2-product-no-name.html": [
+      {
+        "rule": "schema",
+        "type": "Product",
+        "path": "/",
+        "msg": "must have required property 'name'",
+        "params": {
+          "missingProperty": "name"
+        }
+      }
+    ],
+    "j3-price-symbol.html": [
+      {
+        "rule": "schema",
+        "type": "Product",
+        "path": "/offers/price",
+        "msg": "must be number",
+        "params": {
+          "type": "number"
+        }
+      },
+      {
+        "rule": "schema",
+        "type": "Product",
+        "path": "/offers/price",
+        "msg": "must match pattern \"^[0-9]+([.,][0-9]+)?$\"",
+        "params": {
+          "pattern": "^[0-9]+([.,][0-9]+)?$"
+        }
+      }
+    ],
+    "j4-availability-text.html": [
+      {
+        "rule": "schema",
+        "type": "Product",
+        "path": "/offers/availability",
+        "msg": "must match pattern \"^https?://schema\\.org/(InStock|OutOfStock|PreOrder|PreSale|BackOrder|Discontinued|InStoreOnly|LimitedAvailability|OnlineOnly|SoldOut|MadeToOrder|Reserved)$\"",
+        "params": {
+          "pattern": "^https?://schema\\.org/(InStock|OutOfStock|PreOrder|PreSale|BackOrder|Discontinued|InStoreOnly|LimitedAvailability|OnlineOnly|SoldOut|MadeToOrder|Reserved)$"
+        }
+      }
+    ],
+    "j5-faq-answer-missing.html": [],
+    "j6-review-no-itemreviewed.html": [
+      {
+        "rule": "schema",
+        "type": "Review",
+        "path": "/",
+        "msg": "must have required property 'itemReviewed'",
+        "params": {
+          "missingProperty": "itemReviewed"
+        }
+      }
+    ]
+  }
+}

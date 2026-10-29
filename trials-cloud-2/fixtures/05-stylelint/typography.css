@@ -1,0 +1,33 @@
+/* Seeded: typography (C4 unknown property, C5 unknown unit) */
+@layer base {
+  .lede {
+    font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+    font-weigth: 500;
+    max-inline-size: var(--measure);
+    text-wrap: pretty;
+  }
+
+  .meta {
+    font-size: 12pxx;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: color-mix(in oklch, var(--color-text) 65%, transparent);
+  }
+
+  .prose {
+    & :is(h2, h3) {
+      margin-block-start: var(--space-l);
+      scroll-margin-block-start: var(--space-l);
+    }
+
+    & :where(ul, ol) {
+      padding-inline-start: 1.25em;
+    }
+
+    & blockquote {
+      margin-inline: 0;
+      padding-inline-start: var(--space-m);
+      border-inline-start: 3px solid var(--color-accent);
+    }
+  }
+}

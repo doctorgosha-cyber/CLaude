@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id","brand","product","species","life_stage","form","kcal_per_100g","protein_pct","fat_pct","moisture_pct","fibre_pct","source_url","source_date","label_year"],
+    "properties": {
+      "id": {"type": "string"}, "brand": {"type": "string"}, "product": {"type": "string"},
+      "species": {"type": "string", "enum": ["dog","cat"]},
+      "life_stage": {"type": "string", "enum": ["puppy","kitten","adult","senior"]},
+      "form": {"type": "string", "enum": ["dry","wet"]},
+      "kcal_per_100g": {"type": "number"}, "protein_pct": {"type": "number"}, "fat_pct": {"type": "number"},
+      "moisture_pct": {"type": "number"}, "fibre_pct": {"type": "number"},
+      "source_url": {"type": "string", "format": "uri"},
+      "source_date": {"type": "string", "format": "date"},
+      "label_year": {"type": "integer"}
+    },
+    "additionalProperties": false
+  }
+}

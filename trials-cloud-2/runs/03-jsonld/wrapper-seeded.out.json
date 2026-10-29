@@ -1,0 +1,59 @@
+{
+  "findings": 8,
+  "files": {
+    "/home/user/CLaude/trials-cloud-2/fixtures/03-jsonld/j1-rating-no-reviews.html": [
+      {
+        "rule": "page-claims",
+        "msg": "aggregateRating without any visible review (.review/[itemprop=review]) or Review node"
+      }
+    ],
+    "/home/user/CLaude/trials-cloud-2/fixtures/03-jsonld/j2-product-no-name.html": [
+      {
+        "rule": "schema",
+        "type": "Product",
+        "path": "/",
+        "msg": "must have required property 'name'"
+      }
+    ],
+    "/home/user/CLaude/trials-cloud-2/fixtures/03-jsonld/j3-price-symbol.html": [
+      {
+        "rule": "schema",
+        "type": "Product",
+        "path": "/offers/price",
+        "msg": "must be number"
+      },
+      {
+        "rule": "schema",
+        "type": "Product",
+        "path": "/offers/price",
+        "msg": "must match pattern \"^[0-9]+([.,][0-9]+)?$\""
+      }
+    ],
+    "/home/user/CLaude/trials-cloud-2/fixtures/03-jsonld/j4-availability-text.html": [
+      {
+        "rule": "schema",
+        "type": "Product",
+        "path": "/offers/availability",
+        "msg": "must match pattern \"^https?://schema\\.org/(InStock|OutOfStock|PreOrder|PreSale|BackOrder|Discontinued|InStoreOnly|LimitedAvailability|OnlineOnly|SoldOut|MadeToOrder|Reserved)$\""
+      }
+    ],
+    "/home/user/CLaude/trials-cloud-2/fixtures/03-jsonld/j5-faq-answer-missing.html": [
+      {
+        "rule": "page-claims",
+        "msg": "FAQ text not on page: Can I mix it with wet food?"
+      },
+      {
+        "rule": "page-claims",
+        "msg": "FAQ text not on page: Yes, replace up to a third of the daily kibble with wet food"
+      }
+    ],
+    "/home/user/CLaude/trials-cloud-2/fixtures/03-jsonld/j6-review-no-itemreviewed.html": [
+      {
+        "rule": "schema",
+        "type": "Review",
+        "path": "/",
+        "msg": "must have required property 'itemReviewed'"
+      }
+    ]
+  }
+}

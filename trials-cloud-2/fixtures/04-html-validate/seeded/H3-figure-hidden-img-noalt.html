@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Figure 3 – Protein vs. price per kcal</title>
+<link rel="stylesheet" href="/assets/figure.css">
+</head>
+<body>
+<main>
+<h1>Figure 3: Protein content vs. price per 1000 kcal</h1>
+<figure>
+<canvas id="scatter" width="800" height="480" role="img" aria-label="Scatter plot of 42 dog foods: protein percentage on the x axis, price per 1000 kcal on the y axis">Your browser does not support canvas.</canvas>
+<figcaption>Each dot is one product. Hover or focus a dot for details.</figcaption>
+</figure>
+<form class="controls" aria-label="Figure controls">
+<fieldset>
+<legend>Show</legend>
+<label><input type="checkbox" name="type" value="dry" checked> Dry</label>
+<label><input type="checkbox" name="type" value="wet" checked> Wet</label>
+</fieldset>
+<label for="minprotein">Minimum protein (%)</label>
+<input type="range" id="minprotein" name="minprotein" min="18" max="45" value="18">
+<output for="minprotein" id="minprotein-out">18</output>
+<button type="button" id="reset">Reset</button>
+</form>
+<svg width="200" height="40" role="img" aria-labelledby="legend-title">
+<title id="legend-title">Legend: blue dots are dry food, orange dots are wet food</title>
+<circle cx="12" cy="20" r="6" fill="#2a6fdb"></circle>
+<text x="24" y="25">Dry</text>
+<circle cx="92" cy="20" r="6" fill="#e07b1a"></circle>
+<text x="104" y="25">Wet</text>
+</svg>
+<div id="fallback" hidden>
+<img src="/img/figure-3-static.png" width="800" height="480">
+<p>Static fallback image, shown when JavaScript is disabled.</p>
+</div>
+</main>
+<script src="/assets/figure-3.js" defer></script>
+</body>
+</html>

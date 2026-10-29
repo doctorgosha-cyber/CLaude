@@ -1,0 +1,12 @@
+{
+  "checks": [
+    {
+      "type": "row-constraint",
+      "formula": "form != 'dry' or protein_pct >= fat_pct"
+    },
+    {
+      "type": "row-constraint",
+      "formula": "(form == 'dry' and 200 <= kcal_per_100g <= 600 and moisture_pct <= 14) or (form == 'wet' and 50 <= kcal_per_100g <= 200 and moisture_pct >= 60)"
+    }
+  ]
+}

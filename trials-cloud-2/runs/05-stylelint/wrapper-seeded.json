@@ -1,0 +1,97 @@
+{
+  "tool": "stylelint",
+  "files": 8,
+  "errors": 11,
+  "warnings": 0,
+  "runtime_ms": 1102,
+  "findings": [
+    {
+      "file": "calculator.css",
+      "line": 23,
+      "col": 1,
+      "rule": "CssSyntaxError",
+      "severity": "error",
+      "text": "Unexpected } (CssSyntaxError)"
+    },
+    {
+      "file": "cards.css",
+      "line": 19,
+      "col": 28,
+      "rule": "declaration-no-important",
+      "severity": "error",
+      "text": "Disallowed !important (declaration-no-important)"
+    },
+    {
+      "file": "cards.css",
+      "line": 20,
+      "col": 69,
+      "rule": "declaration-no-important",
+      "severity": "error",
+      "text": "Disallowed !important (declaration-no-important)"
+    },
+    {
+      "file": "cards.css",
+      "line": 21,
+      "col": 15,
+      "rule": "declaration-no-important",
+      "severity": "error",
+      "text": "Disallowed !important (declaration-no-important)"
+    },
+    {
+      "file": "cards.css",
+      "line": 4,
+      "col": 14,
+      "rule": "declaration-property-value-no-unknown",
+      "severity": "error",
+      "text": "Unknown value \"flx\" for property \"display\" (declaration-property-value-no-unknown)"
+    },
+    {
+      "file": "tokens.css",
+      "line": 3,
+      "col": 17,
+      "rule": "color-no-invalid-hex",
+      "severity": "error",
+      "text": "Invalid hex color \"#12345g\" (color-no-invalid-hex)"
+    },
+    {
+      "file": "tokens.css",
+      "line": 13,
+      "col": 3,
+      "rule": "declaration-block-no-duplicate-properties",
+      "severity": "error",
+      "text": "Duplicate property \"padding-block\" (declaration-block-no-duplicate-properties)"
+    },
+    {
+      "file": "tokens.css",
+      "line": 32,
+      "col": 1,
+      "rule": "no-duplicate-selectors",
+      "severity": "error",
+      "text": "Duplicate selector \".site-header\", first used at line 9 (no-duplicate-selectors)"
+    },
+    {
+      "file": "typography.css",
+      "line": 11,
+      "col": 16,
+      "rule": "declaration-property-value-no-unknown",
+      "severity": "error",
+      "text": "Unknown value \"12pxx\" for property \"font-size\" (declaration-property-value-no-unknown)"
+    },
+    {
+      "file": "typography.css",
+      "line": 5,
+      "col": 5,
+      "rule": "property-no-unknown",
+      "severity": "error",
+      "text": "Unknown property \"font-weigth\" (property-no-unknown)"
+    },
+    {
+      "file": "typography.css",
+      "line": 11,
+      "col": 18,
+      "rule": "unit-no-unknown",
+      "severity": "error",
+      "text": "Unknown unit \"pxx\" (unit-no-unknown)"
+    }
+  ]
+}

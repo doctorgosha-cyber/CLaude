@@ -1,0 +1,116 @@
+/* Control: figure pages, fonts, scroll snap, print */
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("fonts/inter-variable.woff2") format("woff2-variations");
+}
+
+@scope (.figure-page) to (.embed) {
+  figure {
+    margin: 0;
+    display: grid;
+    gap: var(--space-s);
+    justify-items: center;
+  }
+
+  figcaption {
+    font-size: 0.875rem;
+    color: color-mix(in oklch, var(--color-text) 70%, transparent);
+    text-align: center;
+    text-wrap: balance;
+  }
+}
+
+.figure-strip {
+  display: flex;
+  gap: var(--space-m);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scroll-padding-inline: var(--space-m);
+
+  & > * {
+    flex: 0 0 min(80%, 28rem);
+    scroll-snap-align: start;
+  }
+}
+
+.figure-page {
+  font-family: "Inter Variable", system-ui, sans-serif;
+  font-variation-settings: "wght" 450;
+  font-feature-settings: "tnum", "ss01";
+  font-optical-sizing: auto;
+  hyphens: auto;
+  hanging-punctuation: first last;
+}
+
+.comparison-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+
+  & th,
+  & td {
+    padding-block: 0.5rem;
+    padding-inline: 0.75rem;
+    text-align: start;
+    border-block-end: 1px solid color-mix(in srgb, currentcolor 12%, transparent);
+  }
+
+  & tr:nth-child(2n of .data-row) {
+    background: color-mix(in srgb, currentcolor 4%, transparent);
+  }
+
+  & td:has(> .badge) {
+    white-space: nowrap;
+  }
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.1em 0.5em;
+  border-radius: 999px;
+  font-size: 0.75em;
+  font-weight: 600;
+  background: var(--color-accent-soft);
+  color: var(--color-text);
+}
+
+.visually-hidden:not(:focus, :active) {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@supports (field-sizing: content) {
+  textarea {
+    field-sizing: content;
+  }
+}
+
+@supports not (color: oklch(0 0 0)) {
+  :root {
+    --color-accent: #4c6fff;
+  }
+}
+
+@media print {
+  .figure-strip {
+    display: block;
+  }
+
+  .figure-strip > * {
+    break-inside: avoid;
+    margin-block-end: 1cm;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+  }
+}

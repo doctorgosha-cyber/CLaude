@@ -1,0 +1,153 @@
+{
+  "tool": "cspell",
+  "note": "Seeded typos applied by gen.mjs; line numbers are 1-based in the written file. SRT cue = cue index.",
+  "seeded": [
+    {
+      "id": "T1",
+      "file": "thermos-en.srt",
+      "line": 3,
+      "cue": 1,
+      "typo": "vaccum",
+      "correct": "vacuum",
+      "kind": "letter substitution (vacuum -> vaccum)",
+      "expected_flag": "cspell: Unknown word",
+      "detectable_by_dictionary": true
+    },
+    {
+      "id": "T2",
+      "file": "thermos-en.srt",
+      "line": 35,
+      "cue": 9,
+      "typo": "insullation",
+      "correct": "insulation",
+      "kind": "doubled letter",
+      "expected_flag": "cspell: Unknown word",
+      "detectable_by_dictionary": true
+    },
+    {
+      "id": "T3",
+      "file": "thermos-es.srt",
+      "line": 31,
+      "cue": 8,
+      "typo": "tecnica",
+      "correct": "técnica",
+      "kind": "missing accent",
+      "expected_flag": "cspell: Unknown word",
+      "detectable_by_dictionary": true
+    },
+    {
+      "id": "T4",
+      "file": "thermos-es.srt",
+      "line": 35,
+      "cue": 9,
+      "typo": "aislami ento",
+      "correct": "aislamiento",
+      "kind": "split word (both halves non-words)",
+      "expected_flag": "cspell: Unknown word",
+      "detectable_by_dictionary": true
+    },
+    {
+      "id": "T5",
+      "file": "thermos-pt.srt",
+      "line": 43,
+      "cue": 11,
+      "typo": "temperatrua",
+      "correct": "temperatura",
+      "kind": "transposed letters",
+      "expected_flag": "cspell: Unknown word",
+      "detectable_by_dictionary": true
+    },
+    {
+      "id": "T6",
+      "file": "switch-de.srt",
+      "line": 39,
+      "cue": 10,
+      "typo": "Gehäusse",
+      "correct": "Gehäuse",
+      "kind": "doubled letter",
+      "expected_flag": "cspell: Unknown word",
+      "detectable_by_dictionary": true
+    },
+    {
+      "id": "T7",
+      "file": "thermos-uk.srt",
+      "line": 35,
+      "cue": 9,
+      "typo": "ізоляцыї",
+      "correct": "ізоляції",
+      "kind": "wrong Cyrillic letter (Russian ы in a Ukrainian word)",
+      "expected_flag": "cspell: Unknown word",
+      "detectable_by_dictionary": true
+    },
+    {
+      "id": "T8",
+      "file": "site-en.html",
+      "line": 18,
+      "cue": null,
+      "typo": "swtich",
+      "correct": "switch",
+      "kind": "transposed letters",
+      "expected_flag": "cspell: Unknown word",
+      "detectable_by_dictionary": true
+    },
+    {
+      "id": "T9",
+      "file": "site-en.html",
+      "line": 19,
+      "cue": null,
+      "typo": "actu ation",
+      "correct": "actuation",
+      "kind": "split word (both halves non-words)",
+      "expected_flag": "cspell: Unknown word",
+      "detectable_by_dictionary": true
+    },
+    {
+      "id": "T10",
+      "file": "site-ru.html",
+      "line": 15,
+      "cue": null,
+      "typo": "клавеатуре",
+      "correct": "клавиатуре",
+      "kind": "wrong Cyrillic vowel (и -> е)",
+      "expected_flag": "cspell: Unknown word",
+      "detectable_by_dictionary": true
+    },
+    {
+      "id": "T11",
+      "file": "site-ru.html",
+      "line": 19,
+      "cue": null,
+      "typo": "переклюючателя",
+      "correct": "переключателя",
+      "kind": "doubled letter",
+      "expected_flag": "cspell: Unknown word",
+      "detectable_by_dictionary": true
+    },
+    {
+      "id": "T12",
+      "file": "site-en.html",
+      "line": 23,
+      "cue": null,
+      "typo": "key board",
+      "correct": "keyboard",
+      "kind": "split word into two REAL words (not detectable by a dictionary spellchecker)",
+      "expected_flag": "cspell: Unknown word",
+      "detectable_by_dictionary": false
+    }
+  ],
+  "controls": [
+    "switch-fr.srt",
+    "site-de.html",
+    "site-es.html"
+  ],
+  "jargon_in_clean_text": [
+    "Thermoflask",
+    "Kailh",
+    "Cherry MX",
+    "gf",
+    "oklch",
+    "WebGL",
+    "Anatomy of Things",
+    "SKU codes KBOX-RED-0065-A2 / CMXR-0045-TYPE1 / TFLK-0500-SCHW"
+  ]
+}

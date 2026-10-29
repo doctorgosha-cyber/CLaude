@@ -1,0 +1,117 @@
+{
+  "fields": [
+    {
+      "name": "id",
+      "type": "string",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "brand",
+      "type": "string",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "product",
+      "type": "string",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "species",
+      "type": "string",
+      "constraints": {
+        "required": true,
+        "enum": [
+          "dog",
+          "cat"
+        ]
+      }
+    },
+    {
+      "name": "life_stage",
+      "type": "string",
+      "constraints": {
+        "required": true,
+        "enum": [
+          "puppy",
+          "kitten",
+          "adult",
+          "senior"
+        ]
+      }
+    },
+    {
+      "name": "form",
+      "type": "string",
+      "constraints": {
+        "required": true,
+        "enum": [
+          "dry",
+          "wet"
+        ]
+      }
+    },
+    {
+      "name": "kcal_per_100g",
+      "type": "number",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "protein_pct",
+      "type": "number",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "fat_pct",
+      "type": "number",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "moisture_pct",
+      "type": "number",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "fibre_pct",
+      "type": "number",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "source_url",
+      "type": "string",
+      "constraints": {
+        "required": true
+      },
+      "format": "uri"
+    },
+    {
+      "name": "source_date",
+      "type": "date",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "label_year",
+      "type": "integer",
+      "constraints": {
+        "required": true
+      }
+    }
+  ]
+}

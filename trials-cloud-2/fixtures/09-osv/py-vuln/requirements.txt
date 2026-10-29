@@ -1,0 +1,6 @@
+# Synthetic fixture: 2 seeded vulnerable pins (P1, P2) + 3 clean controls (PC1-PC3)
+requests==2.25.1
+pyyaml==5.3.1
+click==8.5.0
+idna==3.20
+urllib3==2.8.0

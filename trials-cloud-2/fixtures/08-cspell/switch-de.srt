@@ -1,0 +1,47 @@
+1
+00:00:00,000 --> 00:00:04,000
+Das ist der Kailh Box Schalter, das Herz einer mechanischen Tastatur.
+
+2
+00:00:05,000 --> 00:00:09,000
+Jede Taste sitzt auf einem Stößel, der in einem Kunststoffgehäuse gleitet.
+
+3
+00:00:10,000 --> 00:00:14,000
+Eine Feder drückt den Stößel nach jedem Anschlag wieder nach oben.
+
+4
+00:00:15,000 --> 00:00:19,000
+Beim Herunterdrücken berühren sich zwei Metallblättchen und schließen den Stromkreis.
+
+5
+00:00:20,000 --> 00:00:24,000
+Die Betätigungskraft wird in Grammkraft gemessen, meist zwischen 45 und 60 gf.
+
+6
+00:00:25,000 --> 00:00:29,000
+Ein linearer Schalter gleitet ohne Widerstand von oben nach unten.
+
+7
+00:00:30,000 --> 00:00:34,000
+Ein taktiler Schalter fügt am Auslösepunkt eine kleine Stufe hinzu.
+
+8
+00:00:35,000 --> 00:00:39,000
+Ein klickender Schalter erzeugt mit einer Klickleiste ein deutliches Geräusch.
+
+9
+00:00:40,000 --> 00:00:44,000
+Cherry MX Schalter nutzen einen Kreuzstößel, den fast jede Tastenkappe akzeptiert.
+
+10
+00:00:45,000 --> 00:00:49,000
+Das Gehäusse besteht oft aus Polycarbonat, damit Licht hindurch scheint.
+
+11
+00:00:50,000 --> 00:00:54,000
+Ein guter Schalter übersteht mehr als fünfzig Millionen Anschläge.
+
+12
+00:00:55,000 --> 00:00:59,000
+Dieser Film gehört zur Reihe Anatomy of Things.

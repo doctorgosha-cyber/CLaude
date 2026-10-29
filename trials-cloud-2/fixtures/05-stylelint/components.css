@@ -1,0 +1,101 @@
+/* Control: card and grid components with container queries and nesting */
+@layer components {
+  .card-grid {
+    container: cards / inline-size;
+    display: grid;
+    gap: var(--space-m);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  }
+
+  .card {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: var(--space-m);
+    border: 1px solid color-mix(in srgb, currentcolor 15%, transparent);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    box-shadow: var(--shadow);
+    container-type: inline-size;
+
+    &:has(> img:first-child) {
+      padding-block-start: 0;
+    }
+
+    & > img {
+      border-start-start-radius: inherit;
+      border-start-end-radius: inherit;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      inline-size: 100%;
+    }
+
+    .card-title {
+      font-size: clamp(1.125rem, 1rem + 2cqi, 1.5rem);
+      margin-block-end: var(--space-s);
+    }
+
+    :is(.card-body, .card-footer) p:last-child {
+      margin-block-end: 0;
+    }
+
+    :where(.card-footer) {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-s);
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  @container cards (width >= 48rem) {
+    .card-featured {
+      grid-column: span 2;
+      grid-template-columns: subgrid;
+    }
+  }
+
+  @container (inline-size > 30rem) {
+    .card {
+      padding: var(--space-l);
+    }
+  }
+
+  .rating {
+    --fill: calc(var(--score, 0) / 5 * 100%);
+
+    display: inline-block;
+    inline-size: 5em;
+    background: linear-gradient(90deg, gold var(--fill), transparent var(--fill));
+    -webkit-mask: url("stars.svg") 0 0 / 1em 1em repeat-x;
+    mask: url("stars.svg") 0 0 / 1em 1em repeat-x;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding-block: 0.6em;
+    padding-inline: 1.2em;
+    border: 0;
+    border-radius: 999px;
+    font: inherit;
+    font-weight: 600;
+    color: white;
+    background: var(--color-accent);
+    cursor: pointer;
+    transition: background 150ms ease, translate 150ms ease;
+
+    &:hover {
+      background: color-mix(in oklch, var(--color-accent), black 10%);
+    }
+
+    &:active {
+      translate: 0 1px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

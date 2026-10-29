@@ -1,0 +1,5 @@
+Scanning dir fixtures/09-osv/node-vuln
+Starting filesystem walk for root: /
+Scanned /home/user/CLaude/trials-cloud-2/fixtures/09-osv/node-vuln/package-lock.json file and found 29 packages
+End status: 1 dirs visited, 3 inodes visited, 1 Extract calls, 5.308368ms elapsed, 5.308547ms wall time
+Loaded npm local db from /root/.cache/osv-scalibr/npm/all.zip

@@ -1,0 +1,37 @@
+{
+  "$id": "nexus-jsonld",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "price": { "oneOf": [ { "type": "number", "minimum": 0 }, { "type": "string", "pattern": "^[0-9]+([.,][0-9]+)?$" } ],
+               "errorMessage": "price must be a number or numeric string without currency symbol" },
+    "availability": { "type": "string", "pattern": "^https?://schema\\.org/(InStock|OutOfStock|PreOrder|PreSale|BackOrder|Discontinued|InStoreOnly|LimitedAvailability|OnlineOnly|SoldOut|MadeToOrder|Reserved)$" },
+    "Offer": { "type": "object", "required": ["@type", "price", "priceCurrency"],
+      "properties": { "@type": { "enum": ["Offer", "AggregateOffer"] }, "price": { "$ref": "#/definitions/price" }, "lowPrice": { "$ref": "#/definitions/price" }, "highPrice": { "$ref": "#/definitions/price" },
+        "priceCurrency": { "type": "string", "pattern": "^[A-Z]{3}$" }, "availability": { "$ref": "#/definitions/availability" }, "url": { "type": "string", "format": "uri" } },
+      "if": { "properties": { "@type": { "const": "AggregateOffer" } } }, "then": { "required": ["@type", "lowPrice", "priceCurrency"] } },
+    "Rating": { "type": "object", "required": ["@type", "ratingValue"], "properties": { "@type": { "const": "Rating" }, "ratingValue": { "type": ["number", "string"] }, "bestRating": { "type": ["number", "string"] } } },
+    "AggregateRating": { "type": "object", "required": ["@type", "ratingValue"], "properties": { "@type": { "const": "AggregateRating" }, "ratingValue": { "type": ["number", "string"] }, "reviewCount": { "type": ["integer", "string"] }, "ratingCount": { "type": ["integer", "string"] } },
+      "anyOf": [ { "required": ["reviewCount"] }, { "required": ["ratingCount"] } ] },
+    "Person": { "type": "object", "required": ["@type", "name"], "properties": { "@type": { "enum": ["Person", "Organization"] }, "name": { "type": "string", "minLength": 1 } } },
+    "Review": { "type": "object", "required": ["@type", "author", "reviewRating"],
+      "properties": { "@type": { "const": "Review" }, "author": { "$ref": "#/definitions/Person" }, "reviewRating": { "$ref": "#/definitions/Rating" }, "itemReviewed": { "type": "object", "required": ["@type", "name"] } } },
+    "TopReview": { "allOf": [ { "$ref": "#/definitions/Review" }, { "required": ["itemReviewed"] } ] },
+    "Product": { "type": "object", "required": ["@type", "name"],
+      "properties": { "@type": { "const": "Product" }, "name": { "type": "string", "minLength": 1 }, "image": { "type": ["string", "array", "object"] },
+        "offers": { "oneOf": [ { "$ref": "#/definitions/Offer" }, { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/Offer" } } ] },
+        "aggregateRating": { "$ref": "#/definitions/AggregateRating" },
+        "review": { "oneOf": [ { "$ref": "#/definitions/Review" }, { "type": "array", "items": { "$ref": "#/definitions/Review" } } ] } } },
+    "Question": { "type": "object", "required": ["@type", "name", "acceptedAnswer"],
+      "properties": { "@type": { "const": "Question" }, "name": { "type": "string", "minLength": 1 },
+        "acceptedAnswer": { "type": "object", "required": ["@type", "text"], "properties": { "@type": { "const": "Answer" }, "text": { "type": "string", "minLength": 1 } } } } },
+    "FAQPage": { "type": "object", "required": ["@type", "mainEntity"], "properties": { "@type": { "const": "FAQPage" },
+      "mainEntity": { "oneOf": [ { "$ref": "#/definitions/Question" }, { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/Question" } } ] } } }
+  },
+  "type": "object", "required": ["@type"],
+  "allOf": [
+    { "if": { "properties": { "@type": { "const": "Product" } } }, "then": { "$ref": "#/definitions/Product" } },
+    { "if": { "properties": { "@type": { "const": "Review" } } }, "then": { "$ref": "#/definitions/TopReview" } },
+    { "if": { "properties": { "@type": { "const": "FAQPage" } } }, "then": { "$ref": "#/definitions/FAQPage" } },
+    { "if": { "properties": { "@type": { "const": "Offer" } } }, "then": { "$ref": "#/definitions/Offer" } }
+  ]
+}

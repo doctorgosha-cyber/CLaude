@@ -1,0 +1,65 @@
+─────────────────────────────────── Dataset ────────────────────────────────────
+                                    dataset                                     
+┏━━━━━━━━━━━┳━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┓
+┃ name      ┃ type  ┃ path                                           ┃ status  ┃
+┡━━━━━━━━━━━╇━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━┩
+│ catalogue │ table │ /home/user/CLaude/trials-cloud-2/fixtures/01-… │ INVALID │
+└───────────┴───────┴────────────────────────────────────────────────┴─────────┘
+──────────────────────────────────── Tables ────────────────────────────────────
+                                   catalogue                                    
+┏━━━━━┳━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Row ┃ Field ┃ Type             ┃ Message                                     ┃
+┡━━━━━╇━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ 2   │ 7     │ constraint-error │ The cell "1500" in row at position "2" and  │
+│     │       │                  │ field "kcal_per_100g" at position "7" does  │
+│     │       │                  │ not conform to a constraint: constraint     │
+│     │       │                  │ "maximum" is "600"                          │
+│ 2   │ None  │ row-constraint   │ The row at position 2 has an error: the row │
+│     │       │                  │ constraint to conform is "(form == 'dry'    │
+│     │       │                  │ and 200 <= kcal_per_100g <= 600 and         │
+│     │       │                  │ moisture_pct <= 14) or (form == 'wet' and   │
+│     │       │                  │ 50 <= kcal_per_100g <= 200 and moisture_pct │
+│     │       │                  │ >= 60)"                                     │
+│ 6   │ 8     │ constraint-error │ The cell "280" in row at position "6" and   │
+│     │       │                  │ field "protein_pct" at position "8" does    │
+│     │       │                  │ not conform to a constraint: constraint     │
+│     │       │                  │ "maximum" is "60"                           │
+│ 8   │ 10    │ constraint-error │ The cell "0.1" in row at position "8" and   │
+│     │       │                  │ field "moisture_pct" at position "10" does  │
+│     │       │                  │ not conform to a constraint: constraint     │
+│     │       │                  │ "minimum" is "3"                            │
+│ 12  │ 7     │ constraint-error │ The cell "1200" in row at position "12" and │
+│     │       │                  │ field "kcal_per_100g" at position "7" does  │
+│     │       │                  │ not conform to a constraint: constraint     │
+│     │       │                  │ "maximum" is "600"                          │
+│ 12  │ None  │ row-constraint   │ The row at position 12 has an error: the    │
+│     │       │                  │ row constraint to conform is "(form ==      │
+│     │       │                  │ 'dry' and 200 <= kcal_per_100g <= 600 and   │
+│     │       │                  │ moisture_pct <= 14) or (form == 'wet' and   │
+│     │       │                  │ 50 <= kcal_per_100g <= 200 and moisture_pct │
+│     │       │                  │ >= 60)"                                     │
+│ 14  │ 13    │ constraint-error │ The cell "" in row at position "14" and     │
+│     │       │                  │ field "source_date" at position "13" does   │
+│     │       │                  │ not conform to a constraint: constraint     │
+│     │       │                  │ "required" is "True"                        │
+│ 18  │ 1     │ unique-error     │ Row at position "18" has unique constraint  │
+│     │       │                  │ violation in field "id" at position "1":    │
+│     │       │                  │ the same as in the row at position 17       │
+│ 18  │ None  │ primary-key      │ Row at position "18" violates the primary   │
+│     │       │                  │ key: the same as in the row at position 17  │
+│ 20  │ 4     │ constraint-error │ The cell "puppy" in row at position "20"    │
+│     │       │                  │ and field "species" at position "4" does    │
+│     │       │                  │ not conform to a constraint: constraint     │
+│     │       │                  │ "enum" is "['dog', 'cat']"                  │
+│ 24  │ 10    │ constraint-error │ The cell "-5" in row at position "24" and   │
+│     │       │                  │ field "moisture_pct" at position "10" does  │
+│     │       │                  │ not conform to a constraint: constraint     │
+│     │       │                  │ "minimum" is "3"                            │
+│ 26  │ None  │ row-constraint   │ The row at position 26 has an error: the    │
+│     │       │                  │ row constraint to conform is "form != 'dry' │
+│     │       │                  │ or protein_pct >= fat_pct"                  │
+│ 30  │ 14    │ constraint-error │ The cell "2019" in row at position "30" and │
+│     │       │                  │ field "label_year" at position "14" does    │
+│     │       │                  │ not conform to a constraint: constraint     │
+│     │       │                  │ "minimum" is "2022"                         │
+└─────┴───────┴──────────────────┴─────────────────────────────────────────────┘

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en",
+  "import": [
+    "@cspell/dict-es-es/cspell-ext.json",
+    "@cspell/dict-pt-br/cspell-ext.json",
+    "@cspell/dict-fr-fr/cspell-ext.json",
+    "@cspell/dict-de-de/cspell-ext.json",
+    "@cspell/dict-ru_ru/cspell-ext.json",
+    "@cspell/dict-uk-ua/cspell-ext.json",
+    "@cspell/dict-id-id/cspell-ext.json"
+  ],
+  "enableFiletypes": ["srt"],
+  "overrides": [
+    { "filename": "**/*-en.{srt,html}", "language": "en" },
+    { "filename": "**/*-es.{srt,html}", "language": "es" },
+    { "filename": "**/*-pt.{srt,html}", "language": "pt" },
+    { "filename": "**/*-fr.{srt,html}", "language": "fr" },
+    { "filename": "**/*-de.{srt,html}", "language": "de" },
+    { "filename": "**/*-ru.{srt,html}", "language": "ru" },
+    { "filename": "**/*-uk.{srt,html}", "language": "uk" },
+    { "filename": "**/*-id.{srt,html}", "language": "id" }
+  ]
+}

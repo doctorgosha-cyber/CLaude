@@ -1,0 +1,112 @@
+{
+  "valid": false,
+  "stats": {
+    "tasks": 1,
+    "errors": 2,
+    "warnings": 0,
+    "seconds": 0.307
+  },
+  "warnings": [],
+  "errors": [],
+  "tasks": [
+    {
+      "name": "catalogue",
+      "type": "table",
+      "valid": false,
+      "place": "/home/user/CLaude/trials-cloud-2/fixtures/01-catalogue/catalogue.csv",
+      "labels": [
+        "id",
+        "brand",
+        "product",
+        "species",
+        "life_stage",
+        "form",
+        "kcal_per_100g",
+        "protein_pct",
+        "fat_pct",
+        "moisture_pct",
+        "fibre_pct",
+        "source_url",
+        "source_date",
+        "label_year"
+      ],
+      "stats": {
+        "errors": 2,
+        "warnings": 0,
+        "seconds": 0.307,
+        "md5": "29a4a6ecc4c82e9b8134c3cdfcc8f7fd",
+        "sha256": "fec0ff4f9f70d14bd7bbad13a10f841fc0cf9106ccee4ecf6514ac143453d637",
+        "bytes": 5192,
+        "fields": 14,
+        "rows": 40
+      },
+      "warnings": [],
+      "errors": [
+        {
+          "type": "constraint-error",
+          "title": "Constraint Error",
+          "description": "A field value does not conform to a constraint.",
+          "message": "The cell \"\" in row at position \"14\" and field \"source_date\" at position \"13\" does not conform to a constraint: constraint \"required\" is \"True\"",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "constraint \"required\" is \"True\"",
+          "cells": [
+            "P013",
+            "Oakridge",
+            "Puppy Lamb (kibble)",
+            "dog",
+            "adult",
+            "dry",
+            "414.7",
+            "31.3",
+            "12",
+            "7.6",
+            "3.8",
+            "https://example.com/products/p013",
+            "",
+            "2023"
+          ],
+          "rowNumber": 14,
+          "cell": "",
+          "fieldName": "source_date",
+          "fieldNumber": 13
+        },
+        {
+          "type": "constraint-error",
+          "title": "Constraint Error",
+          "description": "A field value does not conform to a constraint.",
+          "message": "The cell \"puppy\" in row at position \"20\" and field \"species\" at position \"4\" does not conform to a constraint: constraint \"enum\" is \"['dog', 'cat']\"",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "constraint \"enum\" is \"['dog', 'cat']\"",
+          "cells": [
+            "P019",
+            "Silver Whisker",
+            "Active Beef (kibble)",
+            "puppy",
+            "senior",
+            "dry",
+            "417.6",
+            "25.2",
+            "13.7",
+            "9.6",
+            "3.4",
+            "https://example.com/products/p019",
+            "2024-02-26",
+            "2024"
+          ],
+          "rowNumber": 20,
+          "cell": "puppy",
+          "fieldName": "species",
+          "fieldNumber": 4
+        }
+      ]
+    }
+  ]
+}

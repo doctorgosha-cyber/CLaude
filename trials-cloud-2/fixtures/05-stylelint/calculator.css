@@ -1,0 +1,36 @@
+/* Seeded: pet-food calculator form (C8 stray closing brace) */
+.calculator {
+  display: grid;
+  gap: var(--space-m);
+  container: calc / inline-size;
+
+  & label {
+    display: grid;
+    gap: 0.25rem;
+    font-weight: 600;
+  }
+
+  & input,
+  & select {
+    font: inherit;
+    padding: 0.5em 0.75em;
+    border: 1px solid color-mix(in srgb, currentcolor 25%, transparent);
+    border-radius: calc(var(--radius) / 2);
+    background: var(--color-surface);
+    color: inherit;
+  }
+}
+}
+
+.calculator-result {
+  padding: var(--space-m);
+  border-radius: var(--radius);
+  background: var(--color-accent-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+@container calc (width >= 36rem) {
+  .calculator {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -1,0 +1,5 @@
+Scanning dir fixtures/09-osv/py-vuln
+Starting filesystem walk for root: /
+Scanned /home/user/CLaude/trials-cloud-2/fixtures/09-osv/py-vuln/requirements.txt file and found 5 packages
+End status: 1 dirs visited, 2 inodes visited, 1 Extract calls, 176.385µs elapsed, 176.457µs wall time
+Loaded PyPI local db from /root/.cache/osv-scalibr/PyPI/all.zip

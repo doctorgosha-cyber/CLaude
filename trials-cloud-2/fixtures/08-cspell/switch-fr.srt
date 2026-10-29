@@ -1,0 +1,47 @@
+1
+00:00:00,000 --> 00:00:04,000
+Voici l'interrupteur Kailh Box, le cœur d'un clavier mécanique.
+
+2
+00:00:05,000 --> 00:00:09,000
+Chaque touche repose sur une tige qui glisse dans un boîtier en plastique.
+
+3
+00:00:10,000 --> 00:00:14,000
+Un ressort pousse la tige vers le haut à chaque frappe.
+
+4
+00:00:15,000 --> 00:00:19,000
+Quand la tige descend, deux lames de métal se touchent et ferment le circuit.
+
+5
+00:00:20,000 --> 00:00:24,000
+La force d'actionnement se mesure en grammes-force, souvent entre 45 et 60 gf.
+
+6
+00:00:25,000 --> 00:00:29,000
+Un interrupteur linéaire glisse sans à-coups du haut vers le bas.
+
+7
+00:00:30,000 --> 00:00:34,000
+Un interrupteur tactile ajoute une petite bosse au point d'activation.
+
+8
+00:00:35,000 --> 00:00:39,000
+Un interrupteur à clic ajoute un son net grâce à une barre de clic.
+
+9
+00:00:40,000 --> 00:00:44,000
+Les Cherry MX utilisent une tige en croix que la plupart des touches acceptent.
+
+10
+00:00:45,000 --> 00:00:49,000
+Le boîtier est souvent en polycarbonate pour laisser passer la lumière.
+
+11
+00:00:50,000 --> 00:00:54,000
+Un bon interrupteur survit à plus de cinquante millions de frappes.
+
+12
+00:00:55,000 --> 00:00:59,000
+Ce film fait partie de la série Anatomy of Things.

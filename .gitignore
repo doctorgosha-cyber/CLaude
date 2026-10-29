@@ -1,0 +1,4 @@
+trials-cloud-2/**/node_modules/
+trials-cloud-2/**/venv/
+trials-cloud-2/**/__grade__/
+trials-cloud-2/**/__hidden__/

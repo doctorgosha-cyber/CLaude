@@ -1,0 +1,47 @@
+1
+00:00:00,000 --> 00:00:04,000
+Este é o Thermoflask, uma garrafa térmica que mantém o café quente por doze horas.
+
+2
+00:00:05,000 --> 00:00:09,000
+Tudo começa com duas paredes de aço inoxidável, uma dentro da outra.
+
+3
+00:00:10,000 --> 00:00:14,000
+Entre elas não há quase nada: um vácuo.
+
+4
+00:00:15,000 --> 00:00:19,000
+O calor viaja de três formas: condução, convecção e radiação.
+
+5
+00:00:20,000 --> 00:00:24,000
+Sem ar no espaço, a condução e a convecção não têm caminho.
+
+6
+00:00:25,000 --> 00:00:29,000
+Resta a radiação, que uma fina camada de cobre reflete para dentro.
+
+7
+00:00:30,000 --> 00:00:34,000
+A única ponte entre as paredes é o gargalo estreito no topo.
+
+8
+00:00:35,000 --> 00:00:39,000
+Os engenheiros o fazem o mais fino possível para reduzir a perda de calor.
+
+9
+00:00:40,000 --> 00:00:44,000
+A tampa acrescenta uma última camada de isolamento com uma vedação de silicone.
+
+10
+00:00:45,000 --> 00:00:49,000
+Encha com água fervente e o exterior continua frio ao toque.
+
+11
+00:00:50,000 --> 00:00:54,000
+Doze horas depois, a temperatrua do café ainda passa dos sessenta graus.
+
+12
+00:00:55,000 --> 00:00:59,000
+Este filme faz parte da série Anatomy of Things.

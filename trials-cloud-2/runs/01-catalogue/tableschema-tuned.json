@@ -1,0 +1,134 @@
+{
+  "fields": [
+    {
+      "name": "id",
+      "type": "string",
+      "constraints": {
+        "required": true,
+        "unique": true,
+        "pattern": "^P[0-9]{3}$"
+      }
+    },
+    {
+      "name": "brand",
+      "type": "string",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "product",
+      "type": "string",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "species",
+      "type": "string",
+      "constraints": {
+        "required": true,
+        "enum": [
+          "dog",
+          "cat"
+        ]
+      }
+    },
+    {
+      "name": "life_stage",
+      "type": "string",
+      "constraints": {
+        "required": true,
+        "enum": [
+          "puppy",
+          "kitten",
+          "adult",
+          "senior"
+        ]
+      }
+    },
+    {
+      "name": "form",
+      "type": "string",
+      "constraints": {
+        "required": true,
+        "enum": [
+          "dry",
+          "wet"
+        ]
+      }
+    },
+    {
+      "name": "kcal_per_100g",
+      "type": "number",
+      "constraints": {
+        "required": true,
+        "minimum": 50,
+        "maximum": 600
+      }
+    },
+    {
+      "name": "protein_pct",
+      "type": "number",
+      "constraints": {
+        "required": true,
+        "minimum": 3,
+        "maximum": 60
+      }
+    },
+    {
+      "name": "fat_pct",
+      "type": "number",
+      "constraints": {
+        "required": true,
+        "minimum": 1,
+        "maximum": 40
+      }
+    },
+    {
+      "name": "moisture_pct",
+      "type": "number",
+      "constraints": {
+        "required": true,
+        "minimum": 3,
+        "maximum": 90
+      }
+    },
+    {
+      "name": "fibre_pct",
+      "type": "number",
+      "constraints": {
+        "required": true,
+        "minimum": 0,
+        "maximum": 15
+      }
+    },
+    {
+      "name": "source_url",
+      "type": "string",
+      "constraints": {
+        "required": true
+      },
+      "format": "uri"
+    },
+    {
+      "name": "source_date",
+      "type": "date",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "label_year",
+      "type": "integer",
+      "constraints": {
+        "required": true,
+        "minimum": 2022,
+        "maximum": 2026
+      }
+    }
+  ],
+  "primaryKey": [
+    "id"
+  ]
+}

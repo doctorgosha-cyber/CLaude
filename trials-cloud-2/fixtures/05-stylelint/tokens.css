@@ -1,0 +1,34 @@
+/* Seeded: brand tokens (C6 invalid hex, C7 duplicate property) */
+:root {
+  --brand-blue: #12345g;
+  --brand-blue-soft: color-mix(in oklch, var(--brand-blue) 25%, white);
+  --brand-gradient: linear-gradient(135deg, oklch(0.7 0.15 250), oklch(0.6 0.2 300));
+  --font-display: "Inter Variable", system-ui, sans-serif;
+}
+
+.site-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 10;
+  padding-block: var(--space-s);
+  background: color-mix(in srgb, var(--color-surface) 85%, transparent);
+  backdrop-filter: blur(8px);
+  padding-block: var(--space-m);
+  border-block-end: 1px solid color-mix(in srgb, currentcolor 10%, transparent);
+}
+
+@supports not (backdrop-filter: blur(8px)) {
+  .site-header {
+    background: var(--color-surface);
+  }
+}
+
+@media (width >= 64rem) {
+  .site-header {
+    padding-inline: var(--space-l);
+  }
+}
+
+.site-header {
+  font-family: var(--font-display);
+}

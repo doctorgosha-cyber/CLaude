@@ -1,0 +1,11 @@
+{
+  "findings": 0,
+  "files": {
+    "/home/user/CLaude/trials-cloud-2/fixtures/03-jsonld/c1-product-offers.html": [],
+    "/home/user/CLaude/trials-cloud-2/fixtures/03-jsonld/c2-product-rating-reviews.html": [],
+    "/home/user/CLaude/trials-cloud-2/fixtures/03-jsonld/c3-faq.html": [],
+    "/home/user/CLaude/trials-cloud-2/fixtures/03-jsonld/c4-review.html": [],
+    "/home/user/CLaude/trials-cloud-2/fixtures/03-jsonld/c5-article.html": [],
+    "/home/user/CLaude/trials-cloud-2/fixtures/03-jsonld/c6-breadcrumb.html": []
+  }
+}

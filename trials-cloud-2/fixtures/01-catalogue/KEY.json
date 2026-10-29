@@ -1,0 +1,137 @@
+{
+  "fixtures": {
+    "seeded": [
+      "catalogue.json",
+      "catalogue.csv"
+    ],
+    "controls": [
+      "catalogue-clean.json",
+      "catalogue-clean.csv"
+    ],
+    "clean_rows_in_seeded": 30,
+    "seeded_rows": 10
+  },
+  "faults": [
+    {
+      "id": "F1",
+      "row_id": "P001",
+      "field": "kcal_per_100g",
+      "what": "kJ value (1500) stored under kcal_per_100g; true value ~360 kcal",
+      "class": "unit-mismatch",
+      "catch_by": {
+        "json_schema": "maximum (tuned range dry 200-600)",
+        "frictionless": "constraints.maximum (tuned)",
+        "custom": "no (only because magnitude falls outside range)"
+      }
+    },
+    {
+      "id": "F2",
+      "row_id": "P005",
+      "field": "protein_pct",
+      "what": "protein given as g/kg (280) instead of % (28)",
+      "class": "unit-mismatch",
+      "catch_by": {
+        "json_schema": "maximum (tuned, <=100 or tighter 60)",
+        "frictionless": "constraints.maximum (tuned)",
+        "custom": "no (magnitude outside range)"
+      }
+    },
+    {
+      "id": "F3",
+      "row_id": "P007",
+      "field": "moisture_pct",
+      "what": "moisture as fraction 0.1 instead of 10 (%)",
+      "class": "unit-mismatch",
+      "catch_by": {
+        "json_schema": "minimum (tuned, moisture >= 3)",
+        "frictionless": "constraints.minimum (tuned)",
+        "custom": "no (magnitude outside range); a fraction of 0.8 for wet food would also be caught by min, but note: a schema cannot see units, only magnitudes"
+      }
+    },
+    {
+      "id": "F4",
+      "row_id": "P011",
+      "field": "kcal_per_100g",
+      "what": "impossible 1200 kcal/100 g (pure fat is ~900)",
+      "class": "impossible-value",
+      "catch_by": {
+        "json_schema": "maximum (tuned)",
+        "frictionless": "constraints.maximum (tuned)",
+        "custom": "no"
+      }
+    },
+    {
+      "id": "F5",
+      "row_id": "P013",
+      "field": "source_date",
+      "what": "source_date missing (key absent in JSON, empty cell in CSV)",
+      "class": "structural",
+      "catch_by": {
+        "json_schema": "required (default)",
+        "frictionless": "constraints.required (default)",
+        "custom": "no"
+      }
+    },
+    {
+      "id": "F6",
+      "row_id": "P017 (now reads P016)",
+      "field": "id",
+      "what": "duplicate id: row 17 carries id P016, same as row 16",
+      "class": "integrity",
+      "catch_by": {
+        "json_schema": "NOT expressible: uniqueItems compares whole objects, not one key across objects -> custom post-check",
+        "frictionless": "constraints.unique or primaryKey (tuned)",
+        "custom": "Ajv: yes; Frictionless: no"
+      }
+    },
+    {
+      "id": "F7",
+      "row_id": "P019",
+      "field": "species",
+      "what": "species = \"puppy\" (not in dog|cat)",
+      "class": "enum",
+      "catch_by": {
+        "json_schema": "enum (default)",
+        "frictionless": "constraints.enum (default)",
+        "custom": "no"
+      }
+    },
+    {
+      "id": "F8",
+      "row_id": "P023",
+      "field": "moisture_pct",
+      "what": "negative moisture (-5)",
+      "class": "range",
+      "catch_by": {
+        "json_schema": "minimum (tuned)",
+        "frictionless": "constraints.minimum (tuned)",
+        "custom": "no"
+      }
+    },
+    {
+      "id": "F9",
+      "row_id": "P025",
+      "field": "protein_pct/fat_pct",
+      "what": "protein 12 and fat 32 on dry kibble (swapped); row rule protein_pct >= fat_pct when form == dry",
+      "class": "cross-field",
+      "catch_by": {
+        "json_schema": "NOT expressible with standard keywords (no cross-property comparison) -> custom keyword / post-check",
+        "frictionless": "row-constraint check (tuned, custom formula)",
+        "custom": "both tools"
+      }
+    },
+    {
+      "id": "F10",
+      "row_id": "P029",
+      "field": "label_year",
+      "what": "label_year 2019 (< 2022, stale label)",
+      "class": "range",
+      "catch_by": {
+        "json_schema": "minimum 2022 (tuned)",
+        "frictionless": "constraints.minimum (tuned)",
+        "custom": "no (simple range, no custom logic needed)"
+      }
+    }
+  ],
+  "note": "Faults F1-F4, F8, F10 are caught only by numeric ranges (semantic faults a type-only schema cannot see). F6 needs custom logic in Ajv. F9 needs custom logic in both tools. F5 and F7 are the only faults a type/required/enum schema catches."
+}

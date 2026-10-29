@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pet food calculator</title>
+<link rel="stylesheet" href="/assets/calculator.css">
+<script type="module" src="/assets/calculator.js"></script>
+</head>
+<body>
+<main>
+<h1>Pet food calculator</h1>
+<p>Daily portion from weight, age and activity. Catalogue: <span data-catalogue-version="2026.10">812 products</span>.</p>
+<pet-calculator data-species="dog" data-unit="g">
+<form id="calc" method="dialog">
+<fieldset>
+<legend>Your dog</legend>
+<label for="weight">Weight (kg)</label>
+<input type="number" id="weight" name="weight" min="1" max="90" step="0.1" value="20" required>
+<label for="activity">Activity</label>
+<select id="activity" name="activity">
+<option value="1.2">Low (neutered, indoor)</option>
+<option value="1.6" selected>Moderate</option>
+<option value="2.0">High (working dog)</option>
+</select>
+</fieldset>
+<fieldset>
+<legend>Food</legend>
+<label for="product">Product</label>
+<input type="search" id="product" name="product" list="products" autocomplete="off" placeholder="Start typing a brand">
+<datalist id="products">
+<option value="Orijen Original"></option>
+<option value="Acana Wild Prairie"></option>
+<option value="Josera Optiness"></option>
+</datalist>
+</fieldset>
+<button type="submit">Calculate</button>
+<button type="button" data-action="open-help">Help</button>
+</form>
+<output for="weight activity product" id="result" aria-live="polite"></output>
+</pet-calculator>
+<template id="result-row">
+<tr><td class="product"></td><td class="grams"></td><td class="cost"></td></tr>
+</template>
+<dialog id="help" aria-labelledby="help-title">
+<h2 id="help-title">How the calculator works</h2>
+<p>Resting energy = 70 × kg<sup>0.75</sup> kcal. Multiplied by the activity factor, then divided by the food's kcal per 100 g.</p>
+<form method="dialog">
+<button type="submit">Close</button>
+</form>
+</dialog>
+</main>
+</body>
+</html>

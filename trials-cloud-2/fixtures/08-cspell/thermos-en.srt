@@ -1,0 +1,47 @@
+1
+00:00:00,000 --> 00:00:04,000
+Meet the Thermoflask, a vaccum bottle that keeps coffee hot for twelve hours.
+
+2
+00:00:05,000 --> 00:00:09,000
+It starts with two walls of stainless steel, one nested inside the other.
+
+3
+00:00:10,000 --> 00:00:14,000
+Between them is almost nothing at all: a vacuum.
+
+4
+00:00:15,000 --> 00:00:19,000
+Heat travels three ways: conduction, convection and radiation.
+
+5
+00:00:20,000 --> 00:00:24,000
+With no air in the gap, conduction and convection have no path to follow.
+
+6
+00:00:25,000 --> 00:00:29,000
+That leaves radiation, which a thin copper coating reflects back inside.
+
+7
+00:00:30,000 --> 00:00:34,000
+The only bridge between the walls is the narrow neck at the top.
+
+8
+00:00:35,000 --> 00:00:39,000
+Engineers make it as thin as possible to slow the leak of heat.
+
+9
+00:00:40,000 --> 00:00:44,000
+The lid adds a final layer of insullation with a silicone gasket.
+
+10
+00:00:45,000 --> 00:00:49,000
+Fill it with boiling water and the outside stays cool to the touch.
+
+11
+00:00:50,000 --> 00:00:54,000
+Twelve hours later, your coffee is still above sixty degrees.
+
+12
+00:00:55,000 --> 00:00:59,000
+This film is part of the Anatomy of Things series.

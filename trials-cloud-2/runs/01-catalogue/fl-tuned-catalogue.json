@@ -1,0 +1,448 @@
+{
+  "valid": false,
+  "stats": {
+    "tasks": 1,
+    "errors": 13,
+    "warnings": 0,
+    "seconds": 0.093
+  },
+  "warnings": [],
+  "errors": [],
+  "tasks": [
+    {
+      "name": "catalogue",
+      "type": "table",
+      "valid": false,
+      "place": "/home/user/CLaude/trials-cloud-2/fixtures/01-catalogue/catalogue.csv",
+      "labels": [
+        "id",
+        "brand",
+        "product",
+        "species",
+        "life_stage",
+        "form",
+        "kcal_per_100g",
+        "protein_pct",
+        "fat_pct",
+        "moisture_pct",
+        "fibre_pct",
+        "source_url",
+        "source_date",
+        "label_year"
+      ],
+      "stats": {
+        "errors": 13,
+        "warnings": 0,
+        "seconds": 0.093,
+        "md5": "29a4a6ecc4c82e9b8134c3cdfcc8f7fd",
+        "sha256": "fec0ff4f9f70d14bd7bbad13a10f841fc0cf9106ccee4ecf6514ac143453d637",
+        "bytes": 5192,
+        "fields": 14,
+        "rows": 40
+      },
+      "warnings": [],
+      "errors": [
+        {
+          "type": "constraint-error",
+          "title": "Constraint Error",
+          "description": "A field value does not conform to a constraint.",
+          "message": "The cell \"1500\" in row at position \"2\" and field \"kcal_per_100g\" at position \"7\" does not conform to a constraint: constraint \"maximum\" is \"600\"",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "constraint \"maximum\" is \"600\"",
+          "cells": [
+            "P001",
+            "Acme Paws",
+            "Adult Chicken & Rice (kibble)",
+            "dog",
+            "adult",
+            "dry",
+            "1500",
+            "28.8",
+            "18.9",
+            "7.7",
+            "2.9",
+            "https://example.com/products/p001",
+            "2024-04-20",
+            "2024"
+          ],
+          "rowNumber": 2,
+          "cell": "1500",
+          "fieldName": "kcal_per_100g",
+          "fieldNumber": 7
+        },
+        {
+          "type": "row-constraint",
+          "title": "Row Constraint",
+          "description": "The value does not conform to the row constraint.",
+          "message": "The row at position 2 has an error: the row constraint to conform is \"(form == 'dry' and 200 <= kcal_per_100g <= 600 and moisture_pct <= 14) or (form == 'wet' and 50 <= kcal_per_100g <= 200 and moisture_pct >= 60)\"",
+          "tags": [
+            "#table",
+            "#row"
+          ],
+          "note": "the row constraint to conform is \"(form == 'dry' and 200 <= kcal_per_100g <= 600 and moisture_pct <= 14) or (form == 'wet' and 50 <= kcal_per_100g <= 200 and moisture_pct >= 60)\"",
+          "cells": [
+            "P001",
+            "Acme Paws",
+            "Adult Chicken & Rice (kibble)",
+            "dog",
+            "adult",
+            "dry",
+            "1500",
+            "28.8",
+            "18.9",
+            "7.7",
+            "2.9",
+            "https://example.com/products/p001",
+            "2024-04-20",
+            "2024"
+          ],
+          "rowNumber": 2
+        },
+        {
+          "type": "constraint-error",
+          "title": "Constraint Error",
+          "description": "A field value does not conform to a constraint.",
+          "message": "The cell \"280\" in row at position \"6\" and field \"protein_pct\" at position \"8\" does not conform to a constraint: constraint \"maximum\" is \"60\"",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "constraint \"maximum\" is \"60\"",
+          "cells": [
+            "P005",
+            "Terra Vita",
+            "Active Beef (kibble)",
+            "dog",
+            "adult",
+            "dry",
+            "396.4",
+            "280",
+            "14.4",
+            "9.1",
+            "2.4",
+            "https://example.com/products/p005",
+            "2024-03-05",
+            "2024"
+          ],
+          "rowNumber": 6,
+          "cell": "280",
+          "fieldName": "protein_pct",
+          "fieldNumber": 8
+        },
+        {
+          "type": "constraint-error",
+          "title": "Constraint Error",
+          "description": "A field value does not conform to a constraint.",
+          "message": "The cell \"0.1\" in row at position \"8\" and field \"moisture_pct\" at position \"10\" does not conform to a constraint: constraint \"minimum\" is \"3\"",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "constraint \"minimum\" is \"3\"",
+          "cells": [
+            "P007",
+            "Marlow",
+            "Puppy Lamb (kibble)",
+            "dog",
+            "puppy",
+            "dry",
+            "403.7",
+            "22.2",
+            "10.1",
+            "0.1",
+            "3.6",
+            "https://example.com/products/p007",
+            "2025-12-17",
+            "2025"
+          ],
+          "rowNumber": 8,
+          "cell": "0.1",
+          "fieldName": "moisture_pct",
+          "fieldNumber": 10
+        },
+        {
+          "type": "constraint-error",
+          "title": "Constraint Error",
+          "description": "A field value does not conform to a constraint.",
+          "message": "The cell \"1200\" in row at position \"12\" and field \"kcal_per_100g\" at position \"7\" does not conform to a constraint: constraint \"maximum\" is \"600\"",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "constraint \"maximum\" is \"600\"",
+          "cells": [
+            "P011",
+            "Hearth Pet",
+            "Puppy Lamb (kibble)",
+            "dog",
+            "senior",
+            "dry",
+            "1200",
+            "27.1",
+            "16.2",
+            "9.5",
+            "4.4",
+            "https://example.com/products/p011",
+            "2025-11-08",
+            "2025"
+          ],
+          "rowNumber": 12,
+          "cell": "1200",
+          "fieldName": "kcal_per_100g",
+          "fieldNumber": 7
+        },
+        {
+          "type": "row-constraint",
+          "title": "Row Constraint",
+          "description": "The value does not conform to the row constraint.",
+          "message": "The row at position 12 has an error: the row constraint to conform is \"(form == 'dry' and 200 <= kcal_per_100g <= 600 and moisture_pct <= 14) or (form == 'wet' and 50 <= kcal_per_100g <= 200 and moisture_pct >= 60)\"",
+          "tags": [
+            "#table",
+            "#row"
+          ],
+          "note": "the row constraint to conform is \"(form == 'dry' and 200 <= kcal_per_100g <= 600 and moisture_pct <= 14) or (form == 'wet' and 50 <= kcal_per_100g <= 200 and moisture_pct >= 60)\"",
+          "cells": [
+            "P011",
+            "Hearth Pet",
+            "Puppy Lamb (kibble)",
+            "dog",
+            "senior",
+            "dry",
+            "1200",
+            "27.1",
+            "16.2",
+            "9.5",
+            "4.4",
+            "https://example.com/products/p011",
+            "2025-11-08",
+            "2025"
+          ],
+          "rowNumber": 12
+        },
+        {
+          "type": "constraint-error",
+          "title": "Constraint Error",
+          "description": "A field value does not conform to a constraint.",
+          "message": "The cell \"\" in row at position \"14\" and field \"source_date\" at position \"13\" does not conform to a constraint: constraint \"required\" is \"True\"",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "constraint \"required\" is \"True\"",
+          "cells": [
+            "P013",
+            "Oakridge",
+            "Puppy Lamb (kibble)",
+            "dog",
+            "adult",
+            "dry",
+            "414.7",
+            "31.3",
+            "12",
+            "7.6",
+            "3.8",
+            "https://example.com/products/p013",
+            "",
+            "2023"
+          ],
+          "rowNumber": 14,
+          "cell": "",
+          "fieldName": "source_date",
+          "fieldNumber": 13
+        },
+        {
+          "type": "unique-error",
+          "title": "Unique Error",
+          "description": "This field is a unique field but it contains a value that has been used in another row.",
+          "message": "Row at position \"18\" has unique constraint violation in field \"id\" at position \"1\": the same as in the row at position 17",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "the same as in the row at position 17",
+          "cells": [
+            "P016",
+            "Acme Paws",
+            "Senior Light Turkey (kibble)",
+            "dog",
+            "puppy",
+            "dry",
+            "371.8",
+            "28",
+            "16.5",
+            "9.5",
+            "2.3",
+            "https://example.com/products/p017",
+            "2024-03-12",
+            "2024"
+          ],
+          "rowNumber": 18,
+          "cell": "P016",
+          "fieldName": "id",
+          "fieldNumber": 1
+        },
+        {
+          "type": "primary-key",
+          "title": "PrimaryKey Error",
+          "description": "Values in the primary key fields should be unique for every row",
+          "message": "Row at position \"18\" violates the primary key: the same as in the row at position 17",
+          "tags": [
+            "#table",
+            "#row"
+          ],
+          "note": "the same as in the row at position 17",
+          "cells": [
+            "P016",
+            "Acme Paws",
+            "Senior Light Turkey (kibble)",
+            "dog",
+            "puppy",
+            "dry",
+            "371.8",
+            "28",
+            "16.5",
+            "9.5",
+            "2.3",
+            "https://example.com/products/p017",
+            "2024-03-12",
+            "2024"
+          ],
+          "rowNumber": 18
+        },
+        {
+          "type": "constraint-error",
+          "title": "Constraint Error",
+          "description": "A field value does not conform to a constraint.",
+          "message": "The cell \"puppy\" in row at position \"20\" and field \"species\" at position \"4\" does not conform to a constraint: constraint \"enum\" is \"['dog', 'cat']\"",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "constraint \"enum\" is \"['dog', 'cat']\"",
+          "cells": [
+            "P019",
+            "Silver Whisker",
+            "Active Beef (kibble)",
+            "puppy",
+            "senior",
+            "dry",
+            "417.6",
+            "25.2",
+            "13.7",
+            "9.6",
+            "3.4",
+            "https://example.com/products/p019",
+            "2024-02-26",
+            "2024"
+          ],
+          "rowNumber": 20,
+          "cell": "puppy",
+          "fieldName": "species",
+          "fieldNumber": 4
+        },
+        {
+          "type": "constraint-error",
+          "title": "Constraint Error",
+          "description": "A field value does not conform to a constraint.",
+          "message": "The cell \"-5\" in row at position \"24\" and field \"moisture_pct\" at position \"10\" does not conform to a constraint: constraint \"minimum\" is \"3\"",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "constraint \"minimum\" is \"3\"",
+          "cells": [
+            "P023",
+            "Acme Paws",
+            "Puppy Lamb (kibble)",
+            "dog",
+            "adult",
+            "dry",
+            "348.8",
+            "30.7",
+            "17.3",
+            "-5",
+            "4.6",
+            "https://example.com/products/p023",
+            "2023-07-21",
+            "2023"
+          ],
+          "rowNumber": 24,
+          "cell": "-5",
+          "fieldName": "moisture_pct",
+          "fieldNumber": 10
+        },
+        {
+          "type": "row-constraint",
+          "title": "Row Constraint",
+          "description": "The value does not conform to the row constraint.",
+          "message": "The row at position 26 has an error: the row constraint to conform is \"form != 'dry' or protein_pct >= fat_pct\"",
+          "tags": [
+            "#table",
+            "#row"
+          ],
+          "note": "the row constraint to conform is \"form != 'dry' or protein_pct >= fat_pct\"",
+          "cells": [
+            "P025",
+            "Northfield",
+            "Sensitive Duck (kibble)",
+            "dog",
+            "puppy",
+            "dry",
+            "371",
+            "12",
+            "32",
+            "9.6",
+            "4.6",
+            "https://example.com/products/p025",
+            "2024-07-13",
+            "2024"
+          ],
+          "rowNumber": 26
+        },
+        {
+          "type": "constraint-error",
+          "title": "Constraint Error",
+          "description": "A field value does not conform to a constraint.",
+          "message": "The cell \"2019\" in row at position \"30\" and field \"label_year\" at position \"14\" does not conform to a constraint: constraint \"minimum\" is \"2022\"",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "constraint \"minimum\" is \"2022\"",
+          "cells": [
+            "P029",
+            "Northfield",
+            "Puppy Lamb (kibble)",
+            "dog",
+            "adult",
+            "dry",
+            "414.8",
+            "24.8",
+            "10.8",
+            "8.7",
+            "4.5",
+            "https://example.com/products/p029",
+            "2023-06-14",
+            "2019"
+          ],
+          "rowNumber": 30,
+          "cell": "2019",
+          "fieldName": "label_year",
+          "fieldNumber": 14
+        }
+      ]
+    }
+  ]
+}

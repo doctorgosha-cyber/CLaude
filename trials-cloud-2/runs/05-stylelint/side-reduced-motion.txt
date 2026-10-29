@@ -1,0 +1,9 @@
+
+reduced-motion.css
+  5:32  ×  Disallowed !important  declaration-no-important
+  6:34  ×  Disallowed !important  declaration-no-important
+  7:33  ×  Disallowed !important  declaration-no-important
+  8:27  ×  Disallowed !important  declaration-no-important
+
+× 4 problems (4 errors, 0 warnings)
+

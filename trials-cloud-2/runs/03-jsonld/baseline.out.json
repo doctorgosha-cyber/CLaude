@@ -1,0 +1,50 @@
+{
+  "c1-product-offers.html": {
+    "blocks": 1,
+    "errors": []
+  },
+  "c2-product-rating-reviews.html": {
+    "blocks": 1,
+    "errors": []
+  },
+  "c3-faq.html": {
+    "blocks": 1,
+    "errors": []
+  },
+  "c4-review.html": {
+    "blocks": 1,
+    "errors": []
+  },
+  "c5-article.html": {
+    "blocks": 1,
+    "errors": []
+  },
+  "c6-breadcrumb.html": {
+    "blocks": 1,
+    "errors": []
+  },
+  "j1-rating-no-reviews.html": {
+    "blocks": 1,
+    "errors": []
+  },
+  "j2-product-no-name.html": {
+    "blocks": 1,
+    "errors": []
+  },
+  "j3-price-symbol.html": {
+    "blocks": 1,
+    "errors": []
+  },
+  "j4-availability-text.html": {
+    "blocks": 1,
+    "errors": []
+  },
+  "j5-faq-answer-missing.html": {
+    "blocks": 1,
+    "errors": []
+  },
+  "j6-review-no-itemreviewed.html": {
+    "blocks": 1,
+    "errors": []
+  }
+}
