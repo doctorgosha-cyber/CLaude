@@ -1,0 +1,91 @@
+{
+  "id": 4,
+  "tool": "html-validate (offline HTML5 markup validator, npm)",
+  "versions": {
+    "html-validate": "11.17.0",
+    "node": "22.22.0",
+    "npm": "10.9.4",
+    "axe-core (overlap column only)": "4.14.0",
+    "playwright-core (overlap column only)": "1.64.1"
+  },
+  "licences": {
+    "html-validate": "MIT",
+    "@html-validate/stylish": "MIT",
+    "@sidvind/better-ajv-errors": "Apache-2.0",
+    "ajv": "MIT",
+    "fast-deep-equal": "MIT",
+    "fast-uri": "BSD-3-Clause",
+    "json-schema-traverse": "MIT",
+    "kleur": "MIT",
+    "prompts": "MIT",
+    "require-from-string": "MIT",
+    "semver": "ISC",
+    "sisteransi": "MIT",
+    "copyleft_flags": "none in the html-validate tree. (axe-core 4.14.0 is MPL-2.0: fine used unmodified as a dependency; playwright-core Apache-2.0. Both only for the optional overlap column.)"
+  },
+  "install": {
+    "command": "npm i html-validate@11.17.0",
+    "seconds": 14.25,
+    "size_mb": 13,
+    "packages": 12,
+    "windows": "yes: pure JavaScript (no .node binaries, no node-gyp, no os/cpu restrictions in any package.json; CLI is bin/html-validate.mjs); runs on any Node >=18. Not executed on Windows here.",
+    "setup": "one npm install + two JSON files (htmlvalidate.tuned.json, elements-img-alt.json); no browser, no network at run time"
+  },
+  "fixtures": "trials-cloud-2/fixtures/04-html-validate/ (KEY.json): 6 seeded pages H1-H6 (review article with duplicate id=verdict; product card grid with <a> inside <a>; figure page with canvas/svg/controls and an alt-less <img> inside a hidden fallback div; FAQ with <details> and a stray </div>; suggestion form with <label for> pointing to a missing id; comparison <table cellpadding>) + 4 clean controls C1-C4 (video page with <source>/<track>; calculator with custom element, data-*, <datalist>, <template>, <dialog>, module script; figure with inline SVG role=img/aria-labelledby and <picture>/<source>; FAQ with <details name> accordion, aria-pressed buttons, <time>). All hand-written, one defect per seeded page.",
+  "baseline": {
+    "what": "No markup check at all today (pages shipped after visual review). axe-core adopted in round 1 is a runtime accessibility checker, not a validator: run as an overlap column on the same pages it reports only H5 (rule 'label') and nothing for H1/H2/H3/H4/H6.",
+    "command": "runs/04-html-validate/baseline.sh <files>  (prints 0 findings, exit 0); axe overlap: node runs/04-html-validate/axe-run.mjs <dirs>",
+    "recall": "0/6",
+    "axe_overlap_recall": "1/6 (H5 only)",
+    "false_positives": 0,
+    "axe_overlap_false_positives": 0,
+    "runtime_s": 0.0,
+    "axe_overlap_runtime_s": 6.1
+  },
+  "candidate_default": {
+    "config": "html-validate --preset recommended (= extends html-validate:recommended, 78 rules on)",
+    "commands": ["html-validate --preset recommended -f json fixtures/04-html-validate/seeded fixtures/04-html-validate/clean"],
+    "found": {"H1": true, "H2": true, "H3": false, "H4": true, "H5": false, "H6": true},
+    "found_by_rule": {"H1": "no-dup-id", "H2": "element-permitted-content", "H3": "MISSED: wcag/h37 deliberately skips <img> that is not in the accessibility tree (inAccessibilityTree check), so the hidden fallback image is ignored exactly as axe ignores it", "H4": "close-order", "H5": "MISSED: no-missing-references is not part of the recommended preset in v11 (it lives in the 'document' preset); valid-for does not check id existence", "H6": "no-deprecated-attr"},
+    "recall": "4/6",
+    "false_positives": 0,
+    "false_positive_rules": [],
+    "extra_findings_on_seeded": 2,
+    "extra_findings_detail": ["H3 L16 wcag/h32 '<form> element must have a submit button' (JS-driven figure controls form; valid HTML, debatable)", "H3 L20 form-dup-name 'Duplicate form control name \"type\"' on two checkboxes sharing a name (valid and common HTML; rule default only exempts radio)"],
+    "runtime_s": 0.77,
+    "runtime_note": "10 files; re-runs 0.86-0.88 s on a shared 4-vCPU box with load average ~10",
+    "exit_code": 1
+  },
+  "candidate_tuned": {
+    "config": "runs/04-html-validate/htmlvalidate.tuned.json: extends recommended; elements: [html5, elements-img-alt.json] (img.requiredAttributes=[alt] so element-required-attributes flags every alt-less <img>, hidden or not); rules ON: no-missing-references=error; form-dup-name shared=[radio,checkbox,submit,button,reset]; rules OFF: wcag/h32 (submit-button requirement fired on a JS-only controls form), attr-quotes, void-style, no-inline-style, attribute-boolean-style, no-redundant-role (all five observed firing on the WordPress-style probe runs/04-html-validate/probe-wp-style.html: unquoted id, <br /> and <img ... /> from wpautop/block output, style= from the block editor, checked=\"checked\", role=navigation on <nav>; they are stylistic and would drown real errors on WP-rendered pages). Also measured but not chosen: preset 'standard' (34 rules) = 4/6, 0 FP, 0 extra; it drops wcag/h37 and still lacks no-missing-references.",
+    "commands": ["html-validate -c runs/04-html-validate/htmlvalidate.tuned.json -f json fixtures/04-html-validate/seeded fixtures/04-html-validate/clean"],
+    "found": {"H1": true, "H2": true, "H3": true, "H4": true, "H5": true, "H6": true},
+    "found_by_rule": {"H1": "no-dup-id", "H2": "element-permitted-content", "H3": "element-required-attributes (via custom element metadata)", "H4": "close-order", "H5": "no-missing-references", "H6": "no-deprecated-attr"},
+    "recall": "6/6",
+    "false_positives": 0,
+    "false_positive_rules": [],
+    "extra_findings_on_seeded": 0,
+    "runtime_s": 0.66,
+    "runtime_note": "10 files; re-runs 0.54-1.72 s (same shared-CPU noise); custom elements file adds config-load time, parsing itself is milliseconds",
+    "exit_code": 1,
+    "standard_preset_for_reference": {"recall": "4/6", "found": {"H1": true, "H2": true, "H3": false, "H4": true, "H5": false, "H6": true}, "false_positives": 0, "extra_findings_on_seeded": 0, "runtime_s": 0.63}
+  },
+  "limits": [
+    "Static source validator: it checks the HTML as written, not the DOM after JavaScript or after WordPress filters. For WP pages the team must validate the rendered output (curl the page, or run against the theme's PHP output), not the template files.",
+    "Recommended preset misses H3 by design: wcag/h37 ignores images outside the accessibility tree (same blind spot as axe); the tuned fix uses custom element metadata, which is a documented feature but not a rule option.",
+    "Recommended preset misses H5: no-missing-references is only in the 'document' preset in v11; must be enabled explicitly.",
+    "Recommended preset includes stylistic rules (attr-quotes, void-style, no-inline-style, attribute-boolean-style, no-redundant-role) that fire on ordinary WordPress block output; left on they would bury the real errors, so the tuned config turns them off.",
+    "form-dup-name default flags same-name checkboxes (valid HTML); needs the shared option.",
+    "Runtime numbers measured under load average ~10 on 4 vCPU (other trials concurrent); absolute values are noisy but all under 2 s for 10 files.",
+    "Windows not executed; evidence is pure-JS dependency tree only."
+  ],
+  "verdict": "ADOPT",
+  "reason": "Baseline is no check (0/6); axe, adopted in round 1, sees only 1/6 of these markup defects on the same pages. html-validate recommended finds 4/6 with 0 false positives on 4 modern clean pages but 2 noisy extras; the tuned config (recommended + no-missing-references + img alt required via element metadata + 6 noisy rules off) finds 6/6 with 0 false positives and 0 extras in ~0.6-0.9 s for 10 files, after a 14 s / 13 MB pure-JS install (MIT, Windows-capable).",
+  "wrapper": "runs/04-html-validate/wrapper-sketch.mjs (checks/html.mjs; tested: clean dir exit 0, seeded dir exit 1 with 6 findings, missing path exit 2)",
+  "do_not_adopt_notes": [
+    "Do not use the bare recommended preset on WordPress-rendered pages: the stylistic rules (void-style on <br />, no-inline-style, attribute-boolean-style, attr-quotes, no-redundant-role) all fire on normal block-editor output and would make the check unusable without the tuned config.",
+    "Do not expect it to replace axe: it caught the hidden-image alt only with the element-metadata override, and it has no colour-contrast, focus-order or runtime ARIA checks; keep both (overlap on these 6 defects was only H5).",
+    "Preset 'standard' is not a good tuned choice: 4/6, it drops wcag/h37 and no-missing-references entirely.",
+    "axe overlap column install time (1.7 s) is not representative: npm cache was already warm from another trial."
+  ]
+}

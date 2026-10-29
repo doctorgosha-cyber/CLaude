@@ -1,0 +1,7 @@
+{
+  "tool": null,
+  "dir": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/py-vuln",
+  "findings": [],
+  "ok": false,
+  "error": "osv-scanner not found and no package-lock.json for npm audit"
+}

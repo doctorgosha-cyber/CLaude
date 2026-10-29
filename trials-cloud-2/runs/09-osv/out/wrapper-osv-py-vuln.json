@@ -1,0 +1,127 @@
+{
+  "tool": "osv-scanner 2.7.0",
+  "dir": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/py-vuln",
+  "findings": [
+    {
+      "file": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/py-vuln/requirements.txt",
+      "package": "pyyaml",
+      "version": "5.3.1",
+      "ecosystem": "PyPI",
+      "id": "PYSEC-2021-142",
+      "aliases": [
+        "CVE-2020-14343",
+        "GHSA-8q59-q68h-6hv4"
+      ],
+      "summary": ""
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/py-vuln/requirements.txt",
+      "package": "pyyaml",
+      "version": "5.3.1",
+      "ecosystem": "PyPI",
+      "id": "GHSA-8q59-q68h-6hv4",
+      "aliases": [
+        "CVE-2020-14343",
+        "PYSEC-2021-142"
+      ],
+      "summary": "Improper Input Validation in PyYAML"
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/py-vuln/requirements.txt",
+      "package": "requests",
+      "version": "2.25.1",
+      "ecosystem": "PyPI",
+      "id": "PYSEC-2023-74",
+      "aliases": [
+        "CVE-2023-32681",
+        "GHSA-j8r2-6x86-q33q"
+      ],
+      "summary": ""
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/py-vuln/requirements.txt",
+      "package": "requests",
+      "version": "2.25.1",
+      "ecosystem": "PyPI",
+      "id": "PYSEC-2026-1872",
+      "aliases": [
+        "CVE-2024-47081",
+        "GHSA-9hjg-9r4m-mvj7"
+      ],
+      "summary": "Requests vulnerable to .netrc credentials leak via malicious URLs"
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/py-vuln/requirements.txt",
+      "package": "requests",
+      "version": "2.25.1",
+      "ecosystem": "PyPI",
+      "id": "PYSEC-2026-1873",
+      "aliases": [
+        "CVE-2024-35195",
+        "GHSA-9wx4-h78v-vm56"
+      ],
+      "summary": "Requests `Session` object does not verify requests after making first request with verify=False"
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/py-vuln/requirements.txt",
+      "package": "requests",
+      "version": "2.25.1",
+      "ecosystem": "PyPI",
+      "id": "PYSEC-2026-2275",
+      "aliases": [
+        "CVE-2026-25645",
+        "GHSA-gc5v-m9x4-r6x2"
+      ],
+      "summary": ""
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/py-vuln/requirements.txt",
+      "package": "requests",
+      "version": "2.25.1",
+      "ecosystem": "PyPI",
+      "id": "GHSA-9hjg-9r4m-mvj7",
+      "aliases": [
+        "CVE-2024-47081",
+        "PYSEC-2026-1872"
+      ],
+      "summary": "Requests vulnerable to .netrc credentials leak via malicious URLs"
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/py-vuln/requirements.txt",
+      "package": "requests",
+      "version": "2.25.1",
+      "ecosystem": "PyPI",
+      "id": "GHSA-9wx4-h78v-vm56",
+      "aliases": [
+        "CVE-2024-35195",
+        "PYSEC-2026-1873"
+      ],
+      "summary": "Requests `Session` object does not verify requests after making first request with verify=False"
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/py-vuln/requirements.txt",
+      "package": "requests",
+      "version": "2.25.1",
+      "ecosystem": "PyPI",
+      "id": "GHSA-gc5v-m9x4-r6x2",
+      "aliases": [
+        "CVE-2026-25645",
+        "PYSEC-2026-2275"
+      ],
+      "summary": "Requests has Insecure Temp File Reuse in its extract_zipped_paths() utility function"
+    },
+    {
+      "file": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/py-vuln/requirements.txt",
+      "package": "requests",
+      "version": "2.25.1",
+      "ecosystem": "PyPI",
+      "id": "GHSA-j8r2-6x86-q33q",
+      "aliases": [
+        "CVE-2023-32681",
+        "PYSEC-2023-74"
+      ],
+      "summary": "Unintended leak of Proxy-Authorization header in requests"
+    }
+  ],
+  "ok": false
+}

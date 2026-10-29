@@ -1,0 +1,71 @@
+{
+  "tool": "npm audit (fallback; cannot read requirements.txt)",
+  "dir": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/node-vuln",
+  "findings": [
+    {
+      "file": "package-lock.json",
+      "package": "lodash",
+      "range": "<=4.17.23",
+      "severity": "high",
+      "id": "GHSA-35jh-r3h4-6jhm",
+      "summary": "Command Injection in lodash"
+    },
+    {
+      "file": "package-lock.json",
+      "package": "lodash",
+      "range": "<=4.17.23",
+      "severity": "moderate",
+      "id": "GHSA-29mw-wpgm-hmr9",
+      "summary": "Regular Expression Denial of Service (ReDoS) in lodash"
+    },
+    {
+      "file": "package-lock.json",
+      "package": "lodash",
+      "range": "<=4.17.23",
+      "severity": "high",
+      "id": "GHSA-r5fr-rjxr-66jc",
+      "summary": "lodash vulnerable to Code Injection via `_.template` imports key names"
+    },
+    {
+      "file": "package-lock.json",
+      "package": "lodash",
+      "range": "<=4.17.23",
+      "severity": "moderate",
+      "id": "GHSA-f23m-r3pf-42rh",
+      "summary": "lodash vulnerable to Prototype Pollution via array path bypass in `_.unset` and `_.omit`"
+    },
+    {
+      "file": "package-lock.json",
+      "package": "lodash",
+      "range": "<=4.17.23",
+      "severity": "moderate",
+      "id": "GHSA-xxjr-mmjv-4gpg",
+      "summary": "Lodash has Prototype Pollution Vulnerability in `_.unset` and `_.omit` functions"
+    },
+    {
+      "file": "package-lock.json",
+      "package": "minimist",
+      "range": "1.0.0 - 1.2.5",
+      "severity": "critical",
+      "id": "GHSA-xvch-5gv4-984h",
+      "summary": "Prototype Pollution in minimist"
+    },
+    {
+      "file": "package-lock.json",
+      "package": "node-fetch",
+      "range": "<2.6.7",
+      "severity": "high",
+      "id": "GHSA-r683-j2x4-v87g",
+      "summary": "node-fetch forwards secure headers to untrusted sites"
+    },
+    {
+      "file": "package-lock.json",
+      "package": "semver",
+      "range": "7.0.0 - 7.5.1",
+      "severity": "high",
+      "id": "GHSA-c2qf-rxjj-qqgw",
+      "summary": "semver vulnerable to Regular Expression Denial of Service"
+    }
+  ],
+  "ok": false
+}

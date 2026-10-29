@@ -1,0 +1,6 @@
+{
+  "tool": "osv-scanner 2.7.0",
+  "dir": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/py-clean",
+  "findings": [],
+  "ok": true
+}

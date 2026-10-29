@@ -1,0 +1,6 @@
+{
+  "tool": "npm audit (fallback; cannot read requirements.txt)",
+  "dir": "/home/user/CLaude/trials-cloud-2/fixtures/09-osv/node-clean",
+  "findings": [],
+  "ok": true
+}
