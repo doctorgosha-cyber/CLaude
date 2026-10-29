@@ -1,0 +1,14 @@
+{
+  "products": [
+    {
+      "id": "hi",
+      "name": "hi",
+      "species": "cat",
+      "energy": {
+        "value": 3850,
+        "unit": "kcal/100g"
+      },
+      "added": "2026-01-01"
+    }
+  ]
+}

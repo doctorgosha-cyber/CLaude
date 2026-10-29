@@ -1,0 +1,66 @@
+{
+  "id": 7,
+  "tool": "ffmpeg ebur128 (loudness / true-peak / LRA measurement) + Node checker for voice-over-music ratio; loudnorm/alimiter used only to build fixtures",
+  "versions": {"ffmpeg": "6.1.1-3ubuntu5 (Ubuntu 24.04 package, --enable-gpl)", "node": "22.22.0", "espeak-ng": "1.51 (fixtures only)"},
+  "licences": {
+    "ffmpeg": "LGPL-2.1-or-later core; this Ubuntu build is configured --enable-gpl (libx264, etc.) so the binary as a whole is GPL-2.0-or-later. We only invoke the ffmpeg CLI as a separate process (child_process.spawnSync) and do not link or redistribute it, so no GPL/LGPL obligation attaches to our checker code; obligations only arise if the team redistributes an ffmpeg binary (then ship its source/offer).",
+    "check-loudness.mjs / wrapper": "own code, no npm dependencies"
+  },
+  "install": {
+    "command": "none needed here (system package: apt-get install -y ffmpeg=7:6.1.1-3ubuntu5). Windows: static build from gyan.dev or github.com/BtbN/FFmpeg-Builds (third-party, GPL build), put ffmpeg.exe on PATH or set FFMPEG env var",
+    "seconds": 0,
+    "size_mb": 36.4,
+    "size_note": "Installed-Size of ffmpeg + libav* Ubuntu packages (dpkg-query); Windows static ffmpeg.exe is roughly 100-150 MB (not measured: github.com and gyan.dev are refused by the egress proxy: 'curl: (56) CONNECT tunnel failed, response 403')",
+    "windows": "yes - native binary; the ebur128/ametadata/alimiter filters are in every full build (gyan.dev 'essentials'/'full' and BtbN win64-gpl builds are GPL builds from third parties, not from ffmpeg.org); checker is pure Node (spawnSync, no shell). Not run on Windows in this trial."
+  },
+  "fixtures": "fixtures/07-loudness/: voice.wav (espeak-ng), music.wav (synth bed), video.mp4 (shared 9:16 test pattern), per-mix gained stems X_voice.wav/X_music.wav (f32 wav), 5 mixes C1 C2 L1 L2 L3 .mp4 (1080x1920 H.264 + AAC 48 kHz stereo, 25 s), KEY.json with MEASURED integrated/LRA/TP per file, generator make-mixes.sh (log: runs/07-loudness/make-mixes.log, 1m44s)",
+  "baseline": {
+    "what": "what the team does today: no loudness check; the render step only confirms the mp4 has an audio stream (ffprobe)",
+    "command": "bash runs/07-loudness/baseline.sh",
+    "recall": "0/3",
+    "false_positives": 0,
+    "runtime_s": 0.31
+  },
+  "candidate_default": {
+    "config": "check-loudness.mjs: ffmpeg -af ebur128=peak=true on the mix (parse Integrated, LRA, True peak), plus integrated LUFS of the voice and music stems found next to the mix; thresholds integrated -14 +-1 LUFS, true peak <= -1.0 dBTP, ratio = LUFS_voice - LUFS_music >= +6 dB (ratio needs the stems; without them the checker says so and skips it)",
+    "commands": ["node runs/07-loudness/check-loudness.mjs fixtures/07-loudness/<X>.mp4"],
+    "found": {"L1": true, "L2": true, "L3": true},
+    "found_by": {"L1": "integrated -9.8 LUFS", "L2": "ratio -10 dB", "L3": "true peak +1.2 dBTP"},
+    "recall": "3/3",
+    "false_positives": 0,
+    "controls": {"C1": "I -14.1, TP -2.7, ratio +10.0 -> pass", "C2": "I -14.1, TP -2.7, ratio +8.0 -> pass"},
+    "extra_findings_on_seeded": 0,
+    "runtime_s": 2.0,
+    "runtime_note": "per 25 s file incl. 3 ffmpeg passes (mix + 2 stems), 4 shared vCPU; a single ebur128 pass on the mp4 is 1.19 s; measured per file: C1 1.99, C2 1.95, L1 1.91, L2 1.90, L3 2.18"
+  },
+  "candidate_tuned": {
+    "config": "--tuned: same plus LRA <= 12 LU and a 'music under speech' check: 100 ms momentary loudness series of both stems via ebur128=metadata=1,ametadata=print:file=-, keep frames where voice momentary > -30 LUFS, energy-mean the music and voice over those frames, require voice - music >= +6 dB during speech. This is the simpler of the two options in the brief (momentary-loudness gating, not sidechaincompress); chosen because it needs no extra filter graph and gives a number the team can read.",
+    "commands": ["node runs/07-loudness/check-loudness.mjs --tuned fixtures/07-loudness/<X>.mp4"],
+    "found": {"L1": true, "L2": true, "L3": true},
+    "found_by": {"L1": "integrated -9.8 LUFS", "L2": "ratio -10 dB AND ratio_speech -8.8 dB", "L3": "true peak +1.2 dBTP"},
+    "recall": "3/3",
+    "false_positives": 0,
+    "controls": {"C1": "ratio_speech +11.0, LRA 2.2 -> pass", "C2": "ratio_speech +9.0, LRA 2.2 -> pass"},
+    "extra_findings_on_seeded": 0,
+    "runtime_s": 2.6,
+    "runtime_note": "C1 2.68, C2 2.58, L1 2.59, L2 2.66, L3 2.59 s (5 ffmpeg passes per file)",
+    "gain_over_default": "none on these fixtures (L2 is already caught by the plain ratio); the speech-gated ratio only adds value when the bed has swells timed against the narration, which the synthetic bed only mildly has (C1: +10.0 overall vs +11.0 during speech)"
+  },
+  "limits": [
+    "Voice-to-music ratio needs the two stems; the final mp4 alone cannot give it (the checker reports a note and checks only integrated/TP/LRA).",
+    "Ratio is a stem-level number: it says nothing about spectral masking; +6 dB is a rule of thumb, not an intelligibility measure.",
+    "ebur128 'Peak' line is true peak only with peak=true (4x oversampled); AAC encoding raised sample-peak-limited material by up to ~3 dB TP in this trial, so limit at <= -3 dBFS before encoding.",
+    "Synthetic fixtures (espeak voice, synth bed), 25 s; real TTS voices and licensed beds not tested; no Windows run (hosts for the static builds are refused from the sandbox).",
+    "L1 measured -9.8 LUFS instead of the intended ~-8 (limiter saturation); still 3.8 LU past tolerance, so the detection is not borderline.",
+    "Runtimes carry shared-CPU noise (4 vCPU shared with other trials)."
+  ],
+  "verdict": "ADOPT",
+  "reason": "Baseline is nothing (0/3). ffmpeg ebur128 plus a 50-line Node checker catches 3/3 seeded defects (too loud -9.8 LUFS, voice buried -10 dB, true peak +1.2 dBTP) with 0 false positives on 2 clean controls, in ~2 s per 25 s film, with zero install (ffmpeg is already in the pipeline) and no licence obligation because ffmpeg runs as a separate process.",
+  "wrapper": "runs/07-loudness/wrapper-sketch.mjs",
+  "wrapper_exit_codes": {"C1.mp4 (clean)": 0, "L2.mp4 (seeded)": 1, "mix without stems (L3 copy)": "1 with note 'stems not found; voice/music ratio not checked'", "missing file": 2},
+  "do_not_adopt_notes": [
+    "Tuned mode (speech-gated ratio + LRA) showed no extra recall on these fixtures and costs +0.6 s per file; keep it optional (--tuned), do not make it the gate.",
+    "Do not use loudnorm single-pass as the check: it normalises (changes the file) and prints targets, not a verdict; ebur128 is the measurement filter. loudnorm two-pass remains the fix step after a failed check.",
+    "First fixture run used 16-bit stems: the hot L1 voice stem clipped and the ratio read 5.6 dB (a false 'ratio' finding on L1). Fixed by writing stems as float wav; the team should measure ratio on float or pre-gain stems, never on clipped intermediates."
+  ]
+}

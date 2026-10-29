@@ -4,7 +4,7 @@ import { loadCatalogue, findProduct } from './catalogue.mjs';
 import { SPECIES, ACTIVITIES, stagesFor } from './needs.mjs';
 import { portionFor } from './calculator.mjs';
 import { formatPortion } from './format.mjs';
-import { parseNumber } from './units.mjs';
+import { parseNumber, lbToKg } from './units.mjs';
 
 const UNITS = ['metric', 'imperial'];
 
@@ -61,7 +61,9 @@ export function handlePortion(input) {
   if (!product) return error(404, `unknown product: ${productId}`);
   if (product.species !== species) return error(400, `product ${productId} is not a ${species} food`);
 
-  const { kcalPerDay, grams } = portionFor({ species, weightKg: weight, stage, activity }, product);
+  // Imperial callers send the weight in pounds; the needs model works in kilograms.
+  const weightKg = units === 'imperial' ? lbToKg(weight) : weight;
+  const { kcalPerDay, grams } = portionFor({ species, weightKg, stage, activity }, product);
   return {
     status: 200,
     body: formatPortion({ grams, kcalPerDay, weight, units, product }),

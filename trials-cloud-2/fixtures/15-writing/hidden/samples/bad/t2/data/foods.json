@@ -1,0 +1,8 @@
+[
+  { "id": "nf-001", "name": "Northfield Adult Chicken", "kind": "dry", "protein_g": 26.0, "fat_g": 15.0, "carbohydrate_g": 42.0, "fibre_g": 3.5, "moisture_pct": 8.0 },
+  { "id": "nf-002", "name": "Northfield Puppy Lamb", "kind": "dry", "protein_g": 30.0, "fat_g": 18.0, "carbohydrate_g": 36.5, "fibre_g": 2.8, "moisture_pct": 8.0 },
+  { "id": "nf-003", "name": "Riverbank Salmon Pate", "kind": "wet", "protein_g": 10.5, "fat_g": 6.0, "carbohydrate_g": 2.0, "fibre_g": 0.5, "moisture_pct": 78.0 },
+  { "id": "nf-004", "name": "Riverbank Beef Chunks", "kind": "wet", "protein_g": 9.0, "fat_g": 5.5, "carbohydrate_g": 4.0, "fibre_g": 0.8, "moisture_pct": 79.0 },
+  { "id": "nf-005", "name": "Barkley Raw Turkey", "kind": "raw", "protein_g": 17.5, "fat_g": 12.0, "carbohydrate_g": 0.0, "fibre_g": 0.0, "moisture_pct": 68.0 },
+  { "id": "nf-006", "name": "Barkley Senior Light", "kind": "dry", "protein_g": 24.0, "fat_g": 8.5, "carbohydrate_g": 48.0, "fibre_g": 9.0, "moisture_pct": 8.5 }
+]

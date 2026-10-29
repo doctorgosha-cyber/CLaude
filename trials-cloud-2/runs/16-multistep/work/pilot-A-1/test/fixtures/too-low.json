@@ -1,0 +1,14 @@
+{
+  "products": [
+    {
+      "id": "lo",
+      "name": "lo",
+      "species": "cat",
+      "energy": {
+        "value": 2400,
+        "unit": "kcal/kg"
+      },
+      "added": "2026-01-01"
+    }
+  ]
+}

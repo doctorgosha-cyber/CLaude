@@ -35,5 +35,4 @@ are what will be checked — **without breaking anything**:
 - `node serve.mjs 8080` previews the page at http://127.0.0.1:8080/
 - `npm test` runs the visible smoke test (serves the folder, checks the markup hooks and
   that every referenced asset resolves). Run it before you finish.
-- Aim for under 20 minutes of work. Leave a short note of what you changed and the
-  before/after numbers in `PERF.md`.
+- Aim for under 20 minutes of work. Leave a short note of what you changed in `PERF.md`.

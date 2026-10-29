@@ -36,7 +36,10 @@ export function serveDir(root) {
       const body = await readFile(file);
       res.writeHead(200, { 'content-type': MIME[path.extname(file).toLowerCase()] || 'application/octet-stream', 'cache-control': 'no-store' });
       res.end(body);
-    } catch { res.writeHead(404, { 'content-type': 'text/plain' }); res.end('not found'); }
+    } catch {
+      if (p === '/favicon.ico') { res.writeHead(204); return res.end(); }
+      res.writeHead(404, { 'content-type': 'text/plain' }); res.end('not found');
+    }
   });
   return new Promise((resolve) => {
     server.listen(0, '127.0.0.1', () => {

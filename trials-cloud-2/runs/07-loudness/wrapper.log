@@ -2,3 +2,7 @@
 C1 exit=0
 {"file":"L2.mp4","integrated":-14,"lra":7.4,"truePeak":-3,"ratio":-10,"findings":["voice only -10 dB over music (want >= +6)"],"voice":-23.6,"music":-13.6,"pass":false}
 L2 exit=1
+{"file":"/tmp/claude-0/-home-user-CLaude/6f421993-6727-5065-82a2-786c50db201d/scratchpad/tools2/07-loudness/work/nostems.mp4","integrated":-14.1,"lra":2.3,"truePeak":1.2,"ratio":null,"findings":["true peak 1.2 dBTP (want <= -1)"],"note":"stems not found; voice/music ratio not checked","pass":false}
+nostems exit=1
+
+missing exit=2

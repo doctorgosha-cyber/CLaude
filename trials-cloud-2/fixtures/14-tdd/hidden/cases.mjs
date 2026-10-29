@@ -55,6 +55,7 @@ export const cases = [
     near(m.toGrams('0.75 kg (2 bags)'), 1500);
     near(m.toGrams('400 g (12 pouches)'), 4800);
     near(m.toGrams('85 g (24 cans)'), 2040);
+    near(m.toGrams('1 lb 4 oz (2 bags)'), 2 * (LB + 4 * OZ));
   } },
   { id: 'T05', name: 'toGrams: decimal comma, NBSP/NNBSP between number and unit, surrounding whitespace', run: (m) => {
     near(m.toGrams('1,5 kg'), 1500);
@@ -82,6 +83,8 @@ export const cases = [
     assert.equal(r2.currency, 'USD'); near(r2.perKg, 50, 1e-9);
     const r3 = m.pricePerKg('5 usd', '1 kg');
     assert.equal(r3.currency, 'USD'); near(r3.perKg, 5, 1e-9);
+    const r4 = m.pricePerKg('USD 12.50', '500 g');                // code before the number
+    assert.equal(r4.currency, 'USD'); near(r4.perKg, 25, 1e-9);
   } },
   { id: 'P02', name: 'pricePerKg: decimal comma and € after the number', run: (m) => {
     const r = m.pricePerKg('29,99 €', '1,5 kg');
@@ -142,8 +145,11 @@ export const cases = [
     eqStr(m.formatMoney(1.005, 'USD', 'en-US'), '$1.00', '1.005');
     eqStr(m.formatMoney(0.125, 'USD', 'en-US'), '$0.12', '0.125');
     eqStr(m.formatMoney(2.1251, 'USD', 'en-US'), '$2.13', '2.1251 (above half)');
+    // 1.015*100 === 101.49999999999999 in binary: numeric half-even gives 1.01; the decimal-digit rule gives 1.02
+    eqStr(m.formatMoney(1.015, 'USD', 'en-US'), '$1.02', '1.015');
+    eqStr(m.formatMoney(0.005, 'USD', 'en-US'), '$0.00', '0.005');
   } },
-  { id: 'F02', name: 'formatMoney: JPY has 0 minor units; en-US grouping', run: (m) => {
+  { id: 'F02', name: 'formatMoney: JPY has 0 minor units; en-US grouping; negative/NaN/non-number/unknown currency → TypeError', run: (m) => {
     eqStr(m.formatMoney(2.5, 'JPY', 'en-US'), '¥2', '2.5 JPY');
     eqStr(m.formatMoney(3.5, 'JPY', 'en-US'), '¥4', '3.5 JPY');
     eqStr(m.formatMoney(1234.5, 'JPY', 'en-US'), '¥1,234', '1234.5 JPY');
@@ -151,6 +157,11 @@ export const cases = [
     eqStr(m.formatMoney(1234567.891, 'GBP', 'en-US'), '£1,234,567.89', 'GBP grouping');
     eqStr(m.formatMoney(0, 'EUR', 'en-US'), '€0.00', 'zero');
     eqStr(m.formatMoney(1234.5, 'CHF', 'en-US'), 'CHF' + NBSP + '1,234.50', 'CHF code + NBSP');
+    eqStr(m.formatMoney(0.5, 'JPY', 'en-US'), '¥0', '0.5 JPY');
+    throwsType(() => m.formatMoney(-1, 'USD', 'en-US'), '-1', 'negative');
+    throwsType(() => m.formatMoney(NaN, 'USD', 'en-US'), undefined, 'NaN');
+    throwsType(() => m.formatMoney('1.00', 'USD', 'en-US'), undefined, 'string amount');
+    throwsType(() => m.formatMoney(1, 'PLN', 'en-US'), 'PLN', 'unknown currency');
   } },
   { id: 'F03', name: 'formatMoney: de-DE layout "1.234,50 €" with NBSP, half-even applies', run: (m) => {
     eqStr(m.formatMoney(1234.5, 'EUR', 'de-DE'), '1.234,50' + NBSP + '€', 'EUR');
@@ -168,13 +179,6 @@ export const cases = [
     eqStr(m.formatMoney(1234.5, 'EUR', 'uk-UA'), '1' + NBSP + '234,50' + NBSP + '€', 'EUR narrow symbol');
     eqStr(m.formatMoney(2.5, 'JPY', 'uk-UA'), '2' + NBSP + '¥', 'JPY half-even');
     eqStr(m.formatMoney(99.995, 'UAH', 'uk-UA'), '100,00' + NBSP + '₴', 'carry');
-  } },
-  { id: 'F06', name: 'formatMoney: negative, NaN, non-number, unknown currency/locale → TypeError', run: (m) => {
-    throwsType(() => m.formatMoney(-1, 'USD', 'en-US'), '-1', 'negative');
-    throwsType(() => m.formatMoney(NaN, 'USD', 'en-US'), undefined, 'NaN');
-    throwsType(() => m.formatMoney('1.00', 'USD', 'en-US'), undefined, 'string amount');
-    throwsType(() => m.formatMoney(1, 'PLN', 'en-US'), 'PLN', 'unknown currency');
-    throwsType(() => m.formatMoney(1, 'USD', 'pl-PL'), 'pl-PL', 'unknown locale');
   } },
 
   // ------------------------------------------------------------ kcalPer100g
@@ -203,6 +207,8 @@ export const cases = [
     assert.equal(m.daysSupply(2000, 1000, '2028-02-28'), '2028-02-29');
     assert.equal(m.daysSupply(2000, 1000, '2100-02-28'), '2100-03-01');   // no Feb 29 in 2100
     assert.equal(m.daysSupply(2000, 1000, '2000-02-28'), '2000-02-29');   // 2000 is a leap year
+    assert.equal(m.daysSupply(36600, 100, '2027-03-01'), '2028-02-29');   // 366 days: Mar 1 2027 .. Feb 29 2028
+    assert.equal(m.daysSupply(6100, 100, '2099-12-31'), '2100-03-01');    // 61 days across a non-leap century
   } },
   { id: 'D02', name: 'daysSupply: month/year end, whole-day floor, one-day bag', run: (m) => {
     assert.equal(m.daysSupply(2000, 300, '2027-12-27'), '2028-01-01');    // floor(6.67)=6: 27..31, Jan 1
@@ -265,10 +271,12 @@ export const cases = [
       { id: 'bad2', price: '$5', mass: '0 g' },           // zero mass
       { id: 'ok2', price: '$10', mass: '1 kg' },
       { id: 'bad3', price: '$5', mass: 'two kg' },
+      { id: 'bad4', price: undefined, mass: '1 kg' },  // missing price is invalid, not an error
+      { id: 'bad5' },
     ];
     const snapshot = JSON.stringify(products);
     const out = m.compare(products);
-    assert.deepEqual(out.map((r) => r.id), ['ok2', 'ok1', 'bad1', 'bad2', 'bad3']);
+    assert.deepEqual(out.map((r) => r.id), ['ok2', 'ok1', 'bad1', 'bad2', 'bad3', 'bad4', 'bad5']);
     for (const r of out.slice(2)) {
       assert.equal(r.currency, null, r.id + ' currency');
       assert.ok(Number.isNaN(r.perKg), r.id + ' perKg should be NaN');

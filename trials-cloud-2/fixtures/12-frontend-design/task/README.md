@@ -55,8 +55,8 @@ Species values are exactly `all`, `dog`, `cat`; sort values are exactly `feature
 | `filter-price-max`   | `<input type="number">`                                              |
 | `sort-select`        | `<select>` with the five sort values above                           |
 | `product-card`       | each card; also carries `data-product-id="<id from JSON>"`           |
-| `product-price`      | the price text inside a card                                         |
-| `product-rating`     | the rating text inside a card                                        |
+| `product-price`      | the price text inside a card (exactly `£18.00`, nothing else inside) |
+| `product-rating`     | the rating text inside a card (contains `4.5`; `4.5 out of 5` is ok) |
 | `compare-toggle`     | the per-card `<button type="button" aria-pressed="…">`               |
 | `compare-bar`        | the sticky/fixed bar                                                 |
 | `compare-count`      | number of selected products (text is the number only)                |

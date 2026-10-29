@@ -147,8 +147,9 @@ function checkR5(report) { // numbers carry units
     total++;
     const before = prose.slice(Math.max(0, m.index - 12), m.index);
     const after = prose.slice(m.index + m[0].length, m.index + m[0].length + 40);
-    if (/(?:\bL|\bline\s|\blines\s|\bv|\bstep\s|\brule\s|\bR|\bt|\bnf-|\bno\.?\s|#|\$|€|£|§|\bversion\s|\bphp\s)$/i.test(before)) continue;
+    if (/(?:\bL|\bline\s|\blines\s|\bv|\bstep\s|\brule\s|\bR|\bt|\bnf-|\bno\.?\s|#|\$|€|£|§|\bversion\s|\bphp\s|\bexit\s|\bexit code\s|\bstatus\s|\bcode\s)$/i.test(before)) continue;
     if (/^\s?(?:[%‰°×]|x\b)/.test(after) || UNIT_RE.test(after) || UNIT_RE_ADJ.test(after)) continue;
+    if (/^\s?(?:of|out of|\/)\s?\d/.test(after)) continue; // "3 of 5 files": the pair is graded on the second number
     bare.push(m[0] + after.slice(0, 12).replace(/\n/g, ' '));
   }
   // tables: header must carry a unit for numeric columns (or cells carry it)

@@ -1,0 +1,14 @@
+{
+  "products": [
+    {
+      "id": "ok",
+      "name": "ok",
+      "species": "cat",
+      "energy": {
+        "value": 4120,
+        "unit": "kcal/kg "
+      },
+      "added": "2026-01-01"
+    }
+  ]
+}

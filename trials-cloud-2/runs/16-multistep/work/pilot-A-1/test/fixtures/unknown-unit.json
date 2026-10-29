@@ -1,0 +1,14 @@
+{
+  "products": [
+    {
+      "id": "x",
+      "name": "x",
+      "species": "cat",
+      "energy": {
+        "value": 380,
+        "unit": "kJ/100g"
+      },
+      "added": "2026-01-01"
+    }
+  ]
+}
