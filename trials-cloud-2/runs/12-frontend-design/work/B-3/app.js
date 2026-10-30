@@ -56,7 +56,6 @@
     img.alt = '';
     img.width = 320;
     img.height = 240;
-    img.loading = 'lazy';
     img.decoding = 'async';
     figure.append(img);
     if (p.badge) {
@@ -68,6 +67,7 @@
     const slot = document.createElement('span');
     slot.className = 'card__slot';
     slot.hidden = true;
+    slot.setAttribute('aria-hidden', 'true');
     figure.append(slot);
 
     const body = document.createElement('div');
@@ -157,7 +157,6 @@
       toggle.textContent = on ? 'Remove from comparison' : 'Add to comparison';
       slot.hidden = !on;
       slot.textContent = on ? String(position + 1) : '';
-      slot.setAttribute('aria-label', on ? `Comparison slot ${position + 1}` : '');
       if (!on && full) toggle.setAttribute('disabled', '');
       else toggle.removeAttribute('disabled');
     }

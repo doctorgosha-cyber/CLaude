@@ -204,6 +204,8 @@ main { padding: 0; }
 
 .facts dd span { font-size: 0.875rem; color: var(--muted); }
 
+.facts dd .unit-line { display: block; line-height: 1.2; }
+
 .card-foot {
   display: flex;
   align-items: center;

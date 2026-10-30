@@ -1,0 +1,66 @@
+{
+ "pairs": [
+  {
+   "pair": "pair-1",
+   "leftIs": "A",
+   "preferred_arm": "B",
+   "A": {
+    "clarity": 4,
+    "hierarchy": 3,
+    "distinctiveness": 2
+   },
+   "B": {
+    "clarity": 4,
+    "hierarchy": 4,
+    "distinctiveness": 4
+   },
+   "reason": "Right's oversized two-line title, numbered films, monospace runtimes and hairline rules read as an editorial film index; left is a competent but generic bootstrap-style card grid with a stock green button."
+  },
+  {
+   "pair": "pair-2",
+   "leftIs": "B",
+   "preferred_arm": "B",
+   "A": {
+    "clarity": 4,
+    "hierarchy": 4,
+    "distinctiveness": 2
+   },
+   "B": {
+    "clarity": 5,
+    "hierarchy": 5,
+    "distinctiveness": 4
+   },
+   "reason": "Left's ruled masthead, numbered films, mono metadata and 'Watch in' selector read as a specific explainer-film channel with a dominant title. Right is clear but uses generic hero band and white card template."
+  },
+  {
+   "pair": "pair-3",
+   "leftIs": "B",
+   "preferred_arm": "B",
+   "A": {
+    "clarity": 4,
+    "hierarchy": 3,
+    "distinctiveness": 3
+   },
+   "B": {
+    "clarity": 4,
+    "hierarchy": 4,
+    "distinctiveness": 4
+   },
+   "reason": "Left's editorial numbering, rules and oversized masthead feel made for a film channel with one clear focal point; right is clean but card-and-box generic with three competing headings."
+  }
+ ],
+ "summary": {
+  "A": {
+   "mean_clarity": 4.0,
+   "mean_hierarchy": 3.33,
+   "mean_distinctiveness": 2.33,
+   "preferred_count": 0
+  },
+  "B": {
+   "mean_clarity": 4.33,
+   "mean_hierarchy": 4.33,
+   "mean_distinctiveness": 4.0,
+   "preferred_count": 3
+  }
+ }
+}

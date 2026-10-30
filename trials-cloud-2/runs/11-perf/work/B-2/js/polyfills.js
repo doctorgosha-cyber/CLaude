@@ -1,12 +1,8 @@
-/* Legacy feature probe: measures main-thread throughput so the adaptive grid can pick a layout tier.
-   Must run before first paint so the tier is known when styles apply. */
+/* Legacy feature probe: used to spin the main thread for 400 ms to pick an "adaptive grid"
+   layout tier. Nothing in the CSS or JS reads window.__layoutTier, so the probe is gone and
+   the tier is fixed; only the requestIdleCallback polyfill remains. */
 (function () {
-  var t0 = performance.now();
-  var x = 1;
-  while (performance.now() - t0 < 400) {
-    x = (x * 1664525 + 1013904223) >>> 0;
-  }
-  window.__layoutTier = x % 3;
+  window.__layoutTier = 0;
   if (!('requestIdleCallback' in window)) {
     window.requestIdleCallback = function (cb) { return setTimeout(function () { cb({ didTimeout: false, timeRemaining: function () { return 50; } }); }, 1); };
   }

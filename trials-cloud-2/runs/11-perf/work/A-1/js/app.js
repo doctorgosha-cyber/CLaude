@@ -1,9 +1,11 @@
 /* SoundBench comparison page — client-side behaviour.
  *
  * Data contract
- *   data/products.json          -> the catalogue: [{ id, name }], in editor's order
+ *   data/products.json          -> the catalogue, in editor's order: [{ id, name, brand, price, rating, battery_h, weight_g }]
  *   data/product-<id>.json      -> detail record: { brand, price, rating, battery_h, weight_g }
- * The table row for a product merges the two records.
+ * The catalogue now carries the detail fields, so the page needs a single request; a product
+ * without them (an older catalogue export) still falls back to its detail record. Detail
+ * records are fetched in parallel; the row order is always the catalogue order.
  */
 (function () {
   'use strict';
@@ -31,16 +33,20 @@
 
   // ---------- data loading ----------
 
+  function hasDetail(p) {
+    return p && typeof p.price === 'number' && typeof p.rating === 'number' &&
+           p.brand != null && p.battery_h != null && p.weight_g != null;
+  }
+
   async function loadCatalogue() {
     var res = await fetch('data/products.json');
     var list = await res.json();
-    var rows = [];
-    for (var i = 0; i < list.length; i++) {
-      var detailRes = await fetch('data/product-' + list[i].id + '.json');
+    return Promise.all(list.map(async function (p) {
+      if (hasDetail(p)) return Object.assign({}, p);
+      var detailRes = await fetch('data/product-' + p.id + '.json');
       var detail = await detailRes.json();
-      rows.push(Object.assign({}, list[i], detail));
-    }
-    return rows;
+      return Object.assign({}, p, detail);
+    }));
   }
 
   // ---------- sorting ----------
@@ -196,12 +202,31 @@
 
   // ---------- promo banner ----------
   // Shown on every page view once the page has settled; copy comes from marketing.
+  // The banner's box is already in the markup (its space is reserved from the first paint, so
+  // revealing it does not shift the page); this just fades it in. If a template ever omits it,
+  // the banner is created as before.
   function showPromoBanner() {
-    var banner = document.createElement('div');
-    banner.className = 'promo-banner';
-    banner.id = 'promo-banner';
-    banner.innerHTML = '<strong>Free shipping on orders over €50</strong> — this week only, on every model in the table. <span class="promo-terms">Applies to orders shipped within the EU; the discount is shown at checkout.</span>';
-    document.body.insertBefore(banner, document.body.firstChild);
+    var banner = document.getElementById('promo-banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.className = 'promo-banner';
+      banner.id = 'promo-banner';
+      banner.innerHTML = '<strong>Free shipping on orders over €50</strong> — this week only, on every model in the table. <span class="promo-terms">Applies to orders shipped within the EU; the discount is shown at checkout.</span>';
+      document.body.insertBefore(banner, document.body.firstChild);
+    }
+    banner.removeAttribute('aria-hidden');
+    banner.classList.add('is-visible');
+  }
+
+  // ---------- analytics ----------
+  // tq-analytics is 300 KB and only consumes the event queue, so it is loaded once the page
+  // is idle. The inline stub in index.html queues every tq() call made before then.
+  function loadAnalytics() {
+    if (document.querySelector('script[src="js/vendor/tq-analytics.js"]')) return;
+    var s = document.createElement('script');
+    s.src = 'js/vendor/tq-analytics.js';
+    s.async = true;
+    document.body.appendChild(s);
   }
 
   // ---------- boot ----------
@@ -230,11 +255,17 @@
     });
 
     // Marketing wants the banner to slide in once the page has painted, not before.
-    window.addEventListener('load', function () {
+    function afterLoad() {
       requestAnimationFrame(function () {
         requestAnimationFrame(function () { setTimeout(showPromoBanner, 300); });
       });
-    });
+      requestIdleCallback(loadAnalytics, { timeout: 2000 });
+    }
+    if (document.readyState === 'complete') {
+      afterLoad();
+    } else {
+      window.addEventListener('load', afterLoad);
+    }
   }
 
   if (document.readyState === 'loading') {

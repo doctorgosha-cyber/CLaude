@@ -60,7 +60,7 @@
     const facts = el('dl', { class: 'facts' }, [
       el('div', {}, [
         el('dt', { text: 'Energy' }),
-        el('dd', {}, [`${p.kcalPer100g} `, el('span', { text: 'kcal / 100 g' })]),
+        el('dd', {}, [`${p.kcalPer100g}`, el('span', { class: 'unit-line', text: 'kcal/100 g' })]),
       ]),
       el('div', {}, [
         el('dt', { text: 'Protein' }),

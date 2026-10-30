@@ -197,6 +197,10 @@
   // ---------- promo banner ----------
   // Shown on every page view once the page has settled; copy comes from marketing.
   function showPromoBanner() {
+    // The markup ships in index.html with its space reserved (data-pending hides it), so
+    // revealing it does not shift the layout. Fall back to inserting it if a page lacks it.
+    var existing = document.getElementById('promo-banner');
+    if (existing) { existing.removeAttribute('data-pending'); return; }
     var banner = document.createElement('div');
     banner.className = 'promo-banner';
     banner.id = 'promo-banner';

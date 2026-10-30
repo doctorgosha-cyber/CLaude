@@ -375,7 +375,7 @@ input[type="number"] { width: 9.5em; }
   .compare { padding-top: 28px; }
   .toolbar__filters { width: 100%; }
   .toolbar__filters .field { flex: 1 1 calc(50% - 10px); }
-  .toolbar__filters .field:first-child { flex-basis: 100%; }
+  .toolbar__filters .field:nth-of-type(1) { flex-basis: 100%; }
   #filter-species, #sort-select, input[type="number"] { width: 100%; }
   .toolbar__sort { width: 100%; margin-left: 0; }
   .compare-bar { flex-wrap: wrap; }

@@ -405,9 +405,11 @@ img { display: block; max-width: 100%; height: auto; }
 
 .compare-bar .btn--ghost { margin-left: auto; }
 
-@media (max-width: 480px) {
-  .compare-bar { padding: 12px 14px; }
-  .compare-bar .btn--ghost { padding-inline: 14px; }
+@media (max-width: 600px) {
+  .compare-bar { padding: 12px 14px; gap: 10px 12px; }
+  .compare-bar__text { order: 1; }
+  .compare-bar .btn--ghost { order: 2; padding-inline: 14px; }
+  .compare-bar__chips { order: 3; flex-basis: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -75,7 +75,6 @@ function buildCard(p) {
   img.alt = '';
   img.width = 320;
   img.height = 240;
-  img.loading = 'lazy';
   img.decoding = 'async';
   figure.append(img);
   if (p.badge) {

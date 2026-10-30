@@ -1,98 +1,218 @@
 [
   {
     "id": 101,
-    "name": "Aero 2 ANC"
+    "name": "Aero 2 ANC",
+    "brand": "Nordlys",
+    "price": 279,
+    "rating": 4.7,
+    "battery_h": 41,
+    "weight_g": 254
   },
   {
     "id": 108,
-    "name": "Studio One"
+    "name": "Studio One",
+    "brand": "Acme",
+    "price": 159,
+    "rating": 4,
+    "battery_h": 30,
+    "weight_g": 268
   },
   {
     "id": 115,
-    "name": "Aero Lite"
+    "name": "Aero Lite",
+    "brand": "Nordlys",
+    "price": 199,
+    "rating": 4.1,
+    "battery_h": 36,
+    "weight_g": 221
   },
   {
     "id": 122,
-    "name": "Zenith"
+    "name": "Zenith",
+    "brand": "Orbita",
+    "price": 899,
+    "rating": 4.7,
+    "battery_h": 24,
+    "weight_g": 330
   },
   {
     "id": 129,
-    "name": "Wing"
+    "name": "Wing",
+    "brand": "Kestrel",
+    "price": 279,
+    "rating": 4.6,
+    "battery_h": 38,
+    "weight_g": 240
   },
   {
     "id": 136,
-    "name": "Halo"
+    "name": "Halo",
+    "brand": "Orbita",
+    "price": 349,
+    "rating": 4.6,
+    "battery_h": 32,
+    "weight_g": 275
   },
   {
     "id": 143,
-    "name": "Pulse Go"
+    "name": "Pulse Go",
+    "brand": "Tundra",
+    "price": 89,
+    "rating": 3.6,
+    "battery_h": 28,
+    "weight_g": 198
   },
   {
     "id": 150,
-    "name": "Pebble"
+    "name": "Pebble",
+    "brand": "Tundra",
+    "price": 129,
+    "rating": 3.9,
+    "battery_h": 25,
+    "weight_g": 189
   },
   {
     "id": 157,
-    "name": "Flux"
+    "name": "Flux",
+    "brand": "Kestrel",
+    "price": 329,
+    "rating": 4.3,
+    "battery_h": 35,
+    "weight_g": 262
   },
   {
     "id": 164,
-    "name": "Flux Mini"
+    "name": "Flux Mini",
+    "brand": "Kestrel",
+    "price": 199,
+    "rating": 4.4,
+    "battery_h": 30,
+    "weight_g": 205
   },
   {
     "id": 171,
-    "name": "Quiet Mark II"
+    "name": "Quiet Mark II",
+    "brand": "Acme",
+    "price": 449,
+    "rating": 4.5,
+    "battery_h": 29,
+    "weight_g": 290
   },
   {
     "id": 178,
-    "name": "Signature"
+    "name": "Signature",
+    "brand": "Vellum",
+    "price": 899,
+    "rating": 4.9,
+    "battery_h": 20,
+    "weight_g": 345
   },
   {
     "id": 185,
-    "name": "Trail"
+    "name": "Trail",
+    "brand": "Tundra",
+    "price": 149,
+    "rating": 3.8,
+    "battery_h": 45,
+    "weight_g": 230
   },
   {
     "id": 192,
-    "name": "Orbit X"
+    "name": "Orbit X",
+    "brand": "Orbita",
+    "price": 599,
+    "rating": 4.4,
+    "battery_h": 26,
+    "weight_g": 310
   },
   {
     "id": 199,
-    "name": "Studio Pro"
+    "name": "Studio Pro",
+    "brand": "Acme",
+    "price": 349,
+    "rating": 4.6,
+    "battery_h": 34,
+    "weight_g": 280
   },
   {
     "id": 206,
-    "name": "Solace"
+    "name": "Solace",
+    "brand": "Vellum",
+    "price": 499,
+    "rating": 4.5,
+    "battery_h": 30,
+    "weight_g": 300
   },
   {
     "id": 213,
-    "name": "Drift"
+    "name": "Drift",
+    "brand": "Vellum",
+    "price": 129,
+    "rating": 4.2,
+    "battery_h": 33,
+    "weight_g": 210
   },
   {
     "id": 220,
-    "name": "Nimbus"
+    "name": "Nimbus",
+    "brand": "Nordlys",
+    "price": 429,
+    "rating": 4.5,
+    "battery_h": 40,
+    "weight_g": 258
   },
   {
     "id": 227,
-    "name": "Kite"
+    "name": "Kite",
+    "brand": "Kestrel",
+    "price": 249,
+    "rating": 4.6,
+    "battery_h": 27,
+    "weight_g": 215
   },
   {
     "id": 234,
-    "name": "Summit"
+    "name": "Summit",
+    "brand": "Tundra",
+    "price": 379,
+    "rating": 4.2,
+    "battery_h": 50,
+    "weight_g": 320
   },
   {
     "id": 241,
-    "name": "Borealis"
+    "name": "Borealis",
+    "brand": "Nordlys",
+    "price": 349,
+    "rating": 4.8,
+    "battery_h": 44,
+    "weight_g": 266
   },
   {
     "id": 248,
-    "name": "Studio Go"
+    "name": "Studio Go",
+    "brand": "Acme",
+    "price": 99,
+    "rating": 3.7,
+    "battery_h": 22,
+    "weight_g": 195
   },
   {
     "id": 255,
-    "name": "Halo Lite"
+    "name": "Halo Lite",
+    "brand": "Orbita",
+    "price": 229,
+    "rating": 4.3,
+    "battery_h": 30,
+    "weight_g": 238
   },
   {
     "id": 262,
-    "name": "Polar"
+    "name": "Polar",
+    "brand": "Nordlys",
+    "price": 69,
+    "rating": 3.4,
+    "battery_h": 20,
+    "weight_g": 180
   }
 ]

@@ -53,6 +53,7 @@ section { margin: 2rem 0; }
   background: #fff4cc; color: #4a3b00; padding: 1rem 1.25rem; text-align: center;
   border-bottom: 1px solid #f0d77a; font-size: 1.0625rem; line-height: 1.6;
 }
+.promo-banner[data-pending] { visibility: hidden; } /* space reserved from first paint; revealed by app.js once the page has settled (no layout shift) */
 .promo-banner strong { display: block; font-size: 1.25rem; }
 .promo-banner .promo-terms { display: block; font-size: 0.875rem; opacity: 0.85; }
 

@@ -34,13 +34,12 @@
   async function loadCatalogue() {
     var res = await fetch('data/products.json');
     var list = await res.json();
-    var rows = [];
-    for (var i = 0; i < list.length; i++) {
-      var detailRes = await fetch('data/product-' + list[i].id + '.json');
-      var detail = await detailRes.json();
-      rows.push(Object.assign({}, list[i], detail));
-    }
-    return rows;
+    // Fetch every detail record in parallel (one round trip instead of 24 in sequence);
+    // the result keeps the catalogue (editor's) order.
+    var details = await Promise.all(list.map(function (p) {
+      return fetch('data/product-' + p.id + '.json').then(function (r) { return r.json(); });
+    }));
+    return list.map(function (p, i) { return Object.assign({}, p, details[i]); });
   }
 
   // ---------- sorting ----------
@@ -196,12 +195,20 @@
 
   // ---------- promo banner ----------
   // Shown on every page view once the page has settled; copy comes from marketing.
+  // The banner markup is pre-rendered at the top of <body> (invisible, but taking up its
+  // space) so revealing it does not shift the rest of the page. If the markup is missing
+  // for any reason, fall back to creating it.
   function showPromoBanner() {
-    var banner = document.createElement('div');
-    banner.className = 'promo-banner';
-    banner.id = 'promo-banner';
-    banner.innerHTML = '<strong>Free shipping on orders over €50</strong> — this week only, on every model in the table. <span class="promo-terms">Applies to orders shipped within the EU; the discount is shown at checkout.</span>';
-    document.body.insertBefore(banner, document.body.firstChild);
+    var banner = document.getElementById('promo-banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.className = 'promo-banner';
+      banner.id = 'promo-banner';
+      banner.innerHTML = '<strong>Free shipping on orders over €50</strong> — this week only, on every model in the table. <span class="promo-terms">Applies to orders shipped within the EU; the discount is shown at checkout.</span>';
+      document.body.insertBefore(banner, document.body.firstChild);
+    }
+    banner.classList.remove('promo-banner--pending');
+    banner.removeAttribute('aria-hidden');
   }
 
   // ---------- boot ----------

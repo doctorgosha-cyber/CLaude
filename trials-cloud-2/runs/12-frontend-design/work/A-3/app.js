@@ -67,7 +67,7 @@
     toggle.addEventListener('click', () => toggleCompare(p.id));
 
     const media = el('div', { class: 'card__media' }, [
-      el('img', { src: p.image, alt: '', width: 320, height: 240, loading: 'lazy', decoding: 'async' }),
+      el('img', { src: p.image, alt: '', width: 320, height: 240, decoding: 'async' }),
     ]);
     if (p.badge) media.append(el('span', { class: 'card__badge', text: p.badge }));
 

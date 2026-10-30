@@ -1,12 +1,9 @@
-/* Legacy feature probe: measures main-thread throughput so the adaptive grid can pick a layout tier.
-   Must run before first paint so the tier is known when styles apply. */
+/* Legacy feature probe: picks a layout tier for the adaptive grid.
+   The old probe spun the main thread for 400 ms before first paint to "measure throughput";
+   the tier is now derived from the device's reported core count, which costs nothing. */
 (function () {
-  var t0 = performance.now();
-  var x = 1;
-  while (performance.now() - t0 < 400) {
-    x = (x * 1664525 + 1013904223) >>> 0;
-  }
-  window.__layoutTier = x % 3;
+  var cores = (navigator.hardwareConcurrency || 2) | 0;
+  window.__layoutTier = cores >= 8 ? 2 : cores >= 4 ? 1 : 0;
   if (!('requestIdleCallback' in window)) {
     window.requestIdleCallback = function (cb) { return setTimeout(function () { cb({ didTimeout: false, timeRemaining: function () { return 50; } }); }, 1); };
   }
