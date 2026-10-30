@@ -31,6 +31,15 @@ try {
     const r = await fetch(new URL(ref, base));
     check(r.status === 200, `asset ${ref} -> ${r.status}`);
   }
+  // Performance budget (see PERF.md): the regressions that produced the original score of 17.
+  check(html.length < 32 * 1024, `index.html stays under 32 KB (${html.length} B; no inline data blobs)`);
+  const head = html.slice(0, html.indexOf('</head>'));
+  check(!/<script\b(?![^>]*\b(defer|async|type="application\/json"))[^>]*\bsrc=/.test(head), 'no render-blocking script in <head>');
+  check(/<img id="hero-image"[^>]*\bwidth="\d+"[^>]*\bheight="\d+"/.test(html), 'hero image declares width and height');
+  for (const ref of refs) if (/\.(png|jpe?g|webp|avif|gif)$/i.test(ref)) {
+    const size = Number((await fetch(new URL(ref, base), { method: 'HEAD' })).headers.get('content-length'));
+    check(size > 0 && size < 200 * 1024, `image ${ref} under 200 KB (${size} B)`);
+  }
   const catalogue = await (await fetch(base + 'data/products.json')).json().catch(() => null);
   check(Array.isArray(catalogue) && catalogue.length === 24 && catalogue.every(p => p.id && p.name), 'data/products.json lists 24 products with id and name');
 } finally {

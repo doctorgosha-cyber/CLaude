@@ -1,0 +1,118 @@
+{
+  "id": 11,
+  "tool": "performance-optimization skill (addyosmani/agent-skills, skills/performance-optimization/SKILL.md)",
+  "versions": {
+    "skill": "main @ 2026-10-29 (16,698 B; sha256 in fixtures/skills/SHA256SUMS)",
+    "agent": "Claude Code subagents, same session model in both arms",
+    "harness": "playwright-core 1.64.1, lighthouse 13.6.0 (mobile, simulated throttling, 3 runs, median), Chromium build 1194"
+  },
+  "licences": {
+    "skill": "MIT (fixtures/skills/addyosmani-agent-skills.LICENSE.txt)"
+  },
+  "install": {
+    "command": "copy SKILL.md into .claude/skills/performance-optimization/ (or claude plugin install from the addyosmani marketplace)",
+    "seconds": 0,
+    "size_mb": 0.017,
+    "windows": "n/a (prompt text)"
+  },
+  "fixtures": "fixtures/11-perf: task/ (SoundBench, a self-contained 24-headphone review page, deliberately slow: 2.98 MB unsized hero PNG, 300 KB synchronous analytics bundle whose tiny tq() the table render depends on, 400 ms busy-wait polyfill, 1.5 MB unread inline JSON, 4 TTF @font-faces without font-display, N+1 fetch of 24 product files, 236 KB CSS with 400 unused rules, late-inserted promo banner (CLS 0.23), unsized/unlazy below-fold PNGs; gen/gen.mjs regenerates it), hidden/ (functional.mjs 15 browser checks incl. tie-break sort, brand filter, compare cap 4, banner text; lighthouse.mjs; server.mjs), reference/ (1.0, LH 100, 35 KB), grade.mjs, KEY.md",
+  "design": "Arm A = plain subagent told to make the page fast without breaking features; Arm B = same prompt + 'read fixtures/skills/performance-optimization.SKILL.md first and follow it'. 3 reps per arm, fresh copies. Score = 0.5 × functional (15 checks) + 0.5 × clamp((LH − 17)/(95 − 17)). Untouched task 0.5 (LH 17). Pilot (plain agent) scored 1.0 (LH 100) so the trial sits at the ceiling; it was not hardened further because the slowness is already eight interacting causes with a cross-file trap (removing the analytics bundle breaks the table) and the brief's time box was spent. Secondary metrics kept per run: LH score, LCP, CLS, TBT, transferred bytes. Four of the six arm runs (A-1, B-1, B-2, B-3) were interrupted by an API rate limit and resumed; their usage rows cover the resumed segment only.",
+  "baseline": {
+    "what": "Arm A plain subagent",
+    "runs": 3,
+    "scores": [
+      1,
+      1,
+      1
+    ],
+    "mean_score": 1,
+    "lh": [
+      100,
+      100,
+      100
+    ],
+    "lcp_ms": [
+      1433,
+      1362,
+      1054
+    ],
+    "cls": [
+      0,
+      0,
+      0
+    ],
+    "tbt_ms": [
+      0,
+      0,
+      0
+    ],
+    "transferred_bytes": [
+      386866,
+      350050,
+      1820150
+    ],
+    "mean_tokens": 122697,
+    "mean_tool_uses": 16.67,
+    "mean_seconds": 325
+  },
+  "candidate_default": {
+    "config": "Arm B with the performance-optimization skill",
+    "runs": 3,
+    "scores": [
+      1,
+      1,
+      1
+    ],
+    "mean_score": 1,
+    "lh": [
+      100,
+      100,
+      96
+    ],
+    "lcp_ms": [
+      1129,
+      1361,
+      2783
+    ],
+    "cls": [
+      0,
+      0,
+      0
+    ],
+    "tbt_ms": [
+      0,
+      4,
+      16
+    ],
+    "transferred_bytes": [
+      1822994,
+      1829213,
+      1811182
+    ],
+    "mean_tokens": 138275,
+    "mean_tool_uses": 7,
+    "mean_seconds": 209.1,
+    "delta_vs_A": {
+      "score_points": 0,
+      "tokens_pct": 12.7,
+      "tool_uses_pct": -58,
+      "seconds_pct": -35.7
+    },
+    "observed": "All six runs kept 15/15 features (every run kept a tq() stub or queue, none fell into the analytics trap) and reached LH ≥ 96. Arm B followed the skill visibly: each run measured before and after every change with the README's Lighthouse command and left a PERF.md ledger; B-3 reverted a font-fallback change its own measurement showed made CLS worse. Arm B left the 1.47 MB TTF fonts in place in all three runs (1.81-1.83 MB transferred) because WOFF2 subsetting tooling is absent on this machine; two of three plain runs dropped or replaced the webfont instead (350-387 KB). Tool-call and wall-time means for arm B are post-resume segments and are not comparable to arm A."
+  },
+  "candidate_tuned": {
+    "config": "none",
+    "note": "not run; the skill has no knobs"
+  },
+  "limits": [
+    "Ceiling: 6/6 runs at 1.0; the score cannot separate the arms. The secondary metrics (bytes, LCP) favour arm A on page weight, but by one design choice (fonts), not by method.",
+    "Usage: 4 of 6 runs resumed after a rate limit, so tokens are inflated for both arms (double context) and tool calls/seconds for arm B are truncated; only the direction of the token delta (+13 %) is meaningful.",
+    "n = 3 per arm; Lighthouse is run 3 times per grade with the median taken (all medians equal to all three runs here)."
+  ],
+  "verdict": "REJECT as a default (ceiling, no measurable gain, +13 % tokens); WATCH for the measure-first ledger (PERF.md) if the Owner wants auditable performance work",
+  "reason": "Both arms hit 1.0 in every rep: the plain agent already finds all eight seeded causes and avoids the cross-file trap. The skill's only visible effect is process (per-change measurement and a written ledger), which costs tokens and did not change the outcome; it also made the agent more conservative (fonts kept, 1.8 MB pages vs 0.35-0.39 MB for two plain runs).",
+  "wrapper": null,
+  "do_not_adopt_notes": [
+    "Do not adopt as a default for page-speed fixes; the plain agent is at the ceiling on this task size."
+  ]
+}

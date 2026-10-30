@@ -1,0 +1,2577 @@
+{
+  "generated": "2026-10-30",
+  "brief": "HANDOFF 2: 16 tool and skill trials",
+  "sandbox": "claude.ai cloud container, Linux x86_64, 4 vCPU, Node 22.22.0, Python 3.13.16, PHP 8.3.6; network limited to package registries, raw.githubusercontent.com and the OSV offline-database bucket; up to 15 trials ran concurrently, so runtimes carry shared-CPU noise",
+  "trials": [
+    {
+      "id": 1,
+      "tool": "Ajv 8 (JSON Schema, JSON) vs Frictionless 5 (Table Schema, CSV) for the pet-food catalogue",
+      "versions": {
+        "ajv": "8.20.0",
+        "ajv-formats": "3.0.1",
+        "frictionless": "5.21.0",
+        "node": "22.22.0",
+        "python": "3.13.16"
+      },
+      "licences": {
+        "ajv": "MIT",
+        "ajv-formats": "MIT",
+        "fast-deep-equal": "MIT",
+        "fast-uri": "BSD-3-Clause",
+        "json-schema-traverse": "MIT",
+        "require-from-string": "MIT",
+        "frictionless": "MIT",
+        "frictionless_deps": "41 packages, all MIT/BSD/Apache/PSF except certifi MPL-2.0 (unmodified dependency: fine); full list in runs/01-catalogue/frictionless-licences.txt; no GPL/AGPL/LGPL"
+      },
+      "install": {
+        "ajv": {
+          "command": "npm i ajv@8.20.0 ajv-formats@3.0.1",
+          "seconds": 3.15,
+          "size_mb": 3.2,
+          "packages": 6,
+          "windows": "yes: pure JavaScript, no optional/native deps (node_modules holds only ajv, ajv-formats, fast-deep-equal, fast-uri, json-schema-traverse, require-from-string)"
+        },
+        "frictionless": {
+          "command": "python3 -m venv venv && venv/bin/pip install frictionless==5.21.0",
+          "seconds": 18,
+          "size_mb": 73,
+          "packages": 41,
+          "windows": "yes (untested here): frictionless-5.21.0-py3-none-any.whl; only compiled dep pydantic-core has pydantic_core-2.50.1-cp313-cp313-win_amd64.whl (both downloaded from PyPI as evidence). Needs a Python 3.13 install on the Windows box; the CLI needs --trusted for paths outside cwd."
+        },
+        "command": "npm i ajv@8.20.0 ajv-formats@3.0.1  |  pip install frictionless==5.21.0",
+        "seconds": 3.15,
+        "size_mb": 3.2,
+        "windows": "Ajv yes (pure JS); Frictionless yes-untested (py3-none-any wheel + win_amd64 pydantic-core wheel)"
+      },
+      "fixtures": "fixtures/01-catalogue/: gen.mjs (deterministic) -> catalogue.json + catalogue.csv (40 rows, 10 seeded faults F1-F10 on rows P001,P005,P007,P011,P013,P016/P017,P019,P023,P025,P029; 30 clean rows), catalogue-clean.json/.csv (40 clean control rows), KEY.json (per fault: row, field, what, which keyword/check/custom rule catches it). Fields: id, brand, product, species, life_stage, form(dry|wet, added for ranges), kcal_per_100g, protein_pct, fat_pct, moisture_pct, fibre_pct, source_url, source_date, label_year.",
+      "baseline": {
+        "what": "Home-made 30-line Node validator (runs/01-catalogue/baseline.mjs): required keys present, numbers are numbers, strings are strings. JSON input.",
+        "command": "node baseline.mjs fixtures/01-catalogue/catalogue.json",
+        "found": {
+          "F1": false,
+          "F2": false,
+          "F3": false,
+          "F4": false,
+          "F5": true,
+          "F6": false,
+          "F7": false,
+          "F8": false,
+          "F9": false,
+          "F10": false
+        },
+        "recall": "1/10",
+        "false_positives": 0,
+        "runtime_s": 0.035,
+        "note": "Only the structural fault (missing source_date) is structural; the other 9 are semantic/range/cross-field faults by design, so the team's claim of 8/10 on tabular faults does not transfer to this fixture."
+      },
+      "candidate_default": {
+        "config": "Ajv: schema-default.json = type/required/enum/format(uri,date)/additionalProperties only, Ajv2020 strict+allErrors+ajv-formats. Frictionless: tableschema-default.json = field types + required + enum + date type/uri format, `frictionless validate catalogue.csv --schema ... --trusted --json`.",
+        "commands": [
+          "node ajv-run.mjs schema-default.json catalogue.json",
+          "frictionless validate catalogue.csv --schema tableschema-default.json --trusted --json"
+        ],
+        "ajv": {
+          "found": {
+            "F1": false,
+            "F2": false,
+            "F3": false,
+            "F4": false,
+            "F5": true,
+            "F6": false,
+            "F7": true,
+            "F8": false,
+            "F9": false,
+            "F10": false
+          },
+          "recall": "2/10",
+          "false_positives": 0,
+          "extra_findings_on_seeded": 0,
+          "runtime_s": 0.15,
+          "validate_ms_in_process": 73
+        },
+        "frictionless": {
+          "found": {
+            "F1": false,
+            "F2": false,
+            "F3": false,
+            "F4": false,
+            "F5": true,
+            "F6": false,
+            "F7": true,
+            "F8": false,
+            "F9": false,
+            "F10": false
+          },
+          "recall": "2/10",
+          "false_positives": 0,
+          "extra_findings_on_seeded": 0,
+          "runtime_s": 0.43
+        },
+        "found": {
+          "F1": false,
+          "F2": false,
+          "F3": false,
+          "F4": false,
+          "F5": true,
+          "F6": false,
+          "F7": true,
+          "F8": false,
+          "F9": false,
+          "F10": false
+        },
+        "recall": "2/10",
+        "false_positives": 0,
+        "extra_findings_on_seeded": 0,
+        "runtime_s": 0.15
+      },
+      "candidate_tuned": {
+        "config": "Ajv: schema-tuned.json adds minimum/maximum on every number (kcal 50-600, protein 3-60, fat 1-40, moisture 3-90, fibre 0-15, label_year 2022-2026), if/then/else on form (dry kcal 200-600 & moisture<=14; wet kcal 50-200 & moisture>=60), id pattern, plus TWO custom keywords registered in ajv-run.mjs: proteinGteFat (row rule, applied under then: for dry) and uniqueKey:'id' (array-level, because uniqueItems compares whole objects). Frictionless: tableschema-tuned.json adds the same minimum/maximum, unique:true + primaryKey on id, pattern; checklist-tuned.json adds two row-constraint checks (simpleeval formulas): `form != 'dry' or protein_pct >= fat_pct` and the per-form kcal/moisture ranges. Why: a type-only schema cannot see magnitudes; ranges are the only schema-level lever against unit faults, and cross-row/cross-field rules need custom logic.",
+        "commands": [
+          "node ajv-run.mjs schema-tuned.json catalogue.json",
+          "frictionless validate catalogue.csv --schema tableschema-tuned.json --checklist checklist-tuned.json --trusted --json"
+        ],
+        "ajv": {
+          "found": {
+            "F1": true,
+            "F2": true,
+            "F3": true,
+            "F4": true,
+            "F5": true,
+            "F6": true,
+            "F7": true,
+            "F8": true,
+            "F9": true,
+            "F10": true
+          },
+          "recall": "10/10",
+          "false_positives": 0,
+          "extra_findings_on_seeded": 0,
+          "error_lines": 15,
+          "note": "15 error objects for 10 faults: kcal maximum fires from both the base property and the then: branch, and Ajv adds an 'if' wrapper error per failing branch (wrapper filters keyword 'if').",
+          "runtime_s": 0.18,
+          "validate_ms_in_process": 143
+        },
+        "frictionless": {
+          "found": {
+            "F1": true,
+            "F2": true,
+            "F3": true,
+            "F4": true,
+            "F5": true,
+            "F6": true,
+            "F7": true,
+            "F8": true,
+            "F9": true,
+            "F10": true
+          },
+          "recall": "10/10",
+          "false_positives": 0,
+          "extra_findings_on_seeded": 0,
+          "error_lines": 13,
+          "note": "13 errors for 10 faults: F6 reported twice (unique-error + primary-key), F1/F4 twice (constraint maximum + row-constraint).",
+          "runtime_s": 0.52
+        },
+        "caught_by_mechanism": {
+          "schema_defaults_type_required_enum": [
+            "F5",
+            "F7"
+          ],
+          "numeric_ranges_min_max": [
+            "F1 (kJ 1500 > max 600)",
+            "F2 (280 > max 60)",
+            "F3 (0.1 < min 3)",
+            "F4 (1200 > max 600)",
+            "F8 (-5 < min 3)",
+            "F10 (2019 < min 2022)"
+          ],
+          "custom_logic_ajv": [
+            "F6 duplicate id (custom keyword uniqueKey; JSON Schema has no cross-item key uniqueness)",
+            "F9 protein>=fat (custom keyword proteinGteFat; JSON Schema has no cross-property comparison)"
+          ],
+          "custom_logic_frictionless": [
+            "F9 protein>=fat (row-constraint check in checklist; F6 is native via unique/primaryKey)"
+          ],
+          "custom_in_both": [
+            "F9 (cross-field row rule). Unit-label faults F1-F3 were caught ONLY because their magnitude fell outside the range; the probe (runs/01-catalogue/probe/) shows a kJ value of 188 on a wet row passes both tuned configs with exit 0 -> unit faults with in-range magnitude are invisible to both tools and need a source-side unit field or a plausibility rule (e.g. Atwater kcal estimate from protein/fat vs declared kcal)."
+          ]
+        },
+        "found": {
+          "F1": true,
+          "F2": true,
+          "F3": true,
+          "F4": true,
+          "F5": true,
+          "F6": true,
+          "F7": true,
+          "F8": true,
+          "F9": true,
+          "F10": true
+        },
+        "recall": "10/10",
+        "false_positives": 0,
+        "extra_findings_on_seeded": 0,
+        "runtime_s": 0.18
+      },
+      "limits": [
+        "Both tools at defaults are no better than the baseline on this fixture (2/10 vs 1/10): everything useful came from ranges and custom rules, which the team must author and maintain.",
+        "Unit-label faults are invisible to any schema when the wrong-unit magnitude stays inside the plausible range (probe: 188 kJ on a wet row passes both). Ranges catch only gross unit errors.",
+        "Ajv: JSON Schema cannot express duplicate ids across array items (uniqueItems compares whole objects) nor cross-field comparisons; both needed addKeyword (~6 lines each). Strict mode rejected then/else subschemas lacking 'type' on first try.",
+        "Ajv reports duplicate error objects (base + then branch + 'if' wrapper) for one fault; a wrapper must dedupe/filter.",
+        "Frictionless: CLI refused relative '../' and absolute paths with 'path ... is not safe' until --trusted was passed; the Python runtime adds 73 MB and a second toolchain for a Node team; CLI start-up ~0.4 s per run; row-constraint formulas are simpleeval strings (no editor support, errors only at runtime).",
+        "Frictionless validates the CSV, Ajv the JSON; the calculator consumes JSON, so Frictionless would validate a sibling file unless the JSON is converted (Frictionless can read JSON arrays too, not measured).",
+        "Runtimes measured on a shared 4-vCPU box with other trials running; 40 rows is tiny, numbers are start-up dominated."
+      ],
+      "verdict": "ADOPT (Ajv 8.20.0 tuned schema + two custom keywords); WATCH (Frictionless 5.21.0: equal recall, but Python toolchain and no advantage for a Node team)",
+      "reason": "Baseline catches 1/10; Ajv defaults 2/10 and Frictionless defaults 2/10 with 0 false positives; both tuned configs catch 10/10 with 0 false positives on 40 clean control rows. Ajv costs 3.2 MB / 3 s install, pure JS, 0.18 s per run and lives in the Node repo the calculator already uses; Frictionless matches recall but needs a 73 MB Python venv, --trusted, and 0.52 s per run. 6 of the 10 faults are caught purely by min/max ranges, 2 (dup id, protein>=fat) need custom keywords in Ajv, and in-range unit faults are not detectable by either.",
+      "wrapper": "runs/01-catalogue/wrapper-sketch.mjs (checks/catalogue.mjs; exit 0 on catalogue-clean.json, 1 on catalogue.json with 10 rows flagged, 2 on missing file)",
+      "do_not_adopt_notes": [
+        "Do not adopt Frictionless for this use: identical recall to Ajv after tuning, but adds Python 3.13 + 41 packages (73 MB) to a Node-on-Windows team, needs --trusted for normal paths, and validates CSV rather than the JSON the calculator reads.",
+        "Do not rely on schema defaults alone: type/required/enum caught only F5 and F7, which is no measurable gain over the baseline (1/10).",
+        "Ranges are not unit detection: F1-F3 passed as 'caught' only because 1500, 280 and 0.1 fall outside plausible bounds; a kJ value of 188 on a wet row passed both tuned validators (probe). Add a unit column at the source or an Atwater plausibility rule to close that gap."
+      ]
+    },
+    {
+      "id": 2,
+      "tool": "ast-grep (winner) vs Semgrep CE, for risky JS/PHP patterns",
+      "versions": {
+        "@ast-grep/cli": "0.51.0",
+        "@ast-grep/cli-linux-x64-gnu": "0.51.0",
+        "semgrep": "1.182.1",
+        "node": "22.22.0",
+        "python": "3.13.16"
+      },
+      "licences": {
+        "@ast-grep/cli": "MIT",
+        "@ast-grep/cli-linux-x64-gnu": "MIT",
+        "semgrep": "LGPL-2.1-or-later (CLI used unmodified as a dev tool: no copyleft obligation on the team's code; LGPL applies only if they modify/redistribute Semgrep itself)",
+        "semgrep_notable_deps": "MIT/Apache/BSD only in the venv (click, rich, httpx, peewee, jsonschema, opentelemetry-*, mcp)"
+      },
+      "install": {
+        "command": "npm i @ast-grep/cli@0.51.0  |  python3 -m venv venv && venv/bin/pip install semgrep==1.182.1",
+        "seconds": 3.99,
+        "size_mb": 106,
+        "windows": "yes: @ast-grep/cli@0.51.0 optionalDependencies include @ast-grep/cli-win32-x64-msvc, -win32-ia32-msvc, -win32-arm64-msvc (same version); wrapper spawns ast-grep.cmd on win32",
+        "semgrep": {
+          "seconds": 219.7,
+          "size_mb": 369,
+          "windows": "untested: PyPI DOES ship semgrep-1.182.1-...-none-win_amd64.whl (59 MB; contains semgrep/bin/semgrep-core.exe 255 MB + 17 DLLs; classifier 'Operating System :: Microsoft :: Windows'). Not run on Windows here; semgrep.dev docs unreachable (proxy 403) so the official support status could not be confirmed either way. Also needs Python >=3.10 on every dev machine."
+        }
+      },
+      "fixtures": "trials-cloud-2/fixtures/02-patterns/theme (generated by gen.sh; KEY.json): 12 files = 8 seeded (S1 aliased+computed eval, S2 template-literal innerHTML, S3 echo of $_GET value assigned 2 statements earlier, S4 $wpdb->query/get_results with interpolated vars, S5 new Function, S6 document.write, S7 setTimeout string, S8 unescaped href echo) + 4 controls (C1 esc_html/esc_url, C2 textContent + constant innerHTML + 'eval()' in comment, C3 $wpdb->prepare then query, C4 arrow setTimeout + JSON.parse + 'eval(' in comment). S1 and S4 each have 2 locations; a defect counts as found only if all its locations are flagged.",
+      "baseline": {
+        "what": "grep -rnE for 7 literal forms (innerHTML\\s*=, \\beval\\(, echo \\$_GET, \\$wpdb->(query|get_results|get_var|get_row)\\(.*\\$, new Function\\(, document\\.write\\(, setTimeout\\(\\s*[\"'])",
+        "command": "runs/02-patterns/baseline.sh <dir>",
+        "found": {
+          "S1": false,
+          "S2": true,
+          "S3": false,
+          "S4": true,
+          "S5": true,
+          "S6": true,
+          "S7": true,
+          "S8": false
+        },
+        "recall": "5/8",
+        "false_positives": 3,
+        "false_positive_detail": "C2 (constant innerHTML + 'eval()' in comment), C3 ($wpdb->query($wpdb->prepare(...)) and get_results($sql)), C4 ('eval(' in comment)",
+        "extra_findings_on_seeded": 1,
+        "extra_detail": "inc/cleanup.php:20 get_var with only {$wpdb->prefix} interpolated",
+        "runtime_s": 0.03
+      },
+      "candidate_default": {
+        "config": "ast-grep ad-hoc one-liners, no config: eval($X), $EL.innerHTML = $X, new Function($$$), document.write($X), setTimeout($A, $B), echo $_GET[$K], $wpdb->query($S), $wpdb->get_results($S)",
+        "commands": [
+          "runs/02-patterns/astgrep-default.sh <dir>  (8x: ast-grep run -p '<pattern>' -l js|php --json=compact <dir>)"
+        ],
+        "found": {
+          "S1": false,
+          "S2": true,
+          "S3": false,
+          "S4": true,
+          "S5": true,
+          "S6": true,
+          "S7": true,
+          "S8": false
+        },
+        "recall": "5/8",
+        "false_positives": 3,
+        "false_positive_detail": "C2 constant innerHTML, C3 query($wpdb->prepare()) + get_results($sql), C4 arrow setTimeout",
+        "extra_findings_on_seeded": 0,
+        "runtime_s": 0.1,
+        "note": "Same recall as grep; fewer comment hits but plain patterns cannot say 'non-literal RHS' or 'unescaped'. Aliased eval and flow cases are structurally out of reach without rule files.",
+        "semgrep_ce": {
+          "config": "runs/02-patterns/semgrep/rules-default.yml: 8 plain patterns (eval(...), $EL.innerHTML = $V, new Function(...), document.write(...), setTimeout($CB, ...), echo $_GET[...];, $wpdb->query(...), $wpdb->get_results(...))",
+          "commands": [
+            "SEMGREP_ENABLE_VERSION_CHECK=0 semgrep --config runs/02-patterns/semgrep/rules-default.yml --metrics=off --disable-version-check --json -o out.json <dir>"
+          ],
+          "found": {
+            "S1": false,
+            "S2": true,
+            "S3": false,
+            "S4": true,
+            "S5": true,
+            "S6": true,
+            "S7": true,
+            "S8": false
+          },
+          "recall": "5/8",
+          "false_positives": 3,
+          "false_positive_detail": "C2 constant innerHTML, C3 query(prepare) + get_results($sql), C4 arrow setTimeout",
+          "extra_findings_on_seeded": 0,
+          "runtime_s": 1.8,
+          "runtime_without_disable_version_check_s": 98.8,
+          "registry_error": "semgrep --config p/javascript -> exit 2: HTTPSConnectionPool(host='semgrep.dev', port=443): Max retries exceeded with url: /c/p/javascript (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden'))). --config auto with --metrics=off -> 'Cannot create auto config when metrics are off'. Registry rules therefore NOT measured."
+        }
+      },
+      "candidate_tuned": {
+        "config": "runs/02-patterns/astgrep/sgconfig.yml + rules/*.yml (7 rules): js-eval (eval(...) | identifier `eval` not in callee position = alias | window/globalThis/self[non-string](...)), js-innerhtml-nonliteral (innerHTML/outerHTML/insertAdjacentHTML where RHS is not a string and not a substitution-free template), js-new-function, js-document-write(ln), js-timer-string (setTimeout/setInterval whose callback is string/template/binary-expression), php-echo-unescaped (echo/print of a variable, property, index or a call whose name is not an esc_*/wp_kses*/i18n/... function), php-wpdb-interpolated-sql ($wpdb->query|get_results|get_var|get_row|get_col whose SQL argument is an encapsed string with a plain $var/$arr[] inside, or a concatenation with a variable; {$wpdb->prefix} is allowed). Why: constraints express 'non-literal RHS' and 'unescaped' which plain patterns cannot; two tree-sitter-php quirks had to be worked around (a pattern with a literal comma needs >=2 args so both arities are listed; a captured argument is the `argument` wrapper node, so constraints use `has`).",
+        "commands": [
+          "ast-grep scan -c runs/02-patterns/astgrep/sgconfig.yml --json=compact <dir>"
+        ],
+        "found": {
+          "S1": true,
+          "S2": true,
+          "S3": true,
+          "S4": true,
+          "S5": true,
+          "S6": true,
+          "S7": true,
+          "S8": true
+        },
+        "recall": "8/8",
+        "false_positives": 0,
+        "extra_findings_on_seeded": 0,
+        "runtime_s": 0.02,
+        "findings_total": 10,
+        "note": "10 findings = exactly the 10 seeded locations. S3 is caught syntactically (echo of a bare variable), NOT by flow analysis: ast-grep has no taint mode, so `echo $count` of a safe integer would be flagged the same way (WordPress coding standards flag it too).",
+        "semgrep_ce": {
+          "config": "runs/02-patterns/semgrep/rules-tuned.yml (8 rules): pattern-either for eval/alias (const|let|var $A = eval, $A = eval), $G[$K](...) with metavariable-regex on $K (constant folding turns 'ev'+'al' into a string so pattern-not $G[\"...\"] hides it); innerHTML with pattern-not \"...\"; setTimeout/setInterval with metavariable-regex on $CB; php-echo-tainted-request = mode: taint ($_GET/$_POST/$_REQUEST/$_COOKIE/$_SERVER[...] source, esc_*/wp_kses*/sanitize_*/intval/absint/rawurlencode sanitizers, echo/print sink); php-echo-unescaped-var (metavariable-regex: bare variable/property/index); php-wpdb-interpolated-sql = mode: taint (any function parameter -> $wpdb->query/get_* without $wpdb->prepare/esc_sql/intval/absint), because metavariable-regex could not see the content of a PHP interpolated string.",
+          "commands": [
+            "SEMGREP_ENABLE_VERSION_CHECK=0 semgrep --config runs/02-patterns/semgrep/rules-tuned.yml --metrics=off --disable-version-check --json -o out.json <dir>"
+          ],
+          "found": {
+            "S1": true,
+            "S2": true,
+            "S3": true,
+            "S4": true,
+            "S5": true,
+            "S6": true,
+            "S7": true,
+            "S8": true
+          },
+          "recall": "8/8",
+          "false_positives": 0,
+          "extra_findings_on_seeded": 0,
+          "runtime_s": 1.9,
+          "findings_total": 12,
+          "note": "12 findings on 10 seeded locations: lazy-eval.js:3 reported twice (two eval sub-patterns) and search.php:13 twice (syntactic + taint rule). Taint genuinely tracked $_GET['q'] -> $q -> echo $q across two statements, which ast-grep cannot do. Invalid PHP patterns in this version: '(int) ...' and '\"...\" . ...' (rule parse errors). CE JSON output hides matched lines/metavars ('requires login'), so results carry only path/line/rule."
+        }
+      },
+      "limits": [
+        "ast-grep is purely syntactic: no data flow. 'echo $var' is flagged whether or not $var is safe; '$sql = \"... $id\"; $wpdb->query($sql)' (variable holding an interpolated string) is NOT caught by either ast-grep rule.",
+        "ast-grep PHP quirks (tree-sitter-php): patterns with a literal comma need >=2 args (list both arities); the captured call argument is the `argument` wrapper, so constraints must use `has:`; <?= $x ?> short-echo not covered by the `echo $X` pattern (untested).",
+        "The php-echo-unescaped allow-list of escaping/i18n function names is hand-maintained; a new helper (e.g. a theme's own esc wrapper) must be added or it is flagged.",
+        "Semgrep registry (p/..., --config auto) is unreachable through this proxy: only local rules measured. Without --disable-version-check a run took 98.8 s (version check against semgrep.dev hangs until timeout).",
+        "Semgrep CE 1.182.1: metavariable-regex does not see the text of a PHP interpolated string; JSON output omits matched lines and metavariable values ('requires login').",
+        "Semgrep on Windows: wheel exists on PyPI but was not executed here; needs Python >=3.10 on each machine (the team runs Node).",
+        "Runtimes measured on a 4-vCPU box shared with other trials; all are sub-second except Semgrep's ~1.8-2 s Python startup.",
+        "12 fixture files only; the rule set is 7 rules, not a general security scanner."
+      ],
+      "verdict": "ADOPT",
+      "reason": "ast-grep tuned finds 8/8 seeded defects (10/10 locations) with 0 false positives on the 4 controls and 0 extras, vs grep 5/8 with 3 of 4 controls flagged; it runs in 0.02 s, installs in 4 s / 106 MB as a plain npm devDependency with win32-x64 binaries, and the rules are 7 small YAML files. Semgrep CE tuned also reaches 8/8 / 0 FP and has real taint tracking, but costs 220 s / 369 MB plus Python on every Windows machine, its registry and version check are unreachable here (98.8 s run without --disable-version-check), and its PHP string handling needed a taint workaround, so it is WATCH for the one flow case (request value echoed later) ast-grep can only approximate syntactically.",
+      "wrapper": "runs/02-patterns/wrapper-sketch.mjs (as checks/patterns.mjs; rules dir runs/02-patterns/astgrep -> checks/patterns-rules). Tested: whole fixture tree exit 1 (10 findings); 4 control files exit 0; missing binary exit 2.",
+      "do_not_adopt_notes": [
+        "ast-grep defaults (ad-hoc one-liners): no gain over grep (5/8, same 3 control files flagged) - the value is entirely in the rule files with constraints.",
+        "Semgrep CE as the primary tool: REJECT for this team (Node on Windows): 369 MB Python venv, 220 s install, Python prerequisite, registry/auto config blocked here, 98.8 s run unless --disable-version-check is set, CE JSON hides matched text. Keep as WATCH only for taint-style checks.",
+        "Semgrep registry rulesets (p/javascript, p/php, --config auto): not measured, host semgrep.dev refused by the egress proxy (403).",
+        "Semgrep patterns '(int) ...' and '\"...\" . ...' fail to parse for PHP in 1.182.1; metavariable-regex on an interpolated PHP string never matches - the SQL rule had to be rewritten as a taint rule from function parameters, which misses interpolation of non-parameter variables."
+      ]
+    },
+    {
+      "id": 3,
+      "tool": "schema.org JSON-LD validation: (a) Ajv 8 + hand-written JSON Schema (schema-dts as type reference) + own page-claims check; (b) structured-data-testing-tool",
+      "versions": {
+        "node": "22.22.0",
+        "ajv": "8.20.0",
+        "ajv-formats": "3.0.1",
+        "schema-dts": "2.1.0 (latest; brief said 1.x, latest on npm is 2.1.0)",
+        "structured-data-testing-tool": "4.5.0"
+      },
+      "licences": {
+        "ajv": "MIT",
+        "ajv-formats": "MIT",
+        "fast-uri": "BSD-3-Clause",
+        "json-schema-traverse": "MIT",
+        "fast-deep-equal": "MIT",
+        "require-from-string": "MIT",
+        "schema-dts": "Apache-2.0",
+        "schema-dts-lib": "Apache-2.0",
+        "structured-data-testing-tool": "ISC",
+        "sdtt_deps_87": "59 MIT, 12 ISC, 6 BSD-2-Clause, css-select 'BSD-like', jmespath Apache-2.0 (licenses[] field), domutils: no license field in package.json (LICENSE file BSD-2-Clause, Felix Boehm); no GPL/AGPL/MPL/LGPL in either tree"
+      },
+      "install": {
+        "command": "npm i ajv@8.20.0 ajv-formats@3.0.1 schema-dts@2.1.0   |   npm i structured-data-testing-tool@4.5.0",
+        "seconds": 1.09,
+        "size_mb": 4.2,
+        "sdtt_seconds": 4.04,
+        "sdtt_size_mb": 15,
+        "sdtt_packages": 87,
+        "sdtt_notes": "npm warns core-js@2.6.12 deprecated; node-fetch@2, yargs@13, chalk@2 era deps",
+        "windows": "yes: both trees are pure JS, 0 binding.gyp / .node files, no os/cpu restrictions in any package.json; ajv route has 8 packages, no postinstall; schema-dts is .d.ts only (compile-time, not loaded at runtime)"
+      },
+      "fixtures": "/home/user/CLaude/trials-cloud-2/fixtures/03-jsonld/: 12 HTML pages, one <script type=application/ld+json> each, generated by gen.mjs; KEY.json lists J1..J6 (aggregateRating w/o visible reviews, Product w/o name, price '$29.99', availability 'in stock', FAQ answer only in JSON-LD, Review w/o itemReviewed) and 6 controls (Product+offers, Product+aggregateRating+visible review list, FAQPage with Q/A in HTML, Review with itemReviewed, Article, BreadcrumbList)",
+      "baseline": {
+        "what": "what NEXUS does today: extract <script type=application/ld+json> blocks and JSON.parse them (runs/03-jsonld/baseline.mjs)",
+        "command": "node baseline.mjs fixtures/03-jsonld/*.html",
+        "recall": "0/6",
+        "found": {
+          "J1": false,
+          "J2": false,
+          "J3": false,
+          "J4": false,
+          "J5": false,
+          "J6": false
+        },
+        "false_positives": 0,
+        "runtime_s": 0.04
+      },
+      "candidate_default": {
+        "config": "Ajv 8.20.0 (allErrors, strict:false) + ajv-formats, hand-written draft-07 schema runs/03-jsonld/schema.json (Product requires name; Offer price number|^[0-9]+([.,][0-9]+)?$, priceCurrency ^[A-Z]{3}$, availability schema.org ItemAvailability URL; AggregateRating ratingValue+reviewCount|ratingCount; Review author+reviewRating, top-level Review also itemReviewed; FAQPage mainEntity Question with acceptedAnswer.text). oneOf cascade errors filtered. Property names cross-checked against schema-dts 2.1.0 schema.d.ts.",
+        "commands": [
+          "node ajv-check.mjs fixtures/03-jsonld/*.html"
+        ],
+        "found": {
+          "J1": false,
+          "J2": true,
+          "J3": true,
+          "J4": true,
+          "J5": false,
+          "J6": true
+        },
+        "recall": "4/6",
+        "false_positives": 0,
+        "extra_findings_on_seeded": 1,
+        "extra_findings_note": "J3 yields two messages for the same price ('must be number' + 'must match pattern'); counted as 1 extra line, same defect",
+        "runtime_s": 0.19,
+        "runtime_note": "12 files, whole process incl. Node start + schema compile; validation itself 7 ms"
+      },
+      "candidate_tuned": {
+        "config": "same schema + --claims = runs/03-jsonld/page-claims.mjs (own ~25-line check): aggregateRating requires >=1 [itemprop=review] / .review element or a Review node in the JSON-LD; every FAQ question name and acceptedAnswer.text must be a substring of the whitespace-normalised, tag-stripped page text. Why: no off-the-shelf validator checks that structured-data claims are visible on the page, which is exactly the Google manual-action class (J1, J5).",
+        "commands": [
+          "node ajv-check.mjs --claims fixtures/03-jsonld/*.html"
+        ],
+        "found": {
+          "J1": true,
+          "J2": true,
+          "J3": true,
+          "J4": true,
+          "J5": true,
+          "J6": true
+        },
+        "recall": "6/6",
+        "false_positives": 0,
+        "extra_findings_on_seeded": 2,
+        "extra_findings_note": "J3 double message as above; J5 reports both the missing question and the missing answer of the same Q/A pair",
+        "runtime_s": 0.16
+      },
+      "candidate_b_structured_data_testing_tool": {
+        "config_default": "Node API structuredDataTest(Buffer) auto mode (runs/03-jsonld/sdtt-check.mjs); CLI `sdtt --file x.html --presets Google`",
+        "config_google_preset": "structuredDataTest(buffer, {presets:[Google]})",
+        "offline": "yes: file/Buffer input never calls fetch; only --url does",
+        "network_error_when_url": "request to https://example.com/ failed, reason: getaddrinfo ENOTFOUND example.com (node-fetch@2 ignores HTTPS_PROXY)",
+        "found": {
+          "J1": false,
+          "J2": false,
+          "J3": false,
+          "J4": false,
+          "J5": false,
+          "J6": false
+        },
+        "recall": "0/6",
+        "false_positives": 0,
+        "extra_findings_on_seeded": 0,
+        "runtime_s": 0.25,
+        "runtime_google_s": 0.29,
+        "why": "its only non-optional test is 'schema type name exists in schemas.json'; all auto-generated property tests are optional:true (index.js: '@TODO Add test to check if prop contents is valid'); the Google preset contains only Article*/BlogPosting/WebPage/ClaimReview/Organization presets, no Product/Offer/Review/FAQPage/BreadcrumbList. CLI bug: `-o file` crashes on success (references undefined err.res) and prints a misleading 'Unable to open file', exit 1"
+      },
+      "limits": [
+        "Hand-written schema covers Product/Offer/AggregateOffer/AggregateRating/Review/FAQPage only; Article/BreadcrumbList pass through with just @type required (no false positives but no checks either). Extend schema.json per type as needed.",
+        "page-claims uses substring match on normalised text; HTML entities other than &amp;/&nbsp; (e.g. &rsquo; vs ') or markdown-rendered answers with inline tags survive tag stripping but an answer split across elements with extra punctuation would be a false positive. Review-visibility check accepts any .review class or itemprop=review, so a site using other class names needs the selector list extended.",
+        "JSON-LD extraction is regex based (one or more script blocks, arrays and @graph supported); nested @graph references by @id are not resolved.",
+        "schema-dts is types only (TypeScript); it was used as a property-name reference, it does not validate anything at runtime. No TypeScript compiler was installed, so compile-time typing was not measured.",
+        "structured-data-testing-tool 4.5.0: last published 2020, deps include deprecated core-js@2 and node-fetch@2; proxy-unaware for URL mode.",
+        "Runtimes measured on shared 4 vCPU; all under 0.3 s for 12 files so noise is irrelevant."
+      ],
+      "verdict": "ADOPT",
+      "reason": "Baseline (JSON.parse) finds 0/6. Ajv + hand-written schema finds 4/6 (J2 J3 J4 J6) and with the ~25-line page-claims check 6/6, with 0 false positives on the 6 controls, 0.16-0.19 s for 12 files, 4.2 MB / 1.1 s install, pure JS. structured-data-testing-tool finds 0/6 (its Google preset has no Product/Review/FAQ rules; everything property-level is optional) so it adds nothing over JSON.parse.",
+      "wrapper": "runs/03-jsonld/wrapper-sketch.mjs (24 lines, needs schema.json beside it; exit 0 on 6 controls, 1 on 6 seeded, 2 on missing file). Copy for the team at trials-cloud-2/checks/jsonld.mjs + checks/jsonld.schema.json (needs `npm i ajv@8.20.0 ajv-formats@3.0.1` at repo root; verified same exit codes from a dir with node_modules).",
+      "do_not_adopt_notes": [
+        "structured-data-testing-tool@4.5.0: REJECT. 0/6 recall on Product/Review/FAQ defects, 87 packages / 15 MB, unmaintained since 2020, CLI -o flag broken, URL mode needs direct network (ENOTFOUND through the egress proxy).",
+        "schema-dts alone gives no runtime validation; it only helps if the team writes JSON-LD in TypeScript. Not needed for the check; keep as optional dev-dependency reference."
+      ]
+    },
+    {
+      "id": 4,
+      "tool": "html-validate (offline HTML5 markup validator, npm)",
+      "versions": {
+        "html-validate": "11.17.0",
+        "node": "22.22.0",
+        "npm": "10.9.4",
+        "axe-core (overlap column only)": "4.14.0",
+        "playwright-core (overlap column only)": "1.64.1"
+      },
+      "licences": {
+        "html-validate": "MIT",
+        "@html-validate/stylish": "MIT",
+        "@sidvind/better-ajv-errors": "Apache-2.0",
+        "ajv": "MIT",
+        "fast-deep-equal": "MIT",
+        "fast-uri": "BSD-3-Clause",
+        "json-schema-traverse": "MIT",
+        "kleur": "MIT",
+        "prompts": "MIT",
+        "require-from-string": "MIT",
+        "semver": "ISC",
+        "sisteransi": "MIT",
+        "copyleft_flags": "none in the html-validate tree. (axe-core 4.14.0 is MPL-2.0: fine used unmodified as a dependency; playwright-core Apache-2.0. Both only for the optional overlap column.)"
+      },
+      "install": {
+        "command": "npm i html-validate@11.17.0",
+        "seconds": 14.25,
+        "size_mb": 13,
+        "packages": 12,
+        "windows": "yes: pure JavaScript (no .node binaries, no node-gyp, no os/cpu restrictions in any package.json; CLI is bin/html-validate.mjs); runs on any Node >=18. Not executed on Windows here.",
+        "setup": "one npm install + two JSON files (htmlvalidate.tuned.json, elements-img-alt.json); no browser, no network at run time"
+      },
+      "fixtures": "trials-cloud-2/fixtures/04-html-validate/ (KEY.json): 6 seeded pages H1-H6 (review article with duplicate id=verdict; product card grid with <a> inside <a>; figure page with canvas/svg/controls and an alt-less <img> inside a hidden fallback div; FAQ with <details> and a stray </div>; suggestion form with <label for> pointing to a missing id; comparison <table cellpadding>) + 4 clean controls C1-C4 (video page with <source>/<track>; calculator with custom element, data-*, <datalist>, <template>, <dialog>, module script; figure with inline SVG role=img/aria-labelledby and <picture>/<source>; FAQ with <details name> accordion, aria-pressed buttons, <time>). All hand-written, one defect per seeded page.",
+      "baseline": {
+        "what": "No markup check at all today (pages shipped after visual review). axe-core adopted in round 1 is a runtime accessibility checker, not a validator: run as an overlap column on the same pages it reports only H5 (rule 'label') and nothing for H1/H2/H3/H4/H6.",
+        "command": "runs/04-html-validate/baseline.sh <files>  (prints 0 findings, exit 0); axe overlap: node runs/04-html-validate/axe-run.mjs <dirs>",
+        "recall": "0/6",
+        "axe_overlap_recall": "1/6 (H5 only)",
+        "false_positives": 0,
+        "axe_overlap_false_positives": 0,
+        "runtime_s": 0,
+        "axe_overlap_runtime_s": 6.1
+      },
+      "candidate_default": {
+        "config": "html-validate --preset recommended (= extends html-validate:recommended, 78 rules on)",
+        "commands": [
+          "html-validate --preset recommended -f json fixtures/04-html-validate/seeded fixtures/04-html-validate/clean"
+        ],
+        "found": {
+          "H1": true,
+          "H2": true,
+          "H3": false,
+          "H4": true,
+          "H5": false,
+          "H6": true
+        },
+        "found_by_rule": {
+          "H1": "no-dup-id",
+          "H2": "element-permitted-content",
+          "H3": "MISSED: wcag/h37 deliberately skips <img> that is not in the accessibility tree (inAccessibilityTree check), so the hidden fallback image is ignored exactly as axe ignores it",
+          "H4": "close-order",
+          "H5": "MISSED: no-missing-references is not part of the recommended preset in v11 (it lives in the 'document' preset); valid-for does not check id existence",
+          "H6": "no-deprecated-attr"
+        },
+        "recall": "4/6",
+        "false_positives": 0,
+        "false_positive_rules": [],
+        "extra_findings_on_seeded": 2,
+        "extra_findings_detail": [
+          "H3 L16 wcag/h32 '<form> element must have a submit button' (JS-driven figure controls form; valid HTML, debatable)",
+          "H3 L20 form-dup-name 'Duplicate form control name \"type\"' on two checkboxes sharing a name (valid and common HTML; rule default only exempts radio)"
+        ],
+        "runtime_s": 0.77,
+        "runtime_note": "10 files; re-runs 0.86-0.88 s on a shared 4-vCPU box with load average ~10",
+        "exit_code": 1
+      },
+      "candidate_tuned": {
+        "config": "runs/04-html-validate/htmlvalidate.tuned.json: extends recommended; elements: [html5, elements-img-alt.json] (img.requiredAttributes=[alt] so element-required-attributes flags every alt-less <img>, hidden or not); rules ON: no-missing-references=error; form-dup-name shared=[radio,checkbox,submit,button,reset]; rules OFF: wcag/h32 (submit-button requirement fired on a JS-only controls form), attr-quotes, void-style, no-inline-style, attribute-boolean-style, no-redundant-role (all five observed firing on the WordPress-style probe runs/04-html-validate/probe-wp-style.html: unquoted id, <br /> and <img ... /> from wpautop/block output, style= from the block editor, checked=\"checked\", role=navigation on <nav>; they are stylistic and would drown real errors on WP-rendered pages). Also measured but not chosen: preset 'standard' (34 rules) = 4/6, 0 FP, 0 extra; it drops wcag/h37 and still lacks no-missing-references.",
+        "commands": [
+          "html-validate -c runs/04-html-validate/htmlvalidate.tuned.json -f json fixtures/04-html-validate/seeded fixtures/04-html-validate/clean"
+        ],
+        "found": {
+          "H1": true,
+          "H2": true,
+          "H3": true,
+          "H4": true,
+          "H5": true,
+          "H6": true
+        },
+        "found_by_rule": {
+          "H1": "no-dup-id",
+          "H2": "element-permitted-content",
+          "H3": "element-required-attributes (via custom element metadata)",
+          "H4": "close-order",
+          "H5": "no-missing-references",
+          "H6": "no-deprecated-attr"
+        },
+        "recall": "6/6",
+        "false_positives": 0,
+        "false_positive_rules": [],
+        "extra_findings_on_seeded": 0,
+        "runtime_s": 0.66,
+        "runtime_note": "10 files; re-runs 0.54-1.72 s (same shared-CPU noise); custom elements file adds config-load time, parsing itself is milliseconds",
+        "exit_code": 1,
+        "standard_preset_for_reference": {
+          "recall": "4/6",
+          "found": {
+            "H1": true,
+            "H2": true,
+            "H3": false,
+            "H4": true,
+            "H5": false,
+            "H6": true
+          },
+          "false_positives": 0,
+          "extra_findings_on_seeded": 0,
+          "runtime_s": 0.63
+        }
+      },
+      "limits": [
+        "Static source validator: it checks the HTML as written, not the DOM after JavaScript or after WordPress filters. For WP pages the team must validate the rendered output (curl the page, or run against the theme's PHP output), not the template files.",
+        "Recommended preset misses H3 by design: wcag/h37 ignores images outside the accessibility tree (same blind spot as axe); the tuned fix uses custom element metadata, which is a documented feature but not a rule option.",
+        "Recommended preset misses H5: no-missing-references is only in the 'document' preset in v11; must be enabled explicitly.",
+        "Recommended preset includes stylistic rules (attr-quotes, void-style, no-inline-style, attribute-boolean-style, no-redundant-role) that fire on ordinary WordPress block output; left on they would bury the real errors, so the tuned config turns them off.",
+        "form-dup-name default flags same-name checkboxes (valid HTML); needs the shared option.",
+        "Runtime numbers measured under load average ~10 on 4 vCPU (other trials concurrent); absolute values are noisy but all under 2 s for 10 files.",
+        "Windows not executed; evidence is pure-JS dependency tree only."
+      ],
+      "verdict": "ADOPT",
+      "reason": "Baseline is no check (0/6); axe, adopted in round 1, sees only 1/6 of these markup defects on the same pages. html-validate recommended finds 4/6 with 0 false positives on 4 modern clean pages but 2 noisy extras; the tuned config (recommended + no-missing-references + img alt required via element metadata + 6 noisy rules off) finds 6/6 with 0 false positives and 0 extras in ~0.6-0.9 s for 10 files, after a 14 s / 13 MB pure-JS install (MIT, Windows-capable).",
+      "wrapper": "runs/04-html-validate/wrapper-sketch.mjs (checks/html.mjs; tested: clean dir exit 0, seeded dir exit 1 with 6 findings, missing path exit 2)",
+      "do_not_adopt_notes": [
+        "Do not use the bare recommended preset on WordPress-rendered pages: the stylistic rules (void-style on <br />, no-inline-style, attribute-boolean-style, attr-quotes, no-redundant-role) all fire on normal block-editor output and would make the check unusable without the tuned config.",
+        "Do not expect it to replace axe: it caught the hidden-image alt only with the element-metadata override, and it has no colour-contrast, focus-order or runtime ARIA checks; keep both (overlap on these 6 defects was only H5).",
+        "Preset 'standard' is not a good tuned choice: 4/6, it drops wcag/h37 and no-missing-references entirely.",
+        "axe overlap column install time (1.7 s) is not representative: npm cache was already warm from another trial."
+      ]
+    },
+    {
+      "id": 5,
+      "tool": "stylelint + stylelint-config-standard (theme CSS linting)",
+      "versions": {
+        "stylelint": "17.16.0",
+        "stylelint-config-standard": "40.0.0",
+        "stylelint-config-recommended (transitive)": "18.0.0",
+        "node": "22.22.0",
+        "npm": "10.9.4"
+      },
+      "licences": {
+        "stylelint": "MIT",
+        "stylelint-config-standard": "MIT",
+        "stylelint-config-recommended": "MIT",
+        "transitive (103 packages)": "MIT, MIT-0, ISC, BSD-3-Clause, Python-2.0, CC0-1.0; no GPL/AGPL/MPL/LGPL found"
+      },
+      "install": {
+        "command": "npm i stylelint@17.16.0 stylelint-config-standard@40.0.0",
+        "seconds": 13.7,
+        "size_mb": 19,
+        "packages": 103,
+        "windows": "yes - pure JavaScript: 0 .node binaries, 0 binding.gyp, no optionalDependencies, package.json os unrestricted, engines node>=20.19.0; stylelint ships Windows CI in its repo"
+      },
+      "fixtures": "fixtures/05-stylelint/: 8 hand-written CSS files in a modern theme style (custom properties on :root, @layer, @property, clamp(), @container + cqi, nesting, :is/:where/:has, logical properties, color-mix(), oklch(), light-dark(), @supports, media range syntax, @view-transition, @starting-style, @scope, anchor positioning, ::details-content). Seeded C1..C8 in cards.css, typography.css, tokens.css, calculator.css; controls base.css, components.css, motion.css, figures.css. KEY.json lists each defect with line and expected rule.",
+      "baseline": {
+        "what": "none - NEXUS does not lint CSS today; runs/05-stylelint/baseline.sh reproduces that (prints an empty finding list)",
+        "command": "runs/05-stylelint/baseline.sh",
+        "recall": "0/8",
+        "false_positives": 0,
+        "runtime_s": 0.01
+      },
+      "candidate_default": {
+        "config": "{ \"extends\": \"stylelint-config-standard\" } (runs/05-stylelint/stylelintrc-default.json)",
+        "commands": [
+          "stylelint \"**/*.css\" --config runs/05-stylelint/stylelintrc-default.json --config-basedir <install dir> --formatter json"
+        ],
+        "found": {
+          "C1": true,
+          "C2": true,
+          "C3": false,
+          "C4": true,
+          "C5": true,
+          "C6": false,
+          "C7": true,
+          "C8": true
+        },
+        "found_by_rule": {
+          "C1": "declaration-property-value-no-unknown",
+          "C2": "no-duplicate-selectors",
+          "C3": "MISSED (declaration-no-important is not in config-standard)",
+          "C4": "property-no-unknown",
+          "C5": "declaration-property-value-no-unknown (unit-no-unknown is not in config-standard)",
+          "C6": "MISSED (color-no-invalid-hex is not in config-standard; declaration-property-value-no-unknown skips custom properties)",
+          "C7": "declaration-block-no-duplicate-properties",
+          "C8": "CssSyntaxError"
+        },
+        "recall": "6/8",
+        "false_positives": 6,
+        "false_positives_detail": {
+          "base.css": [
+            "lightness-notation x3 (oklch(0.65 ...), light-dark(oklch(0.2 ...), oklch(0.95 ...)) wants 65%/20%/95%)",
+            "hue-degree-notation x2 (oklch hue 250 wants 250deg)"
+          ],
+          "components.css": [
+            "property-no-vendor-prefix x1 (-webkit-mask next to mask)"
+          ],
+          "motion.css": [],
+          "figures.css": []
+        },
+        "false_positive_rules": [
+          "lightness-notation",
+          "hue-degree-notation",
+          "property-no-vendor-prefix"
+        ],
+        "modern_features_that_did_NOT_fire": "clamp, @container/cqi, nesting, :is/:where/:has, logical props, color-mix, light-dark, @property, @layer, @scope, @view-transition, ::view-transition-*, @starting-style, transition display/overlay allow-discrete, anchor()/anchor-name/position-anchor, ::details-content, interpolate-size, field-sizing, text-wrap: pretty, :nth-child(2n of S), media range syntax, dvh/svh units",
+        "extra_findings_on_seeded": 4,
+        "extra_findings_detail": "tokens.css: lightness-notation x2 + hue-degree-notation x2 on oklch(0.7 0.15 250) / oklch(0.6 0.2 300) - same stylistic rules as the control FPs",
+        "runtime_s": 0.84,
+        "runtime_runs_s": [
+          0.84,
+          0.83,
+          0.83
+        ],
+        "cli_exit_code": 2,
+        "note": "stylelint 16+/17 writes the formatter report to stderr and exits 2 on lint problems (1 = fatal, 78 = config error)"
+      },
+      "candidate_tuned": {
+        "config": "runs/05-stylelint/stylelintrc-tuned.json: extends config-standard; DISABLED the 3 stylistic rules that fired on controls: lightness-notation (team writes oklch(0.65 ...) not 65%), hue-degree-notation (bare hue numbers), property-no-vendor-prefix (hand-written -webkit-mask fallback, no autoprefixer); ADDED declaration-no-important, color-no-invalid-hex, unit-no-unknown (all exist in 17.16 but are not in config-standard/recommended); no-duplicate-selectors, property-no-unknown, declaration-property-value-no-unknown, declaration-block-no-duplicate-properties were already on via config-recommended and are restated explicitly",
+        "commands": [
+          "stylelint \"**/*.css\" --config runs/05-stylelint/stylelintrc-tuned.json --config-basedir <install dir> --formatter json"
+        ],
+        "found": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true,
+          "C5": true,
+          "C6": true,
+          "C7": true,
+          "C8": true
+        },
+        "found_by_rule": {
+          "C1": "declaration-property-value-no-unknown",
+          "C2": "no-duplicate-selectors",
+          "C3": "declaration-no-important (3 hits, one per declaration)",
+          "C4": "property-no-unknown",
+          "C5": "unit-no-unknown + declaration-property-value-no-unknown (both on the same line)",
+          "C6": "color-no-invalid-hex (works inside a custom property)",
+          "C7": "declaration-block-no-duplicate-properties",
+          "C8": "CssSyntaxError"
+        },
+        "recall": "8/8",
+        "false_positives": 0,
+        "false_positive_rules": [],
+        "extra_findings_on_seeded": 0,
+        "extra_findings_note": "11 warnings total for 8 defects: C3 reports 3 lines (3 !important) and C5 is reported by two rules; both are the seeded defects, not extras",
+        "runtime_s": 0.86,
+        "runtime_runs_s": [
+          1,
+          0.86,
+          1.66
+        ],
+        "cli_exit_code": 2
+      },
+      "wrapper_test": {
+        "clean_exit": 0,
+        "seeded_exit": 1,
+        "bad_config_exit": 2,
+        "clean_runtime_s": 0.77,
+        "seeded_runtime_s": 1.5,
+        "note": "Node API (stylelint.lint) so stdout/stderr and exit codes are normalised to 0/1/2"
+      },
+      "limits": [
+        "config-standard alone misses two of the eight seeded classes (!important creep, invalid hex in a custom property); the three missing rules must be added by hand",
+        "declaration-no-important has no ignore option: the canonical prefers-reduced-motion reset (4x !important) fires 4 errors under the tuned config (side test, runs/05-stylelint/side-reduced-motion.txt); teams using that pattern need a /* stylelint-disable declaration-no-important */ block or must gate animations with prefers-reduced-motion: no-preference instead",
+        "the stylistic rules in config-standard (lightness-notation, hue-degree-notation, property-no-vendor-prefix, plus kebab-case selector/custom-property patterns) encode opinions, not errors; expect to turn more off on a real codebase (BEM __/-- class names would hit selector-class-pattern)",
+        "CLI prints the report to stderr and exits 2 on lint problems (not 1): scripts that assume stdout/exit 1 silently see an empty report - the wrapper uses the Node API instead",
+        "a parse error (C8) stops every other rule for that file, so one stray brace hides any further defect in the same file until fixed",
+        "stylelint knows CSS only through its bundled css-tree/mdn data; bleeding-edge syntax may be flagged as unknown in future versions, so pin the version and re-check controls on upgrade (none fired on this fixture set at 17.16.0)",
+        "runtimes were measured on a shared 4-vCPU box with concurrent trials; expect ~0.8-1.7 s for 8 files, dominated by Node start-up"
+      ],
+      "verdict": "ADOPT",
+      "reason": "Tuned stylelint finds 8/8 seeded defects with 0 false positives on 4 modern-CSS controls (defaults: 6/8 with 6 stylistic FPs from lightness-notation, hue-degree-notation, property-no-vendor-prefix), against a baseline of 0/8 because nothing is checked today. Cost is 13.7 s install, 19 MB, pure Node (Windows yes), under 1 s per run, MIT throughout.",
+      "wrapper": "runs/05-stylelint/wrapper-sketch.mjs",
+      "do_not_adopt_notes": [
+        "do not adopt config-standard unmodified: it misses !important and invalid-hex and produces 6 stylistic errors on clean modern CSS (oklch lightness/hue notation, -webkit-mask)",
+        "do not rely on the CLI exit code 1 / stdout report: stylelint 17 uses stderr and exit 2 for lint problems",
+        "declaration-no-important will flag the common reduced-motion !important reset; decide the team pattern before enabling it"
+      ]
+    },
+    {
+      "id": 6,
+      "tool": "sharp (libvips) vs @squoosh/lib vs cwebp/avifenc for WebP/AVIF site images at equal visual quality",
+      "versions": {
+        "sharp": "0.35.5",
+        "@img/sharp-libvips-linux-x64": "1.3.4 (libvips 8.18.7, libwebp 1.6.0, libheif 1.23.5, aom 3.15.1, mozjpeg 0826579)",
+        "@squoosh/lib": "0.5.3 (deprecated; engines node ^12.5||^14||^16)",
+        "cwebp (apt webp)": "1.3.2-0.4build3",
+        "avifenc (apt libavif-bin)": "1.0.4-1ubuntu3 (aom 3.8.2, rav1e 0.7.1, svt 1.7.0)",
+        "scikit-image": "0.26.0 (metric only)",
+        "dssim": "3.5.1 via cargo (metric only; PyPI dssim==1.3.0 is an unrelated discrete-event simulation package)",
+        "node": "22.22.0",
+        "python": "3.13.16"
+      },
+      "licences": {
+        "sharp": "Apache-2.0",
+        "@img/sharp-linux-x64": "Apache-2.0",
+        "@img/sharp-libvips-linux-x64": "LGPL-3.0-or-later (prebuilt libvips + bundled aom/libheif/libwebp/mozjpeg; used unmodified as a dependency: fine, no obligation beyond keeping it replaceable)",
+        "@squoosh/lib": "Apache-2.0",
+        "webp (cwebp)": "BSD-3-Clause",
+        "libavif-bin (avifenc)": "BSD-2-Clause",
+        "scikit-image": "BSD-3-Clause (measurement only)",
+        "dssim": "AGPL-3.0 (measurement CLI only; do not link into the product)"
+      },
+      "install": {
+        "command": "npm i sharp@0.35.5  (alternatives: apt-get install -y webp libavif-bin ; npm i @squoosh/lib@0.5.3)",
+        "seconds": 4.25,
+        "size_mb": 30,
+        "windows": "yes: sharp package.json lists optionalDependencies @img/sharp-win32-x64 / win32-ia32 / win32-arm64 @0.35.5 (prebuilt libvips, no compiler). cwebp/avifenc: untested here (official Windows zips come from downloads.webmproject.org / GitHub releases, both blocked). squoosh: untested (Node+wasm, needs --no-experimental-global-navigator --no-experimental-fetch on Node 22).",
+        "others": {
+          "@squoosh/lib": {
+            "seconds": 1.04,
+            "size_mb": 21
+          },
+          "apt webp+libavif-bin": {
+            "seconds": 7.05,
+            "size_mb": 2.9
+          },
+          "scikit-image venv (metric only)": {
+            "seconds": 35.1,
+            "size_mb": 298
+          },
+          "dssim cargo build (metric only)": {
+            "seconds": 56.6,
+            "size_mb": 25,
+            "binary_mb": 2.1
+          }
+        }
+      },
+      "fixtures": "fixtures/06-images/src: 8 PNG sources = 4 bundled scikit-image sample photos (astronaut NASA PD 512x512, chelsea CC0 451x300, coffee CC0 600x400, rocket SpaceX PD 640x427; no pooch downloads) + 3 synthetic text-on-photo banners (SVG text composited with sharp) + 1 flat product-box render (SVG rasterised). SUBSTITUTE for the team's product photos. fixtures/06-images/seeded: noise_fine.png (S1) + 2 control copies; fixtures/06-images/control: 2 clean images. KEY.json lists sources, licences, S1 and controls.",
+      "baseline": {
+        "what": "assumed hand export: JPEG quality 80 via sharp (encoder 'jpeg-sharp' in bench.mjs) for photos+banners; PNG as-is for the flat render",
+        "command": "cd runs/06-images && node bench.mjs (rows encoder=jpeg-sharp / png-source in bench.json)",
+        "recall": "n/a (no checker today: 0/1 - nothing gates quality)",
+        "false_positives": 0,
+        "runtime_s": 0.21,
+        "total_bytes_jpeg80_8_images": 290584,
+        "total_bytes_mix_jpeg80_plus_png_flat": 301579,
+        "jpeg80_ssim_rgb_per_image": {
+          "banner_text_astronaut": 0.94928,
+          "banner_text_chelsea": 0.94834,
+          "banner_text_coffee": 0.92814,
+          "flat_product_box": 0.98299,
+          "photo_astronaut": 0.94576,
+          "photo_chelsea": 0.95523,
+          "photo_coffee": 0.91901,
+          "photo_rocket": 0.91968
+        },
+        "jpeg80_images_with_ssim_ge_0.97": "1/8 (only flat_product_box, 0.983); photos/banners 0.919-0.955"
+      },
+      "candidate_default": {
+        "config": "wrapper defaults as briefed: sharp webp quality 80 effort 4; avif quality 60 effort 4 (sharp default chroma 4:4:4); gate SSIM(RGB) >= 0.97",
+        "commands": [
+          "node runs/06-images/wrapper-sketch.mjs fixtures/06-images/seeded --out runs/06-images/out/wrapper-F --avif  # exit 1",
+          "node runs/06-images/wrapper-sketch.mjs fixtures/06-images/src --out runs/06-images/out/wrapper-A --avif  # exit 1, 14/16 outputs below 0.97"
+        ],
+        "found": {
+          "S1": true
+        },
+        "recall": "1/1",
+        "false_positives": 2,
+        "false_positive_detail": "control photo_chelsea flagged in both formats (webp 0.953, avif 0.957) because the 0.97 bar is above today's JPEG-80 quality (0.955 on that image)",
+        "extra_findings_on_seeded": 0,
+        "runtime_s": 4.253,
+        "exit_codes": {
+          "src(A)": 1,
+          "seeded(F)": 1,
+          "nonexistent dir(E)": 2
+        },
+        "encoder_comparison": {
+          "method": "5 qualities (50..90) x 8 images x 13 encoder configs; every output decoded with sharp to PNG; SSIM = scikit-image structural_similarity RGB multichannel (data_range 255, also grey); DSSIM = kornelski dssim 3.5.1. Knee A (as briefed) = smallest bytes with SSIM_rgb >= 0.97. Knee B ('equal quality to today') = smallest bytes with SSIM_rgb >= JPEG-80's SSIM on the same image, and separately dssim <= JPEG-80's dssim.",
+          "squoosh_avif_quality_mapping": "cqLevel = round(63*(100-q)/100) (squoosh has no 0-100 quality)",
+          "knees": {
+            "sharp-webp": {
+              "images_reaching_0.97": "3/8",
+              "total_bytes_at_0.97_knee": 68032,
+              "pct_of_jpeg80_same_images": 86,
+              "mean_q_at_0.97_knee": 76.7,
+              "cannot_reach_0.97_at_q90": [
+                "banner_text_astronaut",
+                "banner_text_coffee",
+                "photo_astronaut",
+                "photo_coffee",
+                "photo_rocket"
+              ],
+              "match_jpeg80_by_ssim": {
+                "total_bytes": 212410,
+                "pct_of_jpeg80": 73.1,
+                "mean_q": 77.5
+              },
+              "match_jpeg80_by_dssim": {
+                "total_bytes": 324304,
+                "pct_of_jpeg80": 111.6,
+                "mean_q": 85
+              },
+              "mean_encode_ms_per_image": 54.2
+            },
+            "sharp-webp-tuned": {
+              "images_reaching_0.97": "3/8",
+              "total_bytes_at_0.97_knee": 68246,
+              "pct_of_jpeg80_same_images": 86.3,
+              "mean_q_at_0.97_knee": 76.7,
+              "cannot_reach_0.97_at_q90": [
+                "banner_text_astronaut",
+                "banner_text_coffee",
+                "photo_astronaut",
+                "photo_coffee",
+                "photo_rocket"
+              ],
+              "match_jpeg80_by_ssim": {
+                "total_bytes": 206758,
+                "pct_of_jpeg80": 71.2,
+                "mean_q": 76.2
+              },
+              "match_jpeg80_by_dssim": {
+                "total_bytes": 327254,
+                "pct_of_jpeg80": 112.6,
+                "mean_q": 85
+              },
+              "mean_encode_ms_per_image": 289.9
+            },
+            "sharp-avif": {
+              "images_reaching_0.97": "8/8",
+              "total_bytes_at_0.97_knee": 379014,
+              "pct_of_jpeg80_same_images": 130.4,
+              "mean_q_at_0.97_knee": 80,
+              "cannot_reach_0.97_at_q90": [],
+              "match_jpeg80_by_ssim": {
+                "total_bytes": 140860,
+                "pct_of_jpeg80": 48.5,
+                "mean_q": 56.2
+              },
+              "match_jpeg80_by_dssim": {
+                "total_bytes": 199867,
+                "pct_of_jpeg80": 68.8,
+                "mean_q": 66.2
+              },
+              "mean_encode_ms_per_image": 1627.6
+            },
+            "sharp-avif-tuned": {
+              "images_reaching_0.97": "6/8",
+              "total_bytes_at_0.97_knee": 224432,
+              "pct_of_jpeg80_same_images": 106,
+              "mean_q_at_0.97_knee": 76.7,
+              "cannot_reach_0.97_at_q90": [
+                "photo_coffee",
+                "photo_rocket"
+              ],
+              "match_jpeg80_by_ssim": {
+                "total_bytes": 140322,
+                "pct_of_jpeg80": 48.3,
+                "mean_q": 57.5
+              },
+              "match_jpeg80_by_dssim": {
+                "total_bytes": 192010,
+                "pct_of_jpeg80": 66.1,
+                "mean_q": 66.2
+              },
+              "mean_encode_ms_per_image": 1526.2
+            },
+            "cwebp": {
+              "images_reaching_0.97": "3/8",
+              "total_bytes_at_0.97_knee": 68032,
+              "pct_of_jpeg80_same_images": 86,
+              "mean_q_at_0.97_knee": 76.7,
+              "cannot_reach_0.97_at_q90": [
+                "banner_text_astronaut",
+                "banner_text_coffee",
+                "photo_astronaut",
+                "photo_coffee",
+                "photo_rocket"
+              ],
+              "match_jpeg80_by_ssim": {
+                "total_bytes": 212410,
+                "pct_of_jpeg80": 73.1,
+                "mean_q": 77.5
+              },
+              "match_jpeg80_by_dssim": {
+                "total_bytes": 324304,
+                "pct_of_jpeg80": 111.6,
+                "mean_q": 85
+              },
+              "mean_encode_ms_per_image": 73.6
+            },
+            "cwebp-tuned": {
+              "images_reaching_0.97": "3/8",
+              "total_bytes_at_0.97_knee": 68246,
+              "pct_of_jpeg80_same_images": 86.3,
+              "mean_q_at_0.97_knee": 76.7,
+              "cannot_reach_0.97_at_q90": [
+                "banner_text_astronaut",
+                "banner_text_coffee",
+                "photo_astronaut",
+                "photo_coffee",
+                "photo_rocket"
+              ],
+              "match_jpeg80_by_ssim": {
+                "total_bytes": 206758,
+                "pct_of_jpeg80": 71.2,
+                "mean_q": 76.2
+              },
+              "match_jpeg80_by_dssim": {
+                "total_bytes": 327254,
+                "pct_of_jpeg80": 112.6,
+                "mean_q": 85
+              },
+              "mean_encode_ms_per_image": 155.1
+            },
+            "avifenc": {
+              "images_reaching_0.97": "8/8",
+              "total_bytes_at_0.97_knee": 426760,
+              "pct_of_jpeg80_same_images": 146.9,
+              "mean_q_at_0.97_knee": 77.5,
+              "cannot_reach_0.97_at_q90": [],
+              "match_jpeg80_by_ssim": {
+                "total_bytes": 164729,
+                "pct_of_jpeg80": 56.7,
+                "mean_q": 57.5
+              },
+              "match_jpeg80_by_dssim": {
+                "total_bytes": 212508,
+                "pct_of_jpeg80": 73.1,
+                "mean_q": 65
+              },
+              "mean_encode_ms_per_image": 243.4
+            },
+            "avifenc-tuned": {
+              "images_reaching_0.97": "6/8",
+              "total_bytes_at_0.97_knee": 247097,
+              "pct_of_jpeg80_same_images": 116.7,
+              "mean_q_at_0.97_knee": 76.7,
+              "cannot_reach_0.97_at_q90": [
+                "photo_coffee",
+                "photo_rocket"
+              ],
+              "match_jpeg80_by_ssim": {
+                "total_bytes": 161556,
+                "pct_of_jpeg80": 55.6,
+                "mean_q": 60
+              },
+              "match_jpeg80_by_dssim": {
+                "total_bytes": 200158,
+                "pct_of_jpeg80": 68.9,
+                "mean_q": 67.5
+              },
+              "mean_encode_ms_per_image": 244.1
+            },
+            "squoosh-webp": {
+              "images_reaching_0.97": "3/8",
+              "total_bytes_at_0.97_knee": 68032,
+              "pct_of_jpeg80_same_images": 86,
+              "mean_q_at_0.97_knee": 76.7,
+              "cannot_reach_0.97_at_q90": [
+                "banner_text_astronaut",
+                "banner_text_coffee",
+                "photo_astronaut",
+                "photo_coffee",
+                "photo_rocket"
+              ],
+              "match_jpeg80_by_ssim": {
+                "total_bytes": 212410,
+                "pct_of_jpeg80": 73.1,
+                "mean_q": 77.5
+              },
+              "match_jpeg80_by_dssim": {
+                "total_bytes": 324304,
+                "pct_of_jpeg80": 111.6,
+                "mean_q": 85
+              },
+              "mean_encode_ms_per_image": 111.8
+            },
+            "squoosh-webp-tuned": {
+              "images_reaching_0.97": "3/8",
+              "total_bytes_at_0.97_knee": 68438,
+              "pct_of_jpeg80_same_images": 86.6,
+              "mean_q_at_0.97_knee": 76.7,
+              "cannot_reach_0.97_at_q90": [
+                "banner_text_astronaut",
+                "banner_text_coffee",
+                "photo_astronaut",
+                "photo_coffee",
+                "photo_rocket"
+              ],
+              "match_jpeg80_by_ssim": {
+                "total_bytes": 207314,
+                "pct_of_jpeg80": 71.3,
+                "mean_q": 76.2
+              },
+              "match_jpeg80_by_dssim": {
+                "total_bytes": 327414,
+                "pct_of_jpeg80": 112.7,
+                "mean_q": 85
+              },
+              "mean_encode_ms_per_image": 181.7
+            },
+            "squoosh-avif": {
+              "images_reaching_0.97": "6/8",
+              "total_bytes_at_0.97_knee": 240012,
+              "pct_of_jpeg80_same_images": 113.4,
+              "mean_q_at_0.97_knee": 80,
+              "cannot_reach_0.97_at_q90": [
+                "photo_coffee",
+                "photo_rocket"
+              ],
+              "match_jpeg80_by_ssim": {
+                "total_bytes": 146424,
+                "pct_of_jpeg80": 50.4,
+                "mean_q": 60
+              },
+              "match_jpeg80_by_dssim": {
+                "total_bytes": 202340,
+                "pct_of_jpeg80": 69.6,
+                "mean_q": 71.2
+              },
+              "mean_encode_ms_per_image": 555.2
+            },
+            "squoosh-avif-tuned": {
+              "images_reaching_0.97": "6/8",
+              "total_bytes_at_0.97_knee": 236278,
+              "pct_of_jpeg80_same_images": 111.6,
+              "mean_q_at_0.97_knee": 76.7,
+              "cannot_reach_0.97_at_q90": [
+                "photo_coffee",
+                "photo_rocket"
+              ],
+              "match_jpeg80_by_ssim": {
+                "total_bytes": 153741,
+                "pct_of_jpeg80": 52.9,
+                "mean_q": 60
+              },
+              "match_jpeg80_by_dssim": {
+                "total_bytes": 198349,
+                "pct_of_jpeg80": 68.3,
+                "mean_q": 68.8
+              },
+              "mean_encode_ms_per_image": 658.8
+            }
+          },
+          "quality_grid": {
+            "sharp-webp": {
+              "q50": {
+                "total_bytes": 124282,
+                "pct_of_jpeg80": 42.8,
+                "images_ge_jpeg80_ssim": 1,
+                "images_le_jpeg80_dssim": 1,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.9225,
+                "mean_encode_ms": 51
+              },
+              "q60": {
+                "total_bytes": 139554,
+                "pct_of_jpeg80": 48,
+                "images_ge_jpeg80_ssim": 1,
+                "images_le_jpeg80_dssim": 1,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.9302,
+                "mean_encode_ms": 46
+              },
+              "q70": {
+                "total_bytes": 157906,
+                "pct_of_jpeg80": 54.3,
+                "images_ge_jpeg80_ssim": 1,
+                "images_le_jpeg80_dssim": 1,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.9374,
+                "mean_encode_ms": 47
+              },
+              "q80": {
+                "total_bytes": 203642,
+                "pct_of_jpeg80": 70.1,
+                "images_ge_jpeg80_ssim": 7,
+                "images_le_jpeg80_dssim": 1,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.9499,
+                "mean_encode_ms": 54
+              },
+              "q90": {
+                "total_bytes": 332102,
+                "pct_of_jpeg80": 114.3,
+                "images_ge_jpeg80_ssim": 8,
+                "images_le_jpeg80_dssim": 8,
+                "images_ssim_ge_0.97": 3,
+                "mean_ssim_rgb": 0.9672,
+                "mean_encode_ms": 72
+              }
+            },
+            "sharp-avif": {
+              "q50": {
+                "total_bytes": 110264,
+                "pct_of_jpeg80": 37.9,
+                "images_ge_jpeg80_ssim": 3,
+                "images_le_jpeg80_dssim": 1,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.9432,
+                "mean_encode_ms": 1425
+              },
+              "q60": {
+                "total_bytes": 155317,
+                "pct_of_jpeg80": 53.4,
+                "images_ge_jpeg80_ssim": 8,
+                "images_le_jpeg80_dssim": 2,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.9582,
+                "mean_encode_ms": 1437
+              },
+              "q70": {
+                "total_bytes": 209179,
+                "pct_of_jpeg80": 72,
+                "images_ge_jpeg80_ssim": 8,
+                "images_le_jpeg80_dssim": 8,
+                "images_ssim_ge_0.97": 2,
+                "mean_ssim_rgb": 0.9682,
+                "mean_encode_ms": 1469
+              },
+              "q80": {
+                "total_bytes": 279935,
+                "pct_of_jpeg80": 96.3,
+                "images_ge_jpeg80_ssim": 8,
+                "images_le_jpeg80_dssim": 8,
+                "images_ssim_ge_0.97": 4,
+                "mean_ssim_rgb": 0.9752,
+                "mean_encode_ms": 1643
+              },
+              "q90": {
+                "total_bytes": 441113,
+                "pct_of_jpeg80": 151.8,
+                "images_ge_jpeg80_ssim": 8,
+                "images_le_jpeg80_dssim": 8,
+                "images_ssim_ge_0.97": 8,
+                "mean_ssim_rgb": 0.9844,
+                "mean_encode_ms": 2163
+              }
+            },
+            "avifenc": {
+              "q50": {
+                "total_bytes": 117537,
+                "pct_of_jpeg80": 40.4,
+                "images_ge_jpeg80_ssim": 2,
+                "images_le_jpeg80_dssim": 1,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.9429,
+                "mean_encode_ms": 213
+              },
+              "q60": {
+                "total_bytes": 177715,
+                "pct_of_jpeg80": 61.2,
+                "images_ge_jpeg80_ssim": 8,
+                "images_le_jpeg80_dssim": 3,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.961,
+                "mean_encode_ms": 222
+              },
+              "q70": {
+                "total_bytes": 236760,
+                "pct_of_jpeg80": 81.5,
+                "images_ge_jpeg80_ssim": 8,
+                "images_le_jpeg80_dssim": 8,
+                "images_ssim_ge_0.97": 3,
+                "mean_ssim_rgb": 0.97,
+                "mean_encode_ms": 190
+              },
+              "q80": {
+                "total_bytes": 314416,
+                "pct_of_jpeg80": 108.2,
+                "images_ge_jpeg80_ssim": 8,
+                "images_le_jpeg80_dssim": 8,
+                "images_ssim_ge_0.97": 5,
+                "mean_ssim_rgb": 0.9773,
+                "mean_encode_ms": 252
+              },
+              "q90": {
+                "total_bytes": 554520,
+                "pct_of_jpeg80": 190.8,
+                "images_ge_jpeg80_ssim": 8,
+                "images_le_jpeg80_dssim": 8,
+                "images_ssim_ge_0.97": 8,
+                "mean_ssim_rgb": 0.9875,
+                "mean_encode_ms": 339
+              }
+            },
+            "squoosh-avif": {
+              "q50": {
+                "total_bytes": 97609,
+                "pct_of_jpeg80": 33.6,
+                "images_ge_jpeg80_ssim": 1,
+                "images_le_jpeg80_dssim": 1,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.9298,
+                "mean_encode_ms": 660
+              },
+              "q60": {
+                "total_bytes": 144397,
+                "pct_of_jpeg80": 49.7,
+                "images_ge_jpeg80_ssim": 7,
+                "images_le_jpeg80_dssim": 1,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.9493,
+                "mean_encode_ms": 628
+              },
+              "q70": {
+                "total_bytes": 187982,
+                "pct_of_jpeg80": 64.7,
+                "images_ge_jpeg80_ssim": 8,
+                "images_le_jpeg80_dssim": 5,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.958,
+                "mean_encode_ms": 535
+              },
+              "q80": {
+                "total_bytes": 242988,
+                "pct_of_jpeg80": 83.6,
+                "images_ge_jpeg80_ssim": 8,
+                "images_le_jpeg80_dssim": 8,
+                "images_ssim_ge_0.97": 3,
+                "mean_ssim_rgb": 0.9654,
+                "mean_encode_ms": 491
+              },
+              "q90": {
+                "total_bytes": 398333,
+                "pct_of_jpeg80": 137.1,
+                "images_ge_jpeg80_ssim": 8,
+                "images_le_jpeg80_dssim": 8,
+                "images_ssim_ge_0.97": 6,
+                "mean_ssim_rgb": 0.9754,
+                "mean_encode_ms": 462
+              }
+            },
+            "cwebp": {
+              "q50": {
+                "total_bytes": 124282,
+                "pct_of_jpeg80": 42.8,
+                "images_ge_jpeg80_ssim": 1,
+                "images_le_jpeg80_dssim": 1,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.9225,
+                "mean_encode_ms": 83
+              },
+              "q60": {
+                "total_bytes": 139554,
+                "pct_of_jpeg80": 48,
+                "images_ge_jpeg80_ssim": 1,
+                "images_le_jpeg80_dssim": 1,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.9302,
+                "mean_encode_ms": 68
+              },
+              "q70": {
+                "total_bytes": 157906,
+                "pct_of_jpeg80": 54.3,
+                "images_ge_jpeg80_ssim": 1,
+                "images_le_jpeg80_dssim": 1,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.9374,
+                "mean_encode_ms": 81
+              },
+              "q80": {
+                "total_bytes": 203642,
+                "pct_of_jpeg80": 70.1,
+                "images_ge_jpeg80_ssim": 7,
+                "images_le_jpeg80_dssim": 1,
+                "images_ssim_ge_0.97": 1,
+                "mean_ssim_rgb": 0.9499,
+                "mean_encode_ms": 65
+              },
+              "q90": {
+                "total_bytes": 332102,
+                "pct_of_jpeg80": 114.3,
+                "images_ge_jpeg80_ssim": 8,
+                "images_le_jpeg80_dssim": 8,
+                "images_ssim_ge_0.97": 3,
+                "mean_ssim_rgb": 0.9672,
+                "mean_encode_ms": 72
+              }
+            }
+          },
+          "notes": [
+            "WebP bytes are identical across sharp, cwebp and squoosh at default settings (same libwebp encoder) -> encoder choice for WebP is only packaging/runtime.",
+            "Tuned WebP (effort 6 + smartSubsample / -sharp_yuv) changed bytes by <1% and SSIM by <0.001: no gain.",
+            "sharp AVIF default chromaSubsampling is already 4:4:4 (default and 'tuned 4:4:4' outputs byte-identical on banners); 4:2:0 on photos saved 5-25% bytes but dropped RGB-SSIM below the JPEG-80 line on coffee/rocket.",
+            "At the 0.97 bar no WebP encoder reaches it on banner_text_astronaut (0.969 at q90) and banner_text_coffee (0.959 at q90) nor on 3 of 4 photos; all AVIF encoders reach it (q80-90) except squoosh/avifenc-tuned 4:2:0 on coffee/rocket.",
+            "sharp AVIF (libheif+aom 3.15) is 10-12% smaller than avifenc 1.0.4 (aom 3.8.2) at matched quality but ~7x slower per image at effort 4 vs avifenc speed 6 (1.4 s vs 0.2 s per 0.1-0.5 MP image, shared CPU)."
+          ]
+        }
+      },
+      "candidate_tuned": {
+        "config": "sharp webp quality 80 effort 4; avif quality 70 effort 4 (4:4:4, sharp default); gate --min-ssim 0.92 = lowest JPEG-80 score on the fixtures ('not worse than today'). Why: q70 is the lowest grid quality where AVIF beats JPEG-80 on all 8 images under BOTH SSIM and DSSIM; 0.97 rejects today's own export.",
+        "commands": [
+          "node runs/06-images/wrapper-sketch.mjs fixtures/06-images/control --out runs/06-images/out/wrapper-H --avif --avif-q 70 --min-ssim 0.92  # exit 0",
+          "node runs/06-images/wrapper-sketch.mjs fixtures/06-images/seeded --out runs/06-images/out/wrapper-G --avif --avif-q 70 --min-ssim 0.92  # exit 1",
+          "node runs/06-images/wrapper-sketch.mjs fixtures/06-images/src --out runs/06-images/out/wrapper-I --avif --avif-q 70 --min-ssim 0.92  # exit 0"
+        ],
+        "found": {
+          "S1": true
+        },
+        "recall": "1/1",
+        "false_positives": 0,
+        "extra_findings_on_seeded": 0,
+        "runtime_s": 11.319,
+        "runtime_note": "8 images x (webp+avif+2 decodes+2 SSIM) on shared 4 vCPU; AVIF effort 4 dominates (~1.4 s/image)",
+        "exit_codes": {
+          "control(H)": 0,
+          "seeded(G)": 1,
+          "src(I)": 0
+        },
+        "encoder_comparison": "see candidate_default.encoder_comparison (same bench; tuned configs are the *-tuned encoders)",
+        "found_detail": "S1 noise_fine.png flagged via its WebP output (SSIM 0.553); its AVIF q70 output scored above 0.92, so the gate relies on the WebP leg at this setting"
+      },
+      "limits": [
+        "Fixtures are 4 stock photos + synthetic banners, 0.13-0.48 MP, not the team's product photos or 9:16 frames; byte ratios will shift on real inputs.",
+        "SSIM and DSSIM disagree on WebP q80 (SSIM: >= JPEG-80 on 7/8; DSSIM: worse on 7/8). No human viewing done.",
+        "Quality grid is 10 steps; knees are coarse.",
+        "Runtimes on a shared 4 vCPU box with other trials running.",
+        "avifenc defaults (speed 6, yuv auto=444) vs sharp effort 4 are not identical speed settings.",
+        "squoosh runs only with two Node flags and is deprecated upstream; not a maintainable choice.",
+        "Windows for cwebp/avifenc/squoosh not tested (binaries from blocked hosts).",
+        "runs/06-images/out/ (16 MB of encoded outputs) is not shipped; `node runs/06-images/bench.mjs` regenerates it."
+      ],
+      "verdict": "ADOPT",
+      "reason": "sharp@0.35.5 AVIF at quality 70 gives 72% of today's JPEG-80 bytes (209 KB vs 291 KB on 8 images) while scoring >= JPEG-80 on every image under both SSIM and DSSIM (q60: 53% of bytes, passes SSIM 8/8 but DSSIM only 2/8). WebP q80 is 70% of bytes by SSIM but DSSIM rates it below JPEG-80 on 7/8, so WebP is a fallback format only, not the saving. sharp beats avifenc 1.0.4 by ~10% bytes at equal quality, needs one npm install with Windows prebuilts, and the wrapper gate catches the seeded failure with 0 FPs at the 0.92 'not worse than today' threshold.",
+      "wrapper": "runs/06-images/wrapper-sketch.mjs",
+      "do_not_adopt_notes": [
+        "@squoosh/lib 0.5.3: deprecated; on Node 22 import fails with 'TypeError: Cannot set property navigator of #<Object> which has only a getter' (build/index.js:30), then 'TypeError: Failed to parse URL from .../imagequant_node-a4aafbae.wasm'; works only with --no-experimental-global-navigator --no-experimental-fetch. Bytes no better than sharp.",
+        "cwebp 1.3.2: byte-identical WebP to sharp; extra binary to ship on Windows for no gain.",
+        "avifenc 1.0.4 (Ubuntu): 10-12% larger files than sharp at equal quality; Windows builds only via GitHub releases (blocked here).",
+        "The briefed 0.97 RGB-SSIM gate: today's JPEG-80 export itself fails it on 7/8 images and WebP cannot reach it at q90 on 5/8; using it as the default would reject the team's current quality. Wrapper keeps 0.97 as the default per brief but the adopted CI setting is --min-ssim 0.92.",
+        "Tuned WebP (effort 6, smartSubsample) and 4:2:0 AVIF on photos: no gain / quality loss.",
+        "PyPI dssim==1.3.0 is not the image metric (installed then removed)."
+      ]
+    },
+    {
+      "id": 7,
+      "tool": "ffmpeg ebur128 (loudness / true-peak / LRA measurement) + Node checker for voice-over-music ratio; loudnorm/alimiter used only to build fixtures",
+      "versions": {
+        "ffmpeg": "6.1.1-3ubuntu5 (Ubuntu 24.04 package, --enable-gpl)",
+        "node": "22.22.0",
+        "espeak-ng": "1.51 (fixtures only)"
+      },
+      "licences": {
+        "ffmpeg": "LGPL-2.1-or-later core; this Ubuntu build is configured --enable-gpl (libx264, etc.) so the binary as a whole is GPL-2.0-or-later. We only invoke the ffmpeg CLI as a separate process (child_process.spawnSync) and do not link or redistribute it, so no GPL/LGPL obligation attaches to our checker code; obligations only arise if the team redistributes an ffmpeg binary (then ship its source/offer).",
+        "check-loudness.mjs / wrapper": "own code, no npm dependencies"
+      },
+      "install": {
+        "command": "none needed here (system package: apt-get install -y ffmpeg=7:6.1.1-3ubuntu5). Windows: static build from gyan.dev or github.com/BtbN/FFmpeg-Builds (third-party, GPL build), put ffmpeg.exe on PATH or set FFMPEG env var",
+        "seconds": 0,
+        "size_mb": 36.4,
+        "size_note": "Installed-Size of ffmpeg + libav* Ubuntu packages (dpkg-query); Windows static ffmpeg.exe is roughly 100-150 MB (not measured: github.com and gyan.dev are refused by the egress proxy: 'curl: (56) CONNECT tunnel failed, response 403')",
+        "windows": "yes - native binary; the ebur128/ametadata/alimiter filters are in every full build (gyan.dev 'essentials'/'full' and BtbN win64-gpl builds are GPL builds from third parties, not from ffmpeg.org); checker is pure Node (spawnSync, no shell). Not run on Windows in this trial."
+      },
+      "fixtures": "fixtures/07-loudness/: voice.wav (espeak-ng), music.wav (synth bed), video.mp4 (shared 9:16 test pattern), per-mix gained stems X_voice.wav/X_music.wav (f32 wav), 5 mixes C1 C2 L1 L2 L3 .mp4 (1080x1920 H.264 + AAC 48 kHz stereo, 25 s), KEY.json with MEASURED integrated/LRA/TP per file, generator make-mixes.sh (log: runs/07-loudness/make-mixes.log, 1m44s)",
+      "baseline": {
+        "what": "what the team does today: no loudness check; the render step only confirms the mp4 has an audio stream (ffprobe)",
+        "command": "bash runs/07-loudness/baseline.sh",
+        "recall": "0/3",
+        "false_positives": 0,
+        "runtime_s": 0.31
+      },
+      "candidate_default": {
+        "config": "check-loudness.mjs: ffmpeg -af ebur128=peak=true on the mix (parse Integrated, LRA, True peak), plus integrated LUFS of the voice and music stems found next to the mix; thresholds integrated -14 +-1 LUFS, true peak <= -1.0 dBTP, ratio = LUFS_voice - LUFS_music >= +6 dB (ratio needs the stems; without them the checker says so and skips it)",
+        "commands": [
+          "node runs/07-loudness/check-loudness.mjs fixtures/07-loudness/<X>.mp4"
+        ],
+        "found": {
+          "L1": true,
+          "L2": true,
+          "L3": true
+        },
+        "found_by": {
+          "L1": "integrated -9.8 LUFS",
+          "L2": "ratio -10 dB",
+          "L3": "true peak +1.2 dBTP"
+        },
+        "recall": "3/3",
+        "false_positives": 0,
+        "controls": {
+          "C1": "I -14.1, TP -2.7, ratio +10.0 -> pass",
+          "C2": "I -14.1, TP -2.7, ratio +8.0 -> pass"
+        },
+        "extra_findings_on_seeded": 0,
+        "runtime_s": 2,
+        "runtime_note": "per 25 s file incl. 3 ffmpeg passes (mix + 2 stems), 4 shared vCPU; a single ebur128 pass on the mp4 is 1.19 s; measured per file: C1 1.99, C2 1.95, L1 1.91, L2 1.90, L3 2.18"
+      },
+      "candidate_tuned": {
+        "config": "--tuned: same plus LRA <= 12 LU and a 'music under speech' check: 100 ms momentary loudness series of both stems via ebur128=metadata=1,ametadata=print:file=-, keep frames where voice momentary > -30 LUFS, energy-mean the music and voice over those frames, require voice - music >= +6 dB during speech. This is the simpler of the two options in the brief (momentary-loudness gating, not sidechaincompress); chosen because it needs no extra filter graph and gives a number the team can read.",
+        "commands": [
+          "node runs/07-loudness/check-loudness.mjs --tuned fixtures/07-loudness/<X>.mp4"
+        ],
+        "found": {
+          "L1": true,
+          "L2": true,
+          "L3": true
+        },
+        "found_by": {
+          "L1": "integrated -9.8 LUFS",
+          "L2": "ratio -10 dB AND ratio_speech -8.8 dB",
+          "L3": "true peak +1.2 dBTP"
+        },
+        "recall": "3/3",
+        "false_positives": 0,
+        "controls": {
+          "C1": "ratio_speech +11.0, LRA 2.2 -> pass",
+          "C2": "ratio_speech +9.0, LRA 2.2 -> pass"
+        },
+        "extra_findings_on_seeded": 0,
+        "runtime_s": 2.6,
+        "runtime_note": "C1 2.68, C2 2.58, L1 2.59, L2 2.66, L3 2.59 s (5 ffmpeg passes per file)",
+        "gain_over_default": "none on these fixtures (L2 is already caught by the plain ratio); the speech-gated ratio only adds value when the bed has swells timed against the narration, which the synthetic bed only mildly has (C1: +10.0 overall vs +11.0 during speech)"
+      },
+      "limits": [
+        "Voice-to-music ratio needs the two stems; the final mp4 alone cannot give it (the checker reports a note and checks only integrated/TP/LRA).",
+        "Ratio is a stem-level number: it says nothing about spectral masking; +6 dB is a rule of thumb, not an intelligibility measure.",
+        "ebur128 'Peak' line is true peak only with peak=true (4x oversampled); AAC encoding raised sample-peak-limited material by up to ~3 dB TP in this trial, so limit at <= -3 dBFS before encoding.",
+        "Synthetic fixtures (espeak voice, synth bed), 25 s; real TTS voices and licensed beds not tested; no Windows run (hosts for the static builds are refused from the sandbox).",
+        "L1 measured -9.8 LUFS instead of the intended ~-8 (limiter saturation); still 3.8 LU past tolerance, so the detection is not borderline.",
+        "Runtimes carry shared-CPU noise (4 vCPU shared with other trials).",
+        "Per-mix float stems (C1..L3_voice/music.wav, 96 MB) are not shipped: run fixtures/07-loudness/make-mixes.sh first to regenerate them (deterministic; the base voice.wav/music.wav and the five mp4 mixes are included)."
+      ],
+      "verdict": "ADOPT",
+      "reason": "Baseline is nothing (0/3). ffmpeg ebur128 plus a 50-line Node checker catches 3/3 seeded defects (too loud -9.8 LUFS, voice buried -10 dB, true peak +1.2 dBTP) with 0 false positives on 2 clean controls, in ~2 s per 25 s film, with zero install (ffmpeg is already in the pipeline) and no licence obligation because ffmpeg runs as a separate process.",
+      "wrapper": "runs/07-loudness/wrapper-sketch.mjs",
+      "wrapper_exit_codes": {
+        "C1.mp4 (clean)": 0,
+        "L2.mp4 (seeded)": 1,
+        "mix without stems (L3 copy)": "1 with note 'stems not found; voice/music ratio not checked'",
+        "missing file": 2
+      },
+      "do_not_adopt_notes": [
+        "Tuned mode (speech-gated ratio + LRA) showed no extra recall on these fixtures and costs +0.6 s per file; keep it optional (--tuned), do not make it the gate.",
+        "Do not use loudnorm single-pass as the check: it normalises (changes the file) and prints targets, not a verdict; ebur128 is the measurement filter. loudnorm two-pass remains the fix step after a failed check.",
+        "First fixture run used 16-bit stems: the hot L1 voice stem clipped and the ratio read 5.6 dB (a false 'ratio' finding on L1). Fixed by writing stems as float wav; the team should measure ratio on float or pre-gain stems, never on clipped intermediates."
+      ]
+    },
+    {
+      "id": 8,
+      "tool": "cspell (multilingual spell check for SRT subtitles + HTML site copy)",
+      "versions": {
+        "cspell": "10.4.0",
+        "@cspell/dict-es-es": "3.0.9",
+        "@cspell/dict-pt-br": "2.4.4",
+        "@cspell/dict-fr-fr": "2.3.2",
+        "@cspell/dict-de-de": "4.1.3",
+        "@cspell/dict-ru_ru": "2.3.4 (note: the Russian package is dict-ru_ru with an underscore; @cspell/dict-ru-ru does not exist, npm 404)",
+        "@cspell/dict-uk-ua": "4.0.7",
+        "@cspell/dict-id-id": "1.0.9 (installed, not exercised: no Indonesian fixture)",
+        "bundled with cspell (used here)": "@cspell/dict-en_us 4.4.43 MIT, @cspell/dict-en-gb-mit 3.1.32 MIT, dict-html/css/software-terms/companies etc. MIT, dict-en-common-misspellings CC BY-SA 4.0, dict-django WTFPL",
+        "node": "22.22.0 (cspell engines: node >=22.18.0)"
+      },
+      "licences": {
+        "cspell": "MIT",
+        "@cspell/dict-es-es": "LGPL-3.0 (Hunspell-derived; used unmodified as a dependency: fine)",
+        "@cspell/dict-pt-br": "GPL-3.0-or-later (COPYLEFT FLAG; Hunspell-derived dictionary data). Alternative: @cspell/dict-pt-pt 3.0.8 is LGPL-3.0",
+        "@cspell/dict-fr-fr": "MIT (package.json); README points to the Hunspell French dictionaries README for the source data licence",
+        "@cspell/dict-de-de": "LGPL-3.0 (Hunspell-derived; unmodified dependency: fine)",
+        "@cspell/dict-ru_ru": "GPL-3.0-or-later (COPYLEFT FLAG; combined Russian Hunspell + AOT sources, see LICENSE.russian-aot.txt)",
+        "@cspell/dict-uk-ua": "GPL-3.0 (COPYLEFT FLAG; Hunspell-derived)",
+        "@cspell/dict-id-id": "LGPL-3.0-only (Hunspell-derived from shuLhan/hunspell-id; unmodified dependency: fine)",
+        "copyleft_note": "pt-br, ru_ru and uk-ua are GPL-3 dictionary DATA loaded by a dev-time CLI; nothing is linked into or shipped with the themes/sites. Keep them as devDependencies and do not redistribute the trie files. If the team wants zero GPL, swap pt-br for pt-pt (LGPL) and accept weaker/no coverage for ru/uk, or source other data."
+      },
+      "install": {
+        "command": "npm i --no-audit --no-fund cspell@10.4.0 @cspell/dict-es-es@3.0.9 @cspell/dict-pt-br@2.4.4 @cspell/dict-fr-fr@2.3.2 @cspell/dict-de-de@4.1.3 @cspell/dict-ru_ru@2.3.4 @cspell/dict-uk-ua@4.0.7 @cspell/dict-id-id@1.0.9",
+        "seconds": 5.82,
+        "size_mb": 29,
+        "packages_added": 115,
+        "windows": "yes - pure JavaScript: no *.node binaries anywhere in node_modules, no os/cpu/optionalDependencies fields in cspell's package.json, bin is bin.mjs run by Node; cspell is widely used on Windows (VS Code Code Spell Checker shares the engine). Requires Node >=22.18.0 (team has 22.22.0).",
+        "setup_complexity": "one npm line + one cspell.json with per-file overrides + a words.txt; no network at runtime"
+      },
+      "fixtures": "fixtures/08-cspell/: 6 SRT explainer narrations (thermos-en/es/pt/uk, switch-fr/de; 12 cues each) + 4 HTML product pages (site-en/de/es/ru); 12 seeded typos T1-T12 in KEY.json (transposed letters, letter substitution, doubled letters, missing accent, wrong Cyrillic letter, split words incl. one split into two real words); controls with 0 seeded typos: switch-fr.srt, site-de.html, site-es.html. Clean text carries Thermoflask, Kailh, Cherry MX, gf, oklch, WebGL, Anatomy of Things and SKUs KBOX-RED-0065-A2 / CMXR-0045-TYPE1 / TFLK-0500-SCHW. Generated by fixtures/08-cspell/gen.mjs (typos applied by exact single replacement so KEY line/cue numbers are exact).",
+      "baseline": {
+        "what": "Nothing automated today (manual proofreading). runs/08-cspell/baseline.sh reproduces the 0/12 result.",
+        "command": "runs/08-cspell/baseline.sh",
+        "recall": "0/12",
+        "false_positives": 0,
+        "runtime_s": 0.01
+      },
+      "candidate_default": {
+        "config": "runs/08-cspell/config-default/cspell.json: language en, imports the 7 dictionary cspell-ext.json files, enableFiletypes srt, overrides map *-xx.{srt,html} -> single locale xx. No project word list, no ignore patterns.",
+        "commands": [
+          "cd fixtures/08-cspell && cspell --no-progress --no-color --config ../../runs/08-cspell/config-default/cspell.json \"**/*.{srt,html}\"  (exit 1, 54 issues in 10 files)"
+        ],
+        "found": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true,
+          "T5": true,
+          "T6": true,
+          "T7": true,
+          "T8": true,
+          "T9": true,
+          "T10": true,
+          "T11": true,
+          "T12": false
+        },
+        "recall": "11/12",
+        "false_positives": 15,
+        "false_positives_breakdown": {
+          "brand/proper noun (Thermoflask, Kailh, Anatomy)": 10,
+          "SKU token (TFLK, KBOX)": 2,
+          "real dictionary gap (English CSS class 'hero' and 'demo' in de/es pages, i.e. English tokens in a non-English file)": 3
+        },
+        "extra_findings_on_seeded": 26,
+        "extra_findings_breakdown": {
+          "brand/proper noun (Kailh, Thermoflask, Anatomy, Cherry)": 17,
+          "SKU token (KBOX, CMXR)": 3,
+          "real dictionary gap": 6,
+          "real_gap_words": "Colours, neighbours (en-US dict only; en-GB spellings), hero, demo (English tokens in ru page), Grammkraft, Klickleiste (German compounds absent from de-de)"
+        },
+        "total_flags": 54,
+        "suggestions": "cspell printed a fix only for vaccum->vacuum and swtich->switch (common-misspellings list); no suggestions for the other 9 found typos in default output (--show-suggestions not used)",
+        "runtime_s": 14.1,
+        "runtime_note": "3 runs: 10.7 / 14.1 / 18.7 s for 10 small files; load average 9-10 on 4 shared vCPU, so heavily noisy. cspell --version alone 0.6 s; a single en file 2.7 s, a single uk file 3.3 s: dictionary loading (uk_ua.trie is 4.4 MB uncompressed) dominates."
+      },
+      "candidate_tuned": {
+        "config": "runs/08-cspell/config-tuned/cspell.json + cspell-words.txt. Changes and why: (1) project word list (Thermoflask, Kailh, Cherry, Anatomy, oklch, WebGL, Grammkraft) removes the brand/jargon flags; (2) ignoreRegExpList with patterns for SRT timestamps and SKU codes ([A-Z]{3,5}(-[A-Z0-9]{2,6}){2,}) removes the SKU tokens; (3) minWordLength 4 (explicit default; 5 was tried, see do_not_adopt_notes); (4) per-file language set to 'xx,en' (and 'en,en-GB' for English) so English CSS class names / shared jargon in non-English pages and British spellings pass.",
+        "commands": [
+          "cd fixtures/08-cspell && cspell --no-progress --no-color --config ../../runs/08-cspell/config-tuned/cspell.json \"**/*.{srt,html}\"  (exit 1, 14 issues in 7 files)"
+        ],
+        "found": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true,
+          "T5": true,
+          "T6": true,
+          "T7": true,
+          "T8": true,
+          "T9": true,
+          "T10": true,
+          "T11": true,
+          "T12": false
+        },
+        "recall": "11/12",
+        "false_positives": 0,
+        "extra_findings_on_seeded": 1,
+        "extra_findings_breakdown": {
+          "real dictionary gap": 1,
+          "words": "Klickleiste (German compound 'click bar', absent from de-de; a genuine word)"
+        },
+        "total_flags": 14,
+        "runtime_s": 9.5,
+        "runtime_note": "3 runs: 10.6 / 9.5 / 8.3 s under the same shared-CPU load; not meaningfully different from default (same dictionaries loaded)."
+      },
+      "languages_coverage": {
+        "en": "good; en-US only by default: Colours/neighbours flagged until en-GB added (bundled MIT en-GB dictionary)",
+        "es": "no gaps on 12 cues + 1 page (accented and unaccented forms handled; missing accent 'tecnica' correctly flagged)",
+        "pt (pt-BR)": "no gaps on 12 cues; transposition caught",
+        "fr": "no gaps on 12 cues incl. elided forms (l'interrupteur, d'actionnement), cœur, à-coups",
+        "de": "WEAKEST: compound nouns are hit-and-miss. Kunststoffgehäuse, Metallblättchen, Betätigungskraft, Auslösepunkt, Kreuzstößel, Tastenkappe passed; Grammkraft and Klickleiste were flagged. Expect a steady trickle of compound false positives in German copy; the word list absorbs them.",
+        "uk": "no gaps on 12 cues; the wrong Cyrillic letter (Russian ы) was caught; dictionary is the largest (4.4 MB trie) and the slowest to load",
+        "ru": "no gaps on 1 page; both seeded errors caught",
+        "id": "installed only (LGPL), no fixture; not measured",
+        "ja, hi": "skipped per the team's brief; cspell has no official dictionaries for them anyway"
+      },
+      "limits": [
+        "T12 'key board' (a word split into two real words) is undetectable by any dictionary checker; real-word errors (form/from, their/there) are out of scope. Max achievable recall on this key is 11/12.",
+        "Dual-locale tuning ('es,en' etc.) measurably masks typos that happen to be English words: probe 'cobre'->'cover' in thermos-es.srt is flagged by the single-locale default config and NOT flagged by the tuned config. Trade-off: fewer false positives on code tokens vs. a blind spot for English-shaped typos. Alternative is single locale + a bigger word list.",
+        "German compound coverage is incomplete (Grammkraft, Klickleiste flagged); the word list will grow with German copy.",
+        "Runtime is 8-19 s per run on this loaded box (mostly dictionary load, ~2.5-3.5 s even for one file); fine for a pre-commit/CI check, too slow for an on-save loop. --cache would skip unchanged files but not the dictionary load.",
+        "Three of the seven language dictionaries are GPL-3 (pt-br, ru_ru, uk-ua): dev-tool data only, keep as devDependencies, do not vendor the trie files into the sites.",
+        "cspell exits 1 for configuration errors just like for findings ('Configuration Error' on stderr); the wrapper detects this (stderr 'Error' or 'Files checked: 0') and returns 2, so a broken config cannot pass as clean.",
+        "JSON output needs the separate package @cspell/cspell-json-reporter (not installed); the wrapper parses the stable 'file:line:col - Unknown word (w)' text format instead.",
+        "Suggestions are only printed for words in the common-misspellings list by default (2 of 11); --show-suggestions costs extra time and was not measured.",
+        "Sample is small (12 cues per language, one page each); coverage statements are indicative, not statistical.",
+        "cspell has no built-in SRT language id; 'enableFiletypes: [srt]' is needed so **/*.srt is checked as plain text (timestamps are digits and were never flagged even without the ignore pattern)."
+      ],
+      "verdict": "ADOPT",
+      "reason": "Today 0/12 typos are caught automatically; cspell 10.4.0 catches 11/12 (the 12th is a real-word split no dictionary can see) in all six languages tested, including a missing Spanish accent, a wrong Cyrillic letter in Ukrainian and two Russian errors. Defaults flag 41 non-typos (mostly brand names and SKUs); the tuned config with a 7-line word list and two ignore patterns brings that to 0 false positives on the 3 controls and 1 genuine dictionary gap (German compound). Cost: 5.8 s / 29 MB install, pure Node (Windows yes), ~9-14 s per run on this loaded box; three GPL-3 dictionaries (pt-br, ru, uk) stay dev-only.",
+      "wrapper": "runs/08-cspell/wrapper-sketch.mjs",
+      "wrapper_tests": {
+        "clean (3 controls)": "exit 0, files_checked 3, count 0 -> runs/08-cspell/wrapper-clean.json",
+        "seeded (all 10 files)": "exit 1, files_checked 10, count 14 (11 typos, 13 tokens, + Klickleiste) -> runs/08-cspell/wrapper-seeded.json",
+        "bad --config path": "exit 2 (Configuration Error passed through)",
+        "glob matching no files": "exit 2 (Files checked: 0)",
+        "cspell not installed in cwd": "exit 2"
+      },
+      "do_not_adopt_notes": [
+        "minWordLength 5 (tried, not adopted): drops the 'actu' half of T9 and the 'ento' half of T4 (both still caught via the other half) and would hide genuine 4-letter typos; it removed nothing the word list / SKU pattern did not already remove.",
+        "Dual-locale 'xx,en' overrides (adopted in tuned, with the measured blind spot above): if the team prefers strictness, use single locale and add class names (hero, demo) to the word list instead.",
+        "@cspell/dict-ru-ru as named in the brief does not exist on npm (404); the correct package is @cspell/dict-ru_ru.",
+        "Installing all 7 dictionaries loads ~29 MB and costs ~2-3 s startup per run; only import the locales actually used in a given repo.",
+        "Nothing failed or was unsafe; no network access is needed at runtime."
+      ]
+    },
+    {
+      "id": 9,
+      "tool": "osv-scanner (Google) offline mode vs npm audit",
+      "versions": {
+        "osv-scanner": "2.7.0 (osv-scalibr 0.5.3, module v2.7.0 tagged 2026-10-12)",
+        "npm": "10.9.4",
+        "node": "22.22.0",
+        "go": "1.24.7 (build only)",
+        "osv_offline_db": "npm all.zip 219 MB + PyPI all.zip, downloaded 2026-10-29 from osv-vulnerabilities.storage.googleapis.com"
+      },
+      "licences": {
+        "osv-scanner": "Apache-2.0 (LICENSE in module root; no copyleft)",
+        "npm audit": "part of npm (Artistic-2.0), already installed",
+        "vulnerability data": "OSV/GHSA advisories, CC-BY 4.0"
+      },
+      "install": {
+        "command": "GOBIN=<tools2/09-osv> go install github.com/google/osv-scanner/v2/cmd/osv-scanner@v2.7.0",
+        "seconds": 151.2,
+        "size_mb": 79,
+        "offline_db_cache_mb": 245,
+        "note": "GitHub releases are blocked here, so built from source via proxy.golang.org (151 s, needs Go). Normal install is a prebuilt release binary (seconds). First offline scan also downloads the per-ecosystem OSV database (npm 219 MB, PyPI ~35 MB) into ~/.cache/osv-scalibr; re-download on each run with --download-offline-databases (it re-fetches, ~8 s extra here) or run with --offline only to use the cache.",
+        "windows": "yes - .goreleaser.yml in the v2.7.0 module lists goos windows/amd64 (release asset osv-scanner_windows_amd64.zip); single static Go binary, no runtime deps. Not executed on Windows here (release download blocked)."
+      },
+      "fixtures": "fixtures/09-osv/: node-vuln/ (package.json + real lockfile v3, 29 packages: seeded V1 lodash@4.17.20, V2 minimist@1.2.5, V3 node-fetch@2.6.6, V4 semver@7.3.7 + clean controls picocolors@1.1.1, nanoid@6.0.2, fast-glob@3.3.3); node-clean/ (6 clean pins incl. lodash@4.18.1, minimist@1.2.8, semver@7.8.5; 23 packages); py-vuln/requirements.txt (P1 requests==2.25.1, P2 pyyaml==5.3.1 + click==8.5.0, idna==3.20, urllib3==2.8.0); py-clean/requirements.txt (all current). gen-lockfiles.sh regenerates lockfiles. KEY.json lists expected ids (author's knowledge, marked expected).",
+      "baseline": {
+        "what": "Today: none (no vulnerability scanning) -> 0/6 by definition. Also measured the obvious free alternative npm audit (npm 10.9.4, registry bulk advisories endpoint reachable).",
+        "command": "cd fixtures/09-osv/node-vuln && npm audit --json   (tuned: npm audit --audit-level=high --json)",
+        "recall": "0/6 (none today); npm audit: 4/4 Node, 0/2 Python = 4/6",
+        "false_positives": 0,
+        "runtime_s": 0.5,
+        "npm_audit": {
+          "found": {
+            "V1": "GHSA-35jh-r3h4-6jhm (CVE-2021-23337) + 4 more lodash advisories",
+            "V2": "GHSA-xvch-5gv4-984h (CVE-2021-44906) critical",
+            "V3": "GHSA-r683-j2x4-v87g (CVE-2022-0235) high",
+            "V4": "GHSA-c2qf-rxjj-qqgw (CVE-2022-25883) high",
+            "P1": false,
+            "P2": false
+          },
+          "recall_node": "4/4",
+          "recall_python": "0/2 (ENOLOCK: 'This command requires an existing lockfile' - npm audit cannot read requirements.txt)",
+          "false_positives_on_controls": 0,
+          "node_clean_exit": 0,
+          "extra_advisories_on_seeded_packages": 4,
+          "extra_findings_on_transitive_deps": 0,
+          "runtime_s": {
+            "vuln_default": 0.65,
+            "clean_default": 0.53,
+            "vuln_high": 0.5,
+            "clean_high": 0.46
+          },
+          "tuned": "--audit-level=high --json: identical findings here (all 4 are high/critical; the moderate lodash advisories are still listed inside the lodash entry but do not change the exit code)",
+          "exit_codes": "1 on findings at/above level, 0 clean",
+          "install": "none (ships with npm)",
+          "windows": "yes (npm itself)"
+        }
+      },
+      "candidate_default": {
+        "config": "osv-scanner scan source --offline --download-offline-databases --format json -r <dir>  (online mode is impossible here: api.osv.dev blocked)",
+        "commands": [
+          "osv-scanner scan source --offline --download-offline-databases --format json -r fixtures/09-osv/node-vuln",
+          "osv-scanner scan source --offline --format json -r fixtures/09-osv/node-vuln",
+          "osv-scanner scan source --offline --download-offline-databases --format json -r fixtures/09-osv/node-clean",
+          "osv-scanner scan source --offline --download-offline-databases --format json -r fixtures/09-osv/py-vuln",
+          "osv-scanner scan source --offline --download-offline-databases --format json -r fixtures/09-osv/py-clean",
+          "osv-scanner scan source --offline --format json -r fixtures/09-osv"
+        ],
+        "found": {
+          "V1": true,
+          "V2": true,
+          "V3": true,
+          "V4": true,
+          "P1": true,
+          "P2": true
+        },
+        "reported_ids": {
+          "V1": [
+            "GHSA-35jh-r3h4-6jhm/CVE-2021-23337 (expected)",
+            "GHSA-29mw-wpgm-hmr9/CVE-2020-28500",
+            "GHSA-f23m-r3pf-42rh/CVE-2026-2950",
+            "GHSA-r5fr-rjxr-66jc/CVE-2026-4800",
+            "GHSA-xxjr-mmjv-4gpg/CVE-2025-13465"
+          ],
+          "V2": [
+            "GHSA-xvch-5gv4-984h/CVE-2021-44906 (expected)"
+          ],
+          "V3": [
+            "GHSA-r683-j2x4-v87g/CVE-2022-0235 (expected)"
+          ],
+          "V4": [
+            "GHSA-c2qf-rxjj-qqgw/CVE-2022-25883 (expected)"
+          ],
+          "P1": [
+            "PYSEC-2023-74 + GHSA-j8r2-6x86-q33q/CVE-2023-32681 (expected)",
+            "GHSA-9hjg-9r4m-mvj7/CVE-2024-47081",
+            "GHSA-9wx4-h78v-vm56/CVE-2024-35195",
+            "GHSA-gc5v-m9x4-r6x2/CVE-2026-25645 (each also as a PYSEC-2026-* duplicate)"
+          ],
+          "P2": [
+            "PYSEC-2021-142 + GHSA-8q59-q68h-6hv4/CVE-2020-14343 (expected)"
+          ]
+        },
+        "recall": "6/6 (Node 4/4, Python 2/2)",
+        "false_positives": 0,
+        "controls_detail": "node-clean: 0 findings, exit 0; py-clean: 0 findings, exit 0; in-file controls picocolors/nanoid/fast-glob/click/idna/urllib3: not flagged",
+        "extra_findings_on_seeded": 7,
+        "extra_findings_detail": "4 extra lodash advisories + 3 extra requests advisories: all real, newer advisories on the same seeded packages (same 4 lodash extras as npm audit). Python output lists each advisory twice (PYSEC-* and GHSA-* records are both emitted, cross-aliased) -> 8 vulnerability entries for 4 distinct requests issues. 0 findings on transitive deps (whatwg-url/tr46/webidl-conversions/lru-cache/yallist all clean).",
+        "runtime_s": {
+          "node_vuln_first_run_with_db_download": 20.2,
+          "node_vuln_cached": [
+            12,
+            11.4,
+            12.9,
+            14.2
+          ],
+          "node_clean": 10.6,
+          "py_vuln": 4.3,
+          "py_clean": 2.5,
+          "all_four_fixtures_one_run": 18.1,
+          "note": "~10-14 s per Node scan is dominated by loading the 219 MB npm all.zip; shared 4-vCPU box, other trials running"
+        },
+        "online_mode": "NOT MEASURED - exit 127 after 20.9 s (4 retries): Error during extraction: (extracting as vulnmatch/osvdev) max retries exceeded: attempt 4: request failed: Post \"https://api.osv.dev/v1/querybatch\": Forbidden",
+        "exit_codes": "0 clean, 1 vulns found, 127 tool/network error (also 128 'no packages found')"
+      },
+      "candidate_tuned": {
+        "config": "fixtures/09-osv/tuned/osv-scanner.toml: [[IgnoredVulns]] id=GHSA-c2qf-rxjj-qqgw, ignoreUntil=2027-01-01, reason='semver ReDoS only on trusted hard-coded version strings' (osv-scanner auto-loads osv-scanner.toml next to a lockfile, or pass --config); plus --format json. Why: shows the per-advisory suppression with a documented reason and expiry, the one thing npm audit has no equivalent for (npm audit has no ignore list without a third-party wrapper like better-npm-audit).",
+        "commands": [
+          "osv-scanner scan source --offline --format json --config fixtures/09-osv/tuned/osv-scanner.toml -r fixtures/09-osv/node-vuln",
+          "osv-scanner scan source --offline --format json --config fixtures/09-osv/tuned/osv-scanner.toml -r fixtures/09-osv/node-clean"
+        ],
+        "found": {
+          "V1": true,
+          "V2": true,
+          "V3": true,
+          "V4": "suppressed by config as intended (GHSA-c2qf-rxjj-qqgw ignored)",
+          "P1": "n/a (Node-only run)",
+          "P2": "n/a"
+        },
+        "recall": "3/4 Node by design (V4 deliberately ignored); 4/4 if the ignore is not counted as a miss",
+        "false_positives": 0,
+        "extra_findings_on_seeded": 4,
+        "runtime_s": {
+          "node_vuln": 21.1,
+          "node_clean": 17.7,
+          "note": "slower than the default runs purely from CPU contention at that moment, not from the config"
+        }
+      },
+      "limits": [
+        "api.osv.dev is blocked by this egress proxy, so only offline mode was measurable; offline mode needs ~245 MB of DB zips in ~/.cache/osv-scalibr and ~10-14 s to load the npm DB per run (npm audit: 0.5 s, no cache). On the team's own machines the online mode (no cache, faster) is the normal path.",
+        "osv-scanner built from source here (151 s, Go toolchain) because GitHub releases are blocked; the real install is a ~30 MB prebuilt binary per OS, incl. Windows amd64.",
+        "npm audit cannot read requirements.txt (ENOLOCK) - Python coverage is the only recall difference between the two tools on these fixtures.",
+        "osv-scanner on a bare requirements.txt checks only the pinned direct deps (no transitive resolution for Python); a Node lockfile is scanned fully (all 29 packages).",
+        "Python findings are double-counted in osv-scanner JSON (PYSEC-* and GHSA-* records for the same CVE); a wrapper should dedupe by alias.",
+        "Both tools flag the same 5 lodash advisories; 3 of them (2025/2026 ids) have fixes only in lodash 4.17.23+/4.18.x - i.e. advisory data is live and the controls had to be re-pinned to today's latest to stay clean.",
+        "composer.lock (their WordPress PHP themes) is supported by osv-scanner but was not fixtured or measured here.",
+        "Runtimes are from a shared 4-vCPU box with other trials running (noise of several seconds)."
+      ],
+      "verdict": "WATCH",
+      "reason": "osv-scanner offline found 6/6 seeded (Node 4/4 + Python 2/2) with 0 false positives on 11 controls, but on Node it reports exactly the same advisory set as the free, already-installed npm audit (4/4, 0 FP, 0.5 s vs 10-14 s and 79 MB binary + 245 MB DB cache). Its only measured gain is requirements.txt coverage (2/2 vs 0/2) plus a documented per-advisory ignore list; the online mode could not be measured (api.osv.dev Forbidden). Adopt `npm audit --audit-level=high --json` today at zero cost; promote osv-scanner to ADOPT only if Python (or composer.lock) dependencies are actually part of the repos that get checked.",
+      "wrapper": "runs/09-osv/wrapper-sketch.mjs",
+      "wrapper_tests": {
+        "osv node-vuln": 1,
+        "osv node-clean": 0,
+        "osv py-vuln": 1,
+        "osv py-clean": 0,
+        "npm-fallback node-vuln": 1,
+        "npm-fallback node-clean": 0,
+        "npm-fallback py-vuln": "2 (no lockfile; npm audit cannot scan requirements.txt)"
+      },
+      "do_not_adopt_notes": [
+        "osv-scanner online mode: not measured, api.osv.dev returns 403 Forbidden through the egress proxy (exit 127 after 4 retries / 20.9 s).",
+        "No gain over npm audit on Node lockfiles: identical 4/4 recall, identical 8 advisory ids, identical 0 FP; 20-30x slower in offline mode and ~325 MB footprint vs 0.",
+        "go install of the 79 MB binary took 151 s; on the team's machines use the release binary instead (GitHub releases were blocked here so that path is untested).",
+        "osv-scanner JSON double-lists Python advisories (PYSEC + GHSA); counts need dedupe by alias in any wrapper."
+      ]
+    },
+    {
+      "id": 10,
+      "tool": "Playwright screenshot diff: playwright-core + pixelmatch (and odiff-bin) as before/after visual regression",
+      "versions": {
+        "playwright-core": "1.64.1",
+        "pixelmatch": "8.0.0",
+        "pngjs": "7.0.0",
+        "odiff-bin": "4.5.0 (@odiff/linux-x64 4.5.0)",
+        "chromium": "/opt/pw-browsers/chromium-1194 (Playwright build 1194)",
+        "node": "22.22.0"
+      },
+      "licences": {
+        "playwright-core": "Apache-2.0",
+        "pixelmatch": "ISC",
+        "pngjs": "MIT",
+        "odiff-bin": "MIT",
+        "@odiff/linux-x64": "MIT",
+        "copyleft_flags": "none"
+      },
+      "install": {
+        "command": "npm i playwright-core@1.64.1 pixelmatch@8.0.0 pngjs@7.0.0 && npm i odiff-bin@4.5.0",
+        "seconds": 6.8,
+        "seconds_detail": {
+          "playwright-core+pixelmatch+pngjs": 3.9,
+          "odiff-bin": 2.9
+        },
+        "size_mb": 18,
+        "size_detail_mb": {
+          "playwright-core": 14,
+          "pngjs": 0.7,
+          "pixelmatch": 0.06,
+          "odiff-bin+@odiff/linux-x64": 3.3,
+          "chromium_not_counted": "browser binary is already on the box; a fresh machine needs `npx playwright install chromium` (~150 MB download from a CDN, blocked here, not measured)"
+        },
+        "windows": "yes - playwright-core, pixelmatch, pngjs are pure Node (Playwright ships Windows Chromium builds); odiff-bin 4.5.0 lists optionalDependencies @odiff/win32-x64 and @odiff/win32-arm64 (4.5.0) in its package.json, so npm picks the Windows binary automatically"
+      },
+      "fixtures": "fixtures/10-visual/: generate.mjs writes shared/site.css (design tokens) + before/{U1..U4,C1,C2}.html and after/*.html (review-site page: header, hero, 3 product cards with badges, price table, footer). U1 2px margin shift, U2 --accent #0b4f9c->#0b4fa0, U3 card-2 badge display:none, U4 body font Inter->Arial (Liberation Sans; 'Segoe UI' is aliased to Inter by fontconfig here so the brief's suggested stack gave a 0-px diff - documented in KEY.json). Controls: C1 identical + JS timestamp/random visitors in [data-dynamic]; C2 identical + hero paragraph translateX(0 vs 0.4px) so only glyph anti-aliasing differs. Each pair at 390 and 1280 px. KEY.json lists all.",
+      "baseline": {
+        "what": "manual screenshots: baseline.mjs captures before/after full-page PNGs and a side-by-side PNG per pair/width; a human eyeballs them. Recall per the brief's premise is 0/4 (nobody can see a 4/255 colour change or a 2px shift by eye; U3/U4 might be noticed by a careful reviewer, not measured).",
+        "command": "node runs/10-visual/baseline.mjs",
+        "recall": "0/4",
+        "false_positives": 0,
+        "runtime_s": 21.5,
+        "runtime_note": "capture only, 12 screenshot pairs; human review time not measured"
+      },
+      "candidate_default": {
+        "config": "playwright-core page.screenshot({fullPage:true}) with viewport width 390/1280, default context (deviceScaleFactor 1, animations on, no font wait, no mask); pixelmatch(threshold 0.1, includeAA default=false). DOCS CHECK: pixelmatch README/JSDoc: 'includeAA — If true, disables detecting and ignoring anti-aliased pixels. false by default' => by default AA pixels ARE detected and ignored. Threshold in 8.0.0 is max OKLab HyAB distance (1 = black vs white). Images of different height (U1) are padded with white before comparing (pixelmatch itself throws on size mismatch).",
+        "commands": [
+          "node runs/10-visual/run.mjs default 0.1",
+          "node runs/10-visual/compare.mjs default"
+        ],
+        "found": {
+          "U1": true,
+          "U2": false,
+          "U3": true,
+          "U4": true
+        },
+        "detail": {
+          "U1": "diff 13178 px (1.45%) @390, 20055 px (1.23%) @1280; bbox x0 y1558 390x742 / x0 y815 1280x423; size mismatch 2331->2333 / 1267->1269",
+          "U2": "0 px at threshold 0.1 (also 0 with includeAA:true and at 0.05, 0.02); 65 px at 0.01; 34985 px (3.9%) / 91357 px (5.6%) only at threshold 0.005",
+          "U3": "1527 px (0.168%) bbox x38 y843 76x26 @390; 1575 px (0.097%) bbox x483 y447 77x26 @1280",
+          "U4": "28909 px (3.18%) bbox 341x2274 @390; 34607 px (2.13%) bbox 1071x1212 @1280",
+          "C1": "FALSE POSITIVE: 371 px (0.04%) @390, 1030 px (0.06%) @1280 in the dynamic status bar (no mask)",
+          "C2": "FALSE POSITIVE: 2564 px (0.28%) @390, 2733 px (0.17%) @1280 - pixelmatch's AA detection does not absorb a 0.4px sub-pixel text shift (includeAA:true gives 3155/3119)"
+        },
+        "recall": "3/4",
+        "false_positives": 2,
+        "false_positives_note": "both controls, at both widths (4/4 control screenshots flagged)",
+        "extra_findings_on_seeded": 0,
+        "runtime_s": 12.5,
+        "runtime_per_pair_s": "0.6-1.4 per pair+width (both screenshots + compare), ~1.7 per pair at two widths; 12.5 s wall for 6 pairs x 2 widths incl. browser launch; pixelmatch compare alone 0.15-0.45 s per 1280x1267 (incl. PNG decode, 3 passes)"
+      },
+      "candidate_tuned": {
+        "config": "Capture: newContext({viewport:{width,height:800}, deviceScaleFactor:1, reducedMotion:'reduce'}), goto(load), await document.fonts.ready, inject caret-color:transparent, screenshot({fullPage:true, animations:'disabled', mask:[page.locator('[data-dynamic]')], maskColor:'#FF00FF'}). Compare, two rules: (A) pixelmatch threshold 0.3 (includeAA false), FAIL if diffPixels > 20 (max-pixels allowance for stray sub-pixel AA noise; C2 leaves 5-7 px); (B) 'solid block' rule: pixelmatch threshold 0.005 with windowSize 16, FAIL if the max window count == 256 (a fully changed 16x16 block = a solid fill changed colour, which scattered AA noise never produces: C2 max 134, U2 256). Why: a single threshold cannot do both - U2 needs <= 0.005 where C2 produces 4763 px, and C2 needs >= 0.3 where U2 is invisible. Rule B is admittedly tuned on these fixtures (it only catches changes to solid areas >= 16x16 px; a 4/255 change on thin text or 1px borders would still be missed).",
+        "commands": [
+          "node runs/10-visual/run.mjs tuned 0.3",
+          "node runs/10-visual/compare.mjs tuned",
+          "node runs/10-visual/windowcheck.mjs",
+          "node runs/10-visual/wrapper-sketch.mjs <before> <after> --chrome /opt/pw-browsers/chromium-1194/chrome-linux/chrome"
+        ],
+        "found": {
+          "U1": true,
+          "U2": true,
+          "U3": true,
+          "U4": true
+        },
+        "detail": {
+          "U1": "rule A: 7159 px (0.79%) @390 bbox x24 y1558 337x742; 7149 px (0.44%) @1280 bbox x105 y815 1058x423",
+          "U2": "rule A: 0 px (threshold 0.3 blind to it); rule B: full 16x16 block at threshold 0.005 => flagged; drawn bbox 390x1216 / 1280x473 (header+hero+cards region)",
+          "U3": "rule A: 1498 px (0.165%) bbox x38 y843 76x26; 1534 px (0.095%) bbox x483 y447 77x26",
+          "U4": "rule A: 20884 px (2.30%) bbox 341x2274; 26500 px (1.63%) bbox 1071x1212",
+          "C1": "0 px at every threshold (mask covers the dynamic bar) => 0 reported",
+          "C2": "5 px @390 / 7 px @1280 at threshold 0.3 (<= 20 allowance), solid-block max 134/132 (< 256) => 0 reported"
+        },
+        "recall": "4/4",
+        "recall_single_threshold_only": "3/4 with rule A alone (U2 missed); U2 is a 4/255 blue-channel change, OKLab distance ~0.006, below any perceptual threshold",
+        "false_positives": 0,
+        "extra_findings_on_seeded": 0,
+        "runtime_s": 19.2,
+        "runtime_per_pair_s": "1.0-2.2 per pair+width (fonts wait + mask + 2 extra pixelmatch passes), ~2.9 per pair at two widths; 19.2 s wall for 12 pair-widths. Shared-CPU noise: other trials ran concurrently.",
+        "wrapper_exit_codes": {
+          "C1": 0,
+          "C2": 0,
+          "U1": 1,
+          "U2": 1,
+          "U3": 1,
+          "U4": 1,
+          "missing_file": 2
+        }
+      },
+      "odiff": {
+        "what": "odiff-bin 4.5.0 CLI run on the same PNGs (runs/10-visual/odiff-results.txt). Defaults: threshold 0.1 (YIQ), antialiasing NOT ignored unless --aa; exit 22 on any differing pixel; handles different image heights without --fail-on-layout.",
+        "defaults_on_default_shots": {
+          "U1": "21014 px 2.31% @390",
+          "U2": "0 (missed)",
+          "U3": "1763 px 0.19%",
+          "U4": "47881 px 5.27%",
+          "C1": "554 px FP",
+          "C2": "3123 px FP"
+        },
+        "aa_flag_on_tuned_shots": {
+          "U1": "11902 px 1.31%",
+          "U2": "0 (missed)",
+          "U3": "1528 px 0.17%",
+          "U4": "25900 px 2.85%",
+          "C1": "0",
+          "C2": "2549 px 0.28% FP - --aa does not absorb the sub-pixel shift either"
+        },
+        "t0.005": "U2 35152 px 3.87% / 91576 px 5.65% (caught) but C2 5806 px (FP) - same trade-off as pixelmatch",
+        "runtime_s_per_compare": "0.05-0.19 (vs pixelmatch ~0.15-0.45 incl. decode); no built-in pixel-count allowance, no windowSize, ignore regions only by pixel coordinates, so the 2-rule tuned config cannot be expressed; exit code is binary",
+        "recall_defaults": "3/4, false_positives 2 (both controls)",
+        "windows": "yes - @odiff/win32-x64 + @odiff/win32-arm64 optional deps"
+      },
+      "limits": [
+        "A 4/255 colour-token change (U2) is below the default perceptual threshold of both pixelmatch (0.1) and odiff (0.1); catching it needs threshold <= 0.005, at which sub-pixel text AA noise (C2) produces ~4800 px. The 'solid 16x16 block' rule separates them here but only for changes to solid areas >= 16 px; thin UI (borders, text in the accent colour) with the same change would still pass.",
+        "pixelmatch's built-in anti-aliasing detection does not neutralise a sub-pixel transform (C2 raw 2564-2733 px at 0.1); it takes threshold 0.3 + a 20-px allowance. Threshold 0.3 is lenient: it will also hide moderate colour drift elsewhere (U1/U3/U4 still show 7k/1.5k/21k px, so layout, hidden elements and font changes are safe).",
+        "Dynamic regions must be enumerated as selectors (Playwright mask); the mask box follows the element box, so a masked element whose size depends on the dynamic text needs a fixed size or its container masked (we mask the whole [data-dynamic] bar).",
+        "Full-page screenshots of different height (U1) make pixelmatch throw; the harness/wrapper pads with white. Fixed in-wrapper, but the reported bbox then covers everything below the shift, which is correct but not 'the 2px margin'.",
+        "'Segoe UI' resolves to Inter via fontconfig on this Linux box; cross-OS font metrics differ, so baselines must be captured on the same OS/browser build as the check (Windows vs Linux screenshots will never match).",
+        "Chromium download for a fresh machine (`npx playwright install chromium`) goes to a CDN that is blocked here; not measured.",
+        "Runtimes have shared-CPU noise (4 vCPU, concurrent trials)."
+      ],
+      "verdict": "ADOPT",
+      "reason": "Against today's eyeball comparison (0/4), pixelmatch defaults catch 3/4 seeded changes but flag both controls (dynamic text, sub-pixel AA); the tuned capture (mask [data-dynamic], animations off, fonts.ready, dSF 1) plus threshold 0.3 with a 20-px allowance and a 'fully changed 16x16 block at 0.005' rule gives 4/4 with 0 false positives at ~3 s per page pair (two widths). Cost is 18 MB of pure-Node packages (6.8 s install) on top of a Chromium the team already has; odiff is faster per compare (0.05-0.19 s) but cannot express the tuned rules and adds nothing here.",
+      "wrapper": "runs/10-visual/wrapper-sketch.mjs",
+      "do_not_adopt_notes": [
+        "odiff-bin: no gain over pixelmatch for this use (misses U2 at defaults, --aa still flags C2, no pixel allowance/windowed count, exit 22 on 1 px); keep as optional speed-up only if compare time ever matters.",
+        "pixelmatch defaults as-is: 2 false positives on realistic controls; do not use without the mask + threshold/allowance tuning.",
+        "Single-threshold tuned config (0.3, no rule B): 3/4 - misses subtle colour-token drift; acceptable if the team accepts that colour tokens are checked elsewhere (e.g. a CSS token diff).",
+        "Baseline PNGs (12 MB) and default-mode screenshots were deleted after measurement to keep the repo small; `node baseline.mjs` / `node run.mjs default 0.1` regenerate them in <30 s. diffs/{default,tuned}/*.png (diffMask PNGs, 384 KB) and shots/tuned are kept."
+      ]
+    },
+    {
+      "id": 11,
+      "tool": "performance-optimization skill (addyosmani/agent-skills, skills/performance-optimization/SKILL.md)",
+      "versions": {
+        "skill": "main @ 2026-10-29 (16,698 B; sha256 in fixtures/skills/SHA256SUMS)",
+        "agent": "Claude Code subagents, same session model in both arms",
+        "harness": "playwright-core 1.64.1, lighthouse 13.6.0 (mobile, simulated throttling, 3 runs, median), Chromium build 1194"
+      },
+      "licences": {
+        "skill": "MIT (fixtures/skills/addyosmani-agent-skills.LICENSE.txt)"
+      },
+      "install": {
+        "command": "copy SKILL.md into .claude/skills/performance-optimization/ (or claude plugin install from the addyosmani marketplace)",
+        "seconds": 0,
+        "size_mb": 0.017,
+        "windows": "n/a (prompt text)"
+      },
+      "fixtures": "fixtures/11-perf: task/ (SoundBench, a self-contained 24-headphone review page, deliberately slow: 2.98 MB unsized hero PNG, 300 KB synchronous analytics bundle whose tiny tq() the table render depends on, 400 ms busy-wait polyfill, 1.5 MB unread inline JSON, 4 TTF @font-faces without font-display, N+1 fetch of 24 product files, 236 KB CSS with 400 unused rules, late-inserted promo banner (CLS 0.23), unsized/unlazy below-fold PNGs; gen/gen.mjs regenerates it), hidden/ (functional.mjs 15 browser checks incl. tie-break sort, brand filter, compare cap 4, banner text; lighthouse.mjs; server.mjs), reference/ (1.0, LH 100, 35 KB), grade.mjs, KEY.md",
+      "design": "Arm A = plain subagent told to make the page fast without breaking features; Arm B = same prompt + 'read fixtures/skills/performance-optimization.SKILL.md first and follow it'. 3 reps per arm, fresh copies. Score = 0.5 × functional (15 checks) + 0.5 × clamp((LH − 17)/(95 − 17)). Untouched task 0.5 (LH 17). Pilot (plain agent) scored 1.0 (LH 100) so the trial sits at the ceiling; it was not hardened further because the slowness is already eight interacting causes with a cross-file trap (removing the analytics bundle breaks the table) and the brief's time box was spent. Secondary metrics kept per run: LH score, LCP, CLS, TBT, transferred bytes. Four of the six arm runs (A-1, B-1, B-2, B-3) were interrupted by an API rate limit and resumed; their usage rows cover the resumed segment only.",
+      "baseline": {
+        "what": "Arm A plain subagent",
+        "runs": 3,
+        "scores": [
+          1,
+          1,
+          1
+        ],
+        "mean_score": 1,
+        "lh": [
+          100,
+          100,
+          100
+        ],
+        "lcp_ms": [
+          1433,
+          1362,
+          1054
+        ],
+        "cls": [
+          0,
+          0,
+          0
+        ],
+        "tbt_ms": [
+          0,
+          0,
+          0
+        ],
+        "transferred_bytes": [
+          386866,
+          350050,
+          1820150
+        ],
+        "mean_tokens": 122697,
+        "mean_tool_uses": 16.67,
+        "mean_seconds": 325
+      },
+      "candidate_default": {
+        "config": "Arm B with the performance-optimization skill",
+        "runs": 3,
+        "scores": [
+          1,
+          1,
+          1
+        ],
+        "mean_score": 1,
+        "lh": [
+          100,
+          100,
+          96
+        ],
+        "lcp_ms": [
+          1129,
+          1361,
+          2783
+        ],
+        "cls": [
+          0,
+          0,
+          0
+        ],
+        "tbt_ms": [
+          0,
+          4,
+          16
+        ],
+        "transferred_bytes": [
+          1822994,
+          1829213,
+          1811182
+        ],
+        "mean_tokens": 138275,
+        "mean_tool_uses": 7,
+        "mean_seconds": 209.1,
+        "delta_vs_A": {
+          "score_points": 0,
+          "tokens_pct": 12.7,
+          "tool_uses_pct": -58,
+          "seconds_pct": -35.7
+        },
+        "observed": "All six runs kept 15/15 features (every run kept a tq() stub or queue, none fell into the analytics trap) and reached LH ≥ 96. Arm B followed the skill visibly: each run measured before and after every change with the README's Lighthouse command and left a PERF.md ledger; B-3 reverted a font-fallback change its own measurement showed made CLS worse. Arm B left the 1.47 MB TTF fonts in place in all three runs (1.81-1.83 MB transferred) because WOFF2 subsetting tooling is absent on this machine; two of three plain runs dropped or replaced the webfont instead (350-387 KB). Tool-call and wall-time means for arm B are post-resume segments and are not comparable to arm A."
+      },
+      "candidate_tuned": {
+        "config": "none",
+        "note": "not run; the skill has no knobs"
+      },
+      "limits": [
+        "Ceiling: 6/6 runs at 1.0; the score cannot separate the arms. The secondary metrics (bytes, LCP) favour arm A on page weight, but by one design choice (fonts), not by method.",
+        "Usage: 4 of 6 runs resumed after a rate limit, so tokens are inflated for both arms (double context) and tool calls/seconds for arm B are truncated; only the direction of the token delta (+13 %) is meaningful.",
+        "n = 3 per arm; Lighthouse is run 3 times per grade with the median taken (all medians equal to all three runs here)."
+      ],
+      "verdict": "REJECT as a default (ceiling, no measurable gain, +13 % tokens); WATCH for the measure-first ledger (PERF.md) if the Owner wants auditable performance work",
+      "reason": "Both arms hit 1.0 in every rep: the plain agent already finds all eight seeded causes and avoids the cross-file trap. The skill's only visible effect is process (per-change measurement and a written ledger), which costs tokens and did not change the outcome; it also made the agent more conservative (fonts kept, 1.8 MB pages vs 0.35-0.39 MB for two plain runs).",
+      "wrapper": null,
+      "do_not_adopt_notes": [
+        "Do not adopt as a default for page-speed fixes; the plain agent is at the ceiling on this task size."
+      ]
+    },
+    {
+      "id": 12,
+      "tool": "frontend-design skill (anthropics/skills, skills/frontend-design/SKILL.md)",
+      "versions": {
+        "skill": "main @ 2026-10-29 (9,390 B; sha256 in fixtures/skills/SHA256SUMS)",
+        "agent": "Claude Code subagents, same session model in both arms",
+        "harness": "playwright-core 1.64.1, axe-core 4.14.0, lighthouse 13.6.0, Chromium build 1194"
+      },
+      "licences": {
+        "skill": "Apache-2.0 (fixtures/skills/anthropics-frontend-design.LICENSE.txt)"
+      },
+      "install": {
+        "command": "claude plugin install frontend-design@claude-plugins-official (or copy SKILL.md)",
+        "seconds": 0,
+        "size_mb": 0.009,
+        "windows": "n/a (prompt text)"
+      },
+      "fixtures": "fixtures/12-frontend-design: task/ (README spec for a 6-product pet-food comparison section: species filter, min/max price, 5 sort keys, compare-up-to-3 with sticky bar; data/products.json; synthetic SVG placeholders; serve.mjs; static-only npm test), hidden/ (tests.mjs 4 static + 23 browser tests at 390 and 1280, harness.mjs, slop-markers.mjs, JUDGE.md, judge-pair.mjs, screenshot.mjs), reference/ (1.0), grade.mjs, KEY.md",
+      "design": "Arm A = plain subagent builds from the spec; Arm B = same prompt + 'read fixtures/skills/frontend-design.SKILL.md first and follow it'. 3 reps per arm, fresh copies. Primary score = 0.6 behaviour + 0.2 axe + 0.2 Lighthouse (script only). Secondary: slop-marker count (script) and a blind pairwise design judge (fixed 3-criterion rubric, random left/right, one fresh judge session per pair, unblinded after all three). Pilot (plain agent) scored 1.0 with 14 slop markers; the task was not hardened further because the score already depends on 27 hidden behaviour/a11y checks and the pilot's weaknesses (slop) are what the skill targets, so the secondary metrics carry the comparison.",
+      "baseline": {
+        "what": "Arm A plain subagent",
+        "runs": 3,
+        "scores": [
+          0.76,
+          1,
+          0.92
+        ],
+        "mean_score": 0.893,
+        "slop_markers": [
+          12,
+          14,
+          7
+        ],
+        "axe_violations": [
+          1,
+          0,
+          2
+        ],
+        "mean_tokens": 92674,
+        "mean_tool_uses": 22.33,
+        "mean_seconds": 327.6,
+        "judge_means": {
+          "clarity": 4.33,
+          "hierarchy": 4,
+          "distinctiveness": 3.67
+        }
+      },
+      "candidate_default": {
+        "config": "Arm B with the frontend-design skill",
+        "runs": 3,
+        "scores": [
+          0.8,
+          1,
+          1
+        ],
+        "mean_score": 0.933,
+        "slop_markers": [
+          0,
+          0,
+          0
+        ],
+        "axe_violations": [
+          0,
+          0,
+          0
+        ],
+        "mean_tokens": 99954,
+        "mean_tool_uses": 26.33,
+        "mean_seconds": 328.9,
+        "judge_means": {
+          "clarity": 4,
+          "hierarchy": 4,
+          "distinctiveness": 4
+        },
+        "judge_preferred": {
+          "A": 1,
+          "B": 2,
+          "tie": 0
+        },
+        "delta_vs_A": {
+          "score_points": 4,
+          "tokens_pct": 7.9,
+          "tool_uses_pct": 17.9,
+          "seconds_pct": 0.4
+        },
+        "observed": "A-1 and B-1 both lost the same 9 filter/sort tests for the same reason: their card CSS sets display on .product-card, which overrides the HTML hidden attribute, so filtered cards stay visible (verified deterministic on regrade; the harness counts visibility, not the attribute). A-1 also had one axe label-content-name-mismatch and 12 slop markers (gradient text, glow stacks); A-3 had 2 axe violations and 7 eyebrow labels. All three B runs: 0 axe violations, 0 slop markers (fontFamilyCount 2 is informational). Judge preferred B in 2 of 3 pairs; the one A win was on hierarchy/clarity, with distinctiveness tied."
+      },
+      "candidate_tuned": {
+        "config": "none",
+        "note": "not run; the skill has no knobs"
+      },
+      "limits": [
+        "n = 3 per arm; the +4 point primary delta rests on one run per arm hitting the same CSS bug, so the primary metric is a tie within noise.",
+        "Slop markers and the judge are secondary metrics designed for this trial (validated on a synthetic sloppy page and on both references), not an external standard.",
+        "Three judge calls by the same model family; blind to arm, but a model judge may share the skill's taste.",
+        "Token counts include each subagent's fixed context; only the A-B difference is meaningful. Wall time has shared-CPU noise (up to 12 concurrent agents)."
+      ],
+      "verdict": "WATCH (adopt for customer-facing UI if the visual signal matters): primary score tied within noise, but 0 slop markers and 0 axe violations in 3/3 skill runs vs 33 markers and 3 violations across the plain runs, judge 2:1 for the skill, at +8 % tokens and +18 % tool calls",
+      "reason": "The functional score does not separate the arms (0.893 vs 0.933, each arm lost one run to the same CSS bug). The scripted secondary metrics do: every plain run shipped generic-AI markers (12, 14, 7) and two of three had axe violations; no skill run had either. Cost is modest (+8 % tokens, +0.4 % time).",
+      "wrapper": null,
+      "do_not_adopt_notes": []
+    },
+    {
+      "id": 13,
+      "tool": "no-ai-design-slop skill (MengTo/Skills, no-ai-design-slop/SKILL.md)",
+      "versions": {
+        "skill": "main @ 2026-10-29 (7,007 B; sha256 in fixtures/skills/SHA256SUMS)",
+        "agent": "Claude Code subagents, same session model in both arms",
+        "harness": "same as trial 12 (playwright-core 1.64.1, axe-core 4.14.0, lighthouse 13.6.0)"
+      },
+      "licences": {
+        "skill": "MIT (fixtures/skills/MengTo-Skills.LICENSE.txt)"
+      },
+      "install": {
+        "command": "copy SKILL.md into .claude/skills/no-ai-design-slop/",
+        "seconds": 0,
+        "size_mb": 0.007,
+        "windows": "n/a (prompt text)"
+      },
+      "fixtures": "fixtures/13-no-slop: task/ (README spec for the 'Anatomy of Things' explainer-film landing section: hero, 10-language select re-titling 4 film cards from data/films.json with English fallback marked lang=en, m:ss durations, language counts, newsletter form with novalidate + live-region status; synthetic SVG thumbnails), hidden/ (tests.mjs 4 static + 20 browser tests at 390 and 1280, JUDGE.md), reference/ (1.0), grade.mjs (imports the trial-12 harness), KEY.md",
+      "design": "Arm A = plain subagent builds from the spec; Arm B = same prompt + SKILL.md inline. 3 reps per arm, fresh copies. Score = 0.6 behaviour + 0.2 axe + 0.2 Lighthouse (a11y ≥ 90 and perf ≥ 85). Secondary: slop-marker count and the same blind pairwise judge as trial 12. Pilot (plain agent) scored 0.889, below the ceiling, so no hardening was needed.",
+      "baseline": {
+        "what": "Arm A plain subagent",
+        "runs": 3,
+        "scores": [
+          0.898,
+          0.862,
+          0.896
+        ],
+        "mean_score": 0.885,
+        "lh_perf": [
+          83,
+          74,
+          82
+        ],
+        "slop_markers": [
+          0,
+          1,
+          1
+        ],
+        "mean_tokens": 80735,
+        "mean_tool_uses": 14,
+        "mean_seconds": 170.9,
+        "judge_means": null
+      },
+      "candidate_default": {
+        "config": "Arm B with the no-ai-design-slop skill",
+        "runs": 3,
+        "scores": [
+          1,
+          1,
+          1
+        ],
+        "mean_score": 1,
+        "lh_perf": [
+          86,
+          85,
+          86
+        ],
+        "slop_markers": [
+          0,
+          0,
+          0
+        ],
+        "mean_tokens": 92219,
+        "mean_tool_uses": 19.67,
+        "mean_seconds": 252.6,
+        "judge_means": null,
+        "judge_preferred": {
+          "A": 0,
+          "B": 3,
+          "tie": 0
+        },
+        "delta_vs_A": {
+          "score_points": 11.5,
+          "tokens_pct": 14.2,
+          "tool_uses_pct": 40.5,
+          "seconds_pct": 47.8
+        },
+        "observed": "Every plain run missed the Lighthouse performance bar (83, 74, 82 vs the 85 threshold: fetch-then-inject layout shift and heavier CSS), which costs 0.1 of the score; A-2 also failed one behaviour test. Every skill run passed 24/24 with LH perf 85-86 and 0 slop markers. The skill's review pass (contrast, spacing, 'reserve space for async content') is what pushed CLS and perf over the bar."
+      },
+      "candidate_tuned": {
+        "config": "none",
+        "note": "not run; the skill has no knobs"
+      },
+      "limits": [
+        "n = 3 per arm; the LH perf margin in arm B is thin (85-86 against an 85 threshold), so part of the 11.5-point gap is a threshold effect on a 0.2-weight component.",
+        "Slop markers and the judge are this trial's own secondary metrics; the judge is a model of the same family (blind to arm).",
+        "Token counts include each subagent's fixed context; wall time has shared-CPU noise."
+      ],
+      "verdict": "ADOPT for UI-building subagents: +11.5 points (0.885 → 1.000, 3/3 runs at ceiling), 0 slop markers, judge 3:0 for the skill, at +14 % tokens, +40 % tool calls, +48 % time",
+      "reason": "The only skill trial in this round with a measured primary-score gain: all three skill runs reached 1.0 while all three plain runs lost the Lighthouse component (and one lost a behaviour test). The cost is real (+14 % tokens, about 80 s more per build) but it buys a page that passes the a11y/perf gate first time.",
+      "wrapper": null,
+      "do_not_adopt_notes": []
+    },
+    {
+      "id": 14,
+      "tool": "tdd skill (mattpocock/skills, skills/engineering/tdd/SKILL.md)",
+      "versions": {
+        "skill": "main @ 2026-10-29 (3,629 B; sha256 in fixtures/skills/SHA256SUMS); companion files tests.md / mocking.md not fetched, stated in the arm-B prompt",
+        "agent": "Claude Code subagents, same session model in both arms"
+      },
+      "licences": {
+        "skill": "MIT"
+      },
+      "install": {
+        "command": "claude plugin install mattpocock-skills@claude-plugins-official (or copy SKILL.md)",
+        "seconds": 0,
+        "size_mb": 0.004,
+        "windows": "n/a (prompt text)"
+      },
+      "fixtures": "fixtures/14-tdd: task/README.md (spec of src/pricing.mjs: toGrams, pricePerKg, formatMoney, kcalPer100g, daysSupply, compare with rounding/currency/locale/leap-year rules, 7 visible examples, one smoke test), hidden/cases.mjs (25 named case groups), grade.mjs (runs under TZ=Pacific/Auckland on purpose), reference/ (25/25), calibration/ (two fresh one-shot plain runs by the builder: 21/25 on the final README after re-grading, 24/25), KEY.md",
+      "design": "Arm A = plain subagent implements from the spec; Arm B = same prompt + SKILL.md inline (no interactive user: seams written to SEAMS.md and proceed). 3 reps per arm, fresh copies, concurrent. Score = hidden case groups passed / 25. Hardening: the builder removed giveaway hints and added three rules after a 25/25 one-shot; a second fresh one-shot still scored 24/25, so the 40-80 % target was not reached without making the spec vague (noise for both arms) or adding tricks, which the brief forbids. Reported as a ceiling-limited trial.",
+      "baseline": {
+        "what": "Arm A plain subagent",
+        "runs": 3,
+        "scores": [
+          0.96,
+          0.96,
+          0.96
+        ],
+        "mean_score": 0.96,
+        "failed_case_in_every_run": "D03 (daysSupply with an untrimmed ISO date ' 2028-02-28 '; the common 'trim input' rule applies, every run rejected it)",
+        "mean_tokens": 82020,
+        "mean_tool_uses": 10,
+        "mean_seconds": 238.3,
+        "tests_written_mean": 7
+      },
+      "candidate_default": {
+        "config": "Arm B with the tdd skill",
+        "runs": 3,
+        "scores": [
+          0.96,
+          0.96,
+          0.96
+        ],
+        "mean_score": 0.96,
+        "failed_case_in_every_run": "D03 (same)",
+        "mean_tokens": 90977,
+        "mean_tool_uses": 28,
+        "mean_seconds": 286.2,
+        "tests_written_mean": 20,
+        "delta_vs_A": {
+          "score_points": 0,
+          "tokens_pct": 10.9,
+          "tool_uses_pct": 180,
+          "seconds_pct": 20.1
+        },
+        "observed": "Arm B visibly followed the skill: SEAMS.md written in 3/3, one test file per seam, red-before-green cycles, 15-23 tests vs 7 in arm A, two runs corrected their own wrong test literals against the spec instead of bending the code."
+      },
+      "candidate_tuned": {
+        "config": "none",
+        "note": "not run"
+      },
+      "limits": [
+        "Ceiling: both arms at 24/25 in every rep; the one missed case is identical across all six runs, so the hidden set measures one spec reading, not skill effect.",
+        "n = 3 per arm; wall time has shared-CPU noise (up to 12 concurrent agents).",
+        "Token counts include each subagent's fixed context; only the A-B difference is meaningful.",
+        "The skill's 'confirm seams with the user' step had no user; the adaptation (write SEAMS.md and proceed) removes the one step that could change the outcome in an interactive session."
+      ],
+      "verdict": "REJECT for spec-to-module tasks of this size (no gain, +11 % tokens, +180 % tool calls, +20 % time); the extra tests it leaves behind are the only tangible output",
+      "reason": "Same hidden score (0.96) in all six runs. The skill triples the number of tool calls and leaves ~3x more tests, at +11 % tokens and +20 % wall time. Whether those tests pay off on later changes is not measured here.",
+      "wrapper": null,
+      "do_not_adopt_notes": [
+        "As a default for well-specified modules: no measured quality gain. Worth a second look only where the team values the test suite itself (regression coverage), which this trial did not score."
+      ]
+    },
+    {
+      "id": 15,
+      "tool": "writing-for-agents skill (mattpocock/skills, skills/productivity/writing-for-agents/SKILL.md) applied to a role-card rewrite",
+      "versions": {
+        "skill": "main @ 2026-10-29 (10,886 B; sha256 in fixtures/skills/SHA256SUMS); its companion SKILL-MECHANICS.md was not fetched (skill-specific, not needed for a role card)",
+        "agent": "Claude Code subagents, same session model for all arms and all eval runs"
+      },
+      "licences": {
+        "skill": "MIT (fixtures/skills/mattpocock-skills.LICENSE.txt)"
+      },
+      "install": {
+        "command": "claude plugin install mattpocock-skills@claude-plugins-official (or copy SKILL.md)",
+        "seconds": 0,
+        "size_mb": 0.01,
+        "windows": "n/a (prompt text)"
+      },
+      "fixtures": "fixtures/15-writing: task/ROLE-CARD.md (13,059 B accreted NEXUS solo-agent role card with 6 buried operational rules R1..R6), task/README.md (rewrite brief), hidden/eval/t1..t6 (six small self-contained tasks with PACKET.md), hidden/grade-eval.mjs (script-only grading of REPORT.md + produced files: R1 verdict first, R2 repo-relative paths, R3 escaped PHP output, R4 single NEXT last, R5 numbers with units, R6 missing input => BLOCKED, plus functional checks), grade.mjs (rewrite exists, size, rule presence), KEY.md",
+      "design": "Arm A = plain subagent rewrites the card; Arm B = same prompt + SKILL.md inline. 3 reps per arm. Then the behavioural eval: each of the 7 cards (original + 6 rewrites) is given as the role card (read from ROLE-CARD.md in the run folder, same mechanism for every card) to a fresh subagent per task, 6 tasks per card, 1 rep per task = 42 eval runs; graded only by hidden/grade-eval.mjs. Half of the A-2/B-1 eval runs were interrupted by an API rate limit and resumed; their token/time usage covers the resumed segment only.",
+      "baseline": {
+        "what": "original card as the agent's system instruction",
+        "card_bytes": 13059,
+        "card_tokens_est": 3260,
+        "eval_score": 0.95,
+        "eval_fails": "t2 R5 (table header without unit), t5 R5 (bare number)",
+        "eval_mean_tokens_per_task": 64787,
+        "eval_mean_seconds_per_task": 33.7
+      },
+      "candidate_default": {
+        "config": "Arm A plain rewrite",
+        "rewrite_cost": {
+          "mean_tokens": 66461,
+          "mean_tool_uses": 4,
+          "mean_seconds": 65
+        },
+        "cards_bytes": [
+          8952,
+          9113,
+          9040
+        ],
+        "card_mean_bytes": 9035,
+        "card_mean_tokens_est": 2255,
+        "prompt_tokens_saved_vs_original": 1005,
+        "rule_presence_grade": "6/6 on all three",
+        "eval_scores": [
+          0.9222,
+          0.8764,
+          0.9125
+        ],
+        "eval_mean_score": 0.9037,
+        "eval_mean_tokens_per_task": 63073,
+        "eval_mean_seconds_per_task": 28.7
+      },
+      "candidate_tuned": {
+        "config": "Arm B rewrite with the writing-for-agents skill inline",
+        "rewrite_cost": {
+          "mean_tokens": 72723,
+          "mean_tool_uses": 4.3,
+          "mean_seconds": 90.8
+        },
+        "cards_bytes": [
+          8783,
+          7883,
+          8194
+        ],
+        "card_mean_bytes": 8287,
+        "card_mean_tokens_est": 2070,
+        "prompt_tokens_saved_vs_original": 1190,
+        "rule_presence_grade": "6/6 on all three",
+        "eval_scores": [
+          0.9417,
+          0.9125,
+          0.9292
+        ],
+        "eval_mean_score": 0.9278,
+        "eval_mean_tokens_per_task": 62805,
+        "eval_mean_seconds_per_task": 26.8
+      },
+      "per_card": "runs/15-writing/summary.json (sizes, scores, failing checks per task); every rewrite lost points on R5 (units on numbers / table headers), the rule the original states four times",
+      "limits": [
+        "One eval rep per task per card: differences of a few points between cards are inside run-to-run noise (the same card gives different R4/R5 slips on repeat).",
+        "The role card is handed to the eval agent as a file to read, not as a true system prompt; identical for all cards, so the comparison is fair but the absolute scores may differ from a system-prompt deployment.",
+        "The rewrite arms were asked for compactness; the behavioural loss (R5) is a property of compression, not of the skill: both arms lost it.",
+        "n = 3 rewrites per arm; the B-vs-A gap (+2.4 points, -8 % bytes) is not separable from noise at this size."
+      ],
+      "verdict": "REJECT (as tried); WATCH if the Owner wants shorter cards anyway",
+      "reason": "The brief's bar was 'task success equal or better + prompt tokens saved'. Both arms saved ~1,000-1,200 prompt tokens per run (-31 % / -37 % bytes) but both scored below the original card on the behavioural eval (0.904 plain, 0.928 with the skill, vs 0.950 original), losing mostly the units rule. The skill made the cards a little shorter and a little better than the plain rewrite, at +9 % rewrite tokens and +40 % rewrite time, but did not reach the original's compliance.",
+      "wrapper": null,
+      "do_not_adopt_notes": [
+        "Rewriting a working role card for compactness cost rule compliance in 6 of 6 rewrites; if cards must shrink, keep the rules that eval runs show slipping (units, NEXT line) verbatim and re-run this eval before deploying."
+      ]
+    },
+    {
+      "id": 16,
+      "tool": "iterate-until-verified skill (MengTo/Skills, agent-skills/codex/iterate-until-verified/SKILL.md), chosen over context-engineering because it prescribes an execute-verify loop for a task; context-engineering is about rules files and session setup",
+      "versions": {
+        "skill": "main @ 2026-10-29 (7,467 B; sha256 in fixtures/skills/SHA256SUMS)",
+        "agent": "Claude Code subagents, same session model in both arms"
+      },
+      "licences": {
+        "skill": "MIT (fixtures/skills/MengTo-Skills.LICENSE.txt)"
+      },
+      "install": {
+        "command": "copy SKILL.md into .claude/skills/iterate-until-verified/",
+        "seconds": 0,
+        "size_mb": 0.008,
+        "windows": "n/a (prompt text)"
+      },
+      "fixtures": "fixtures/16-multistep: a 6-file Node pet-food portion service (api, calculator, needs, catalogue, units, format) + data (14-product catalogue, factors with stage aliases) + logs/app.log (80 lines, 4 complainant lines, one red herring) + docs/PORTION-SPEC.md + a vague support ticket as README; hidden/run-tests.mjs (60 tests), grade.mjs, reference/, KEY.md with the v1→v3 hardening history",
+      "design": "Plain-agent pilot, then hardening, three rounds: v1 (3 causes, explicit README, 23 tests) pilot 23/23; v2 (5 causes, vague README, 39 tests) pilot 39/39; v3 (7 interacting causes incl. a data row, a per-can unit, a stage-alias map, a rounding contract, spec-only rules for caps/meals/cans in docs/, one red-herring complainant whose 'fix' fails hidden tests, 60 tests; untouched 8/60) pilot 60/60. Stopped hardening after v3 as decided in advance. A/B on v3: 3 reps per arm, fresh copies; Arm B = same prompt + SKILL.md inline (Execute mode, verifier role performed by the same agent since no subagents). All six arm runs were interrupted once by an API rate limit and resumed; their usage covers the resumed segment, so the cost comparison is indicative only.",
+      "baseline": {
+        "what": "Arm A plain subagent",
+        "runs": 3,
+        "scores": [
+          1,
+          1,
+          1
+        ],
+        "mean_score": 1,
+        "mean_tokens": 85539,
+        "mean_tool_uses": 4,
+        "mean_seconds": 45.3
+      },
+      "candidate_default": {
+        "config": "Arm B with iterate-until-verified",
+        "runs": 3,
+        "scores": [
+          1,
+          1,
+          1
+        ],
+        "mean_score": 1,
+        "mean_tokens": 102413,
+        "mean_tool_uses": 6,
+        "mean_seconds": 133.9,
+        "delta_vs_A": {
+          "score_points": 0,
+          "tokens_pct": 19.7,
+          "tool_uses_pct": 50,
+          "seconds_pct": 195.6
+        },
+        "observed": "Arm B wrote acceptance matrices, replayed every log line as a gate (one run recomputed all 69 successful requests with an independent script), and reported assumptions explicitly; Arm A found the same seven causes from the spec and the log without that scaffolding."
+      },
+      "candidate_tuned": {
+        "config": "none",
+        "note": "not run"
+      },
+      "pilots": "runs/16-multistep/pilots.jsonl (v1 23/23 in 78 s, v2 39/39 in 84 s, v3 60/60 in 135 s)",
+      "limits": [
+        "Ceiling after three hardening rounds: the plain agent reads docs/, the log and the data and fixes all seven interacting causes; the task cannot separate the arms on quality.",
+        "Usage numbers for the six arm runs are post-resume segments (the rate limit cut each run once); direction (B costlier) is consistent with trials 10 (round 1) and 14, magnitude is approximate.",
+        "No interactive user and no subagents: the skill's fan-out and independent-verifier steps collapse into one agent, which is also how NEXUS would use it inside a subagent."
+      ],
+      "verdict": "REJECT for bug-fixing tasks of this size (no quality gain at +20 % tokens, +50 % tool calls, roughly 3x wall time); WATCH only for tasks with a real external verifier",
+      "reason": "Both arms scored 60/60 in all reps on a task hardened three times (plain pilot 23/23, 39/39, 60/60). The skill adds structure (gates, replay of the whole log) that costs time without changing the outcome here.",
+      "wrapper": null,
+      "do_not_adopt_notes": [
+        "Do not adopt as a default debugging wrapper; the measured effect is cost only."
+      ]
+    }
+  ]
+}

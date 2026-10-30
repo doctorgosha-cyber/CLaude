@@ -1,0 +1,93 @@
+{
+  "id": 13,
+  "tool": "no-ai-design-slop skill (MengTo/Skills, no-ai-design-slop/SKILL.md)",
+  "versions": {
+    "skill": "main @ 2026-10-29 (7,007 B; sha256 in fixtures/skills/SHA256SUMS)",
+    "agent": "Claude Code subagents, same session model in both arms",
+    "harness": "same as trial 12 (playwright-core 1.64.1, axe-core 4.14.0, lighthouse 13.6.0)"
+  },
+  "licences": {
+    "skill": "MIT (fixtures/skills/MengTo-Skills.LICENSE.txt)"
+  },
+  "install": {
+    "command": "copy SKILL.md into .claude/skills/no-ai-design-slop/",
+    "seconds": 0,
+    "size_mb": 0.007,
+    "windows": "n/a (prompt text)"
+  },
+  "fixtures": "fixtures/13-no-slop: task/ (README spec for the 'Anatomy of Things' explainer-film landing section: hero, 10-language select re-titling 4 film cards from data/films.json with English fallback marked lang=en, m:ss durations, language counts, newsletter form with novalidate + live-region status; synthetic SVG thumbnails), hidden/ (tests.mjs 4 static + 20 browser tests at 390 and 1280, JUDGE.md), reference/ (1.0), grade.mjs (imports the trial-12 harness), KEY.md",
+  "design": "Arm A = plain subagent builds from the spec; Arm B = same prompt + SKILL.md inline. 3 reps per arm, fresh copies. Score = 0.6 behaviour + 0.2 axe + 0.2 Lighthouse (a11y ≥ 90 and perf ≥ 85). Secondary: slop-marker count and the same blind pairwise judge as trial 12. Pilot (plain agent) scored 0.889, below the ceiling, so no hardening was needed.",
+  "baseline": {
+    "what": "Arm A plain subagent",
+    "runs": 3,
+    "scores": [
+      0.898,
+      0.862,
+      0.896
+    ],
+    "mean_score": 0.885,
+    "lh_perf": [
+      83,
+      74,
+      82
+    ],
+    "slop_markers": [
+      0,
+      1,
+      1
+    ],
+    "mean_tokens": 80735,
+    "mean_tool_uses": 14,
+    "mean_seconds": 170.9,
+    "judge_means": null
+  },
+  "candidate_default": {
+    "config": "Arm B with the no-ai-design-slop skill",
+    "runs": 3,
+    "scores": [
+      1,
+      1,
+      1
+    ],
+    "mean_score": 1,
+    "lh_perf": [
+      86,
+      85,
+      86
+    ],
+    "slop_markers": [
+      0,
+      0,
+      0
+    ],
+    "mean_tokens": 92219,
+    "mean_tool_uses": 19.67,
+    "mean_seconds": 252.6,
+    "judge_means": null,
+    "judge_preferred": {
+      "A": 0,
+      "B": 3,
+      "tie": 0
+    },
+    "delta_vs_A": {
+      "score_points": 11.5,
+      "tokens_pct": 14.2,
+      "tool_uses_pct": 40.5,
+      "seconds_pct": 47.8
+    },
+    "observed": "Every plain run missed the Lighthouse performance bar (83, 74, 82 vs the 85 threshold: fetch-then-inject layout shift and heavier CSS), which costs 0.1 of the score; A-2 also failed one behaviour test. Every skill run passed 24/24 with LH perf 85-86 and 0 slop markers. The skill's review pass (contrast, spacing, 'reserve space for async content') is what pushed CLS and perf over the bar."
+  },
+  "candidate_tuned": {
+    "config": "none",
+    "note": "not run; the skill has no knobs"
+  },
+  "limits": [
+    "n = 3 per arm; the LH perf margin in arm B is thin (85-86 against an 85 threshold), so part of the 11.5-point gap is a threshold effect on a 0.2-weight component.",
+    "Slop markers and the judge are this trial's own secondary metrics; the judge is a model of the same family (blind to arm).",
+    "Token counts include each subagent's fixed context; wall time has shared-CPU noise."
+  ],
+  "verdict": "ADOPT for UI-building subagents: +11.5 points (0.885 → 1.000, 3/3 runs at ceiling), 0 slop markers, judge 3:0 for the skill, at +14 % tokens, +40 % tool calls, +48 % time",
+  "reason": "The only skill trial in this round with a measured primary-score gain: all three skill runs reached 1.0 while all three plain runs lost the Lighthouse component (and one lost a behaviour test). The cost is real (+14 % tokens, about 80 s more per build) but it buys a page that passes the a11y/perf gate first time.",
+  "wrapper": null,
+  "do_not_adopt_notes": []
+}
