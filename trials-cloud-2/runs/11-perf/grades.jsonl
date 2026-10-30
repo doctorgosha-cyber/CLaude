@@ -1,0 +1,5 @@
+{"run": "A-1", "score": 1, "passed": 15, "total": 15, "lh": 100, "lcp": 1433, "cls": 0, "tbt": 0, "bytes": 386866, "failed": null}
+{"run": "A-2", "score": 1, "passed": 15, "total": 15, "lh": 100, "lcp": 1362, "cls": 0, "tbt": 0, "bytes": 350050, "failed": null}
+{"run": "A-3", "score": 1, "passed": 15, "total": 15, "lh": 100, "lcp": 1054, "cls": 0, "tbt": 0, "bytes": 1820150, "failed": null}
+{"run": "B-2", "score": 1, "passed": 15, "total": 15, "lh": 100, "lcp": 1361, "cls": 0, "tbt": 4, "bytes": 1829213, "failed": null}
+{"run": "B-1", "score": 1, "passed": 15, "total": 15, "lh": 100, "lcp": 1129, "cls": 0, "tbt": 0, "bytes": 1822994, "failed": null}

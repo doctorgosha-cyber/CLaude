@@ -1,0 +1,91 @@
+{
+ "trial": "12-frontend-design",
+ "rows": [
+  {
+   "run": "A-1",
+   "arm": "A",
+   "score": 0.76,
+   "passed": 18,
+   "total": 27,
+   "tokens": 97788,
+   "tool_uses": 25,
+   "seconds": 346.8
+  },
+  {
+   "run": "A-2",
+   "arm": "A",
+   "score": 1,
+   "passed": 27,
+   "total": 27,
+   "tokens": 99676,
+   "tool_uses": 26,
+   "seconds": 375.5
+  },
+  {
+   "run": "A-3",
+   "arm": "A",
+   "score": 0.92,
+   "passed": 27,
+   "total": 27,
+   "tokens": 80559,
+   "tool_uses": 16,
+   "seconds": 260.4
+  },
+  {
+   "run": "B-1",
+   "arm": "B",
+   "score": 0.8,
+   "passed": 18,
+   "total": 27,
+   "tokens": 100700,
+   "tool_uses": 27,
+   "seconds": 319
+  },
+  {
+   "run": "B-2",
+   "arm": "B",
+   "score": 1,
+   "passed": 27,
+   "total": 27,
+   "tokens": 97998,
+   "tool_uses": 25,
+   "seconds": 336.4
+  },
+  {
+   "run": "B-3",
+   "arm": "B",
+   "score": 1,
+   "passed": 27,
+   "total": 27,
+   "tokens": 101165,
+   "tool_uses": 27,
+   "seconds": 331.4
+  }
+ ],
+ "summary": {
+  "A": {
+   "runs": 3,
+   "mean_score": 0.893,
+   "min_score": 0.76,
+   "max_score": 1,
+   "mean_tokens": 92674,
+   "mean_tool_uses": 22.33,
+   "mean_seconds": 327.6
+  },
+  "B": {
+   "runs": 3,
+   "mean_score": 0.933,
+   "min_score": 0.8,
+   "max_score": 1,
+   "mean_tokens": 99954,
+   "mean_tool_uses": 26.33,
+   "mean_seconds": 328.9
+  }
+ },
+ "delta_B_vs_A": {
+  "score_points": 4,
+  "tokens_pct": 7.9,
+  "tool_uses_pct": 17.9,
+  "seconds_pct": 0.4
+ }
+}

@@ -1,0 +1,69 @@
+{
+ "pairs": [
+  {
+   "pair": "pair-1",
+   "leftIs": "B",
+   "preferred_arm": "B",
+   "A": {
+    "clarity": 4,
+    "hierarchy": 3,
+    "distinctiveness": 4
+   },
+   "B": {
+    "clarity": 4,
+    "hierarchy": 4,
+    "distinctiveness": 4
+   },
+   "reason": "Left's balanced 3x2 grid, consistent stat tables and clear price focal point read cleanly on both viewports. Right has stronger product cues (stars, species pills) but a 4+2 orphan row and awkward 'per 100 g' wrapping weaken hierarchy."
+  },
+  {
+   "pair": "pair-2",
+   "leftIs": "A",
+   "preferred_arm": "A",
+   "A": {
+    "clarity": 5,
+    "hierarchy": 5,
+    "distinctiveness": 4
+   },
+   "B": {
+    "clarity": 4,
+    "hierarchy": 4,
+    "distinctiveness": 4
+   },
+   "reason": "Left's eyebrow, headline, styled filter bar and labeled stat row guide the eye cleanly on both viewports; price accents aid scanning. Right's editorial headline is charming but native selects and flat table cards feel more generic."
+  },
+  {
+   "pair": "pair-3",
+   "leftIs": "A",
+   "preferred_arm": "B",
+   "A": {
+    "clarity": 4,
+    "hierarchy": 4,
+    "distinctiveness": 3
+   },
+   "B": {
+    "clarity": 4,
+    "hierarchy": 4,
+    "distinctiveness": 4
+   },
+   "reason": "Right's editorial serif headline, nutrition-label leader rows and explicit 'Add to comparison' read as a reviewed-foods guide; left is clean and shows species per card but feels more like a generic shop grid."
+  }
+ ],
+ "means": {
+  "A": {
+   "clarity": 4.33,
+   "hierarchy": 4.0,
+   "distinctiveness": 3.67
+  },
+  "B": {
+   "clarity": 4.0,
+   "hierarchy": 4.0,
+   "distinctiveness": 4.0
+  }
+ },
+ "preferred_count": {
+  "A": 1,
+  "B": 2,
+  "tie": 0
+ }
+}
